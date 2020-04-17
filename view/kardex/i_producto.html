@@ -1,0 +1,164 @@
+<form id="formProducto">
+    <div class="row">
+        <div class="col-sm-8">
+            <div class="form-group">
+                <label for="producto_id">Producto</label>
+                <select class="form-control form-control-sm form-control-autocomplete" id="producto_id" name="producto_id">
+                </select>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="form-group">
+                <label for="unidad_medida_id">Unidad de Medida</label>
+                <select class="form-control form-control-sm form-control-autocomplete" id="unidad_medida_id" name="unidad_medida_id">
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-4">
+            <div class="form-group">
+                <label for="fecha_ingreso">Fecha de Ingreso</label>
+                <input type="text" class="form-control form-control-sm form-control-date" id="fecha_ingreso" name="fecha_ingreso" placeholder="Fecha de Ingreso" maxlength="10">
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="form-group">
+                <label for="cantidad">Cantidad</label>
+                <input type="text" class="form-control form-control-sm form-control-decimal" id="cantidad" name="cantidad" placeholder="Cantidad" maxlength="21">
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="form-group">
+                <label for="precio">Precio</label>
+                <input type="text" class="form-control form-control-sm form-control-decimal" id="precio" name="precio" placeholder="Precio" maxlength="21">
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-4">
+            <div class="form-group">
+                <label for="fecha_vencimiento">Fecha de Vencimiento</label>
+                <input type="text" class="form-control form-control-sm form-control-date" id="fecha_vencimiento" name="fecha_vencimiento" placeholder="Fecha de Vencimiento" maxlength="10">
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="form-group">
+                <label for="comprobante_pago_tipo_id">Tipo de Comprobante</label>
+                <select class="form-control form-control-sm form-control-autocomplete" id="comprobante_pago_tipo_id" name="comprobante_pago_tipo_id">
+                </select>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="form-group">
+                <label for="comprobante_pago_codigo">N° Comprobante</label>
+                <input type="text" class="form-control form-control-sm" id="comprobante_pago_codigo" name="comprobante_pago_codigo" placeholder="N° Comprobante" maxlength="100">
+            </div>
+        </div>
+    </div>
+    <div class="only-options-right">
+        <input type="hidden" id="action" name="action" value="I_PRODUCTO">
+        <input type="hidden" id="almacen_id" name="almacen_id">
+        <button type="submit" class="btn btn-success btn-sm"><i class="la la-save"></i>Guardar</button>
+        <button type="button" class="btn btn-outline-danger btn-sm" onclick="closeLastModal();">Cancelar</button>
+    </div>
+</form>
+<script>
+    function fillProducto(idProducto) {
+        postJSON("Producto_C.php", { "action": "list" }, function (data) {
+            if (!validErrorResponse(data)) {
+                $("#formProducto #producto_id").html('<option value="">Seleccione Producto</option>');
+                var arrayProductos = JSON.parse(data);
+                arrayProductos.forEach(function (object, index) {
+                    $("#formProducto #producto_id").append('<option value="' + object.id + '">' + object.nombre + '</option>');
+                });
+                if (typeof idProducto !== 'undefined') {
+                    $("#formProducto #producto_id").val(idProducto);
+                }
+                startSelect2ById("producto_id");
+            }
+        });
+    }
+    function fillUnidadMedida(idUnidadMedida) {
+        postJSON("UnidadMedida_C.php", { "action": "list" }, function (data) {
+            if (!validErrorResponse(data)) {
+                $("#formProducto #unidad_medida_id").html('<option value="">Seleccione Unidad de Medida</option>');
+                var arrayUnidadesMedida = JSON.parse(data);
+                arrayUnidadesMedida.forEach(function (object, index) {
+                    $("#formProducto #unidad_medida_id").append('<option value="' + object.codigo + '">' + object.nombre + '</option>');
+                });
+                if (typeof idUnidadMedida !== 'undefined') {
+                    $("#formProducto #unidad_medida_id").val(idUnidadMedida);
+                }
+                startSelect2ById("unidad_medida_id");
+            }
+        });
+    }
+    function fillComprobantePagoTipo(idComprobantePagoTipo) {
+        postJSON("ComprobantePagoTipo_C.php", { "action": "list" }, function (data) {
+            if (!validErrorResponse(data)) {
+                $("#formProducto #comprobante_pago_tipo_id").html('<option value="">Seleccione Tipo Comprobante</option>');
+                var arrayComprobantesPagoTipo = JSON.parse(data);
+                arrayComprobantesPagoTipo.forEach(function (object, index) {
+                    $("#formProducto #comprobante_pago_tipo_id").append('<option value="' + object.codigo + '">' + object.nombre + '</option>');
+                });
+                if (typeof idComprobantePagoTipo !== 'undefined') {
+                    $("#formProducto #comprobante_pago_tipo_id").val(idComprobantePagoTipo);
+                }
+                startSelect2ById("comprobante_pago_tipo_id");
+            }
+        });
+    }
+    $("#formProducto").validate({
+        rules: {
+            unidad_medida_id: {
+                required: true
+            },
+            producto_id: {
+                required: true
+            },
+            cantidad: {
+                required: true,
+                maxlength: 21,
+                number: true
+            },
+            precio: {
+                required: true,
+                maxlength: 21,
+                number: true
+            },
+            fecha_ingreso: {
+                required: true,
+                maxlength: 10,
+                dateITA: true
+            },
+            fecha_vencimiento: {
+                maxlength: 10,
+                dateITA: true
+            },
+            comprobante_pago_codigo: {
+                required: function () {
+                    if ($("#formProducto #comprobante_pago_tipo_id").val() === "")
+                        return false;
+                    else
+                        return true;
+
+                }
+            }
+        },
+        submitHandler: function (form) {
+            saveIProducto();
+        }
+    });
+    function saveIProducto() {
+        postJSONForm("Kardex_C.php", "formProducto", function (data) {
+            if (!validErrorResponse(data)) {
+                closeLastModal();
+                notifySuccess();
+                listKardexByAlmacen();
+            }
+        });
+    }
+    startDatePicker();
+    startDecimalNumbers(18, 2);
+</script>

@@ -1,0 +1,82 @@
+<div class="kt-subheader kt-grid__item" id="kt_subheader">
+    <div class="kt-container  kt-container--fluid ">
+        <div class="kt-subheader__main">
+            <h3 class="kt-subheader__title">Producto</h3>
+            <span class="kt-subheader__separator kt-hidden"></span>
+            <div class="kt-subheader__breadcrumbs">
+                <a href="#" class="kt-subheader__breadcrumbs-home"><i class="flaticon2-shelter"></i></a>
+                <span class="kt-subheader__breadcrumbs-separator"></span>
+                <a href="#" class="kt-subheader__breadcrumbs-link">
+                    Productos </a>
+                <span class="kt-subheader__breadcrumbs-separator"></span>
+                <a href="#" class="kt-subheader__breadcrumbs-link">
+                    Listado </a>
+            </div>
+        </div>
+        <div class="kt-subheader__toolbar">
+            <div class="kt-subheader__wrapper">
+                <a class="btn btn-icon btn btn-label btn-label-brand btn-bold" data-toggle="tooltip" title="Actualizar" data-placement="top" onclick="listProductos();"><i class="flaticon-refresh"></i></a>
+                <a class="btn btn-icon btn btn-label btn-label-brand btn-bold" data-toggle="tooltip" title="Agregar" data-placement="top" onclick="getModal('producto/iu.html');"><i class="flaticon2-add-1"></i></a>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="kt-container  kt-container--fluid kt-grid__item kt-grid__item--fluid">
+    <table id="table" class="table table-hover table-bordered table-striped table-sm">
+        <thead class="thead-dark"></thead>
+    </table>
+</div>
+<script>
+    function listProductos() {
+        postJSON("Producto_C.php", { "action": "list" }, function (data) {
+            if (!validErrorResponse(data)) {
+                destroyDataTableIfExists("table");
+                $('#table').DataTable({
+                    data: JSON.parse(data),
+                    columns: [
+                        { title: "Código", data: "codigo" },
+                        { title: "Nombre", data: "nombre" },
+                        { title: "Descripción", data: "descripcion" },
+                        { title: "Stock Mínimo", data: "stock_minimo" },
+                        {
+                            title: "Acciones", className: "td-actions", render: function (data, type, row, meta) {
+                                return '<button type="button" class="btn btn-outline-info btn-elevate btn-icon btn-circle btn-xs" data-toggle="tooltip" title="Factores de Conversión" onclick="showProductoUnidadMedidaListForm(' + row.id + ',\'' + row.nombre + '\');"><i class="fa fa-exchange-alt"></i></button>&nbsp;' +
+                                    '<button type="button" class="btn btn-outline-info btn-elevate btn-icon btn-circle btn-xs" data-toggle="tooltip" title="Editar" onclick="showProducto(' + row.id + ');"><i class="fa fa-pencil-alt"></i></button>&nbsp;' +
+                                    '<button type="button" class="btn btn-outline-danger btn-elevate btn-icon btn-circle btn-xs" data-toggle="tooltip" title="Eliminar" onclick="deleteProducto(' + row.id + ');"><i class="fa fa-trash"></i></button>'
+                            }
+                        }
+                    ]
+                });
+            }
+        });
+    }
+    function showProducto(id) {
+        getModalWithCallBack('producto/iu.html', function () {
+            $("#id").val(id);
+            $("#action").val("u");
+            getProducto();
+        });
+    }
+    function deleteProducto(id) {
+        bootbox.confirm(STR_ASK_DELETE, function (result) {
+            if (result) {
+                postJSON("Producto_C.php", { action: "d", id: id }, function (data) {
+                    if (!validErrorResponse(data)) {
+                        notifySuccess();
+                        listProductos();
+                    }
+                });
+            }
+        });
+    }
+    //Producto Unidad de Medida
+    function showProductoUnidadMedidaListForm(id, nombre) {
+        getModalLargeWithCallBack('producto_unidad_medida/list.html', function () {
+            $("#producto_id_general").val(id);
+            $("#productoText").text(nombre);
+            listProductoUnidadesMedida();
+            startTooltip();
+        });
+    }
+    listProductos();
+</script>

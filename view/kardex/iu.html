@@ -1,0 +1,50 @@
+<h3>Ingreso a Almacen <span id="titleAction"></span></h3>
+<div class="form-group" style="margin-bottom: 0px; text-align: center;">
+    <label class="kt-radio">
+        <input type="radio" name="persona_tipo_id" value="N" onchange="showKardexProductoForm();" checked>
+        POR PRODUCTO
+        <span></span>
+    </label>&nbsp;&nbsp;&nbsp;
+    <label class="kt-radio">
+        <input type="radio" name="persona_tipo_id" value="J" onchange="showKardexOCForm();">
+        ORDEN DE COMPRA
+        <span></span>
+    </label>&nbsp;&nbsp;&nbsp;
+    <label class="kt-radio">
+        <input type="radio" name="persona_tipo_id" value="J" onchange="showKardexAlmacenForm();">
+        CAMBIO DE ALMACÉN
+        <span></span>
+    </label>&nbsp;&nbsp;&nbsp;
+    <label class="kt-radio">
+        <input type="radio" name="persona_tipo_id" value="J" onchange="SSSSSSS();">
+        REINGRESO
+        <span></span>
+    </label>
+</div>
+<div id="ContainerForm"></div>
+<script>
+    function showKardexProductoForm() {
+        getHTMLIntoDOMWithCallBack('kardex/i_producto.html', "#ContainerForm", function () {
+            $("#formProducto #almacen_id").val($("#almacen_id_general").val());
+            fillProducto();
+            fillUnidadMedida();
+            fillComprobantePagoTipo();
+        });
+    }
+    function showKardexOCForm() {
+        getHTMLIntoDOMWithCallBack('kardex/i_orden_compra.html', "#ContainerForm", function () {
+            fillOrdenCompraDontUsed();
+            fillComprobantePagoTipo();
+        });
+    }
+    function showKardexAlmacenForm() {
+        getHTMLIntoDOMWithCallBack('kardex/i_almacen.html', "#ContainerForm", function () {
+            $("#formAlmacen #almacen_id").val($("#almacen_id_general").val());
+            fillProducto();
+            fillUnidadMedida();
+            fillComprobantePagoTipo();
+            fillAlmacenOrigen();
+        });
+    }
+    showKardexProductoForm();
+</script>

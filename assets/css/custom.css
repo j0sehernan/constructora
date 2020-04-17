@@ -1,0 +1,137 @@
+.dataTables_wrapper .dataTable .thead-dark th {
+    color: #fff;
+}
+
+.btn-group-xs>.btn.btn-icon, .btn.btn-icon.btn-xs {
+    height: 2rem;
+    width: 2rem
+}
+
+.td-actions {
+    text-align: center;
+}
+
+.td-decimal {
+    text-align: center;
+    width: 100px;
+}
+
+.td-date {
+    text-align: center;
+    width: 1px;
+}
+
+.td-select {
+    width: 150px;
+}
+
+.td-error {
+    background-color: #fe5962;
+    color: white !important;
+}
+
+.table .form-control-date {
+    max-width: 80px;
+}
+
+.table .form-control-decimal {
+    max-width: 80px;
+}
+
+.table .form-control {
+    padding-left: 5px;
+    padding-right: 5px;
+    max-width: 100%;
+}
+
+@keyframes fadeInDown {
+    100% {
+        opacity: 0.8;
+    }
+}
+
+.col-form-label {
+    text-align: right;
+}
+
+.kt-widget-3 .kt-widget-3__content .kt-widget-3__content-info {
+    padding-bottom: 2rem;
+}
+
+.alert-bootbox-error {
+    padding-bottom: 0px;
+    margin-bottom: 0px;
+}
+
+.error-bold {
+    color: #fd397a;
+    font-weight: bold;
+}
+
+.tr-dark td {
+    font-weight: 500;
+    color: #fff;
+    background-color: #343a40;
+    border-color: #454d55;
+}
+
+.kt-profile .kt-profile__content {
+    border-bottom-width: 0px;
+}
+
+.flex-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.sub-settings {
+    margin-bottom: 10px;
+    text-align: right;
+}
+
+.only-options-right {
+    text-align: right;
+}
+
+@media (min-width: 1024px) {
+    .modal-xl {
+        max-width: 1000px;
+    }
+}
+
+.second-modal-backdrop {
+    z-index: 1060;
+}
+
+.second-modal {
+    z-index: 1070;
+}
+
+.third-modal-backdrop {
+    z-index: 1080
+}
+
+.third-modal {
+    z-index: 1090;
+}
+
+.fourth-modal-backdrop {
+    z-index: 1100;
+}
+
+.fourth-modal {
+    z-index: 1120;
+}
+
+.select2-dropdown {
+    z-index: 1121;
+}
+
+.btn-group-sm>.btn i, .btn.btn-sm i {
+    margin-right: 0;
+}
+
+.text-error, .text-error .kt-widget-3__content-bedge, .text-error .kt-widget-3__content-number {
+    color: #fe5962 !important;
+}

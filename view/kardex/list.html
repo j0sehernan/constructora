@@ -1,0 +1,122 @@
+<div class="kt-subheader kt-grid__item" id="kt_subheader">
+    <div class="kt-container kt-container--fluid ">
+        <div class="kt-subheader__main">
+            <h3 class="kt-subheader__title">Kardex</h3>
+            <span class="kt-subheader__separator kt-hidden"></span>
+            <div class="kt-subheader__breadcrumbs">
+                <a href="#" class="kt-subheader__breadcrumbs-home"><i class="flaticon2-shelter"></i></a>
+                <span class="kt-subheader__breadcrumbs-separator"></span>
+                <a href="#" class="kt-subheader__breadcrumbs-link">
+                    Cadex </a>
+                <span class="kt-subheader__breadcrumbs-separator"></span>
+                <a href="#" class="kt-subheader__breadcrumbs-link">
+                    Listado </a>
+            </div>
+        </div>
+        <div class="kt-subheader__toolbar" id="divToolbar">
+            <div class="kt-subheader__wrapper">
+                <a class="btn btn-icon btn btn-label btn-label-brand btn-bold" data-toggle="tooltip" title="Actualizar" data-placement="top" onclick="listKardexByAlmacen();"><i class="flaticon-refresh"></i></a>
+                <a href="#" class="btn btn-icon btn btn-label btn-label-brand btn-bold" data-toggle="tooltip" title="Registrar Ingreso" data-placement="top" onclick="showKardexForm('i');"><i class="flaticon2-add-1"></i></a>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="kt-container kt-container--fluid kt-grid__item kt-grid__item--fluid">
+    <div class="row">
+        <div class="col">
+            <div class="form-group" style="margin-bottom: 1rem;">
+                <select class="form-control form-control-sm" id="almacen_id_general" name="almacen_id_general" onchange="listKardexByAlmacen();">
+                </select>
+                <span class="mutted" id="ubicacion" style="margin-left: 5px; margin-right: 5px;"></span>
+            </div>
+        </div>
+    </div>
+    <div id="divTable">
+        <table id="table" class="table table-hover table-bordered table-striped table-sm">
+            <thead class="thead-dark"></thead>
+        </table>
+    </div>
+</div>
+<script>
+    function fillAlmacen(idAlmacen) {
+        postJSON("Almacen_C.php", { "action": "list" }, function (data) {
+            if (!validErrorResponse(data)) {
+                $("#almacen_id_general").html('<option value="">Seleccione Almacen</option>');
+                var arrayProductos = JSON.parse(data);
+                arrayProductos.forEach(function (object, index) {
+                    $("#almacen_id_general").append('<option value="' + object.id + '">' + object.nombre + '</option>');
+                });
+                if (typeof idAlmacen !== 'undefined') {
+                    $("#almacen_id_general").val(idAlmacen);
+                }
+                startSelect2ById("almacen_id_general");
+                listKardexByAlmacen();
+            }
+        });
+    }
+    function listKardexByAlmacen() {
+        $("#divTable").hide();
+        $("#divToolbar").hide();
+        var idAlmacen = $("#almacen_id_general").val();
+        if (idAlmacen !== "") {
+            $("#divTable").show();
+            $("#divToolbar").show();
+            var ubicacion = $("#almacen_id_general option:selected").attr("data-ubicacion");
+            ubicacion !== "" ? $("#ubicacion").text(ubicacion) : ""
+            postJSON("Kardex_C.php", { "action": "listByAlmacen", "almacen_id": idAlmacen }, function (data) {
+                if (!validErrorResponse(data)) {
+                    destroyDataTableIfExists("table");
+                    $('#table').DataTable({
+                        data: JSON.parse(data),
+                        columns: [
+                            { title: "Producto", data: "producto" },
+                            { title: "Unidad de Medida", data: "unidad_medida_id" },
+                            { title: "Cantidad", data: "cantidad" },
+                            { title: "F.Ingreso", data: "fecha_ingreso" },
+                            { title: "F.Vencimiento", data: "fecha_vencimiento" },
+                            {
+                                title: "Acciones", className: "td-actions", render: function (data, type, row, meta) {
+                                    return '<button type="button" class="btn btn-outline-info btn-elevate btn-icon btn-circle btn-xs" data-toggle="tooltip" title="Convertir" onclick="showConvertForm(' + row.id + ',\'' + row.unidad_medida_id + '\',\'' + row.unidad_medida + '\',\'' + row.cantidad + '\',\'' + row.producto + '\',\'' + row.producto_id + '\',\'' + row.fecha_ingreso + '\',\'' + row.fecha_vencimiento + '\');"><i class="fa fa-exchange-alt"></i></button>&nbsp;' +
+                                        '<button type="button" class="btn btn-outline-danger btn-elevate btn-icon btn-circle btn-xs" data-toggle="tooltip" title="Eliminar" onclick="delKardex(' + row.id + ');"><i class="fa fa-trash"></i></button>'
+                                }
+                            }
+                        ]
+                    });
+                }
+            });
+        }
+    }
+    function showKardexForm(action, id) {
+        getModalExtraLargeWithCallBack('kardex/iu.html', function () {
+            $("#titleAction").text($("#almacen_id_general option:selected").text());
+        });
+    }
+    function showConvertForm(idKardex, idUnidadMedidaIngreso, unidadMedidaIngreso, cantidad, producto, idProducto, fechaIngreso, fechaVencimiento) {
+        getModalWithCallBack('kardex/convert.html', function () {
+            $("#titleActionConvert").text(producto);
+            $("#unidad_medida_ingreso_id").val(idUnidadMedidaIngreso);
+            $("#unidad_medida_ingreso").val(unidadMedidaIngreso);
+            $("#cantidad_inicial").val(cantidad);
+            $("#cantidad").val(cantidad);
+            $("#id").val(idKardex);
+            $("#producto_id").val(idProducto);
+            $("#almacen_id").val($("#almacen_id_general").val());
+            $("#fecha_ingreso").val(fechaIngreso);
+            $("#fecha_vencimiento").val(fechaVencimiento);
+            fillUnidadMedida();
+        });
+    }
+    function delKardex(id) {
+        askDelete(function (result) {
+            if (result) {
+                postJSON("Kardex_C.php", { action: "del", id: id }, function (data) {
+                    if (!validErrorResponse(data)) {
+                        notifySuccess();
+                        listKardexByAlmacen();
+                    }
+                });
+            }
+        });
+    }
+    fillAlmacen();
+</script>

@@ -1,0 +1,90 @@
+<h3>Avance</h3>
+<div class="only-options-right" style="margin-bottom: 10px;">
+    <input type="hidden" id="proyecto_trabajo_partida_id_general" name="proyecto_trabajo_partida_id_general">
+    <a class="btn btn-icon btn btn-label btn-label-brand btn-bold" data-toggle="tooltip" title="Actualizar" data-placement="top" onclick="listProyectoTrabajoPartidaAvances();"><i class="flaticon-refresh"></i></a>
+    <a class="btn btn-icon btn btn-label btn-label-brand btn-bold" data-toggle="tooltip" title="Agregar" data-placement="top" onclick="showProyectoTrabajoPartidaAvanceForm('i');"><i class="flaticon2-add-1"></i></a>
+</div>
+<table id="tableAvance" class="table table-hover table-bordered table-striped table-sm">
+    <thead class="thead-dark"></thead>
+</table>
+<script>
+    function listProyectoTrabajoPartidaAvances() {
+        postJSON("ProyectoTrabajoPartidaAvance_C.php", { "action": "listByProyectoTrabajoPartida", proyecto_trabajo_partida_id: $("#proyecto_trabajo_partida_id_general").val() }, function (data) {
+            if (!validErrorResponse(data)) {
+                destroyDataTableIfExists("tableAvance");
+                $('#tableAvance').DataTable({
+                    data: JSON.parse(data),
+                    columns: [
+                        { title: "Fecha Inicio Avance", data: "fecha_inicio_avance" },
+                        { title: "Fecha Termino Avance", data: "fecha_termino_avance" },
+                        { title: "Precio Unitario", data: "precio_unitario_avance" },
+                        { title: "Cantidad", data: "cantidad_avance" },
+                        { title: "Precio", data: "precio_avance" },
+                        {
+                            title: "Acciones", className: "td-actions", render: function (data, type, row, meta) {
+                                return '<button type="button" class="btn btn-outline-info btn-elevate btn-icon btn-circle btn-xs" data-toggle="tooltip" title="Editar Avance" onclick="showProyectoTrabajoPartidaAvanceForm(\'u\',\'' + row.id + '\');"><i class="fa fa-pencil-alt"></i></button>&nbsp;' +
+                                    '<button type="button" class="btn btn-outline-danger btn-elevate btn-icon btn-circle btn-xs" data-toggle="tooltip" title="Eliminar Avance" onclick="deleteProyectoTrabajoPartidaAvance(\'' + row.id + '\');"><i class="fa fa-trash"></i></button>'
+                            }
+                        }
+                    ]
+                });
+            }
+        });
+    }
+    function showProyectoTrabajoPartidaAvanceForm(action, id) {
+        getModalWithCallBackSecond('proyecto_trabajo_partida_avance/iu.html', function () {
+            $("#formProyectoTrabajoPartidaAvance #proyecto_trabajo_partida_id").val($("#proyecto_trabajo_partida_id_general").val());
+            $("#formProyectoTrabajoPartidaAvance #proyecto_id").val($("#proyecto_id_general").val());
+            if (action === "i") {
+            } else if (action === "u") {
+                $("#formProyectoTrabajoPartidaAvance #id").val(id);
+                $("#formProyectoTrabajoPartidaAvance #action").val("u");
+                getProyectoTrabajoPartidaAvance();
+            }
+        });
+    }
+    function deleteProyectoTrabajoPartidaAvance(id) {
+        askDelete(function (result) {
+            if (result) {
+                idProyectoTrabajoPartida = $("#proyecto_trabajo_partida_id_general").val();
+                postJSON("ProyectoTrabajoPartidaAvance_C.php", {
+                    action: "d", id: id,
+                    proyecto_trabajo_partida_id: idProyectoTrabajoPartida,
+                    proyecto_id: $("#proyecto_id_general").val()
+                }, function (data) {
+                    if (!validErrorResponse(data)) {
+                        dataResponse = JSON.parse(data);
+                        notifySuccess();
+                        listProyectoTrabajoPartidaAvances();
+                        if (dataResponse.can_delete == true || dataResponse.can_delete == 1) {
+                            var idPadre = $("#tr_partida_" + idProyectoTrabajoPartida).attr("class");
+                            if (typeof idPadre !== 'undefined') {
+                                idPadre = idPadre.replace("tr_padre_", "").replace("odd", "").replace("even", "").trim();
+                            }
+                            var idProyecto = $("#proyecto_id_general").val();
+                            $("#tr_partida_" + idProyectoTrabajoPartida + " td div").last().append('<button type="button" class="btn btn-outline-danger btn-elevate btn-icon btn-circle btn-xs" data-toggle="tooltip" title="Eliminar Partida" onclick="deleteProyectoTrabajoPartida(' + idProyectoTrabajoPartida + ',\'' + idProyecto + '\',\'' + idPadre + '\');"><i class="fa fa-trash"></i></button>');
+                        }
+                        $("#tr_partida_" + idProyectoTrabajoPartida).find(".cantidad_real_acumulada").html(dataResponse.cantidad_real_acumulada);
+                        $("#tr_partida_" + idProyectoTrabajoPartida).find(".precio_real_acumulado").html(dataResponse.precio_real_acumulado);
+                        $("#tr_partida_" + idProyectoTrabajoPartida).find(".cantidad_por_ejecutar").html(dataResponse.cantidad_por_ejecutar);
+                        $("#tr_partida_" + idProyectoTrabajoPartida).find(".fecha_inicio_real").html(dataResponse.min_fecha_inicio_avance);
+                        $("#tr_partida_" + idProyectoTrabajoPartida).find(".fecha_termino_real").html(dataResponse.max_fecha_termino_avance);
+                        if (dataResponse.cantidad_por_ejecutar < 0) {
+                            $("#tr_partida_" + idProyectoTrabajoPartida).find(".cantidad_por_ejecutar").addClass("td-error");
+                        } else {
+                            $("#tr_partida_" + idProyectoTrabajoPartida).find(".cantidad_por_ejecutar").removeClass("td-error");
+                        }
+                        $("#tr_partida_" + idProyectoTrabajoPartida).find(".precio_por_ejecutar").html(dataResponse.precio_por_ejecutar);
+                        if (dataResponse.precio_por_ejecutar < 0) {
+                            $("#tr_partida_" + idProyectoTrabajoPartida).find(".precio_por_ejecutar").addClass("td-error");
+                        } else {
+                            $("#tr_partida_" + idProyectoTrabajoPartida).find(".precio_por_ejecutar").removeClass("td-error");
+                        }
+                        updateProyectoReal(dataResponse.sum_precio_plan, dataResponse.sum_precio_real_acumulado, dataResponse.sum_precio_por_ejecutar, dataResponse.min_fecha_inicio_real, dataResponse.max_fecha_termino_real);
+                    }
+                });
+            }
+        });
+    }
+    listProyectoTrabajoPartidaAvances();
+</script>

@@ -1,0 +1,103 @@
+<h3 id="titleActionModal">Registro</h3>
+<form id="formOrdenCompraDetalle">
+    <div class="form-group">
+        <label for="producto_id">Producto</label>
+        <select class="form-control form-control-sm form-control-autocomplete" id="producto_id" name="producto_id">
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="unidad_medida_id">Unidad de Medida</label>
+        <select class="form-control form-control-sm" id="unidad_medida_id" name="unidad_medida_id" placeholder="Unidad de Medida">
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="cantidad">Cantidad</label>
+        <input type="text" class="form-control form-control-sm form-control-decimal" id="cantidad" name="cantidad" placeholder="Cantidad" maxlength="10">
+    </div>
+    <div class="form-group">
+        <label for="precio_unitario">Precio Unitario</label>
+        <input type="text" class="form-control form-control-sm form-control-decimal" id="precio_unitario" name="precio_unitario" placeholder="Precio Unitario" maxlength="8">
+    </div>
+    <div class="only-options-right">
+        <input type="hidden" id="orden_compra_id" name="orden_compra_id" value="">
+        <input type="hidden" id="action" name="action" value="i">
+        <input type="hidden" id="id" name="id">
+        <button type="submit" class="btn btn-success btn-sm"><i class="la la-save"></i>Guardar</button>
+        <button type="button" class="btn btn-outline-danger btn-sm" onclick="closeLastModal();">Cancelar</button>
+    </div>
+</form>
+<script>
+    function fillProducto(idProducto) {
+        postJSON("Producto_C.php", { "action": "list" }, function (data) {
+            if (!validErrorResponse(data)) {
+                $("#formOrdenCompraDetalle #producto_id").html('<option value="">Seleccione Producto</option>');
+                var arrayProductos = JSON.parse(data);
+                arrayProductos.forEach(function (object, index) {
+                    $("#formOrdenCompraDetalle #producto_id").append('<option value="' + object.id + '">' + object.nombre + '</option>');
+                });
+                if (typeof idProducto !== 'undefined') {
+                    $("#formOrdenCompraDetalle #producto_id").val(idProducto);
+                }
+                startSelect2ById("formOrdenCompraDetalle #producto_id");
+            }
+        });
+    }
+    function fillUnidadMedida(idUnidadMedida) {
+        postJSON("UnidadMedida_C.php", { "action": "list" }, function (data) {
+            if (!validErrorResponse(data)) {
+                $("#formOrdenCompraDetalle #unidad_medida_id").html('<option value="">Seleccione Unidad de Medida</option>');
+                var arrayUnidadesMedida = JSON.parse(data);
+                arrayUnidadesMedida.forEach(function (object, index) {
+                    $("#formOrdenCompraDetalle #unidad_medida_id").append('<option value="' + object.codigo + '">' + object.nombre + '</option>');
+                });
+                if (typeof idUnidadMedida !== 'undefined') {
+                    $("#formOrdenCompraDetalle #unidad_medida_id").val(idUnidadMedida);
+                }
+                startSelect2ById("formOrdenCompraDetalle #unidad_medida_id");
+            }
+        });
+    }
+    function getOrdenCompraDetalle(id) {
+        postJSON("OrdenCompraDetalle_C.php", { action: "get", id: id }, function (data) {
+            if (!validErrorResponse(data)) {
+                dataResponse = JSON.parse(data)[0];
+                $("#titleActionModal").html("Editar");
+                fillProducto(dataResponse.producto_id);
+                fillUnidadMedida(dataResponse.unidad_medida_id);
+                $("#formOrdenCompraDetalle #cantidad").val(dataResponse.cantidad);
+                $("#formOrdenCompraDetalle #precio_unitario").val(dataResponse.precio_unitario);
+            }
+        });
+    }
+    $("#formOrdenCompraDetalle").validate({
+        rules: {
+            producto_id: {
+                required: true
+            },
+            unidad_medida_id: {
+                required: true
+            },
+            cantidad: {
+                required: true,
+                number: true
+            },
+            precio_unitario: {
+                required: true,
+                number: true
+            }
+        },
+        submitHandler: function (form) {
+            saveOrdenCompraDetalle();
+        }
+    });
+    function saveOrdenCompraDetalle() {
+        postJSONForm("OrdenCompraDetalle_C.php", "formOrdenCompraDetalle", function (data) {
+            if (!validErrorResponse(data)) {
+                closeLastModal();
+                notifySuccess();
+                listOrdenCompraDetalles();
+            }
+        });
+    }
+    startDecimalNumbers(9, 2);
+</script>

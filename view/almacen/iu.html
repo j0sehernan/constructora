@@ -1,0 +1,51 @@
+<h3 id="titleAction">Registro</h3>
+<form id="form">
+    <div class="form-group">
+        <label for="nombre">Nombre</label>
+        <input type="text" class="form-control form-control-sm" id="nombre" name="nombre" placeholder="Nombre" maxlength="100">
+    </div>
+    <div class="form-group">
+        <label for="ubicacion">Ubicación</label>
+        <input type="text" class="form-control form-control-sm" id="ubicacion" name="ubicacion" placeholder="Ubicación" maxlength="200">
+    </div>
+    <div class="only-options-right">
+        <input type="hidden" id="action" name="action" value="i">
+        <input type="hidden" id="id" name="id">
+        <button type="submit" class="btn btn-success btn-sm"><i class="la la-save"></i>Guardar</button>
+        <button type="button" class="btn btn-outline-danger btn-sm" onclick="closeLastModal();">Cancelar</button>
+    </div>
+</form>
+<script>
+    function saveAlmacen() {
+        postJSONForm("Almacen_C.php", "form", function (data) {
+            if (!validErrorResponse(data)) {
+                closeLastModal();
+                notifySuccess();
+                listAlmacenes();
+            }
+        });
+    }
+    $("#form").validate({
+        rules: {
+            nombre: {
+                required: true,
+                maxlength: 100
+            },
+            ubicacion: {
+                maxlength: 200
+            }
+        },
+        messages: {
+            nombre: {
+                required: STR_CAMPO_REQUERIDO,
+                maxlength: STR_SOLO_SE_PERMITEN + "{0}" + STR_CARACTERES_COMO_MAXIMO
+            },
+            ubicacion: {
+                maxlength: STR_SOLO_SE_PERMITEN + "{0}" + STR_CARACTERES_COMO_MAXIMO
+            }
+        },
+        submitHandler: function (form) {
+            saveAlmacen();
+        }
+    });
+</script>

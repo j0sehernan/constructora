@@ -1,0 +1,98 @@
+<h3 id="titleActionConvert"></h3>
+<form id="form">
+    <div class="form-group">
+        <label for="unidad_medida_ingreso">UM Ingreso</label>
+        <input type="text" class="form-control form-control-sm" id="unidad_medida_ingreso" name="unidad_medida_ingreso" placeholder="UM Ingreso" maxlength="10" readonly>
+    </div>
+    <div class="form-group">
+        <label for="cantidad">Cantidad</label>
+        <input type="text" class="form-control form-control-sm form-control-decimal" id="cantidad" name="cantidad" placeholder="Cantidad" maxlength="21" onchange="preViewConvert();">
+    </div>
+    <div class="form-group">
+        <label for="unidad_medida_salida_id">Unidad de Medida</label>
+        <select class="form-control form-control-sm form-control-autocomplete" id="unidad_medida_salida_id" name="unidad_medida_salida_id" onchange="preViewConvert();">
+        </select>
+    </div>
+    <div class="form-group" id="pre_view" name="pre_view"></div>
+    <div class="only-options-right">
+        <input type="hidden" id="action" name="action" value="convert">
+        <input type="hidden" id="almacen_id" name="almacen_id">
+        <input type="hidden" id="fecha_ingreso" name="fecha_ingreso">
+        <input type="hidden" id="fecha_vencimiento" name="fecha_vencimiento">
+        <input type="hidden" id="cantidad_inicial" name="cantidad_inicial">
+        <input type="hidden" id="producto_id" name="producto_id">
+        <input type="hidden" id="unidad_medida_ingreso_id" name="unidad_medida_ingreso_id">
+        <input type="hidden" id="cantidad_final" name="cantidad_final">
+        <input type="hidden" id="id" name="id">
+        <button type="submit" class="btn btn-success btn-sm"><i class="la la-save"></i>Guardar</button>
+        <button type="button" class="btn btn-outline-danger btn-sm" onclick="closeLastModal();">Cancelar</button>
+    </div>
+</form>
+<script>
+    function fillUnidadMedida(idUnidadMedida) {
+        postJSON("ProductoUnidadMedida_C.php", { "action": "listByProductoAndUMIngreso", "producto_id": $("#producto_id").val(), "unidad_medida_ingreso_id": $("#unidad_medida_ingreso_id").val() }, function (data) {
+            if (!validErrorResponse(data)) {
+                $("#unidad_medida_salida_id").html('<option value="">Seleccione UM Salida</option>');
+                var arrayUnidadesMedida = JSON.parse(data);
+                arrayUnidadesMedida.forEach(function (object, index) {
+                    $("#unidad_medida_salida_id").append('<option value="' + object.unidad_medida_salida_id + '" data-factor="' + object.factor + '" data-cantidad="' + object.cantidad + '">' + object.unidad_medida_salida + '</option>');
+                });
+                if (typeof idUnidadMedida !== 'undefined') {
+                    $("#unidad_medida_salida_id").val(idUnidadMedida);
+                }
+                startSelect2ById("unidad_medida_salida_id");
+            }
+        });
+    }
+    function preViewConvert() {
+        $("#pre_view").html("");
+        var idUnidadMedida = $("#unidad_medida_salida_id").val();
+        if (idUnidadMedida !== '') {
+            var cantidad = $("#cantidad").val();
+            var factor = $("#unidad_medida_salida_id option:selected").attr("data-factor");
+            var cantidadFactor = $("#unidad_medida_salida_id option:selected").attr("data-cantidad");
+            var resultado = eval(cantidad + factor + cantidadFactor).toFixed(2);
+            $("#cantidad_final").val(resultado);
+
+            var html =
+                '<label>Previsualización</label>' +
+                '<p class="form-control-static" >' +
+                '<span class="kt-font-dark">' + cantidad + '</span>&nbsp' +
+                '<span class="kt-font-danger">' + factor + '</span>&nbsp' +
+                '<span class="kt-font-dark">' + cantidadFactor + '</span>&nbsp' +
+                '<span class="kt-font-danger">=</span>&nbsp' +
+                '<span class="kt-font-success">' + resultado + '</span>' +
+                '</p>';
+            $("#pre_view").html(html);
+        }
+    }
+    function convert() {
+        postJSONForm("Kardex_C.php", "form", function (data) {
+            if (!validErrorResponse(data)) {
+                closeLastModal();
+                notifySuccess();
+                listKardexByAlmacen();
+            }
+        });
+    }
+    $("#form").validate({
+        rules: {
+            cantidad: {
+                required: true,
+                min: 0.01,
+                max: function () {
+                    return $("#cantidad_inicial").val();
+                },
+                maxlength: 21,
+                number: true
+            },
+            unidad_medida_salida_id: {
+                required: true
+            }
+        },
+        submitHandler: function (form) {
+            convert();
+        }
+    });
+    startDecimalNumbers(18, 2);
+</script>

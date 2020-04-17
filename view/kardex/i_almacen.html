@@ -1,0 +1,157 @@
+<form id="formAlmacen">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="form-group">
+                <label for="almacen_origen_id">Almacen Origen</label>
+                <select class="form-control form-control-sm form-control-autocomplete" id="almacen_origen_id" name="almacen_origen_id" onchange="listKardexByAlmacenOrigen();">
+                </select>
+            </div>
+        </div>
+    </div>
+    <div id="divTableAlmacenOrigen" style="display: none;">
+        <table id="tableAlmacenOrigen" class="table table-hover table-bordered table-striped table-sm">
+            <thead class="thead-dark"></thead>
+        </table>
+        <div class="only-options-right">
+            <input type="hidden" id="action" name="action" value="I_ALMACEN">
+            <input type="hidden" id="almacen_id" name="almacen_id">
+            <button type="submit" class="btn btn-success btn-sm"><i class="la la-save"></i>Guardar</button>
+            <button type="button" class="btn btn-outline-danger btn-sm" onclick="closeLastModal();">Cancelar</button>
+        </div>
+    </div>
+</form>
+<script>
+    function fillAlmacenOrigen(idAlmacen) {
+        idAlmacenGeneral = $("#formAlmacen #almacen_id").val();
+        postJSON("Almacen_C.php", { "action": "list" }, function (data) {
+            if (!validErrorResponse(data)) {
+                $("#almacen_origen_id").html('<option value="">Seleccione Almacen de Origen</option>');
+                var arrayAlmacenes = JSON.parse(data);
+                arrayAlmacenes.forEach(function (object, index) {
+                    if (object.id !== idAlmacenGeneral) {
+                        $("#almacen_origen_id").append('<option value="' + object.id + '">' + object.nombre + '</option>');
+                    }
+                });
+                if (typeof idAlmacen !== 'undefined') {
+                    $("#almacen_origen_id").val(idAlmacen);
+                }
+                startSelect2ById("almacen_origen_id");
+            }
+        });
+    }
+    function listKardexByAlmacenOrigen() {
+        $("#divTableAlmacenOrigen").hide();
+        var idAlmacen = $("#almacen_origen_id").val();
+        if (idAlmacen !== "") {
+            $("#divTableAlmacenOrigen").show();
+            //var ubicacion = $("#almacen_id_general option:selected").attr("data-ubicacion");
+            //ubicacion !== "" ? $("#ubicacion").text(ubicacion) : ""
+            postJSON("Kardex_C.php", { "action": "listByAlmacen", "almacen_id": idAlmacen }, function (data) {
+                if (!validErrorResponse(data)) {
+                    destroyDataTableIfExists("tableAlmacenOrigen");
+                    $('#tableAlmacenOrigen').DataTable({
+                        data: JSON.parse(data),
+                        columns: [
+                            {
+                                title: "Producto", data: "producto", render: function (data, type, row, meta) {
+                                    return '<input type="hidden" id="producto_id_' + row.id + '" value="' + row.producto_id + '">' +
+                                        '<input type="hidden" name="kardex" value="' + row.id + '">' + data;
+                                }
+                            },
+                            {
+                                title: "UM", data: "unidad_medida", render: function (data, type, row, meta) {
+                                    return '<input type="hidden" id="unidad_medida_id_' + row.id + '" value="' + row.unidad_medida_id + '">' + data;
+                                }
+                            },
+                            {
+                                title: "F.Ing", data: "fecha_ingreso", className: "td-date", render: function (data, type, row, meta) {
+                                    return '<input type="hidden" id="fecha_ingreso_' + row.id + '" value="' + data + '">' + data;
+                                }
+                            },
+                            {
+                                title: "F.Ven", data: "fecha_vencimiento", className: "td-date", render: function (data, type, row, meta) {
+                                    return '<input type="hidden" id="fecha_vencimiento_' + row.id + '" value="' + data + '">' + data;
+                                }
+                            },
+                            {
+                                title: "Cant", data: "cantidad", render: function (data, type, row, meta) {
+                                    return '<input type="hidden" id="cantidad_restante_' + row.id + '" value="' + data + '">' + data;
+                                }
+                            },
+                            {
+                                title: "Can.Ing.", data: "cantidad", className: "td-decimal", render: function (data, type, row, meta) {
+                                    return '<input type="text" class="form-control-decimal form-control-array" name="cantidad" id="cantidad_' + row.id + '" maxlength="21" max="' + data + '">';
+                                }
+                            }
+                        ]
+                    });
+                    startDecimalNumbers(18, 2);
+                }
+            });
+        }
+    }
+    $("#formAlmacen").validate({
+        rules: {
+            almacen_origen_id: {
+                required: true
+            },
+            cantidad: {
+                required: true,
+                maxlength: 21,
+                max: function (element) {
+                    return Number($(element).attr("max"));
+                },
+                number: true
+            }
+        },
+        errorPlacement: function (error, element) {
+            idElement = $(element).attr("id");
+            classElemet = $(element).attr("class");
+            error.addClass("invalid-feedback")
+            if (classElemet === "form-control-array") {
+                error.attr("id", idElement);
+                error.insertAfter(element);
+            } else if (classElemet = "form-control-autocomplete") {
+                $(element).parent().append(error);
+            }
+        },
+        submitHandler: function (form) {
+            saveIAlmacen();
+        }
+    });
+    function saveIAlmacen() {
+        var OCElements = $("[name=kardex]");
+        var JSONElements = {};
+        $.map(OCElements, function (object, index) {
+            id = $(object).val();
+            cantidad = $("#cantidad_" + id).val();
+            if (cantidad > 0) {
+                producto_id = $("#producto_id_" + id).val();
+                unidad_medida_id = $("#unidad_medida_id_" + id).val();
+                cantidad_restante = $("#cantidad_restante_" + id).val();
+                fecha_ingreso = $("#fecha_ingreso_" + id).val();
+                fecha_vencimiento = $("#fecha_vencimiento_" + id).val();
+                JSONElements[index] = {
+                    id: id,
+                    producto_id: producto_id,
+                    unidad_medida_id: unidad_medida_id,
+                    cantidad_restante: cantidad_restante,
+                    cantidad: cantidad,
+                    fecha_ingreso: fecha_ingreso,
+                    fecha_vencimiento: fecha_vencimiento
+                };
+            }
+        });
+        postJSON("Kardex_C.php", {
+            "action": $("#action").val(), "listKardex": JSONElements,
+            almacen_origen_id: $("#almacen_origen_id").val(),
+            almacen_id: $("#almacen_id_general").val()
+        }, function (data) {
+            if (!validErrorResponse(data)) {
+                closeLastModal();
+                notifySuccess();
+                listKardexByAlmacen();
+            }
+        });
+    }
+</script>

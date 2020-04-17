@@ -1,0 +1,81 @@
+<div class="kt-subheader kt-grid__item" id="kt_subheader">
+    <div class="kt-container  kt-container--fluid ">
+        <div class="kt-subheader__main">
+            <h3 class="kt-subheader__title">Documento de Identidad</h3>
+            <span class="kt-subheader__separator kt-hidden"></span>
+            <div class="kt-subheader__breadcrumbs">
+                <a href="#" class="kt-subheader__breadcrumbs-home"><i class="flaticon2-shelter"></i></a>
+                <span class="kt-subheader__breadcrumbs-separator"></span>
+                <a href="#" class="kt-subheader__breadcrumbs-link">
+                    Documentos de Identidad </a>
+                <span class="kt-subheader__breadcrumbs-separator"></span>
+                <a href="#" class="kt-subheader__breadcrumbs-link">
+                    Listado </a>
+            </div>
+        </div>
+        <div class="kt-subheader__toolbar">
+            <div class="kt-subheader__wrapper">
+                <a class="btn btn-icon btn btn-label btn-label-brand btn-bold" data-toggle="tooltip" title="Actualizar"
+                    data-placement="top" onclick="listDocumentosIdentidad();"><i class="flaticon-refresh"></i></a>
+                <a class="btn btn-icon btn btn-label btn-label-brand btn-bold" data-toggle="tooltip" title="Agregar"
+                    data-placement="top" onclick="showDocumentoIdentidad('i','');"><i class="flaticon2-add-1"></i></a>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="kt-container  kt-container--fluid kt-grid__item kt-grid__item--fluid">
+    <table id="table" class="table table-hover table-bordered table-striped table-sm">
+        <thead class="thead-dark"></thead>
+    </table>
+</div>
+<script>
+    function listDocumentosIdentidad() {
+        postJSON("DocumentoIdentidad_C.php", { "action": "list" }, function (data) {
+            if (!validErrorResponse(data)) {
+                destroyDataTableIfExists("table");
+                $('#table').DataTable({
+                    data: JSON.parse(data),
+                    columns: [
+                        { title: "Código", data: "codigo" },
+                        { title: "Nombre", data: "nombre" },
+                        { title: "Tipo Persona", data: "persona_tipo" },
+                        { title: "Longitud Mínima", data: "longitud_minima" },
+                        { title: "Longitud Máxima", data: "longitud_maxima" },
+                        {
+                            title: "Acciones", className: "td-actions", render: function (data, type, row, meta) {
+                                return '<button type="button" class="btn btn-outline-info btn-elevate btn-icon btn-circle btn-xs" data-toggle="tooltip" title="Editar" onclick="showDocumentoIdentidad(\'u\',\'' + row.codigo + '\');">' +
+                                    '<i class="fa fa-pencil-alt"></i></button>&nbsp;' +
+                                    '<button type="button" class="btn btn-outline-danger btn-elevate btn-icon btn-circle btn-xs" data-toggle="tooltip" title="Eliminar" onclick="deleteDocumentoIdentidad(\'' + row.codigo + '\');">' +
+                                    '<i class="fa fa-trash"></i></button>'
+                            }
+                        }
+                    ]
+                });
+            }
+        });
+    }
+    function showDocumentoIdentidad(action, codigo) {
+        getModalWithCallBack('documento_identidad/iu.html', function () {
+            if (action === "i") {
+                fillPersonaTipos();
+            } else if (action === "u") {
+                $("#codigo").val(codigo);
+                $("#action").val("u");
+                getDocumentoIdentidad();
+            }
+        });
+    }
+    function deleteDocumentoIdentidad(codigo) {
+        bootbox.confirm(STR_ASK_DELETE, function (result) {
+            if (result) {
+                postJSON("DocumentoIdentidad_C.php", { action: "d", codigo: codigo }, function (data) {
+                    if (!validErrorResponse(data)) {
+                        notifySuccess();
+                        listDocumentosIdentidad();
+                    }
+                });
+            }
+        });
+    }
+    listDocumentosIdentidad();
+</script>

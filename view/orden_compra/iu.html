@@ -1,0 +1,187 @@
+<div class="kt-subheader kt-grid__item" id="kt_subheader">
+    <div class="kt-container  kt-container--fluid ">
+        <div class="kt-subheader__main">
+            <h3 class="kt-subheader__title">Orden de Compra</h3>
+            <span class="kt-subheader__separator kt-hidden"></span>
+            <div class="kt-subheader__breadcrumbs">
+                <a href="#" class="kt-subheader__breadcrumbs-home"><i class="flaticon2-shelter"></i></a>
+                <span class="kt-subheader__breadcrumbs-separator"></span>
+                <a href="#" class="kt-subheader__breadcrumbs-link">
+                    Ordenes de Compra </a>
+                <span class="kt-subheader__breadcrumbs-separator"></span>
+                <a href="#" class="kt-subheader__breadcrumbs-link" id="titleAction">
+                    Registro </a>
+            </div>
+        </div>
+        <div class="kt-subheader__toolbar">
+            <div class="kt-subheader__wrapper">
+
+            </div>
+        </div>
+    </div>
+</div>
+<div class="kt-container kt-container--fluid kt-grid__item kt-grid__item--fluid">
+    <form id="form">
+        <div class="row">
+            <div class="col">
+                <div class="form-group">
+                    <label for="persona_proveedor_id">Proveedor</label>
+                    <select class="form-control form-control-sm form-control-autocomplete" id="persona_proveedor_id" name="persona_proveedor_id">
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="codigo">Código</label>
+                    <input type="text" class="form-control form-control-sm" id="codigo" name="codigo" placeholder="Código" maxlength="100">
+                </div>
+            </div>
+            <div class="col">
+                <div class="form-group">
+                    <label for="fecha">Fecha</label>
+                    <input type="text" class="form-control form-control-sm form-control-date" id="fecha" name="fecha" placeholder="Fecha" maxlength="10">
+                </div>
+                <div class="form-group">
+                    <label for="proforma_codigo">Proforma</label>
+                    <input type="text" class="form-control form-control-sm" id="proforma_codigo" name="proforma_codigo" placeholder="Proforma" maxlength="100">
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col only-options-right" style="margin-bottom: 10px;">
+                <span id="divOptionsOrdenCompraDetalle">
+                    <a class="btn btn-icon btn btn-label btn-label-brand btn-bold btn-sm" data-toggle="tooltip" title="Actualizar" data-placement="top" onclick="listOrdenCompraDetalles();"><i class="flaticon-refresh"></i></a>
+                    <a href="#" class="btn btn-icon btn btn-label btn-label-brand btn-bold btn-sm" data-toggle="tooltip" title="Agregar Detalle" data-placement="top" onclick="showOrdenCompraDetalleForm('i')"><i class="flaticon2-add-1"></i></a>
+                </span>
+                <input type="hidden" id="action" name="action" value="i">
+                <input type="hidden" id="id" name="id">
+                <button type="submit" class="btn btn-success btn-sm"><i class="la la-save"></i>Guardar</button>
+            </div>
+        </div>
+    </form>
+    <table id="tableDetalle" class="table table-hover table-bordered table-striped table-sm">
+        <thead class="thead-dark"></thead>
+    </table>
+</div>
+<script>
+    function fillPersonaByPersonaTipo(idPersona) {
+        postJSON("Persona_C.php", { "action": "listByPersonaTipo", "persona_tipo_id": "J" }, function (data) {
+            if (!validErrorResponse(data)) {
+                $("#persona_proveedor_id").html('<option value="">Seleccione Proveedor</option>');
+                var arrayAlmacenes = JSON.parse(data);
+                arrayAlmacenes.forEach(function (object, index) {
+                    $("#persona_proveedor_id").append('<option value="' + object.id + '">' + object.nombre_1 + '</option>');
+                });
+                if (typeof idPersona !== 'undefined') {
+                    $("#persona_proveedor_id").val(idPersona);
+                }
+                startSelect2ById("persona_proveedor_id");
+            }
+        });
+    }
+    function getOrdenCompra(id) {
+        postJSON("OrdenCompra_C.php", { action: "get", id: id }, function (data) {
+            if (!validErrorResponse(data)) {
+                dataResponse = JSON.parse(data)[0];
+                $("#titleAction").html("Editar");
+                fillPersonaByPersonaTipo(dataResponse.persona_proveedor_id);
+                $("#fecha").val(dataResponse.fecha);
+                $("#proforma_codigo").val(dataResponse.proforma_codigo);
+                $("#codigo").val(dataResponse.codigo);
+                listOrdenCompraDetalles();
+            }
+        });
+    }
+    $("#form").validate({
+        rules: {
+            persona_proveedor_id: {
+                required: true
+            },
+            codigo: {
+                required: true,
+                maxlength: 100
+            },
+            fecha: {
+                required: true,
+                dateITA: true
+            },
+            proforma_codigo: {
+                required: true,
+                maxlength: 100
+            }
+        },
+        submitHandler: function (form) {
+            saveOrdenCompra();
+        }
+    });
+    function saveOrdenCompra() {
+        postJSONForm("OrdenCompra_C.php", "form", function (data) {
+            if (!validErrorResponse(data)) {
+                notifySuccess();
+                if ($("#form #action").val() === "i") {
+                    dataResponse = JSON.parse(data)[0];
+                    $("#titleAction").html("Editar");
+                    $("#id").val(dataResponse.id);
+                    $("#action").val("u");
+                    $("#divOptionsOrdenCompraDetalle").show();
+                    listOrdenCompraDetalles();
+                }
+            }
+        });
+    }
+    //DETALLE
+    function showOrdenCompraDetalleForm(action, id) {
+        getModalWithCallBack('orden_compra_detalle/iu.html', function () {
+            $("#orden_compra_id").val($("#form #id").val());
+            if (action === "i") {
+                fillProducto();
+                fillUnidadMedida();
+            } else if (action === "u") {
+                $("#formOrdenCompraDetalle #id").val(id);
+                $("#formOrdenCompraDetalle #action").val("u");
+                getOrdenCompraDetalle(id);
+            }
+        });
+    }
+    function listOrdenCompraDetalles() {
+        var idOrdenCompra = $("#form #id").val();
+        postJSON("OrdenCompraDetalle_C.php", { "action": "listByOrdenCompra", orden_compra_id: idOrdenCompra }, function (data) {
+            if (!validErrorResponse(data)) {
+                destroyDataTableIfExists("tableDetalle");
+                $('#tableDetalle').DataTable({
+                    data: JSON.parse(data),
+                    columns: [
+                        { title: "Producto", data: "producto" },
+                        { title: "Unidad de Medida", data: "unidad_medida" },
+                        { title: "Precio Unitario", data: "precio_unitario" },
+                        { title: "Cantidad Inicial", data: "cantidad" },
+                        { title: "Cantidad Usada", data: "cantidad_usada" },
+                        { title: "Cantidad Restante", data: "cantidad_restante" },
+                        {
+                            title: "Acciones", className: "td-actions", render: function (data, type, row, meta) {
+                                html = "";
+                                if (row.in_progress == 0 && row.used == 0) {
+                                    html =
+                                        '<button type="button" class="btn btn-outline-info btn-elevate btn-icon btn-circle btn-xs" data-toggle="tooltip" title="Editar" onclick="showOrdenCompraDetalleForm(\'u\',' + row.id + ');"><i class="fa fa-pencil-alt"></i></button>&nbsp;' +
+                                        '<button type="button" class="btn btn-outline-danger btn-elevate btn-icon btn-circle btn-xs" data-toggle="tooltip" title="Eliminar" onclick="deleteOrdenCompraDetalle(' + row.id + ');"><i class="fa fa-trash"></i></button>';
+                                }
+                                return html;
+                            }
+                        }
+                    ]
+                });
+            }
+        });
+    }
+    function deleteOrdenCompraDetalle(id) {
+        bootbox.confirm(STR_ASK_DELETE, function (result) {
+            if (result) {
+                postJSON("OrdenCompraDetalle_C.php", { action: "d", id: id }, function (data) {
+                    if (!validErrorResponse(data)) {
+                        notifySuccess();
+                        listOrdenCompraDetalles();
+                    }
+                });
+            }
+        });
+    }
+    startDatePicker();
+</script>

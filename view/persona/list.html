@@ -1,0 +1,88 @@
+<div class="kt-subheader kt-grid__item" id="kt_subheader">
+    <div class="kt-container  kt-container--fluid ">
+        <div class="kt-subheader__main">
+            <h3 class="kt-subheader__title">Persona</h3>
+            <span class="kt-subheader__separator kt-hidden"></span>
+            <div class="kt-subheader__breadcrumbs">
+                <a href="#" class="kt-subheader__breadcrumbs-home"><i class="fa fa-user"></i></a>
+                <span class="kt-subheader__breadcrumbs-separator"></span>
+                <a href="#" class="kt-subheader__breadcrumbs-link">
+                    Personas </a>
+                <span class="kt-subheader__breadcrumbs-separator"></span>
+                <a href="#" class="kt-subheader__breadcrumbs-link">
+                    Listado </a>
+            </div>
+        </div>
+        <div class="kt-subheader__toolbar">
+            <div class="kt-subheader__wrapper">
+                <a class="btn btn-icon btn btn-label btn-label-brand btn-bold" data-toggle="tooltip" title="Actualizar" data-placement="top" onclick="listPersonas();"><i class="flaticon-refresh"></i></a>
+                <a href="#" class="btn btn-icon btn btn-label btn-label-brand btn-bold" data-toggle="tooltip" title="Agregar" data-placement="top" onclick="showPersona('i', 0)"><i class="flaticon2-add-1"></i></a>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="kt-container  kt-container--fluid kt-grid__item kt-grid__item--fluid">
+    <table id="table" class="table table-hover table-bordered table-striped table-sm">
+        <thead class="thead-dark"></thead>
+    </table>
+</div>
+<script>
+    function listPersonas() {
+        postJSON("Persona_C.php", { "action": "list" }, function (data) {
+            if (!validErrorResponse(data)) {
+                destroyDataTableIfExists("table");
+                $('#table').DataTable({
+                    data: JSON.parse(data),
+                    columns: [
+                        { title: "Tipo", data: "persona_tipo_id" },
+                        { title: "DOC", data: "documento_identidad" },
+                        { title: "N°", data: "numero_documento_identidad" },
+                        { title: "Pri. Nom.", data: "nombre_1" },
+                        { title: "Seg. Nom.", data: "nombre_2" },
+                        { title: "A. Paterno", data: "apellido_paterno" },
+                        { title: "A. Materno", data: "apellido_materno" },
+                        {
+                            title: "Acciones", className: "td-actions", render: function (data, type, row, meta) {
+                                return '<button type="button" class="btn btn-outline-success btn-elevate btn-icon btn-circle btn-xs" data-toggle="tooltip" title="Credenciales" onclick="showUsuarioForm(' + row.id + ');"><i class="fa fa-user"></i></button>&nbsp;' +
+                                    '<button type="button" class="btn btn-outline-info btn-elevate btn-icon btn-circle btn-xs" data-toggle="tooltip" title="Editar" onclick="showPersona(\'u\',' + row.id + ');"><i class="fa fa-pencil-alt"></i></button>&nbsp;' +
+                                    '<button type="button" class="btn btn-outline-danger btn-elevate btn-icon btn-circle btn-xs" data-toggle="tooltip" title="Eliminar" onclick="deletePersona(' + row.id + ');"><i class="fa fa-trash"></i></button>'
+                            }
+                        }
+                    ]
+                });
+            }
+        });
+    }
+    function showPersona(action, id) {
+        getHTMLContainerWithCallBack('persona/iu.html', function () {
+            if (action === "i") {
+                startDatePicker();
+            } else if (action === "u") {
+                $("#form #id").val(id);
+                $("#form #action").val("u");
+                getPersona();
+                listEmails();
+                listTelefonos();
+            }
+        });
+    }
+    function deletePersona(id) {
+        bootbox.confirm(STR_ASK_DELETE, function (result) {
+            if (result) {
+                postJSON("Persona_C.php", { action: "d", id: id }, function (data) {
+                    if (!validErrorResponse(data)) {
+                        notifySuccess();
+                        listPersonas();
+                    }
+                });
+            }
+        });
+    }
+    function showUsuarioForm(id) {
+        getModalWithCallBack('persona/usuario.html', function () {
+            $("#form #id").val(id);
+            getUsuario(id);
+        });
+    }
+    listPersonas();
+</script>

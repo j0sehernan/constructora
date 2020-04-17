@@ -1,0 +1,235 @@
+<form id="formOC">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="form-group">
+                <label for="orden_compra_id">Orden de Compra</label>
+                <select class="form-control form-control-sm form-control-autocomplete" id="orden_compra_id" name="orden_compra_id" onchange="listOdenCompraDetalleDontUsed();">
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-4">
+            <div class="form-group">
+                <label for="comprobante_pago_tipo_id">Tipo de Comprobante</label>
+                <select class="form-control form-control-sm form-control-autocomplete" id="comprobante_pago_tipo_id" name="comprobante_pago_tipo_id">
+                </select>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="form-group">
+                <label for="comprobante_pago_codigo">N° Comprobante</label>
+                <input type="text" class="form-control form-control-sm" id="comprobante_pago_codigo" name="comprobante_pago_codigo" placeholder="N° Comprobante" maxlength="100">
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="form-group">
+                <label for="guia_remision">Guía de Remisión</label>
+                <input type="text" class="form-control form-control-sm" id="guia_remision" name="guia_remision" placeholder="Guía Remisión" maxlength="100">
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-4">
+            <div class="form-group">
+                <label for="fecha_ingreso_all">Fecha de Ingreso</label>
+                <input type="text" class="form-control form-control-sm form-control-date" id="fecha_ingreso_all" name="fecha_ingreso_all" placeholder="Fecha de Ingreso" maxlength="10">
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="form-group">
+                <label for="fecha_vencimiento_all">Fecha de Vencimiento</label>
+                <input type="text" class="form-control form-control-sm form-control-date" id="fecha_vencimiento_all" name="fecha_vencimiento_all" placeholder="Fecha de Vencimiento" maxlength="10">
+            </div>
+        </div>
+    </div>
+    <div id="divTableOrdenCompraDetalle" style="display: none;">
+        <table id="tableOrdenCompraDetalle" class="table table-hover table-bordered table-striped table-sm">
+            <thead class="thead-dark"></thead>
+        </table>
+        <div class="only-options-right">
+            <input type="hidden" id="action" name="action" value="I_OC">
+            <input type="hidden" id="orden_compra_used" name="action" value="false">
+            <button type="submit" class="btn btn-success btn-sm"><i class="la la-save"></i>Guardar</button>
+            <button type="button" class="btn btn-outline-danger btn-sm" onclick="closeLastModal();">Cancelar</button>
+        </div>
+    </div>
+</form>
+<script>
+    function fillOrdenCompraDontUsed(idOrdenCompra) {
+        postJSON("OrdenCompra_C.php", { "action": "listDontUsed" }, function (data) {
+            if (!validErrorResponse(data)) {
+                $("#orden_compra_id").html('<option value="">Seleccione Orden de Compra</option>');
+                var arrayOC = JSON.parse(data);
+                arrayOC.forEach(function (object, index) {
+                    $("#orden_compra_id").append('<option value="' + object.id + '">' + object.codigo + '</option>');
+                });
+                if (typeof idOrdenCompra !== 'undefined') {
+                    $("#orden_compra_id").val(idOrdenCompra);
+                }
+                startSelect2ById("orden_compra_id");
+            }
+        });
+    }
+    function fillComprobantePagoTipo(idComprobantePagoTipo) {
+        postJSON("ComprobantePagoTipo_C.php", { "action": "list" }, function (data) {
+            if (!validErrorResponse(data)) {
+                $("#comprobante_pago_tipo_id").html('<option value="">Seleccione Tipo Comprobante</option>');
+                var arrayComprobantesPagoTipo = JSON.parse(data);
+                arrayComprobantesPagoTipo.forEach(function (object, index) {
+                    $("#comprobante_pago_tipo_id").append('<option value="' + object.codigo + '">' + object.nombre + '</option>');
+                });
+                if (typeof idComprobantePagoTipo !== 'undefined') {
+                    $("#comprobante_pago_tipo_id").val(idComprobantePagoTipo);
+                }
+                startSelect2ById("comprobante_pago_tipo_id");
+            }
+        });
+    }
+    function listOdenCompraDetalleDontUsed() {
+        $("#divTableOrdenCompraDetalle").hide();
+        var idOrdenCompra = $("#orden_compra_id").val();
+        if (idOrdenCompra !== "") {
+            $("#divTableOrdenCompraDetalle").show();
+            postJSON("OrdenCompraDetalle_C.php", { "action": "listDontUsedByOrdenCompra", "orden_compra_id": idOrdenCompra }, function (data) {
+                if (!validErrorResponse(data)) {
+                    destroyDataTableIfExists("tableOrdenCompraDetalle");
+                    $('#tableOrdenCompraDetalle').DataTable({
+                        data: JSON.parse(data),
+                        columns: [
+                            {
+                                title: "Producto", data: "producto", render: function (data, type, row, meta) {
+                                    return '<input type="hidden" id="producto_id_' + row.id + '" value="' + row.producto_id + '">' +
+                                        '<input type="hidden" name="orden_compra" value="' + row.id + '">' + data;
+                                }
+                            },
+                            {
+                                title: "UM", data: "unidad_medida", render: function (data, type, row, meta) {
+                                    return '<input type="hidden" id="unidad_medida_id_' + row.id + '" value="' + row.unidad_medida_id + '">' + data;
+                                }
+                            },
+                            {
+                                title: "P.U.", data: "precio_unitario", render: function (data, type, row, meta) {
+                                    return '<input type="hidden" id="precio_unitario_' + row.id + '" value="' + data + '">' + data;
+                                }
+                            },
+                            {
+                                title: "Cant", data: "cantidad_restante", render: function (data, type, row, meta) {
+                                    return '<input type="hidden" id="cantidad_restante_' + row.id + '" value="' + data + '">' + data;
+                                }
+                            },
+                            {
+                                title: "Can.Ing.", className: "td-decimal", data: "cantidad_restante", render: function (data, type, row, meta) {
+                                    return '<input type="text" class="form-control-decimal form-control-array" name="cantidad" id="cantidad_' + row.id + '" value="' + data + '" maxlength="21" max="' + data + '">';
+                                }
+                            },
+                            {
+                                title: "F.Ing", className: "td-date", render: function (data, type, row, meta) {
+                                    return '<input type="text" class="form-control-date form-control-array" name="fecha_ingreso" id="fecha_ingreso_' + row.id + '" value="" maxlength="10">';
+                                }
+                            },
+                            {
+                                title: "F.Ven", className: "td-date", render: function (data, type, row, meta) {
+                                    return '<input type="text" class="form-control-date" name="fecha_vencimiento" id="fecha_vencimiento_' + row.id + '" value="" maxlength="10">';
+                                }
+                            }
+                        ]
+                    });
+                    startDatePicker();
+                    startDecimalNumbers(18, 2);
+                }
+            });
+        }
+    }
+    $("#formOC").validate({
+        rules: {
+            orden_compra_id: {
+                required: true
+            },
+            comprobante_pago_tipo_id: {
+                required: true
+            },
+            comprobante_pago_codigo: {
+                required: true,
+                maxlength: 100
+            },
+            guia_remision: {
+                required: true,
+                maxlength: 100
+            },
+            cantidad: {
+                required: true,
+                maxlength: 21,
+                max: function (element) {
+                    return Number($(element).attr("max"));
+                },
+                number: true
+            },
+            fecha_ingreso: {
+                required: true,
+                maxlength: 10,
+                dateITA: true
+            }
+        },
+        errorPlacement: function (error, element) {
+            idElement = $(element).attr("id");
+            classElemet = $(element).attr("class");
+            error.addClass("invalid-feedback")
+            if (classElemet === "form-control-array") {
+                error.attr("id", idElement);
+                error.insertAfter(element);
+            } else if (classElemet = "form-control-autocomplete") {
+                $(element).parent().append(error);
+            }
+        },
+        submitHandler: function (form) {
+            saveIOC();
+        }
+    });
+    function saveIOC() {
+        var OCElements = $("[name=orden_compra]");
+        var JSONElements = {};
+        var count_orden_compra_used = 0;
+        $.map(OCElements, function (object, index) {
+            id = $(object).val();
+            cantidad = $("#cantidad_" + id).val();
+            if (cantidad > 0) {
+                producto_id = $("#producto_id_" + id).val();
+                unidad_medida_id = $("#unidad_medida_id_" + id).val();
+                precio_unitario = $("#precio_unitario_" + id).val();
+                cantidad_restante = $("#cantidad_restante_" + id).val();
+                fecha_ingreso = $("#fecha_ingreso_" + id).val();
+                fecha_vencimiento = $("#fecha_vencimiento_" + id).val();
+                used = Number(cantidad) == Number(cantidad_restante) ? true : false;
+                used ? count_orden_compra_used++ : count_orden_compra_used;
+                JSONElements[index] = {
+                    id: id,
+                    producto_id: producto_id,
+                    unidad_medida_id: unidad_medida_id,
+                    precio_unitario: precio_unitario,
+                    cantidad: cantidad,
+                    fecha_ingreso: fecha_ingreso,
+                    fecha_vencimiento: fecha_vencimiento,
+                    used: used
+                };
+            }
+        });
+        var orden_compra_used = OCElements.length === count_orden_compra_used ? true : false;
+        postJSON("Kardex_C.php", {
+            "action": $("#action").val(), "listOC": JSONElements,
+            orden_compra_id: $("#orden_compra_id").val(),
+            orden_compra_used: orden_compra_used,
+            comprobante_pago_tipo_id: $("#comprobante_pago_tipo_id").val(),
+            comprobante_pago_codigo: $("#comprobante_pago_codigo").val(),
+            guia_remision: $("#guia_remision").val(),
+            almacen_id: $("#almacen_id_general").val()
+        }, function (data) {
+            if (!validErrorResponse(data)) {
+                closeLastModal();
+                notifySuccess();
+                listKardexByAlmacen();
+            }
+        });
+    }
+    startDatePicker();
+</script>

@@ -1,0 +1,82 @@
+<div class="kt-subheader kt-grid__item" id="kt_subheader">
+    <div class="kt-container kt-container--fluid ">
+        <div class="kt-subheader__main">
+            <h3 class="kt-subheader__title">Proyecto</h3>
+            <span class="kt-subheader__separator kt-hidden"></span>
+            <div class="kt-subheader__breadcrumbs">
+                <a href="#" class="kt-subheader__breadcrumbs-home"><i class="fa fa-project-diagram"></i></a>
+                <span class="kt-subheader__breadcrumbs-separator"></span>
+                <a href="#" class="kt-subheader__breadcrumbs-link">
+                    Proyectos </a>
+                <span class="kt-subheader__breadcrumbs-separator"></span>
+                <a href="#" class="kt-subheader__breadcrumbs-link">
+                    Listado </a>
+            </div>
+        </div>
+        <div class="kt-subheader__toolbar">
+            <div class="kt-subheader__wrapper">
+                <a class="btn btn-icon btn btn-label btn-label-brand btn-bold" data-toggle="tooltip" title="Actualizar" data-placement="top" onclick="listProyectos();"><i class="fa fa-redo-alt"></i></a>
+                <a class="btn btn-icon btn btn-label btn-label-brand btn-bold" data-toggle="tooltip" title="Agregar" data-placement="top" onclick="showProyectoForm();"><i class="flaticon2-add-1"></i></a>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="kt-container kt-container--fluid kt-grid__item kt-grid__item--fluid">
+    <table id="tableProyecto" class="table table-hover table-bordered table-striped table-sm">
+        <thead class="thead-dark"></thead>
+    </table>
+</div>
+<script>
+    function listProyectos() {
+        postJSON("Proyecto_C.php", { "action": "list" }, function (data) {
+            if (!validErrorResponse(data)) {
+                destroyDataTableIfExists("tableProyecto");
+                $('#tableProyecto').DataTable({
+                    data: JSON.parse(data),
+                    columns: [
+                        { title: "Código", data: "codigo" },
+                        { title: "Nombre", data: "nombre" },
+                        { title: "Presupuesto", data: "presupuesto_plan" },
+                        { title: "Fecha de Inicio", data: "fecha_inicio_plan" },
+                        { title: "Fecha de Término", data: "fecha_termino_plan" },
+                        {
+                            title: "Acciones", className: "td-actions", render: function (data, type, row, meta) {
+                                return '<button type="button" class="btn btn-outline-success btn-elevate btn-icon btn-circle btn-xs" data-toggle="tooltip" title="Estructura" onclick="getProyectoEstructuraForm(' + row.id + ');"><i class="fa fa-gopuram"></i></button>&nbsp;' +
+                                    '<button type="button" class="btn btn-outline-info btn-elevate btn-icon btn-circle btn-xs" data-toggle="tooltip" title="Editar" onclick="showProyectoForm(\'u\',' + row.id + ');"><i class="fa fa-pencil-alt"></i></button>&nbsp;' +
+                                    '<button type="button" class="btn btn-outline-danger btn-elevate btn-icon btn-circle btn-xs" data-toggle="tooltip" title="Eliminar" onclick="deleteProyecto(' + row.id + ');"><i class="fa fa-trash"></i></button>'
+                            }
+                        }
+                    ]
+                });
+            }
+        });
+    }
+    function showProyectoForm(action, id) {
+        getModalWithCallBack('proyecto/iu.html', function () {
+            if (action === "u") {
+                $("#id").val(id);
+                $("#action").val("u");
+                getProyecto();
+            }
+        });
+    }
+    function deleteProyecto(id) {
+        askDelete(function (result) {
+            if (result) {
+                postJSON("Proyecto_C.php", { action: "d", id: id }, function (data) {
+                    if (!validErrorResponse(data)) {
+                        notifySuccess();
+                        listProyectos();
+                    }
+                });
+            }
+        });
+    }
+    function getProyectoEstructuraForm(idProyecto) {
+        getHTMLContainerWithCallBack('proyecto/estructura.html', function (data) {
+            $("#proyecto_id_general").val(idProyecto);
+            getProyectoView();
+        });
+    }
+    listProyectos();
+</script>

@@ -1,0 +1,248 @@
+<h3 id="titleAction">Registro Partida</h3>
+<form id="formProyectoTrabajoPartida">
+    <div class="row">
+        <div class="col-sm-4">
+            <div class="form-group">
+                <label for="codigo">Código</label>
+                <input type="text" class="form-control form-control-sm" id="codigo" name="codigo" placeholder="Código">
+            </div>
+        </div>
+        <div class="col-sm-8">
+            <div class="form-group">
+                <label for="nombre">Nombre</label>
+                <input type="text" class="form-control form-control-sm" id="nombre" name="nombre" placeholder="Nombre">
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-3">
+            <div class="form-group">
+                <label for="unidad_medida_id">Unidad de Medida</label>
+                <select class="form-control form-control-sm form-control-autocomplete" id="unidad_medida_id" name="unidad_medida_id">
+                </select>
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <div class="form-group">
+                <label for="precio_unitario_plan">Precio Unitario Plan</label>
+                <input type="text" class="form-control form-control-sm form-control-decimal" id="precio_unitario_plan" name="precio_unitario_plan" placeholder="Precio Unitario Plan" maxlength="21" onchange="changeGenerateValues();">
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <div class="form-group">
+                <label for="cantidad_plan">Cantidad Plan</label>
+                <input type="text" class="form-control form-control-sm form-control-decimal" id="cantidad_plan" name="cantidad_plan" placeholder="Cantidad Plan" maxlength="21" onchange="changeGenerateValues();">
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <div class="form-group">
+                <label for="precio_plan">Precio Plan</label>
+                <input type="text" class="form-control form-control-sm form-control-decimal" id="precio_plan" name="precio_plan" placeholder="Precio Plan" maxlength="21" readonly>
+                <input type="hidden" id="precio_plan_anterior" name="precio_plan_anterior">
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-3">
+            <div class="form-group">
+                <label for="fecha_inicio_plan">Fecha Inicio Plan</label>
+                <input type="text" class="form-control form-control-sm form-control-date" id="fecha_inicio_plan" name="fecha_inicio_plan" placeholder="Fecha Inicio Plan" maxlength="10">
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <div class="form-group">
+                <label for="fecha_termino_plan">Fecha Término Plan</label>
+                <input type="text" class="form-control form-control-sm form-control-date" id="fecha_termino_plan" name="fecha_termino_plan" placeholder="Fecha Término Plan" maxlength="10">
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <div class="form-group">
+                <label for="fecha_inicio_real">Fecha Inicio Real</label>
+                <input type="text" class="form-control form-control-sm form-control-date" id="fecha_inicio_real" name="fecha_inicio_real" placeholder="Fecha Inicio Real" maxlength="10" disabled>
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <div class="form-group">
+                <label for="fecha_termino_real">Fecha Término Real</label>
+                <input type="text" class="form-control form-control-sm form-control-date" id="fecha_termino_real" name="fecha_termino_real" placeholder="Fecha Término Real" maxlength="10" disabled>
+            </div>
+        </div>
+    </div>
+    <div class="only-options-right">
+        <input type="hidden" id="proyecto_id" name="proyecto_id">
+        <input type="hidden" id="codigo_padre" name="codigo_padre">
+        <input type="hidden" id="proyecto_trabajo_partida_id" name="proyecto_trabajo_partida_id">
+        <input type="hidden" id="proyecto_trabajo_id" name="proyecto_trabajo_id">
+        <input type="hidden" id="can_delete" name="can_delete">
+        <input type="hidden" id="cantidad_real_acumulada" name="cantidad_real_acumulada">
+        <input type="hidden" id="precio_real_acumulado" name="precio_real_acumulado">
+        <input type="hidden" id="action" name="action" value="i">
+        <input type="hidden" id="id" name="id">
+        <button type="submit" class="btn btn-success btn-sm"><i class="la la-save"></i>Guardar</button>
+        <button type="button" class="btn btn-outline-danger btn-sm" onclick="closeLastModal();">Cancelar</button>
+    </div>
+</form>
+<script>
+    function fillUnidadMedida(idUnidadMedida) {
+        postJSON("UnidadMedida_C.php", { "action": "list" }, function (data) {
+            if (!validErrorResponse(data)) {
+                $("#formProyectoTrabajoPartida #unidad_medida_id").html('<option value="">Seleccione Unidad de Medida</option>');
+                var arrayUnidadesMedida = JSON.parse(data);
+                arrayUnidadesMedida.forEach(function (object, index) {
+                    $("#formProyectoTrabajoPartida #unidad_medida_id").append('<option value="' + object.codigo + '">' + object.nombre + '</option>');
+                });
+                if (typeof idUnidadMedida !== 'undefined') {
+                    $("#formProyectoTrabajoPartida #unidad_medida_id").val(idUnidadMedida);
+                }
+                startSelect2ById("formProyectoTrabajoPartida #unidad_medida_id");
+            }
+        });
+    }
+    function changeGenerateValues() {
+        var precioUnitarioPlan = $("#precio_unitario_plan").val();
+        var cantidadPlan = $("#cantidad_plan").val();
+        var precioPlan = Number(precioUnitarioPlan) * Number(cantidadPlan);
+        if (isNaN(precioPlan) || precioPlan == null || (precioUnitarioPlan == "" && cantidadPlan == "")) {
+            precioPlan = "";
+        }
+        $("#precio_plan").val(precioPlan);
+    }
+    function getProyectoTrabajoPartida() {
+        postJSON("ProyectoTrabajoPartida_C.php", { action: "get", id: $("#formProyectoTrabajoPartida #id").val() }, function (data) {
+            if (!validErrorResponse(data)) {
+                dataResponse = JSON.parse(data)[0];
+                $("#formProyectoTrabajoPartida #codigo").val(dataResponse.codigo);
+                $("#formProyectoTrabajoPartida #nombre").val(dataResponse.nombre);
+                fillUnidadMedida(dataResponse.unidad_medida_id);
+                $("#formProyectoTrabajoPartida #precio_unitario_plan").val(dataResponse.precio_unitario_plan);
+                $("#formProyectoTrabajoPartida #cantidad_plan").val(dataResponse.cantidad_plan);
+                $("#formProyectoTrabajoPartida #precio_plan").val(dataResponse.precio_plan);
+                $("#formProyectoTrabajoPartida #cantidad_real_acumulada").val(dataResponse.cantidad_real_acumulada);
+                $("#formProyectoTrabajoPartida #precio_real_acumulado").val(dataResponse.precio_real_acumulado);
+                $("#formProyectoTrabajoPartida #precio_plan_anterior").val(dataResponse.precio_plan);
+                $("#formProyectoTrabajoPartida #fecha_inicio_plan").val(dataResponse.fecha_inicio_plan);
+                $("#formProyectoTrabajoPartida #fecha_termino_plan").val(dataResponse.fecha_termino_plan);
+                $("#formProyectoTrabajoPartida #can_delete").val(dataResponse.can_delete);
+                $("#formProyectoTrabajoPartida #fecha_inicio_real").val(dataResponse.fecha_inicio_real);
+                $("#formProyectoTrabajoPartida #fecha_termino_real").val(dataResponse.fecha_termino_real);
+            }
+        });
+    }
+    $("#formProyectoTrabajoPartida").validate({
+        rules: {
+            codigo: {
+                required: true,
+                maxlength: 10,
+                startWithValue: function () {
+                    return $("#codigo_padre").val();
+                },
+                notEqualTo: "#codigo_padre"
+            },
+            nombre: {
+                required: true,
+                maxlength: 200
+            },
+            unidad_medida_id: {
+                required: function () {
+                    return $("#precio_unitario_plan").val() != "" || $("#cantidad_plan").val() != "" ? true : false;
+                }
+            },
+            precio_unitario_plan: {
+                required: function () {
+                    return $("#unidad_medida_id").val() != "" || $("#cantidad_plan").val() != "" ? true : false;
+                },
+                maxlength: 21,
+                number: true,
+                min: 0.1
+            },
+            cantidad_plan: {
+                required: function () {
+                    return $("#unidad_medida_id").val() != "" || $("#precio_unitario_plan").val() != "" ? true : false;
+                },
+                maxlength: 21,
+                number: true,
+                min: 0.1
+            },
+            fecha_inicio_plan: {
+                dateITA: true,
+                maxDate: function () {
+                    return $("#fecha_termino_plan").val();
+                }
+            },
+            fecha_termino_plan: {
+                dateITA: true,
+                minDate: function () {
+                    return $("#fecha_inicio_plan").val();
+                }
+            }
+        },
+        submitHandler: function (form) {
+            saveProyectoTrabajoPartida();
+        }
+    });
+    function saveProyectoTrabajoPartida() {
+        postJSONForm("ProyectoTrabajoPartida_C.php", "formProyectoTrabajoPartida", function (data) {
+            if (!validErrorResponse(data)) {
+                dataResponse = JSON.parse(data);
+                destroyDataTableIfExists("tableProyectoTrabajoPartidas");
+                var action = $("#formProyectoTrabajoPartida #action").val();
+                var codigo = $("#formProyectoTrabajoPartida #codigo").val();
+                var nombre = $("#formProyectoTrabajoPartida #nombre").val();
+                var idUnidadMedida = $("#formProyectoTrabajoPartida #unidad_medida_id").val();
+                var unidadMedida = "";
+                if (idUnidadMedida != "") {
+                    unidadMedida = $("#formProyectoTrabajoPartida #unidad_medida_id option:selected").text();
+                }
+                var precioUnitarioPlan = $("#formProyectoTrabajoPartida #precio_unitario_plan").val();
+                if (Number(precioUnitarioPlan) != 0) {
+                    precioUnitarioPlan = Number(precioUnitarioPlan).toFixed(2);
+                }
+                var cantidadPlan = $("#formProyectoTrabajoPartida #cantidad_plan").val();
+                if (Number(cantidadPlan) != 0) {
+                    cantidadPlan = Number(cantidadPlan).toFixed(2);
+                }
+                var precioPlan = $("#formProyectoTrabajoPartida #precio_plan").val();
+                if (Number(precioPlan) != 0) {
+                    precioPlan = Number(precioPlan).toFixed(2);
+                }
+                var cantidadRealAcumulada = $("#formProyectoTrabajoPartida #cantidad_real_acumulada").val();
+                var precioRealAcumulado = $("#formProyectoTrabajoPartida #precio_real_acumulado").val();
+                var precioPlanAnterior = $("#formProyectoTrabajoPartida #precio_plan_anterior").val();
+                var idPadre = $("#formProyectoTrabajoPartida #proyecto_trabajo_partida_id").val();
+                var codigoPadre = $("#codigo_padre").val();
+                var fechaInicioPlan = $("#fecha_inicio_plan").val();
+                var fechaTerminoPlan = $("#fecha_termino_plan").val();
+                var fechaInicioReal = $("#fecha_inicio_real").val();
+                var fechaTerminoReal = $("#fecha_termino_real").val();
+                var html = "";
+                if (action === "i") {
+                    html = createRowPartidaHTML(dataResponse.id, codigo, nombre, unidadMedida, precioUnitarioPlan, cantidadPlan, precioPlan, "", "", "", "", idPadre, codigoPadre, true, fechaInicioPlan, fechaTerminoPlan, fechaInicioReal, fechaTerminoReal);
+                    if (idPadre != "") {
+                        if ($("#tableProyectoTrabajoPartidas .tr_padre_" + idPadre).length == 0) {
+                            $("#tableProyectoTrabajoPartidas tbody").append(html);
+                        } else {
+                            $("#tableProyectoTrabajoPartidas .tr_padre_" + idPadre).last().after(html);
+                        }
+                        $("#tr_partida_" + idPadre).find("[data-original-title='Eliminar Partida']").remove();
+                    } else {
+                        $("#tableProyectoTrabajoPartidas tbody").append(html);
+                    }
+                } else if (action === "u") {
+                    var id = $("#formProyectoTrabajoPartida #id").val();
+                    var canDelete = $("#formProyectoTrabajoPartida #can_delete").val();
+                    html = createRowPartidaHTML(id, codigo, nombre, unidadMedida, precioUnitarioPlan, cantidadPlan, precioPlan, cantidadRealAcumulada, precioRealAcumulado, dataResponse.cantidad_por_ejecutar, dataResponse.precio_por_ejecutar, idPadre, codigoPadre, canDelete, fechaInicioPlan, fechaTerminoPlan, fechaInicioReal, fechaTerminoReal);
+                    var element = $("#tr_partida_" + id);
+                    element.after(html);
+                    element.remove();
+                }
+                $('#tableProyectoTrabajoPartidas').DataTable();
+                closeLastModal();
+                notifySuccess();
+                startTooltip();
+                updateProyecto(dataResponse.sum_precio_plan, dataResponse.sum_precio_real_acumulado, dataResponse.sum_precio_por_ejecutar, dataResponse.min_fecha_inicio_plan, dataResponse.max_fecha_termino_plan, dataResponse.min_fecha_inicio_real, dataResponse.max_fecha_termino_real);
+            }
+        });
+    }
+    startDecimalNumbers(18, 2);
+    startDatePicker();
+</script>

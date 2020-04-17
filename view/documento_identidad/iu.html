@@ -1,0 +1,105 @@
+<h3 id="titleAction">Registro</h3>
+<form id="form">
+    <div class="form-group">
+        <label for="codigo">Código</label>
+        <input type="text" class="form-control form-control-sm" id="codigo" name="codigo" placeholder="Código" maxlength="10">
+    </div>
+    <div class="form-group">
+        <label for="nombre">Nombre</label>
+        <input type="text" class="form-control form-control-sm" id="nombre" name="nombre" placeholder="Nombre" maxlength="100">
+    </div>
+    <div class="form-group">
+        <label for="persona_tipo_id">Tipo de Persona</label>
+        <select class="form-control form-control-sm" id="persona_tipo_id" name="persona_tipo_id">
+            <option></option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="longitud_minima">Longitud Mínima</label>
+        <input type="text" class="form-control form-control-sm form-control-number" id="longitud_minima" name="longitud_minima" placeholder="Longitud Mínima" maxlength="2">
+    </div>
+    <div class="form-group">
+        <label for="longitud_maxima">Longitud Máxima</label>
+        <input type="text" class="form-control form-control-sm form-control-number" id="longitud_maxima" name="longitud_maxima" placeholder="Longitud Máxima" maxlength="2">
+    </div>
+    <div class="only-options-right">
+        <input type="hidden" id="action" name="action" value="i">
+        <button type="submit" class="btn btn-success btn-sm"><i class="la la-save"></i>Guardar</button>
+        <button type="button" class="btn btn-outline-danger btn-sm" onclick="closeLastModal();">Cancelar</button>
+    </div>
+</form>
+<script>
+    function fillPersonaTipos(id) {
+        postJSON("PersonaTipo_C.php", { "action": "list" }, function (data) {
+            if (!validErrorResponse(data)) {
+                var dataFormat = formatArraySelect2(JSON.parse(data), "codigo", "nombre");
+                $('#persona_tipo_id').select2({
+                    placeholder: 'Seleccione Tipo de Persona',
+                    data: dataFormat
+                }).promise().done(function () {
+                    if (typeof id !== 'undefined') {
+                        $('#persona_tipo_id').val(id).select2();
+                    }
+                });
+            }
+        });
+    }
+    function saveDocumentoIdentidad() {
+        postJSONForm("DocumentoIdentidad_C.php", "form", function (data) {
+            if (!validErrorResponse(data)) {
+                closeLastModal();
+                notifySuccess();
+                listDocumentosIdentidad();
+            }
+        });
+    }
+    $("#form").validate({
+        rules: {
+            codigo: {
+                required: true,
+                maxlength: 10
+            },
+            nombre: {
+                required: true,
+                maxlength: 100
+            },
+            persona_tipo_id: {
+                required: true
+            },
+            longitud_minima: {
+                required: true,
+                maxlength: 2,
+                max: 20,
+                digits: true
+            },
+            longitud_maxima: {
+                required: true,
+                maxlength: 11,
+                min: function (element) {
+                    return $("#longitud_minima").val();
+                },
+                max: 20,
+                digits: true
+            }
+        },
+        submitHandler: function (form) {
+            saveDocumentoIdentidad();
+        }
+    });
+    function getDocumentoIdentidad() {
+        if ($("#action").val() === "u") {
+            postJSON("DocumentoIdentidad_C.php", { action: "get", codigo: $("#form #codigo").val() }, function (data) {
+                if (!validErrorResponse(data)) {
+                    dataResponse = JSON.parse(data)[0];
+                    $("#titleAction").html("Editar");
+                    $("#nombre").val(dataResponse.nombre);
+                    fillPersonaTipos(dataResponse.persona_tipo_id);
+                    $("#longitud_maxima").val(dataResponse.longitud_maxima);
+                    $("#longitud_minima").val(dataResponse.longitud_minima);
+                    $("#form #codigo").prop("readonly", true);
+                }
+            });
+        }
+    }
+    startNumbers(2);
+</script>

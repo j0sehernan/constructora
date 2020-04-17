@@ -1,0 +1,75 @@
+<div class="kt-subheader kt-grid__item" id="kt_subheader">
+    <div class="kt-container  kt-container--fluid ">
+        <div class="kt-subheader__main">
+            <h3 class="kt-subheader__title">Tipo de Email</h3>
+            <span class="kt-subheader__separator kt-hidden"></span>
+            <div class="kt-subheader__breadcrumbs">
+                <a href="#" class="kt-subheader__breadcrumbs-home"><i class="flaticon2-shelter"></i></a>
+                <span class="kt-subheader__breadcrumbs-separator"></span>
+                <a href="#" class="kt-subheader__breadcrumbs-link">
+                    Tipos de Email </a>
+                <span class="kt-subheader__breadcrumbs-separator"></span>
+                <a href="#" class="kt-subheader__breadcrumbs-link">
+                    Listado </a>
+            </div>
+        </div>
+        <div class="kt-subheader__toolbar">
+            <div class="kt-subheader__wrapper">
+                <a class="btn btn-icon btn btn-label btn-label-brand btn-bold" data-toggle="tooltip" title="Actualizar"
+                    data-placement="top" onclick="listEmailTipos();"><i class="flaticon-refresh"></i></a>
+                <a class="btn btn-icon btn btn-label btn-label-brand btn-bold" data-toggle="tooltip"
+                    title="Agregar" data-placement="top" onclick="getModal('email_tipo/iu.html');"><i
+                        class="flaticon2-add-1"></i></a>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="kt-container  kt-container--fluid kt-grid__item kt-grid__item--fluid">
+    <table id="table" class="table table-hover table-bordered table-striped table-sm">
+        <thead class="thead-dark"></thead>
+    </table>
+</div>
+<script>
+    function listEmailTipos() {
+        postJSON("EmailTipo_C.php", { "action": "list" }, function (data) {
+            if (!validErrorResponse(data)) {
+                destroyDataTableIfExists("table");
+                $('#table').DataTable({
+                    data: JSON.parse(data),
+                    columns: [
+                        { title: "Código", data: "codigo" },
+                        { title: "Nombre", data: "nombre" },
+                        {
+                            title: "Acciones", className: "td-actions", render: function (data, type, row, meta) {
+                                return '<button type="button" class="btn btn-outline-info btn-elevate btn-icon btn-circle btn-xs" data-toggle="tooltip" title="Editar" onclick="showEmailTipo(\'' + row.codigo + '\');">' +
+                                    '<i class="fa fa-pencil-alt"></i></button>&nbsp;' +
+                                    '<button type="button" class="btn btn-outline-danger btn-elevate btn-icon btn-circle btn-xs" data-toggle="tooltip" title="Eliminar" onclick="deleteEmailTipo(\'' + row.codigo + '\');">' +
+                                    '<i class="fa fa-trash"></i></button>'
+                            }
+                        }
+                    ]
+                });
+            }
+        });
+    }
+    function showEmailTipo(codigo) {
+        getModalWithCallBack('email_tipo/iu.html', function () {
+            $("#codigo").val(codigo);
+            $("#action").val("u");
+            getEmailTipo();
+        });
+    }
+    function deleteEmailTipo(codigo) {
+        bootbox.confirm(STR_ASK_DELETE, function (result) {
+            if (result) {
+                postJSON("EmailTipo_C.php", { action: "d", codigo: codigo }, function (data) {
+                    if (!validErrorResponse(data)) {
+                        notifySuccess();
+                        listEmailTipos();
+                    }
+                });
+            }
+        });
+    }
+    listEmailTipos();
+</script>

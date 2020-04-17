@@ -1,0 +1,376 @@
+<div class="kt-subheader kt-grid__item" id="kt_subheader">
+    <div class="kt-container kt-container--fluid ">
+        <div class="kt-subheader__main">
+            <h3 class="kt-subheader__title">Proyecto</h3>
+            <span class="kt-subheader__separator kt-hidden"></span>
+            <div class="kt-subheader__breadcrumbs">
+                <a href="#" class="kt-subheader__breadcrumbs-home"><i class="fa fa-project-diagram"></i></a>
+                <span class="kt-subheader__breadcrumbs-separator"></span>
+                <a href="#" class="kt-subheader__breadcrumbs-link">
+                    Proyectos </a>
+                <span class="kt-subheader__breadcrumbs-separator"></span>
+                <a href="#" class="kt-subheader__breadcrumbs-link">
+                    Estructura </a>
+            </div>
+        </div>
+        <div class="kt-subheader__toolbar">
+            <div class="kt-subheader__wrapper">
+                <a class="btn btn-icon btn btn-label btn-label-brand btn-bold" data-toggle="tooltip" title="Actualizar" data-placement="top" onclick="getProyectoView();"><i class="fa fa-redo-alt"></i></a>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="kt-container kt-container--fluid kt-grid__item kt-grid__item--fluid">
+    <div class="row">
+        <div class="col">
+            <!--begin::Portlet-->
+            <div class="kt-portlet kt-portlet--fit kt-portlet--height-fluid">
+                <div class="kt-portlet__body kt-portlet__body--fluid">
+                    <div class="kt-widget-3 kt-widget-3--brand">
+                        <div class="kt-widget-3__content">
+                            <div class="kt-widget-3__content-info">
+                                <div class="kt-widget-3__content-section">
+                                    <div class="kt-widget-3__content-title" id="proyecto_codigo"></div>
+                                    <div class="kt-widget-3__content-desc" id="proyecto_nombre"></div>
+                                </div>
+                                <div class="kt-widget-3__content-section" data-toggle="tooltip" data-placement="top" data-original-title="Presupuesto">
+                                    <span class="kt-widget-3__content-bedge" id="proyecto_presupuesto_moneda"></span>
+                                    <span class="kt-widget-3__content-number" id="proyecto_presupuesto_plan_entero">
+                                        <span id="proyecto_presupuesto_plan_decimal"></span></span>
+                                </div>
+                                <div class="kt-widget-3__content-section" data-toggle="tooltip" data-placement="top" data-original-title="Valor de Venta" id="proyecto_valor_venta" style="display: none;">
+                                    <span class="kt-widget-3__content-bedge" id="proyecto_valor_venta_moneda"></span>
+                                    <span class="kt-widget-3__content-number" id="proyecto_valor_venta_entero">
+                                        <span id="proyecto_valor_venta_decimal"></span></span>
+                                </div>
+                                <div class="kt-widget-3__content-section" data-toggle="tooltip" data-placement="top" data-original-title="Presupuesto por Ejecutar" id="proyecto_presupuesto_por_ejecutar" style="display: none;">
+                                    <span class="kt-widget-3__content-bedge" id="proyecto_presupuesto_por_ejecutar_moneda"></span>
+                                    <span class="kt-widget-3__content-number" id="proyecto_presupuesto_por_ejecutar_entero">
+                                        <span id="proyecto_presupuesto_por_ejecutar_decimal"></span></span>
+                                </div>
+                            </div>
+                            <div class="kt-widget-3__content-stats">
+                                <div class="kt-widget-3__content-progress">
+                                    <div class="progress">
+                                        <!-- Doc: A bootstrap progress bar can be used to show a user how far along it's in a process, see https://getbootstrap.com/docs/4.1/components/progress/ -->
+                                        <div class="progress-bar bg-light" style="width: 100%;" role="progressbar" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                                    </div>
+                                </div>
+                                <div class="kt-widget-3__content-action">
+                                    <div class="kt-widget-3__content-text">
+                                        <span id="proyecto_ubicacion" data-toggle="tooltip" data-placement="top" data-original-title="Ubicación"></span>&nbsp;&nbsp;
+                                        <span id="proyecto_fecha_inicio_plan" data-toggle="tooltip" data-placement="top" data-original-title="Fecha de Inicio Planeada"></span>&nbsp;&nbsp;
+                                        <span id="proyecto_fecha_termino_plan" data-toggle="tooltip" data-placement="top" data-original-title="Fecha de Término Planeada"></span>&nbsp;&nbsp;
+                                    </div>
+                                    <div class="kt-widget-3__content-value">
+                                        <span id="proyecto_fecha_inicio_real" data-toggle="tooltip" data-placement="top" data-original-title="Fecha de Inicio Real"></span>&nbsp;&nbsp;
+                                        <span id="proyecto_fecha_termino_real" data-toggle="tooltip" data-placement="top" data-original-title="Fecha de Término Real"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--end::Portlet-->
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <div class="form-group">
+                <div class="input-group flex-nowrap">
+                    <select class="form-control form-control-sm form-control-autocomplete" id="proyecto_trabajo_id_general" name="proyecto_trabajo_id_general" onchange="changeProyectoTrabajo();">
+                    </select>
+                    <div class="input-group-append">
+                        <button class="btn btn-secondary btn-sm" type="button" data-toggle="tooltip" data-placement="top" data-original-title="Agregar Trabajo" onclick="showProyectoTrabajoForm('i');"><i class="flaticon2-add-1"></i></button>
+                        <button id="proyecto_trabajo_edit_button" class="btn btn-secondary btn-sm" type="button" data-toggle="tooltip" data-placement="top" data-original-title="Editar Trabajo" style="display: none;"><i
+                                class="fa fa-pencil-alt"></i></button>
+                        <button id="proyecto_trabajo_delete_button" class="btn btn-secondary btn-sm" type="button" data-toggle="tooltip" data-placement="top" data-original-title="Eliminar Trabajo" style="display: none;"><i
+                                class="fa fa-trash"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row" style="display: none;" id="divProyectoTrabajoPartidas">
+        <div class="col-sm-12 only-options-right" style="margin-bottom: 10px;">
+            <a class="btn btn-icon btn btn-label btn-label-brand btn-bold btn-sm" data-toggle="tooltip" title="Agregar Partida" data-placement="top" onclick="showProyectoTrabajoPartidaForm('i');"><i class="flaticon2-add-1"></i></a>
+            <a class="btn btn-icon btn btn-label btn-label-brand btn-bold btn-sm" data-toggle="tooltip" title="Actualizar Partidas" data-placement="top" onclick="listProyectoTrabajoPartidasStart();"><i class="fa fa-redo-alt"></i></a>
+        </div>
+        <div class="col-sm-12">
+            <table class="table-fit table responsive table-bordered table-hover table-striped table-sm" id="tableProyectoTrabajoPartidas">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>Código</th>
+                        <th>Nombre</th>
+                        <th data-toggle="tooltip" title="Unidad de Medida" data-placement="top">UM</th>
+                        <th data-toggle="tooltip" title="Precio Unitario Plan" data-placement="top">P.U.P.</th>
+                        <th data-toggle="tooltip" title="Cantidad Plan" data-placement="top">C.P.</th>
+                        <th data-toggle="tooltip" title="Precio Plan" data-placement="top">P.P.</th>
+                        <th data-toggle="tooltip" title="Cantidad Real Acumulada" data-placement="top">C.R.A.</th>
+                        <th data-toggle="tooltip" title="Precio Real Acumulado" data-placement="top">P.R.A.</th>
+                        <th data-toggle="tooltip" title="Cantidad Por Ejecutar" data-placement="top">C.P.E.</th>
+                        <th data-toggle="tooltip" title="Precio Por Ejecutar" data-placement="top">P.P.E.</th>
+                        <th data-toggle="tooltip" title="Fecha Inicio Plan" data-placement="top">F.I.P.</th>
+                        <th data-toggle="tooltip" title="Fecha Término Plan" data-placement="top">F.T.P</th>
+                        <th data-toggle="tooltip" title="Fecha Inicio Real" data-placement="top">F.I.R.</th>
+                        <th data-toggle="tooltip" title="Fecha Término Real" data-placement="top">F.T.R</th>
+                        <th style="width: 100px;">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<input type="hidden" id="proyecto_id_general" name="proyecto_id_general">
+<input type="hidden" id="proyecto_presupuesto_plan_general" name="proyecto_presupuesto_plan_general">
+<script>
+    function fillProyectoTrabajo(idProyectoTrabajo) {
+        postJSON("ProyectoTrabajo_C.php", { "action": "listByProyecto", proyecto_id: $("#proyecto_id_general").val() }, function (data) {
+            if (!validErrorResponse(data)) {
+                $("#proyecto_trabajo_id_general").html('<option value="">Seleccione Trabajo</option>');
+                var arrayTrabajos = JSON.parse(data);
+                arrayTrabajos.forEach(function (object, index) {
+                    $("#proyecto_trabajo_id_general").append('<option value="' + object.id + '">' + object.nombre + '</option>');
+                });
+                if (typeof idProyectoTrabajo !== 'undefined') {
+                    $("#proyecto_trabajo_id_general").val(idProyectoTrabajo);
+                }
+                changeProyectoTrabajo();
+            }
+        });
+    }
+    function changeProyectoTrabajo() {
+        var idProyectoTrabajo = $("#proyecto_trabajo_id_general").val();
+        if (idProyectoTrabajo === '') {
+            $("#proyecto_trabajo_edit_button").hide();
+            $("#proyecto_trabajo_delete_button").hide();
+            $("#divProyectoTrabajoPartidas").hide();
+        } else {
+            $("#proyecto_trabajo_edit_button").show().attr("onclick", "showProyectoTrabajoForm('u'," + idProyectoTrabajo + ");");
+            $("#proyecto_trabajo_delete_button").show().attr("onclick", "deleteProyectoTrabajo(" + idProyectoTrabajo + ");");
+            $("#divProyectoTrabajoPartidas").show();
+        }
+        startSelect2ById("proyecto_trabajo_id_general");
+        startTooltip();
+        listProyectoTrabajoPartidasStart();
+    }
+    function getProyectoView() {
+        postJSON("Proyecto_C.php", { action: "get", id: $("#proyecto_id_general").val() }, function (data) {
+            if (!validErrorResponse(data)) {
+                dataResponse = JSON.parse(data)[0];
+                $("#proyecto_codigo").html(dataResponse.codigo);
+                $("#proyecto_nombre").html(dataResponse.nombre);
+                $("#proyecto_ubicacion").html(dataResponse.ubicacion);
+                updateProyecto(dataResponse.presupuesto_plan, dataResponse.valor_venta, dataResponse.presupuesto_por_ejecutar, dataResponse.fecha_inicio_plan, dataResponse.fecha_termino_plan, dataResponse.fecha_inicio_real, dataResponse.fecha_termino_real);
+                fillProyectoTrabajo();
+            }
+        });
+    }
+    function updateProyecto(presupuestoPlan, valorVenta, presupuestoPorEjecutar, proyectoFechaInicioPlan, proyectoFechaTerminoPlan, proyectoFechaInicioReal, proyectoFechaTerminoReal) {
+        presupuestoPlan = Number(presupuestoPlan).toFixed(2);
+        $("#proyecto_presupuesto_plan_general").val(presupuestoPlan);
+        if (presupuestoPlan != "" && presupuestoPlan != null && presupuestoPlan != "null") {
+            $("#proyecto_presupuesto_moneda").html("S/");
+            $("#proyecto_presupuesto_plan_decimal").html(getDecimalFromNumber(presupuestoPlan));
+            $("#proyecto_presupuesto_plan_entero").html(getIntegerFromNumber(presupuestoPlan) + $('#proyecto_presupuesto_plan_decimal')[0].outerHTML);
+        } else {
+            $("#proyecto_presupuesto_moneda").html("");
+            $("#proyecto_presupuesto_plan_decimal").html("");
+            $("#proyecto_presupuesto_plan_entero").html($('#proyecto_presupuesto_plan_decimal')[0].outerHTML);
+        }
+        updateProyectoReal(presupuestoPlan, valorVenta, presupuestoPorEjecutar, proyectoFechaInicioReal, proyectoFechaTerminoReal);
+        $("#proyecto_fecha_inicio_plan").text(proyectoFechaInicioPlan);
+        $("#proyecto_fecha_termino_plan").text(proyectoFechaTerminoPlan);
+    }
+    function updateProyectoReal(presupuestoPlan, valorVenta, presupuestoPorEjecutar, proyectoFechaInicioReal, proyectoFechaTerminoReal) {
+        valorVenta = Number(valorVenta).toFixed(2);
+        presupuestoPorEjecutar = Number(presupuestoPorEjecutar).toFixed(2);
+        if (valorVenta != "" && valorVenta != null && valorVenta != "null") {
+            $("#proyecto_valor_venta").show();
+            if (presupuestoPlan < valorVenta) {
+                $("#proyecto_valor_venta").addClass("text-error");
+            } else {
+                $("#proyecto_valor_venta").removeClass("text-error");
+            }
+            $("#proyecto_valor_venta_moneda").html("S/");
+            $("#proyecto_valor_venta_decimal").html(getDecimalFromNumber(valorVenta));
+            $("#proyecto_valor_venta_entero").html(getIntegerFromNumber(valorVenta) + $('#proyecto_valor_venta_decimal')[0].outerHTML);
+        } else {
+            $("#proyecto_valor_venta").hide();
+            $("#proyecto_valor_venta_moneda").html("");
+            $("#proyecto_valor_venta_decimal").html("");
+            $("#proyecto_valor_venta_entero").html($('#proyecto_valor_venta_decimal')[0].outerHTML);
+        }
+        if (presupuestoPorEjecutar != "" && presupuestoPorEjecutar != null && presupuestoPorEjecutar != "null") {
+            $("#proyecto_presupuesto_por_ejecutar").show();
+            if (presupuestoPorEjecutar < 0) {
+                $("#proyecto_presupuesto_por_ejecutar").addClass("text-error");
+            } else {
+                $("#proyecto_presupuesto_por_ejecutar").removeClass("text-error");
+            }
+            $("#proyecto_presupuesto_por_ejecutar_moneda").html("S/");
+            $("#proyecto_presupuesto_por_ejecutar_decimal").html(getDecimalFromNumber(presupuestoPorEjecutar));
+            $("#proyecto_presupuesto_por_ejecutar_entero").html(getIntegerFromNumber(presupuestoPorEjecutar) + $('#proyecto_presupuesto_por_ejecutar_decimal')[0].outerHTML);
+        } else {
+            $("#proyecto_valor_venta").hide();
+            $("#proyecto_valor_venta_moneda").html("");
+            $("#proyecto_valor_venta_decimal").html("");
+            $("#proyecto_valor_venta_entero").html($('#proyecto_valor_venta_decimal')[0].outerHTML);
+        }
+        $("#proyecto_fecha_inicio_real").text(proyectoFechaInicioReal);
+        $("#proyecto_fecha_termino_real").text(proyectoFechaTerminoReal);
+    }
+    function showProyectoTrabajoForm(action, id) {
+        getModalWithCallBack('proyecto_trabajo/iu.html', function () {
+            $("#formTrabajo #proyecto_id").val($("#proyecto_id_general").val());
+            if (action === "i") {
+                fillPersonaContratista();
+            } else if (action === "u") {
+                $("#formTrabajo #id").val(id);
+                $("#formTrabajo #action").val("u");
+                getProyectoTrabajo();
+            }
+        });
+    }
+    function deleteProyectoTrabajo(id) {
+        askDelete(function (result) {
+            if (result) {
+                postJSON("ProyectoTrabajo_C.php", { action: "d", id: id }, function (data) {
+                    if (!validErrorResponse(data)) {
+                        notifySuccess();
+                        fillProyectoTrabajo();
+                    }
+                });
+            }
+        });
+    }
+    function listProyectoTrabajoPartidasStart() {
+        destroyDataTableIfExists("tableProyectoTrabajoPartidas");
+        $("#tableProyectoTrabajoPartidas tbody").html("");
+        var idProyectoTrabajo = $("#proyecto_trabajo_id_general").val();
+        postJSON("ProyectoTrabajoPartida_C.php", { "action": "listByProyectoTrabajo", proyecto_trabajo_id: idProyectoTrabajo }, function (data) {
+            if (!validErrorResponse(data)) {
+                var arrayPartidas = JSON.parse(data);
+                arrayPartidas.forEach(function (object, index) {
+                    var html = createRowPartidaHTML(object.id, object.codigo, object.nombre, object.unidad_medida, object.precio_unitario_plan, object.cantidad_plan, object.precio_plan, object.cantidad_real_acumulada, object.precio_real_acumulado, object.cantidad_por_ejecutar, object.precio_por_ejecutar, object.proyecto_trabajo_partida_id, object.codigo_padre, object.can_delete, object.fecha_inicio_plan, object.fecha_termino_plan, object.fecha_inicio_real, object.fecha_termino_real);
+                    $("#tableProyectoTrabajoPartidas tbody").append(html);
+                });
+                $('#tableProyectoTrabajoPartidas').DataTable();
+                startTooltip();
+            }
+        });
+    }
+    function createRowPartidaHTML(id, codigo, nombre, unidadMedida, precioUnitarioPlan, cantidadPlan, precioPlan, cantidadRealAcumulada, precioRealAcumulado, cantidadPorEjecutar, precioPorEjecutar, idPadre, codigoPadre, canDelete, fechaInicioPlan, fechaTerminoPlan, fechaInicioReal, fechaTerminoReal) {
+        var idProyecto = $("#proyecto_id_general").val();
+        var html =
+            '<tr id="tr_partida_' + id + '" class="tr_padre_' + idPadre + '" onmouseover="showActions(this);" onmouseleave="hideActions(this);">' +
+            '<td style="font-size: 11px;">' + codigo + '</td>' +
+            '<td style="font-size: 11px;">' + nombre + '</td>' +
+            '<td style="font-size: 8px;">' + (unidadMedida == null ? '' : unidadMedida) + '</td>' +
+            '<td style="font-size: 11px;">' + (precioUnitarioPlan == null ? '' : precioUnitarioPlan) + '</td>' +
+            '<td style="font-size: 11px;">' + (cantidadPlan == null ? '' : cantidadPlan) + '</td>' +
+            '<td style="font-size: 11px;">' + (precioPlan == null ? '' : precioPlan) + '</td>' +
+            '<td style="font-size: 11px;" class="cantidad_real_acumulada">' + (cantidadRealAcumulada == null ? '' : cantidadRealAcumulada) + '</td>' +
+            '<td style="font-size: 11px;" class="precio_real_acumulado">' + (precioRealAcumulado == null ? '' : precioRealAcumulado) + '</td>' +
+            '<td style="font-size: 11px;" class="cantidad_por_ejecutar' + (cantidadPorEjecutar < 0 ? ' td-error' : '') + '">' + (cantidadPorEjecutar == null ? '' : cantidadPorEjecutar) + '</td>' +
+            '<td style="font-size: 11px;" class="precio_por_ejecutar' + (precioPorEjecutar < 0 ? ' td-error' : '') + '">' + (precioPorEjecutar == null ? '' : precioPorEjecutar) + '</td>' +
+            '<td style="font-size: 8px;">' + fechaInicioPlan + '</td>' +
+            '<td style="font-size: 8px;">' + fechaTerminoPlan + '</td>' +
+            '<td style="font-size: 8px;" class="fecha_inicio_real">' + fechaInicioReal + '</td>' +
+            '<td style="font-size: 8px;" class="fecha_termino_real">' + fechaTerminoReal + '</td>' +
+            '<td class="td-actions">' +
+            '<div class="td_actions_' + id + '" style="display: none;">'
+        if (precioPlan > 0) {
+            html +=
+                '<button type="button" class="btn btn-outline-focus btn-elevate btn-icon btn-circle btn-xs" data-toggle="tooltip" title="Registrar Avance" onclick="showProyectoTrabajoPartidaAvanceListForm(' + id + ');"><i class="fa fa-forward"></i></button>&nbsp;'
+        }
+        html +=
+            '<button type="button" class="btn btn-outline-success btn-elevate btn-icon btn-circle btn-xs" data-toggle="tooltip" title="Agregar Partida a Partir de esta" onclick="showProyectoTrabajoPartidaForm(\'i_son\', 0, ' + id + ', \'' + codigo + '\');"><i class="fa fa-sitemap"></i></button>&nbsp;' +
+            '<button type="button" class="btn btn-outline-info btn-elevate btn-icon btn-circle btn-xs" data-toggle="tooltip" title="Editar Partida" onclick="showProyectoTrabajoPartidaForm(\'u\',' + id + ',\'' + idPadre + '\',\'' + codigoPadre + '\');"><i class="fa fa-pencil-alt"></i></button>&nbsp;'
+        if (canDelete == true || canDelete == 1) {
+            html +=
+                '<button type="button" class="btn btn-outline-danger btn-elevate btn-icon btn-circle btn-xs" data-toggle="tooltip" title="Eliminar Partida" onclick="deleteProyectoTrabajoPartida(' + id + ',\'' + idProyecto + '\',\'' + idPadre + '\');"><i class="fa fa-trash"></i></button>'
+        }
+        html +=
+            '</div>' +
+            '</td>' +
+            '</tr>'
+        return html;
+    }
+    function showActions(element) {
+        var id = $(element).attr("id").replace("tr_partida_", "");
+        $(".td_actions_" + id).show();
+    }
+    function hideActions(element) {
+        var id = $(element).attr("id").replace("tr_partida_", "");
+        $(".td_actions_" + id).hide();
+    }
+    function showProyectoTrabajoPartidaForm(action, id, idPadre, codigoPadre) {
+        getModalLargeWithCallBack('proyecto_trabajo_partida/iu.html', function () {
+            $("#formProyectoTrabajoPartida #proyecto_trabajo_id").val($("#proyecto_trabajo_id_general").val());
+            $("#formProyectoTrabajoPartida #proyecto_id").val($("#proyecto_id_general").val());
+            if (action === "i") {
+                fillUnidadMedida();
+            } else if (action === "i_son") {
+                $("#formProyectoTrabajoPartida #codigo").val(codigoPadre);
+                $("#formProyectoTrabajoPartida #proyecto_trabajo_partida_id").val(idPadre);
+                $("#formProyectoTrabajoPartida #codigo_padre").val(codigoPadre);
+                fillUnidadMedida();
+            } else if (action === "u") {
+                $("#formProyectoTrabajoPartida #id").val(id);
+                $("#formProyectoTrabajoPartida #proyecto_trabajo_partida_id").val(idPadre);
+                $("#formProyectoTrabajoPartida #codigo_padre").val(codigoPadre);
+                $("#formProyectoTrabajoPartida #action").val("u");
+                $("#titleAction").html("Editar Partida");
+                getProyectoTrabajoPartida();
+            } else if (action === "v") {
+                $("#formProyectoTrabajoPartida #id").val(id);
+                $("#formProyectoTrabajoPartida #proyecto_trabajo_partida_id").val(idPadre);
+                $("#formProyectoTrabajoPartida #codigo_padre").val(codigoPadre);
+                $("#formProyectoTrabajoPartida #action").val("u");
+                $("#titleAction").html("Visualizar Partida");
+                $("#formProyectoTrabajoPartida input").attr("disabled", true);
+                $("#formProyectoTrabajoPartida button[type=submit]").attr("disabled", true);
+                getProyectoTrabajoPartida();
+            }
+        });
+    }
+    function deleteProyectoTrabajoPartida(id, idProyecto, idPadre) {
+        askDelete(function (result) {
+            if (result) {
+                postJSON("ProyectoTrabajoPartida_C.php", {
+                    action: "d", id: id,
+                    proyecto_id: idProyecto,
+                    proyecto_trabajo_id: $("#proyecto_trabajo_id_general").val(),
+                    proyecto_trabajo_partida_id: idPadre
+                }, function (data) {
+                    if (!validErrorResponse(data)) {
+                        dataResponse = JSON.parse(data);
+                        notifySuccess();
+                        var element = $("#tr_partida_" + id);
+                        destroyDataTableIfExists("tableProyectoTrabajoPartidas");
+                        element.remove();
+                        $('#tableProyectoTrabajoPartidas').DataTable();
+                        updateProyecto(dataResponse.sum_precio_plan, dataResponse.sum_precio_real_acumulado, dataResponse.sum_precio_por_ejecutar, dataResponse.min_fecha_inicio_plan, dataResponse.max_fecha_termino_plan, dataResponse.min_fecha_inicio_real, dataResponse.max_fecha_termino_real);
+                        if (dataResponse.can_delete == true || dataResponse.can_delete == 1) {
+                            var idPadrePadre = $("#tr_partida_" + idPadre).attr("class");
+                            if (typeof idPadrePadre !== 'undefined') {
+                                idPadrePadre = idPadrePadre.replace("tr_padre_", "").replace("odd", "").replace("even", "").trim();
+                            }
+                            $("#tr_partida_" + idPadre + " td div").last().append('<button type="button" class="btn btn-outline-danger btn-elevate btn-icon btn-circle btn-xs" data-toggle="tooltip" title="Eliminar Partida" onclick="deleteProyectoTrabajoPartida(' + idPadre + ',\'' + idProyecto + '\',\'' + idPadrePadre + '\');"><i class="fa fa-trash"></i></button>');
+                        }
+                    }
+                });
+            }
+        });
+    }
+    function showProyectoTrabajoPartidaAvanceListForm(idProyectoTrabajoPartida) {
+        getModalLargeWithCallBack('proyecto_trabajo_partida_avance/list.html', function () {
+            $("#proyecto_trabajo_partida_id_general").val(idProyectoTrabajoPartida);
+            listProyectoTrabajoPartidaAvances();
+            startTooltip();
+        });
+    }
+</script>

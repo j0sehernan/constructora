@@ -1,0 +1,80 @@
+<h3 id="titleActionPersonaTelefono">Registro</h3>
+<form id="formTelefono">
+    <div class="form-group">
+        <label for="telefono_tipo_id">Tipo</label>
+        <select class="form-control form-control-sm" id="telefono_tipo_id" name="telefono_tipo_id" placeholder="Tipo">
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="telefono">Teléfono</label>
+        <input type="text" class="form-control form-control-sm" id="telefono" name="telefono" placeholder="Teléfono" maxlength="20">
+    </div>
+    <div class="only-options-right">
+        <input type="hidden" id="persona_id" name="persona_id">
+        <input type="hidden" id="action" name="action" value="i">
+        <input type="hidden" id="id" name="id">
+        <button type="submit" class="btn btn-success btn-sm"><i class="la la-save"></i>Guardar</button>
+        <button type="button" class="btn btn-outline-danger btn-sm" onclick="closeLastModal();">Cancelar</button>
+    </div>
+</form>
+<script>
+    function fillTelefonoTipos(idSelected) {
+        postJSON("TelefonoTipo_C.php", { "action": "list" }, function (data) {
+            if (!validErrorResponse(data)) {
+                var arrayEmailTipos = JSON.parse(data);
+                arrayEmailTipos.forEach(function (object, index) {
+                    $("#formTelefono #telefono_tipo_id").append('<option value="' + object.codigo + '">' + object.nombre + '</option>');
+                });
+                if (typeof idSelected !== 'undefined') {
+                    $("#formTelefono #telefono_tipo_id").val(idSelected);
+                }
+            }
+        });
+    }
+    function getPersonaTelefono() {
+        if ($("#formTelefono #action").val() === "u") {
+            postJSON("PersonaTelefono_C.php", { action: "get", id: $("#formTelefono #id").val() }, function (data) {
+                if (!validErrorResponse(data)) {
+                    dataResponse = JSON.parse(data)[0];
+                    $("#titleActionPersonaTelefono").html("Editar");
+                    fillTelefonoTipos(dataResponse.telefono_tipo_id);
+                    $("#formTelefono #telefono").val(dataResponse.telefono);
+                }
+            });
+        }
+    }
+    function savePersonaTelefono() {
+        postJSONForm("PersonaTelefono_C.php", "formTelefono", function (data) {
+            if (!validErrorResponse(data)) {
+                dataResponse = JSON.parse(data)[0];
+                if ($("#formTelefono #action").val() === "i") {
+                    if ($(".personaTelefonoTr").length === 0) {
+                        $("#tablePersonaTelefonos tbody").html("");
+                    }
+                    createPersonaTelefonoHTMLTr(dataResponse.id, $("#formTelefono #telefono_tipo_id option:selected").text(), $("#formTelefono #telefono").val());
+                } else if ($("#formTelefono #action").val() === "u") {
+                    var id = $("#formTelefono #id").val();
+                    $("#personaTelefonoTr_" + id).remove();
+                    createPersonaTelefonoHTMLTr(id, $("#formTelefono #telefono_tipo_id option:selected").text(), $("#formTelefono #telefono").val());
+                }
+                closeLastModal();
+                notifySuccess();
+            }
+        });
+    }
+    $("#formTelefono").validate({
+        rules: {
+            telefono_tipo_id: {
+                required: true
+            },
+            telefono: {
+                required: true,
+                number: true
+            }
+        },
+        submitHandler: function (form) {
+            savePersonaTelefono();
+        }
+    });
+    $("#formTelefono #telefono").inputmask({ "mask": "9", "repeat": 10 });
+</script>

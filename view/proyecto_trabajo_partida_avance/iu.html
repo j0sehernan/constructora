@@ -1,0 +1,130 @@
+<h3 id="titleActionAvance">Registro Avance</h3>
+<form id="formProyectoTrabajoPartidaAvance">
+    <div class="form-group">
+        <label for="fecha_inicio_avance">Fecha Inicio Avance</label>
+        <input type="text" class="form-control form-control-sm form-control-date" id="fecha_inicio_avance" name="fecha_inicio_avance" placeholder="Fecha Inicio Avance" maxlength="10">
+    </div>
+    <div class="form-group">
+        <label for="fecha_termino_avance">Fecha Término Avance</label>
+        <input type="text" class="form-control form-control-sm form-control-date" id="fecha_termino_avance" name="fecha_termino_avance" placeholder="Fecha Inicio Avance" maxlength="10">
+    </div>
+    <div class="form-group">
+        <label for="precio_unitario_avance">Precio Unitario Avance</label>
+        <input type="text" class="form-control form-control-sm form-control-decimal" id="precio_unitario_avance" name="precio_unitario_avance" placeholder="Precio Unitario Avance" maxlength="10" onchange="changeGenerateValues();">
+    </div>
+    <div class="form-group">
+        <label for="cantidad_avance">Cantidad Avance</label>
+        <input type="text" class="form-control form-control-sm form-control-decimal" id="cantidad_avance" name="cantidad_avance" placeholder="Cantidad Avance" maxlength="10" onchange="changeGenerateValues();">
+    </div>
+    <div class="form-group">
+        <label for="precio_avance">Precio Avance</label>
+        <input type="text" class="form-control form-control-sm form-control-decimal" id="precio_avance" name="precio_avance" placeholder="Precio Avance" maxlength="10" readonly>
+    </div>
+    <div class="only-options-right">
+        <input type="hidden" id="proyecto_trabajo_partida_id" name="proyecto_trabajo_partida_id">
+        <input type="hidden" id="proyecto_id" name="proyecto_id">
+        <input type="hidden" id="id" name="id">
+        <input type="hidden" id="action" name="action" value="i">
+        <button type="submit" class="btn btn-success btn-sm"><i class="la la-save"></i>Guardar</button>
+        <button type="button" class="btn btn-outline-danger btn-sm" onclick="closeLastModal();">Cancelar</button>
+    </div>
+</form>
+<script>
+    function changeGenerateValues() {
+        var precioUnitarioAvance = $("#precio_unitario_avance").val();
+        var cantidadAvance = $("#cantidad_avance").val();
+        var precioAvance = Number(precioUnitarioAvance) * Number(cantidadAvance);
+        if (isNaN(precioAvance) || precioAvance == null || (precioUnitarioAvance == "" && cantidadAvance == "")) {
+            precioAvance = "";
+        }
+        $("#precio_avance").val(precioAvance);
+    }
+    function getProyectoTrabajoPartidaAvance() {
+        if ($("#action").val() === "u") {
+            postJSON("ProyectoTrabajoPartidaAvance_C.php", { action: "get", id: $("#formProyectoTrabajoPartidaAvance #id").val() }, function (data) {
+                if (!validErrorResponse(data)) {
+                    dataResponse = JSON.parse(data)[0];
+                    $("#titleActionAvance").html("Editar Avance");
+                    $("#formProyectoTrabajoPartidaAvance #fecha_inicio_avance").val(dataResponse.fecha_inicio_avance);
+                    $("#formProyectoTrabajoPartidaAvance #fecha_termino_avance").val(dataResponse.fecha_termino_avance);
+                    $("#formProyectoTrabajoPartidaAvance #precio_unitario_avance").val(dataResponse.precio_unitario_avance);
+                    $("#formProyectoTrabajoPartidaAvance #cantidad_avance").val(dataResponse.cantidad_avance);
+                    $("#formProyectoTrabajoPartidaAvance #precio_avance").val(dataResponse.precio_avance);
+                }
+            });
+        }
+    }
+    $("#formProyectoTrabajoPartidaAvance").validate({
+        rules: {
+            fecha_inicio_avance: {
+                required: true,
+                dateITA: true,
+                maxDate: function () {
+                    return $("#fecha_termino_avance").val();
+                }
+            },
+            fecha_termino_avance: {
+                required: true,
+                dateITA: true,
+                minDate: function () {
+                    return $("#fecha_inicio_avance").val();
+                }
+            },
+            precio_unitario_avance: {
+                required: true,
+                number: true,
+                maxlength: 21,
+                min: 0.1
+            },
+            cantidad_avance: {
+                required: true,
+                number: true,
+                maxlength: 21,
+                min: 0.1
+            },
+            precio_avance: {
+                required: true,
+                number: true,
+                maxlength: 21,
+                min: 0.1
+            }
+        },
+        submitHandler: function (form) {
+            saveProyectoTrabajoPartidaAvance();
+        }
+    });
+    function saveProyectoTrabajoPartidaAvance() {
+        postJSONForm("ProyectoTrabajoPartidaAvance_C.php", "formProyectoTrabajoPartidaAvance", function (data) {
+            if (!validErrorResponse(data)) {
+                dataResponse = JSON.parse(data);
+                closeLastModal();
+                notifySuccess();
+                listProyectoTrabajoPartidaAvances();
+
+                var id = $("#proyecto_trabajo_partida_id").val();
+                if (dataResponse.can_delete == false || dataResponse.can_delete == 0) {
+                    $("#tr_partida_" + id).find("[data-original-title='Eliminar Partida']").remove();
+                }
+                $("#tr_partida_" + id).find(".cantidad_real_acumulada").html(dataResponse.cantidad_real_acumulada);
+                $("#tr_partida_" + id).find(".precio_real_acumulado").html(dataResponse.precio_real_acumulado);
+                $("#tr_partida_" + id).find(".cantidad_por_ejecutar").html(dataResponse.cantidad_por_ejecutar);
+                $("#tr_partida_" + id).find(".fecha_inicio_real").html(dataResponse.min_fecha_inicio_avance);
+                $("#tr_partida_" + id).find(".fecha_termino_real").html(dataResponse.max_fecha_termino_avance);
+                if (dataResponse.cantidad_por_ejecutar < 0) {
+                    $("#tr_partida_" + id).find(".cantidad_por_ejecutar").addClass("td-error");
+                } else {
+                    $("#tr_partida_" + id).find(".cantidad_por_ejecutar").removeClass("td-error");
+                }
+                $("#tr_partida_" + id).find(".precio_por_ejecutar").html(dataResponse.precio_por_ejecutar);
+                if (dataResponse.precio_por_ejecutar < 0) {
+                    $("#tr_partida_" + id).find(".precio_por_ejecutar").addClass("td-error");
+                } else {
+                    $("#tr_partida_" + id).find(".precio_por_ejecutar").removeClass("td-error");
+                }
+                updateProyectoReal(dataResponse.sum_precio_plan, dataResponse.sum_precio_real_acumulado, dataResponse.sum_precio_por_ejecutar, dataResponse.min_fecha_inicio_real, dataResponse.max_fecha_termino_real);
+            }
+        });
+    }
+    startDatePicker();
+    startDecimalNumbers(18, 2);
+</script>

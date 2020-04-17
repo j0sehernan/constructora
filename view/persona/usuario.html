@@ -1,0 +1,78 @@
+<h3>Credenciales</h3>
+<form id="form">
+    <div class="form-group">
+        <label for="usuario">Usuario</label>
+        <input type="text" class="form-control form-control-sm" id="usuario" name="usuario" placeholder="Usuario" maxlength="20">
+    </div>
+    <div class="form-group">
+        <label for="clave">Password</label>
+        <div class="input-group">
+            <input type="password" class="form-control form-control-sm" id="clave" name="clave" placeholder="Password" maxlength="20">
+            <div class="input-group-append">
+                <button class="btn btn-secondary btn-sm" type="button" data-toggle="tooltip" title="Mostrar/Ocultar" data-placement="top" onclick="showPassword(this);"><i class="fa fa-eye"></i></button>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="re_clave">Re-Password</label>
+        <div class="input-group">
+            <input type="password" class="form-control form-control-sm" id="re_clave" name="re_clave" placeholder="Re-Password" maxlength="20">
+            <div class="input-group-append">
+                <button class="btn btn-secondary btn-sm" type="button" data-toggle="tooltip" title="Mostrar/Ocultar" data-placement="top" onclick="showPassword(this);"><i class="fa fa-eye"></i></button>
+            </div>
+        </div>
+    </div>
+    <div class="only-options-right">
+        <input type="hidden" id="action" name="action" value="uUsuarioClave">
+        <input type="hidden" id="id" name="id" value="">
+        <button type="submit" class="btn btn-success btn-sm"><i class="la la-save"></i>Guardar</button>
+        <button type="button" class="btn btn-outline-danger btn-sm" onclick="closeLastModal();">Cancelar</button>
+    </div>
+</form>
+<script>
+    function showPassword(element) {
+        var type = $(element).parent().parent().find(".form-control").attr("type");
+        if (type === "text") {
+            $(element).parent().parent().find(".form-control").attr("type", "password");
+        } else if (type === "password") {
+            $(element).parent().parent().find(".form-control").attr("type", "text");
+        }
+    }
+    function getUsuario() {
+        postJSON("Persona_C.php", { action: "getUsuarioClave", id: $("#form #id").val() }, function (data) {
+            if (!validErrorResponse(data)) {
+                dataResponse = JSON.parse(data)[0];
+                $("#form #usuario").val(dataResponse.usuario);
+                $("#form #clave").val(dataResponse.clave);
+            }
+        });
+    }
+    $("#form").validate({
+        rules: {
+            usuario: {
+                required: true,
+                maxlength: 20
+            },
+            clave: {
+                required: true,
+                maxlength: 20
+            },
+            re_clave: {
+                required: true,
+                maxlength: 20,
+                equalTo: "#clave"
+            },
+        },
+        submitHandler: function (form) {
+            saveUsuario();
+        }
+    });
+    function saveUsuario() {
+        postJSONForm("Persona_C.php", "form", function (data) {
+            if (!validErrorResponse(data)) {
+                closeLastModal();
+                notifySuccess();
+            }
+        });
+    }
+</script>

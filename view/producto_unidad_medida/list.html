@@ -1,0 +1,58 @@
+<h3 id="productoText"></h3>
+<div class="only-options-right">
+    <input type="hidden" id="producto_id_general" name="producto_id_general">
+    <a class="btn btn-icon btn btn-label btn-label-brand btn-bold" data-toggle="tooltip" title="Actualizar" data-placement="top" onclick="listProductoUnidadesMedida();"><i class="flaticon-refresh"></i></a>
+    <a class="btn btn-icon btn btn-label btn-label-brand btn-bold" data-toggle="tooltip" title="Agregar" data-placement="top" onclick="showProductoUnidadMedidaForm('i');"><i class="flaticon2-add-1"></i></a>
+</div>
+<table id="tableProductoUnidadMedida" class="table table-hover table-bordered table-striped table-sm">
+    <thead class="thead-dark"></thead>
+</table>
+<script>
+    function listProductoUnidadesMedida() {
+        postJSON("ProductoUnidadMedida_C.php", { "action": "listByProducto", producto_id: $("#producto_id_general").val() }, function (data) {
+            if (!validErrorResponse(data)) {
+                destroyDataTableIfExists("tableProductoUnidadMedida");
+                $('#tableProductoUnidadMedida').DataTable({
+                    data: JSON.parse(data),
+                    columns: [
+                        { title: "UM Ingreso", data: "unidad_medida_ingreso_id" },
+                        { title: "Factor", data: "factor" },
+                        { title: "Cantidad", data: "cantidad" },
+                        { title: "UM Salida", data: "unidad_medida_salida_id" },
+                        {
+                            title: "Acciones", className: "td-actions", render: function (data, type, row, meta) {
+                                return '<button type="button" class="btn btn-outline-info btn-elevate btn-icon btn-circle btn-xs" data-toggle="tooltip" title="Editar" onclick="showProductoUnidadMedidaForm(\'u\',\'' + row.id + '\');"><i class="fa fa-pencil-alt"></i></button>&nbsp;' +
+                                    '<button type="button" class="btn btn-outline-danger btn-elevate btn-icon btn-circle btn-xs" data-toggle="tooltip" title="Eliminar" onclick="deleteProductoUnidadMedida(\'' + row.id + '\');"><i class="fa fa-trash"></i></button>'
+                            }
+                        }
+                    ]
+                });
+            }
+        });
+    }
+    function showProductoUnidadMedidaForm(action, id) {
+        getModalWithCallBackSecond('producto_unidad_medida/iu.html', function () {
+            $("#form #producto_id").val($("#producto_id_general").val());
+            if (action === "i") {
+                fillUnidadMedidaIngreso();
+                fillUnidadMedidaSalida();
+            } else if (action === "u") {
+                $("#form #id").val(id);
+                $("#form #action").val("u");
+                getProductoUnidadMedida();
+            }
+        });
+    }
+    function deleteProductoUnidadMedida(id) {
+        askDelete(function (result) {
+            if (result) {
+                postJSON("ProductoUnidadMedida_C.php", { action: "d", id: id }, function (data) {
+                    if (!validErrorResponse(data)) {
+                        notifySuccess();
+                        listProductoUnidadesMedida();
+                    }
+                });
+            }
+        });
+    }
+</script>

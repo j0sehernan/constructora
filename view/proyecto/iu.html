@@ -1,0 +1,59 @@
+<h3 id="titleAction">Registro</h3>
+<form id="form">
+    <div class="form-group">
+        <label for="codigo">Código</label>
+        <input type="text" class="form-control form-control-sm" id="codigo" name="codigo" placeholder="Código" maxlength="10">
+    </div>
+    <div class="form-group">
+        <label for="nombre">Nombre</label>
+        <input type="text" class="form-control form-control-sm" id="nombre" name="nombre" placeholder="Nombre" maxlength="200">
+    </div>
+    <div class="form-group">
+        <label for="ubicacion">Ubicación</label>
+        <input type="text" class="form-control form-control-sm" id="ubicacion" name="ubicacion" placeholder="Ubicación" maxlength="200">
+    </div>
+    <div class="only-options-right">
+        <input type="hidden" id="action" name="action" value="i">
+        <input type="hidden" id="id" name="id">
+        <button type="submit" class="btn btn-success btn-sm"><i class="la la-save"></i>Guardar</button>
+        <button type="button" class="btn btn-outline-danger btn-sm" onclick="closeLastModal();">Cancelar</button>
+    </div>
+</form>
+<script>
+    function getProyecto() {
+        postJSON("Proyecto_C.php", { action: "get", id: $("#id").val() }, function (data) {
+            if (!validErrorResponse(data)) {
+                dataResponse = JSON.parse(data)[0];
+                $("#titleAction").html("Editar");
+                $("#codigo").val(dataResponse.codigo);
+                $("#nombre").val(dataResponse.nombre);
+                $("#ubicacion").val(dataResponse.ubicacion);
+
+            }
+        });
+    }
+    $("#form").validate({
+        rules: {
+            codigo: {
+                required: true,
+                maxlength: 10
+            },
+            nombre: {
+                required: true,
+                maxlength: 200
+            }
+        },
+        submitHandler: function (form) {
+            saveProyecto();
+        }
+    });
+    function saveProyecto() {
+        postJSONForm("Proyecto_C.php", "form", function (data) {
+            if (!validErrorResponse(data)) {
+                closeLastModal();
+                notifySuccess();
+                listProyectos();
+            }
+        });
+    }
+</script>

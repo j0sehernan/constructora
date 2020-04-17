@@ -1,0 +1,493 @@
+<div class="kt-subheader kt-grid__item" id="kt_subheader">
+    <div class="kt-container kt-container--fluid ">
+        <div class="kt-subheader__main">
+            <h3 class="kt-subheader__title">Persona</h3>
+            <span class="kt-subheader__separator kt-hidden"></span>
+            <div class="kt-subheader__breadcrumbs">
+                <a href="#" class="kt-subheader__breadcrumbs-home"><i class="fa fa-user"></i></a>
+                <span class="kt-subheader__breadcrumbs-separator"></span>
+                <a href="#" class="kt-subheader__breadcrumbs-link">
+                    Personas </a>
+                <span class="kt-subheader__breadcrumbs-separator"></span>
+                <a href="#" class="kt-subheader__breadcrumbs-link" id="titleAction">
+                    Registrar </a>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="kt-container kt-container--fluid kt-grid__item kt-grid__item--fluid">
+    <div class="row">
+        <div class="col">
+            <div class="kt-portlet kt-portlet--tabs">
+                <div class="kt-portlet__head">
+                    <div class="kt-portlet__head-toolbar">
+                        <ul class="nav nav-tabs nav-tabs-bold nav-tabs-line nav-tabs-line-brand" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link active" data-toggle="tab" href="#kt_portlet_tabs_1_1_content" role="tab" aria-selected="true"> Identificación
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" data-toggle="tab" href="#kt_portlet_tabs_1_2_content" role="tab" aria-selected="false"> Emails
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" data-toggle="tab" href="#kt_portlet_tabs_1_3_content" role="tab" aria-selected="false"> Teléfonos
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" data-toggle="tab" href="#kt_portlet_tabs_1_4_content" role="tab" aria-selected="false"> Direcciones
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="kt-portlet__body">
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="kt_portlet_tabs_1_1_content" role="tabpanel">
+                            <form id="form">
+                                <div class="row">
+                                    <div class="col-sm-4">
+                                        <div class="row">
+                                            <div class="col-sm-12">
+                                                <div class="kt-profile">
+                                                    <div class="kt-profile__content">
+                                                        <div class="kt-profile__main flex-center">
+                                                            <div class="kt-profile__main-pic">
+                                                                <img src="assets/media/users/user_male.png" alt="" id="profile_image_view" name="profile_image_view">
+                                                                <label class="kt-profile__main-pic-upload">
+                                                                    <i class="flaticon-photo-camera"></i>
+                                                                    <input type="file" id="profile_image_file" name="profile_image_file" onchange="filePreview();">
+                                                                    <!-- accept=".png, .jpg, .jpeg" -->
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-12">
+                                                <div class="container flex-center">
+                                                    <div class="form-group">
+                                                        <label class="kt-radio">
+                                                            <input type="radio" name="persona_tipo_id" value="N" onchange="changePersonaTipo();" checked>
+                                                            NATURAL
+                                                            <span></span>
+                                                        </label>&nbsp;&nbsp;&nbsp;
+                                                        <label class="kt-radio">
+                                                            <input type="radio" name="persona_tipo_id" value="J" onchange="changePersonaTipo();">
+                                                            JURÍDICA
+                                                            <span></span>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-12 flex-center">
+                                                <div class="container flex-center">
+                                                    <div class="form-group">
+                                                        <label class="kt-radio">
+                                                            <input type="radio" name="genero_id" value="M" checked> MASCULINO
+                                                            <span></span>
+                                                        </label>&nbsp;&nbsp;&nbsp;
+                                                        <label class="kt-radio">
+                                                            <input type="radio" name="genero_id" value="F"> FEMENINO
+                                                            <span></span>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-8" style="margin-top: 10px;">
+                                        <div class="container">
+                                            <div class="row">
+                                                <div class="col-sm-4">
+                                                    <div class="form-group">
+                                                        <label for="documento_identidad_id">Doc. Identidad</label>
+                                                        <select class="form-control form-control-sm" id="documento_identidad_id" name="documento_identidad_id" onchange="changeDocumentoIdentidad();">
+                                                            <option value="D" data-min-length="8" data-max-length="8">DNI</option>
+                                                            <option value="C" data-min-length="10" data-max-length="15">CARNET DE
+                                                                EXTRANJERÍA</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-4">
+                                                    <div class="form-group">
+                                                        <label for="numero_documento_identidad">N° Doc</label>
+                                                        <input type="text" class="form-control form-control-sm" id="numero_documento_identidad" name="numero_documento_identidad" placeholder="N° Doc" minlength="8" maxlength="8">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-sm-12">
+                                                    <div class="form-group">
+                                                        <label for="nombre_1" id="labelPrimerNombre">Primer Nombre</label>
+                                                        <input type="text" class="form-control form-control-sm" id="nombre_1" name="nombre_1" placeholder="Primer Nombre" maxlength="100">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-sm-6">
+                                                    <div class="form-group">
+                                                        <label for="nombre_2">Segundo Nombre</label>
+                                                        <input type="text" class="form-control form-control-sm" id="nombre_2" name="nombre_2" placeholder="Segundo Nombre" maxlength="100">
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-6">
+                                                    <div class="form-group">
+                                                        <label for="nombre_3">Tercer Nombre</label>
+                                                        <input type="text" class="form-control form-control-sm" id="nombre_3" name="nombre_3" placeholder="Tercer Nombre" maxlength="100">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-sm-6">
+                                                    <div class="form-group">
+                                                        <label for="apellido_paterno">Apellido Paterno</label>
+                                                        <input type="text" class="form-control form-control-sm" id="apellido_paterno" name="apellido_paterno" placeholder="Apellido Paterno" maxlength="100">
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-6">
+                                                    <div class="form-group">
+                                                        <label for="apellido_materno">Apellido Materno</label>
+                                                        <input type="text" class="form-control form-control-sm" id="apellido_materno" name="apellido_materno" placeholder="Apellido Materno" maxlength="100">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-sm-6">
+                                                    <div class="form-group">
+                                                        <label for="fecha_nacimiento" id="labelFechaCreacion">Fecha de
+                                                            Nacimiento</label>
+                                                        <input type="text" class="form-control form-control-sm form-control-date" id="fecha_nacimiento" name="fecha_nacimiento" placeholder="Fecha de Nacimiento" maxlength="10">
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-6">
+                                                    <div class="form-group">
+                                                        <label for="estado_civil_id">Estado Civil</label>
+                                                        <select class="form-control form-control-sm" id="estado_civil_id" name="estado_civil_id">
+                                                            <option value="S">SOLTER@</option>
+                                                            <option value="C">CASAD@</option>
+                                                            <option value="D">DIVORCIAD@</option>
+                                                            <option value="E">EN RELACIÓN</option>
+                                                            <option value="N">NOVIAZGO</option>
+                                                            <option value="O">COMPROMETID@</option>
+                                                            <option value="P">SEPARAD@</option>
+                                                            <option value="U">UNIÓN LIBRE / CONVIVIENTE</option>
+                                                            <option value="V">VIUD@</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col only-options-right">
+                                    <input type="hidden" name="action" id="action" value="i">
+                                    <input type="hidden" name="id" id="id" value="">
+                                    <input type="hidden" name="profile_image" id="profile_image" value="">
+                                    <button type="submit" class="btn btn-success btn-sm"><i class="la la-save"></i>Guardar</button>
+                                    <button type="button" class="btn btn-outline-danger btn-sm" onclick="getHTMLContainer('persona/list.html');"><i class="la la-save"></i>Cancelar</button>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="tab-pane" id="kt_portlet_tabs_1_2_content" role="tabpanel">
+                            <div class="sub-settings">
+                                <a class="btn btn-icon btn btn-label btn-label-brand btn-bold" data-toggle="tooltip" title="Actualizar" data-placement="top" onclick="listEmails();"><i class="flaticon-refresh"></i></a>
+                                <a href="#" class="btn btn-icon btn btn-label btn-label-brand btn-bold" data-toggle="tooltip" title="Agregar" data-placement="top" onclick="showPersonaEmailForm('i')"><i class="flaticon2-add-1"></i></a>
+                            </div>
+                            <table class="table-fit table table-bordered table-hover table-striped table-sm" id="tablePersonaEmails">
+                                <thead class="thead-dark">
+                                    <tr>
+                                        <th>Tipo</th>
+                                        <th>Email</th>
+                                        <th style="width: 1px;">Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="tab-pane" id="kt_portlet_tabs_1_3_content" role="tabpanel">
+                            <div class="sub-settings">
+                                <a class="btn btn-icon btn btn-label btn-label-brand btn-bold" data-toggle="tooltip" title="Actualizar" data-placement="top" onclick="listTelefonos();"><i class="flaticon-refresh"></i></a>
+                                <a href="#" class="btn btn-icon btn btn-label btn-label-brand btn-bold" data-toggle="tooltip" title="Agregar" data-placement="top" onclick="showPersonaTelefonoForm('i')"><i class="flaticon2-add-1"></i></a>
+                            </div>
+                            <table class="table-fit table table-bordered table-hover table-striped table-sm" id="tablePersonaTelefonos">
+                                <thead class="thead-dark">
+                                    <tr>
+                                        <th>Tipo</th>
+                                        <th>Teléfono</th>
+                                        <th style="width: 1px;">Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="tab-pane" id="kt_portlet_tabs_1_4_content" role="tabpanel">
+                            4
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function filePreview() {
+        profileImage = $("#profile_image_file").get(0);
+        if (profileImage.files && profileImage.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                $("#profile_image_view").attr("src", e.target.result);
+                $("#profile_image").val(e.target.result);
+            }
+            reader.readAsDataURL(profileImage.files[0]);
+        }
+    }
+    function changePersonaTipo() {
+        var personaTipoId = $('#form [name="persona_tipo_id"]:checked').val();
+        if (personaTipoId === "J") {
+            $('#form [name="genero_id"]').parent().parent().parent().parent().hide();
+            $("#form #documento_identidad_id").html('<option value="R" data-min-length="11" data-max-length="11">RUC</option>');
+            $("#form #labelPrimerNombre").text("Razón Social");
+            $("#form #nombre_1").prop("placeholder", "Razón Social");
+            $("#form #nombre_2").parent().parent().hide();
+            $("#form #nombre_3").parent().parent().hide();
+            $("#form #apellido_paterno").parent().parent().hide();
+            $("#form #apellido_materno").parent().parent().hide();
+            $("#form #labelFechaCreacion").text("Fecha de Creación");
+            $("#form #fecha_nacimiento").prop("placeholder", "Fecha de Creación");
+            $("#form #estado_civil_id").parent().parent().hide();
+            changeDocumentoIdentidad();
+        } else if (personaTipoId === "N") {
+            $('#form [name="genero_id"]').parent().parent().parent().parent().show();
+            $("#form #documento_identidad_id").html('<option value="D" data-min-length="8" data-max-length="8">DNI</option>');
+            $("#form #documento_identidad_id").append('<option value="C" data-min-length="10" data-max-length="15">CARNET DE EXTRANJERÍA</option>');
+            $("#form #labelPrimerNombre").text("Primer Nombre");
+            $("#form #nombre_1").prop("placeholder", "Primer Nombre");
+            $("#form #nombre_2").parent().parent().show();
+            $("#form #nombre_3").parent().parent().show();
+            $("#form #apellido_paterno").parent().parent().show();
+            $("#form #apellido_materno").parent().parent().show();
+            $("#form #labelFechaCreacion").text("Fecha de Nacimiento");
+            $("#form #fecha_nacimiento").prop("placeholder", "Fecha de Nacimiento");
+            $("#form #estado_civil_id").parent().parent().show();
+            changeDocumentoIdentidad();
+        }
+    }
+    function changeDocumentoIdentidad() {
+        minLength = $("#documento_identidad_id option:selected").attr("data-min-length");
+        maxLength = $("#documento_identidad_id option:selected").attr("data-max-length");
+        $("#numero_documento_identidad").attr("minlength", minLength);
+        $("#numero_documento_identidad").prop("maxlength", maxLength);
+    }
+    $("#form").validate({
+        rules: {
+            persona_tipo_id: {
+                required: true
+            },
+            documento_identidad_id: {
+                required: true
+            },
+            numero_documento_identidad: {
+                required: true,
+                minlength: function (element) {
+                    return $("#numero_documento_identidad").attr("minlength");
+                },
+                maxlength: function (element) {
+                    return $("#numero_documento_identidad").attr("maxlength");
+                }
+            },
+            nombre_1: {
+                required: true,
+                maxlength: 100
+            },
+            apellido_paterno: {
+                required: function (element) {
+                    return $('[name="persona_tipo_id"]:checked').val() === "N" ? true : false;
+                }
+            },
+            apellido_materno: {
+                required: function (element) {
+                    return $('[name="persona_tipo_id"]:checked').val() === "N" ? true : false;
+                }
+            },
+            genero_id: {
+                required: function (element) {
+                    return $('[name="persona_tipo_id"]:checked').val() === "N" ? true : false;
+                }
+            },
+            fecha_nacimiento: {
+                required: true,
+                maxlength: 10,
+                dateITA: true
+            },
+            estado_civil_id: {
+                required: function (element) {
+                    return $('[name="persona_tipo_id"]:checked').val() === "N" ? true : false;
+                }
+            }
+        },
+        submitHandler: function (form) {
+            savePersona();
+        }
+    });
+    function getPersona() {
+        if ($("#form #action").val() === "u") {
+            postJSON("Persona_C.php", { action: "get", id: $("#form #id").val() }, function (data) {
+                if (!validErrorResponse(data)) {
+                    dataResponse = JSON.parse(data)[0];
+                    $("#titleAction").html("Editar");
+                    $("#form [name=persona_tipo_id]").filter("[value=" + dataResponse.persona_tipo_id + "]").prop("checked", true);
+                    $("#form [name=persona_tipo_id]").prop("disabled", "true");
+                    changePersonaTipo();
+                    $("#form #documento_identidad_id").val(dataResponse.documento_identidad_id);
+                    $("#form #numero_documento_identidad").val(dataResponse.numero_documento_identidad);
+                    $("#form #nombre_1").val(dataResponse.nombre_1);
+                    $("#form #fecha_nacimiento").val(dataResponse.fecha_nacimiento);
+                    if (dataResponse.profile_image !== null) {
+                        $("#form #profile_image_view").attr("src", dataResponse.profile_image);
+                    }
+                    if (dataResponse.persona_tipo_id === "N") {
+                        $("#form #nombre_2").val(dataResponse.nombre_2);
+                        $("#form #nombre_3").val(dataResponse.nombre_3);
+                        $("#form #apellido_paterno").val(dataResponse.apellido_paterno);
+                        $("#form #apellido_materno").val(dataResponse.apellido_materno);
+                        $("#form [name=genero_id]").filter("[value=" + dataResponse.genero_id + "]").prop("checked", true);
+                        $("#form #estado_civil_id").val(dataResponse.estado_civil_id);
+                    }
+                    startDatePicker();
+                }
+            });
+        }
+    }
+    function savePersona() {
+        postJSONForm("Persona_C.php", "form", function (data) {
+            if (!validErrorResponse(data)) {
+                closeLastModal();
+                notifySuccess();
+                getHTMLContainer('persona/list.html');
+            }
+        });
+    }
+    //EMAILS
+    function createPersonaEmailHTMLTr(id, emailTipo, email) {
+        var html = '<tr id="personaEmailTr_' + id + '" class="personaEmailTr">';
+        html += '<td>' + emailTipo + '</td>';
+        html += '<td>' + email + '</td>';
+        html += '<td style="width: 1px;">';
+        html += '<button type="button" class="btn btn-outline-info btn-elevate btn-icon btn-circle btn-xs" data-toggle="tooltip" title="Editar" onclick="showPersonaEmailForm(\'u\',' + id + ');"><i class="fa fa-pencil-alt"></i></button>';
+        html += '<button type="button" class="btn btn-outline-danger btn-elevate btn-icon btn-circle btn-xs" data-toggle="tooltip" title="Eliminar" onclick="deletePersonaEmail(' + id + ');"><i class="fa fa-trash"></i></button>';
+        html += '</td>';
+        html += '</tr>';
+        $("#tablePersonaEmails tbody").append(html);
+    }
+    function createPersonaEmailHTMLTrEmpty() {
+        var html = '<tr>'
+        html += '<td colspan="4">' + STR_NO_SE_ENCONTRARON_REGISTROS + '</td>';
+        html += '</tr>';
+        $("#tablePersonaEmails tbody").append(html);
+    }
+    function listEmails() {
+        postJSON("PersonaEmail_C.php", { "action": "listByPersona", "persona_id": $("#form #id").val() }, function (data) {
+            if (!validErrorResponse(data)) {
+                $("#tablePersonaEmails tbody").html("");
+                var arrayPersonaEmails = JSON.parse(data);
+                if (arrayPersonaEmails.length > 0) {
+                    arrayPersonaEmails.forEach(function (object, index) {
+                        createPersonaEmailHTMLTr(object.id, object.email_tipo, object.email);
+                    });
+                } else {
+                    createPersonaEmailHTMLTrEmpty();
+                }
+            }
+        });
+    }
+    function showPersonaEmailForm(action, id) {
+        getModalWithCallBack('persona_email/iu.html', function () {
+            $("#formEmail #persona_id").val($("#form #id").val());
+            if (action === "i") {
+                fillEmailTipos();
+            } else if (action === "u") {
+                $("#formEmail #id").val(id);
+                $("#formEmail #action").val("u");
+                getPersonaEmail();
+            }
+        });
+    }
+    function deletePersonaEmail(id) {
+        bootbox.confirm(STR_ASK_DELETE, function (result) {
+            if (result) {
+                postJSON("PersonaEmail_C.php", { action: "d", id: id }, function (data) {
+                    if (!validErrorResponse(data)) {
+                        $("#personaEmailTr_" + id).remove();
+                        if ($(".personaEmailTr").length === 0) {
+                            createPersonaEmailHTMLTrEmpty();
+                        }
+                        notifySuccess();
+                    }
+                });
+            }
+        });
+    }
+    //TELEFONOS
+    function createPersonaTelefonoHTMLTr(id, personaTipo, telefono) {
+        var html = '<tr id="personaTelefonoTr_' + id + '" class="personaTelefonoTr">';
+        html += '<td>' + personaTipo + '</td>';
+        html += '<td>' + telefono + '</td>';
+        html += '<td style="width: 1px;">';
+        html += '<button type="button" class="btn btn-outline-info btn-elevate btn-icon btn-circle btn-xs" data-toggle="tooltip" title="Editar" onclick="showPersonaTelefonoForm(\'u\',' + id + ');"><i class="fa fa-pencil-alt"></i></button>';
+        html += '<button type="button" class="btn btn-outline-danger btn-elevate btn-icon btn-circle btn-xs" data-toggle="tooltip" title="Eliminar" onclick="deletePersonaTelefono(' + id + ');"><i class="fa fa-trash"></i></button>';
+        html += '</td>';
+        html += '</tr>';
+        $("#tablePersonaTelefonos tbody").append(html);
+    }
+    function createPersonaTelefonoHTMLTrEmpty() {
+        var html = '<tr>'
+        html += '<td colspan="4">' + STR_NO_SE_ENCONTRARON_REGISTROS + '</td>';
+        html += '</tr>';
+        $("#tablePersonaTelefonos tbody").append(html);
+    }
+    function listTelefonos() {
+        postJSON("PersonaTelefono_C.php", { "action": "listByPersona", "persona_id": $("#form #id").val() }, function (data) {
+            if (!validErrorResponse(data)) {
+                $("#tablePersonaTelefonos tbody").html("");
+                var arrayPersonaTelefonos = JSON.parse(data);
+                if (arrayPersonaTelefonos.length > 0) {
+                    arrayPersonaTelefonos.forEach(function (object, index) {
+                        createPersonaTelefonoHTMLTr(object.id, object.telefono_tipo, object.telefono);
+                    });
+                } else {
+                    createPersonaTelefonoHTMLTrEmpty();
+                }
+            }
+        });
+    }
+    function showPersonaTelefonoForm(action, id) {
+        getModalWithCallBack('persona_telefono/iu.html', function () {
+            $("#formTelefono #persona_id").val($("#form #id").val());
+            if (action === "i") {
+                fillTelefonoTipos();
+            } else if (action === "u") {
+                $("#formTelefono #id").val(id);
+                $("#formTelefono #action").val("u");
+                getPersonaTelefono();
+            }
+        });
+    }
+    function deletePersonaTelefono(id) {
+        bootbox.confirm(STR_ASK_DELETE, function (result) {
+            if (result) {
+                postJSON("PersonaTelefono_C.php", { action: "d", id: id }, function (data) {
+                    if (!validErrorResponse(data)) {
+                        $("#personaTelefonoTr_" + id).remove();
+                        if ($(".personaTelefonoTr").length === 0) {
+                            createPersonaTelefonoHTMLTrEmpty();
+                        }
+                        notifySuccess();
+                    }
+                });
+            }
+        });
+    }
+</script>

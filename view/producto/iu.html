@@ -1,0 +1,89 @@
+<h3 id="titleAction">Registro</h3>
+<form id="form">
+    <div class="form-group">
+        <label for="codigo">Código</label>
+        <input type="text" class="form-control form-control-sm" id="codigo" name="codigo" placeholder="Código" maxlength="10">
+    </div>
+    <div class="form-group">
+        <label for="nombre">Nombre</label>
+        <input type="text" class="form-control form-control-sm" id="nombre" name="nombre" placeholder="Nombre" maxlength="100">
+    </div>
+    <div class="form-group">
+        <label for="descripcion">Descripción</label>
+        <textarea class="form-control form-control-sm" id="descripcion" name="descripcion" placeholder="Descripción" maxlength="200"></textarea>
+    </div>
+    <div class="form-group">
+        <label for="stock_minimo">Stock Mínimo</label>
+        <input type="text" class="form-control form-control-sm form-control-decimal" id="stock_minimo" name="stock_minimo" placeholder="Stock Mínimo" maxlength="21">
+    </div>
+    <div class="only-options-right">
+        <input type="hidden" id="action" name="action" value="i">
+        <input type="hidden" id="id" name="id">
+        <button type="submit" class="btn btn-success btn-sm"><i class="la la-save"></i>Guardar</button>
+        <button type="button" class="btn btn-outline-danger btn-sm" onclick="closeLastModal();">Cancelar</button>
+    </div>
+</form>
+<script>
+    function saveProducto() {
+        postJSONForm("Producto_C.php", "form", function (data) {
+            if (!validErrorResponse(data)) {
+                closeLastModal();
+                notifySuccess();
+                listProductos();
+            }
+        });
+    }
+    function getProducto() {
+        if ($("#action").val() === "u") {
+            postJSON("Producto_C.php", { action: "get", id: $("#form #id").val() }, function (data) {
+                if (!validErrorResponse(data)) {
+                    dataResponse = JSON.parse(data)[0];
+                    $("#titleAction").html("Editar");
+                    $("#codigo").val(dataResponse.codigo);
+                    $("#nombre").val(dataResponse.nombre);
+                    $("#descripcion").val(dataResponse.descripcion);
+                    $("#stock_minimo").val(dataResponse.stock_minimo);
+                }
+            });
+        }
+    }
+    $("#form").validate({
+        rules: {
+            codigo: {
+                required: true,
+                maxlength: 10
+            },
+            nombre: {
+                required: true,
+                maxlength: 100
+            },
+            descripcion: {
+                maxlength: 200
+            },
+            stock_minimo: {
+                maxlength: 21,
+                number: true
+            }
+        },
+        messages: {
+            codigo: {
+                required: STR_CAMPO_REQUERIDO,
+                maxlength: STR_SOLO_SE_PERMITEN + "{0}" + STR_CARACTERES_COMO_MAXIMO
+            },
+            nombre: {
+                required: STR_CAMPO_REQUERIDO,
+                maxlength: STR_SOLO_SE_PERMITEN + "{0}" + STR_CARACTERES_COMO_MAXIMO
+            },
+            descripcion: {
+                maxlength: STR_SOLO_SE_PERMITEN + "{0}" + STR_CARACTERES_COMO_MAXIMO
+            },
+            stock_minimo: {
+                maxlength: STR_SOLO_SE_PERMITEN + "{0}" + STR_CARACTERES_COMO_MAXIMO
+            }
+        },
+        submitHandler: function (form) {
+            saveProducto();
+        }
+    });
+    startDecimalNumbers(18, 2);
+</script>

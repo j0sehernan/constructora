@@ -1,0 +1,75 @@
+<h3 id="titleAction">Registrar Trabajo</h3>
+<form id="formTrabajo">
+    <div class="form-group">
+        <label for="nombre">Nombre</label>
+        <input type="text" class="form-control form-control-sm" id="nombre" name="nombre" placeholder="Nombre">
+    </div>
+    <div class="form-group">
+        <label for="persona_contratista_id">Contratista</label>
+        <select class="form-control form-control-sm form-control-autocomplete" id="persona_contratista_id" name="persona_contratista_id">
+        </select>
+    </div>
+    <div class="only-options-right">
+        <input type="hidden" id="proyecto_id" name="proyecto_id">
+        <input type="hidden" id="action" name="action" value="i">
+        <input type="hidden" id="id" name="id">
+        <button type="submit" class="btn btn-success btn-sm"><i class="la la-save"></i>Guardar</button>
+        <button type="button" class="btn btn-outline-danger btn-sm" onclick="closeLastModal();">Cancelar</button>
+    </div>
+</form>
+<script>
+    function fillPersonaContratista(idPersona) {
+        postJSON("Persona_C.php", { "action": "listByPersonaTipo", "persona_tipo_id": "J" }, function (data) {
+            if (!validErrorResponse(data)) {
+                $("#persona_contratista_id").html('<option value="">Seleccione Contratista</option>');
+                var arrayPersonas = JSON.parse(data);
+                arrayPersonas.forEach(function (object, index) {
+                    $("#persona_contratista_id").append('<option value="' + object.id + '">' + object.nombre_1 + '</option>');
+                });
+                if (typeof idPersona !== 'undefined') {
+                    $("#persona_contratista_id").val(idPersona);
+                }
+                startSelect2ById("persona_contratista_id");
+            }
+        });
+    }
+    function getProyectoTrabajo() {
+        postJSON("ProyectoTrabajo_C.php", { action: "get", id: $("#formTrabajo #id").val() }, function (data) {
+            if (!validErrorResponse(data)) {
+                dataResponse = JSON.parse(data)[0];
+                $("#titleAction").html("Editar Trabajo");
+                $("#nombre").val(dataResponse.nombre);
+                fillPersonaContratista(dataResponse.persona_contratista_id);
+            }
+        });
+    }
+    $("#formTrabajo").validate({
+        rules: {
+            nombre: {
+                required: true,
+                maxlength: 100
+            },
+            persona_contratista_id: {
+                required: true
+            }
+        },
+        submitHandler: function (form) {
+            saveProyectoTrabajo();
+        }
+    });
+    function saveProyectoTrabajo() {
+        postJSONForm("ProyectoTrabajo_C.php", "formTrabajo", function (data) {
+            if (!validErrorResponse(data)) {
+                var action = $("#formTrabajo #action").val();
+                if (action === "i") {
+                    dataResponse = JSON.parse(data)[0];
+                    fillProyectoTrabajo(dataResponse.id);
+                } else if (action === "u") {
+                    fillProyectoTrabajo($("#formTrabajo #id").val());
+                }
+                closeLastModal();
+                notifySuccess();
+            }
+        });
+    }
+</script>

@@ -1,0 +1,112 @@
+<h3 id="titleAction">Registro</h3>
+<form id="form">
+    <div class="form-group">
+        <label for="unidad_medida_ingreso_id">UM Ingreso</label>
+        <select class="form-control form-control-sm form-control-autocomplete" id="unidad_medida_ingreso_id" name="unidad_medida_ingreso_id">
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="factor">Factor</label>
+        <select class="form-control form-control-sm" id="factor" name="factor">
+            <option value="*">*</option>
+            <option value="/">/</option>
+            <option value="+">+</option>
+            <option value="-">-</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="cantidad">Cantidad</label>
+        <input type="text" class="form-control form-control-sm form-control-decimal" id="cantidad" name="cantidad" placeholder="Cantidad" maxlength="21">
+    </div>
+    <div class="form-group">
+        <label for="unidad_medida_salida_id">UM Salida</label>
+        <select class="form-control form-control-sm form-control-autocomplete" id="unidad_medida_salida_id" name="unidad_medida_salida_id">
+        </select>
+    </div>
+    <div class="only-options-right">
+        <input type="hidden" id="producto_id" name="producto_id" value="">
+        <input type="hidden" id="id" name="id" value="">
+        <input type="hidden" id="action" name="action" value="i">
+        <button type="submit" class="btn btn-success btn-sm"><i class="la la-save"></i>Guardar</button>
+        <button type="button" class="btn btn-outline-danger btn-sm" onclick="closeLastModal();">Cancelar</button>
+    </div>
+</form>
+<script>
+    function fillUnidadMedidaIngreso(idUnidadMedida) {
+        postJSON("UnidadMedida_C.php", { "action": "list" }, function (data) {
+            if (!validErrorResponse(data)) {
+                $("#form #unidad_medida_ingreso_id").html('<option value="">Seleccione UM Ingreso</option>');
+                var arrayUnidadMedida = JSON.parse(data);
+                arrayUnidadMedida.forEach(function (object, index) {
+                    $("#form #unidad_medida_ingreso_id").append('<option value="' + object.codigo + '">' + object.nombre + '</option>');
+                });
+                if (typeof idUnidadMedida !== 'undefined') {
+                    $("#form #unidad_medida_ingreso_id").val(idUnidadMedida);
+                }
+                startSelect2ById("unidad_medida_ingreso_id");
+            }
+        });
+    }
+    function fillUnidadMedidaSalida(idUnidadMedida) {
+        postJSON("UnidadMedida_C.php", { "action": "list" }, function (data) {
+            if (!validErrorResponse(data)) {
+                $("#form #unidad_medida_salida_id").html('<option value="">Seleccione UM Salida</option>');
+                var arrayUnidadMedida = JSON.parse(data);
+                arrayUnidadMedida.forEach(function (object, index) {
+                    $("#form #unidad_medida_salida_id").append('<option value="' + object.codigo + '">' + object.nombre + '</option>');
+                });
+                if (typeof idUnidadMedida !== 'undefined') {
+                    $("#form #unidad_medida_salida_id").val(idUnidadMedida);
+                }
+                startSelect2ById("unidad_medida_salida_id");
+            }
+        });
+    }
+    $("#form").validate({
+        rules: {
+            unidad_medida_ingreso_id: {
+                required: true,
+                notEqualTo: "#unidad_medida_salida_id"
+            },
+            factor: {
+                required: true
+            },
+            cantidad: {
+                required: true,
+                number: true,
+                maxlength: 21
+            },
+            unidad_medida_salida_id: {
+                required: true,
+                notEqualTo: "#unidad_medida_ingreso_id"
+            }
+        },
+        submitHandler: function (form) {
+            saveProductoUnidadMedida();
+        }
+    });
+    function getProductoUnidadMedida() {
+        if ($("#action").val() === "u") {
+            postJSON("ProductoUnidadMedida_C.php", { action: "get", id: $("#form #id").val() }, function (data) {
+                if (!validErrorResponse(data)) {
+                    dataResponse = JSON.parse(data)[0];
+                    $("#titleAction").html("Editar");
+                    fillUnidadMedidaIngreso(dataResponse.unidad_medida_ingreso_id);
+                    $("#form #factor").val(dataResponse.factor);
+                    $("#form #cantidad").val(dataResponse.cantidad);
+                    fillUnidadMedidaSalida(dataResponse.unidad_medida_salida_id);
+                }
+            });
+        }
+    }
+    function saveProductoUnidadMedida() {
+        postJSONForm("ProductoUnidadMedida_C.php", "form", function (data) {
+            if (!validErrorResponse(data)) {
+                closeLastModal();
+                notifySuccess();
+                listProductoUnidadesMedida();
+            }
+        });
+    }
+    startDecimalNumbers(18, 2);
+</script>
