@@ -89,6 +89,8 @@
                                 class="fa fa-trash"></i></button>
                     </div>
                 </div>
+                <span id="proyecto_trabajo_contratista" style="margin-left: 15px;" data-toggle="tooltip" data-placement="top" data-original-title="Contratista"></span><br>
+                <span id="proyecto_trabajo_cantidad_adelanto" style="margin-left: 15px;" data-toggle="tooltip" data-placement="top" data-original-title="Cantidad Adelanto"></span>
             </div>
         </div>
     </div>
@@ -132,7 +134,7 @@
                 $("#proyecto_trabajo_id_general").html('<option value="">Seleccione Trabajo</option>');
                 var arrayTrabajos = JSON.parse(data);
                 arrayTrabajos.forEach(function (object, index) {
-                    $("#proyecto_trabajo_id_general").append('<option value="' + object.id + '">' + object.nombre + '</option>');
+                    $("#proyecto_trabajo_id_general").append('<option value="' + object.id + '" data-contratista="' + object.contratista + '" data-cantidad_adelanto="' + object.cantidad_adelanto + '">' + object.nombre + '</option>');
                 });
                 if (typeof idProyectoTrabajo !== 'undefined') {
                     $("#proyecto_trabajo_id_general").val(idProyectoTrabajo);
@@ -147,10 +149,16 @@
             $("#proyecto_trabajo_edit_button").hide();
             $("#proyecto_trabajo_delete_button").hide();
             $("#divProyectoTrabajoPartidas").hide();
+            $("#proyecto_trabajo_contratista").text("");
+            $("#proyecto_trabajo_cantidad_adelanto").text("");
         } else {
             $("#proyecto_trabajo_edit_button").show().attr("onclick", "showProyectoTrabajoForm('u'," + idProyectoTrabajo + ");");
             $("#proyecto_trabajo_delete_button").show().attr("onclick", "deleteProyectoTrabajo(" + idProyectoTrabajo + ");");
             $("#divProyectoTrabajoPartidas").show();
+            var contratista = $("#proyecto_trabajo_id_general option:selected").attr("data-contratista");
+            var cantidad_adelanto = $("#proyecto_trabajo_id_general option:selected").attr("data-cantidad_adelanto");
+            $("#proyecto_trabajo_contratista").text(contratista);
+            $("#proyecto_trabajo_cantidad_adelanto").text(cantidad_adelanto);
         }
         startSelect2ById("proyecto_trabajo_id_general");
         startTooltip();

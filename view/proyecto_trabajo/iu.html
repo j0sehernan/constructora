@@ -9,6 +9,10 @@
         <select class="form-control form-control-sm form-control-autocomplete" id="persona_contratista_id" name="persona_contratista_id">
         </select>
     </div>
+    <div class="form-group">
+        <label for="cantidad_adelanto">Adelanto</label>
+        <input type="text" class="form-control form-control-sm form-control-decimal" id="cantidad_adelanto" name="cantidad_adelanto" placeholder="Cantidad Adelanto">
+    </div>
     <div class="only-options-right">
         <input type="hidden" id="proyecto_id" name="proyecto_id">
         <input type="hidden" id="action" name="action" value="i">
@@ -51,6 +55,11 @@
             },
             persona_contratista_id: {
                 required: true
+            },
+            cantidad_adelanto:{
+                required: true,
+                maxlength: 21,
+                number: true
             }
         },
         submitHandler: function (form) {
@@ -72,4 +81,5 @@
             }
         });
     }
+    startDecimalNumbers(18, 2);
 </script>

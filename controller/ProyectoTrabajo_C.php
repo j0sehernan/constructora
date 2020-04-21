@@ -13,10 +13,10 @@ if ($object->{'action'} == "listByProyecto") {
     $result = $proyectoTrabajo->get($object->{'id'});
     echo (json_encode($result));
 } elseif ($object->{'action'} == "i") {
-    $result = $proyectoTrabajo->insert($object->{'nombre'}, $object->{'proyecto_id'}, $object->{'persona_contratista_id'});
+    $result = $proyectoTrabajo->insert($object->{'nombre'}, $object->{'proyecto_id'}, $object->{'persona_contratista_id'}, $object->{'cantidad_adelanto'});
     echo (json_encode($result));
 } elseif ($object->{'action'} == "u") {
-    $result = $proyectoTrabajo->update($object->{'id'}, $object->{'nombre'}, $object->{'persona_contratista_id'});
+    $result = $proyectoTrabajo->update($object->{'id'}, $object->{'nombre'}, $object->{'persona_contratista_id'}, $object->{'cantidad_adelanto'});
     echo (json_encode($result));
 } elseif ($object->{'action'} == "d") {
     $result = $proyectoTrabajo->delete($object->{'id'});

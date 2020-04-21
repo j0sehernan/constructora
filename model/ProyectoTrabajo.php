@@ -17,17 +17,17 @@ class ProyectoTrabajo
         return $result;
     }
 
-    function insert($nombre, $idProyecto, $idPersonaContratista)
+    function insert($nombre, $idProyecto, $idPersonaContratista, $cantidadAdelanto)
     {
         $db = new DB();
-        $result = $db->executeWithReturn("call proyecto_trabajo_i('$nombre','$idProyecto','$idPersonaContratista');");
+        $result = $db->executeWithReturn("call proyecto_trabajo_i('$nombre','$idProyecto','$idPersonaContratista','$cantidadAdelanto');");
         return $result;
     }
 
-    function update($id, $nombre, $idPersonaContratista)
+    function update($id, $nombre, $idPersonaContratista, $cantidadAdelanto)
     {
         $db = new DB();
-        $result = $db->execute("call proyecto_trabajo_u('$id','$nombre','$idPersonaContratista');");
+        $result = $db->execute("call proyecto_trabajo_u('$id','$nombre','$idPersonaContratista','$cantidadAdelanto');");
         return $result;
     }
 
