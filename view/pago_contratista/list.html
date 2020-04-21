@@ -1,0 +1,98 @@
+<div class="kt-subheader kt-grid__item" id="kt_subheader">
+    <div class="kt-container  kt-container--fluid ">
+        <div class="kt-subheader__main">
+            <h3 class="kt-subheader__title">Pago Contratista</h3>
+            <span class="kt-subheader__separator kt-hidden"></span>
+            <div class="kt-subheader__breadcrumbs">
+                <a href="#" class="kt-subheader__breadcrumbs-home"><i class="flaticon2-shelter"></i></a>
+                <span class="kt-subheader__breadcrumbs-separator"></span>
+                <a href="#" class="kt-subheader__breadcrumbs-link">
+                    Pago Contratistas </a>
+                <span class="kt-subheader__breadcrumbs-separator"></span>
+                <a href="#" class="kt-subheader__breadcrumbs-link">
+                    Listado </a>
+            </div>
+        </div>
+        <div class="kt-subheader__toolbar">
+            <div class="kt-subheader__wrapper">
+                <a class="btn btn-icon btn btn-label btn-label-brand btn-bold" data-toggle="tooltip" title="Actualizar" data-placement="top" onclick="listPagosContratistas();"><i class="flaticon-refresh"></i></a>
+                <a class="btn btn-icon btn btn-label btn-label-brand btn-bold" data-toggle="tooltip" title="Agregar" data-placement="top" onclick="showPagoContratistaForm();"><i class="flaticon2-add-1"></i></a>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="kt-container  kt-container--fluid kt-grid__item kt-grid__item--fluid">
+    <table id="table" class="table table-hover table-bordered table-striped table-sm">
+        <thead class="thead-dark"></thead>
+    </table>
+</div>
+<script>
+    function listPagosContratistas() {
+        postJSON("PagoContratista_C.php", { "action": "list" }, function (data) {
+            if (!validErrorResponse(data)) {
+                destroyDataTableIfExists("table");
+                $('#table').DataTable({
+                    data: JSON.parse(data),
+                    columns: [
+                        { title: "Contratista", data: "contratista" },
+                        { title: "Proyecto", data: "proyecto" },
+                        { title: "Trabajo", data: "proyecto_trabajo" },
+                        { title: "Inicio", data: "fecha_inicio" },
+                        { title: "Término", data: "fecha_termino" },
+                        { title: "Total", data: "monto_total" },
+                        {
+                            title: "Pagado", data: "pagado", render: function (data, type, row, meta) {
+                                return data == 1 ? "Si" : "No";
+                            }
+                        },
+                        {
+                            title: "Opciones", className: "td-actions", render: function (data, type, row, meta) {
+                                if (row.pagado == 0) {
+                                    return '<button type="button" class="btn btn-outline-success btn-elevate btn-icon btn-circle btn-xs" data-toggle="tooltip" title="Confirmar Pago" onclick="confirmarPagoContratista(\'' + row.id + '\');"><i class="fa fa-check"></i></button>&nbsp;'+
+                                    '<button type="button" class="btn btn-outline-danger btn-elevate btn-icon btn-circle btn-xs" data-toggle="tooltip" title="Eliminar" onclick="deletePagoContratista(\'' + row.id + '\');"><i class="fa fa-trash"></i></button>';
+                                } else {
+                                    return '';
+                                }
+                            }
+                        }
+                    ]
+                });
+            }
+        });
+    }
+    function showPagoContratistaForm() {
+        getModalExtraLargeWithCallBack('pago_contratista/iu.html', function () {
+        });
+    }
+    function confirmarPagoContratista(id) {
+        bootbox.confirm({
+            message: "¿Está seguro de realizar el pago?",
+            className: "fourth-modal",
+            callback: function (result) {
+                if (result) {
+                    postJSON("PagoContratista_C.php", { action: "u_Pagado", id: id, pagado: true }, function (data) {
+                        if (!validErrorResponse(data)) {
+                            notifySuccess();
+                            listPagosContratistas();
+                        }
+                    });
+                }
+            }
+        }).promise().done(function () {
+            $(".modal-backdrop").last().addClass("fourth-modal-backdrop");
+        });
+    }
+    function deletePagoContratista(id) {
+        bootbox.confirm(STR_ASK_DELETE, function (result) {
+            if (result) {
+                postJSON("PagoContratista_C.php", { action: "d", id: id }, function (data) {
+                    if (!validErrorResponse(data)) {
+                        notifySuccess();
+                        listPagosContratistas();
+                    }
+                });
+            }
+        });
+    }
+    listPagosContratistas();
+</script>

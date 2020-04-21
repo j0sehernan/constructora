@@ -110,11 +110,12 @@
 						<ul class="kt-menu__nav ">
 							<!-- kt-menu__item--open kt-menu__item--here -->
 							<li class="kt-menu__item kt-menu__item--submenu" aria-haspopup="true" data-ktmenu-submenu-toggle="hover">
-								<a href="javascript:;" class="kt-menu__link kt-menu__toggle"><i class="kt-menu__link-icon flaticon2-graphic"></i><span class="kt-menu__link-text">Dashboards</span><i class="kt-menu__ver-arrow la la-angle-right"></i></a>
+								<a href="javascript:;" class="kt-menu__link kt-menu__toggle"><i class="kt-menu__link-icon flaticon2-graphic"></i><span class="kt-menu__link-text">Menú</span><i class="kt-menu__ver-arrow la la-angle-right"></i></a>
 								<div class="kt-menu__submenu "><span class="kt-menu__arrow"></span>
 									<ul class="kt-menu__subnav">
-										<li class="kt-menu__item kt-menu__item--parent" aria-haspopup="true"><span class="kt-menu__link"><span class="kt-menu__link-text">Dashboards</span></span></li>
+										<li class="kt-menu__item kt-menu__item--parent" aria-haspopup="true"><span class="kt-menu__link"><span class="kt-menu__link-text">Menú</span></span></li>
 										<li class="kt-menu__item" id="menu-kardex"><a class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Kardex</span></a></li>
+										<li class="kt-menu__item" id="menu-pagoContratista"><a class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Pagos a Contratistas</span></a></li>
 										<li class="kt-menu__item" id="menu-proyecto"><a class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Proyectos</span></a></li>
 										<li class="kt-menu__item" id="menu-ordenCompra"><a class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Ordenes de Compra</span></a></li>
 										<li class="kt-menu__item" id="menu-persona"><a class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Personas</span></a></li>

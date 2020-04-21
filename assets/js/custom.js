@@ -74,10 +74,11 @@ function askDelete(success) {
     });
 }
 
-function customAlert(data) {
+function customAlert(data, callback) {
     bootbox.alert({
         message: data,
-        className: "fourth-modal"
+        className: "fourth-modal",
+        callback: callback
     }).promise().done(function () {
         $(".modal-backdrop").last().addClass("fourth-modal-backdrop");
     });
@@ -541,6 +542,10 @@ var pages =
         name: "genero",
         id: "menu-genero",
         url: "genero/list.html"
+    }, {
+        name: "pago_contratista",
+        id: "menu-pagoContratista",
+        url: "pago_contratista/list.html"
     }];
 //set the methods
 $.map(pages, function (object, index) {

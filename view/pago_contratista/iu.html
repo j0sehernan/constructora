@@ -1,0 +1,279 @@
+<h3>Generar Pago</h3>
+<form id="formPagoContratista">
+    <div class="row">
+        <div class="col-sm-4">
+            <div class="form-group">
+                <label for="proyecto_id">Proyecto</label>
+                <select class="form-control form-control-sm form-control-autocomplete" id="proyecto_id" name="proyecto_id">
+                </select>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="form-group">
+                <label for="persona_contratista_id">Contratista</label>
+                <select class="form-control form-control-sm form-control-autocomplete" id="persona_contratista_id" name="persona_contratista_id">
+                    <option value="">Seleccione Contratista</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="form-group">
+                <label for="proyecto_trabajo_id">Trabajo</label>
+                <select class="form-control form-control-sm form-control-autocomplete" id="proyecto_trabajo_id" name="proyecto_trabajo_id">
+                    <option value="">Seleccione Trabajo</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-4">
+            <div class="form-group">
+                <label for="fecha_inicio">Fecha de Inicio</label>
+                <input type="text" class="form-control form-control-sm form-control-date" id="fecha_inicio" name="fecha_inicio" placeholder="Fecha de Inicio" maxlength="10">
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="form-group">
+                <label for="fecha_termino">Fecha de Término</label>
+                <input type="text" class="form-control form-control-sm form-control-date" id="fecha_termino" name="fecha_termino" placeholder="Fecha de Término" maxlength="10">
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="form-group">
+                <label for="monto_total">Monto Total</label>
+                <input type="text" class="form-control form-control-sm" id="monto_total" name="monto_total" placeholder="Monto Total" readonly>
+            </div>
+        </div>
+    </div>
+    <div class="row" style="margin-bottom: 10px;">
+        <div class="col-sm-4">
+            <label class="kt-checkbox">
+                <input type="checkbox" id="pagado" name="pagado" checked>
+                Pagado
+                <span></span>
+            </label>
+        </div>
+        <div class="col-sm-4">
+
+        </div>
+        <div class="col-sm-4">
+            <div style="text-align: right;">
+                <input type="hidden" id="action" name="action">
+                <button type="submit" class="btn btn-outline-info btn-sm" onclick="$('#action').val('view')"><i class="la la-eye"></i> Visualizar</button>
+                <button type="submit" class="btn btn-success btn-sm" onclick="$('#action').val('generate')"><i class="la la-save"></i> Generar</button>
+                <button type="button" class="btn btn-outline-danger btn-sm" onclick="closeLastModal();">Cancelar</button>
+            </div>
+        </div>
+    </div>
+    <div id="divTableAvances" style="display: none;">
+        <table id="tableAvances" class="table table-hover table-bordered table-striped table-sm">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Código</th>
+                    <th>Partida</th>
+                    <th>Pre.Unit.</th>
+                    <th>Cant.</th>
+                    <th>Precio</th>
+                    <th>F. Inicio</th>
+                    <th>F. Término</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</form>
+<script>
+    function fillProyecto(idProyecto) {
+        postJSON("Proyecto_C.php", { "action": "list" }, function (data) {
+            if (!validErrorResponse(data)) {
+                $("#formPagoContratista #proyecto_id").html('<option value="">Seleccione Proyecto</option>');
+                var arrayProyectos = JSON.parse(data);
+                arrayProyectos.forEach(function (object, index) {
+                    $("#formPagoContratista #proyecto_id").append('<option value="' + object.id + '">' + object.nombre + '</option>');
+                });
+                if (typeof idProyecto !== 'undefined') {
+                    $("#formPagoContratista #proyecto_id").val(idProyecto);
+                }
+                startSelect2ById("proyecto_id");
+            }
+        });
+    }
+    function fillContratista(idContratista) {
+        postJSON("ProyectoTrabajo_C.php", { "action": "listContratistasByProyecto", proyecto_id: $("#proyecto_id").val() }, function (data) {
+            if (!validErrorResponse(data)) {
+                $("#formPagoContratista #persona_contratista_id").html('<option value="">Seleccione Contratista</option>');
+                var arrayContratistas = JSON.parse(data);
+                arrayContratistas.forEach(function (object, index) {
+                    $("#formPagoContratista #persona_contratista_id").append('<option value="' + object.persona_contratista_id + '">' + object.contratista + '</option>');
+                });
+                if (typeof idContratista !== 'undefined') {
+                    $("#formPagoContratista #persona_contratista_id").val(idContratista);
+                }
+                startSelect2ById("persona_contratista_id");
+            }
+        });
+    }
+    function fillProyectoTrabajo(idProyectoTrabajo) {
+        postJSON("ProyectoTrabajo_C.php", { "action": "listByContratista", persona_contratista_id: $("#persona_contratista_id").val() }, function (data) {
+            if (!validErrorResponse(data)) {
+                $("#formPagoContratista #proyecto_trabajo_id").html('<option value="">Seleccione Trabajo</option>');
+                var arrayProyectoTrabajo = JSON.parse(data);
+                arrayProyectoTrabajo.forEach(function (object, index) {
+                    $("#formPagoContratista #proyecto_trabajo_id").append('<option value="' + object.id + '">' + object.nombre + '</option>');
+                });
+                if (typeof idProyectoTrabajo !== 'undefined') {
+                    $("#formPagoContratista #proyecto_trabajo_id").val(idProyectoTrabajo);
+                }
+                startSelect2ById("proyecto_trabajo_id");
+            }
+        });
+    }
+    $("#proyecto_id").change(function () {
+        fillContratista();
+        if ($("#proyecto_id").val() == "") {
+            $("#proyecto_trabajo_id").html('<option value="">Seleccione Trabajo</option>');
+            $("#persona_contratista_id").html('<option value="">Seleccione Contratista</option>');
+        }
+    });
+    $("#persona_contratista_id").change(function () {
+        fillProyectoTrabajo();
+    });
+    function createRowAvancesHTML(object) {
+        var html =
+            '<tr><input type="hidden" name="avances" value="' + object.id + '">' +
+            '<td>' + object.codigo + '</td>' +
+            '<td>' + object.partida + '</td>' +
+            '<td>' + object.precio_unitario_avance + '</td>' +
+            '<td>' + object.cantidad_avance + '</td>' +
+            '<td>' + object.precio_avance + '</td>' +
+            '<td>' + object.fecha_inicio_avance + '</td>' +
+            '<td>' + object.fecha_termino_avance + '</td>' +
+            /* '<td class="td-actions">' +
+            '</td>' + */
+            '</tr>'
+        return html;
+    }
+    function listAvancesByProyectoTrabajo() {
+        $("#divTableAvances").hide();
+        $("#monto_total").val("");
+        destroyDataTableIfExists("tableAvances");
+        $("#tableAvances tbody").html("");
+        var idProyectoTrabajo = $("#proyecto_trabajo_id").val();
+        var fechaInicio = $("#fecha_inicio").val();
+        var fechaTermino = $("#fecha_termino").val();
+        if (idProyectoTrabajo !== "" && fechaInicio !== "" && fechaTermino !== "") {
+            $("#divTableAvances").show();
+            postJSON("ProyectoTrabajoPartidaAvance_C.php", {
+                "action": "listByProyectoTrabajo",
+                "proyecto_trabajo_id": idProyectoTrabajo,
+                "fecha_inicio": fechaInicio,
+                "fecha_termino": fechaTermino
+            }, function (data) {
+                if (!validErrorResponse(data)) {
+                    var montoTotal = 0;
+                    var arrayAvances = JSON.parse(data);
+                    arrayAvances.forEach(function (object, index) {
+                        var html = createRowAvancesHTML(object);
+                        montoTotal += Number(object.precio_avance);
+                        $("#tableAvances tbody").append(html);
+                    });
+                    $('#tableAvances').DataTable();
+                    $("#monto_total").val(montoTotal);
+                }
+            });
+        } else if (idProyectoTrabajo == "") {
+            customAlert("Seleccione un Trabajo", function () {
+                $("#proyecto_trabajo_id").select2("open");
+            });
+        } else if (fechaInicio == "") {
+            customAlert("Ingrese Fecha de Inicio", function () {
+                $("#fecha_inicio").focus();
+            });
+        } else if (fechaTermino == "") {
+            customAlert("Ingrese Fecha de Término", function () {
+                $("#fecha_termino").focus();
+            });
+        }
+    }
+    function generate() {
+        var AvanceElements = $("[name=avances]");
+        var JSONElements = {};
+        $.map(AvanceElements, function (object, index) {
+            id = $(object).val();
+            JSONElements[index] = {
+                id: id
+            };
+        });
+        if (AvanceElements.length > 0) {
+            postJSON("PagoContratista_C.php", {
+                "action": "i", "listAvances": JSONElements,
+                persona_contratista_id: $("#persona_contratista_id").val(),
+                proyecto_trabajo_id: $("#proyecto_trabajo_id").val(),
+                proyecto_id: $("#proyecto_id").val(),
+                fecha_inicio: $("#fecha_inicio").val(),
+                fecha_termino: $("#fecha_termino").val(),
+                monto_total: $("#monto_total").val(),
+                pagado: $("#pagado").is(":checked")
+            }, function (data) {
+                if (!validErrorResponse(data)) {
+                    closeLastModal();
+                    notifySuccess();
+                    listPagosContratistas();
+                }
+            });
+        } else {
+            customAlert("Para generar un pago, se debe tener registrado al menos un avance");
+        }
+    }
+    $("#formPagoContratista").validate({
+        rules: {
+            proyecto_id: {
+                required: true
+            },
+            persona_contratista_id: {
+                required: true
+            },
+            proyecto_trabajo_id: {
+                required: true,
+                maxlength: 21,
+                number: true
+            },
+            fecha_inicio: {
+                required: true,
+                maxlength: 10,
+                dateITA: true,
+                maxDate: function () {
+                    return $("#fecha_termino").val();
+                }
+            },
+            fecha_termino: {
+                required: true,
+                maxlength: 10,
+                dateITA: true,
+                minDate: function () {
+                    return $("#fecha_inicio").val();
+                }
+            },
+            monto_total: {
+                required: function () {
+                    return $("#action").val() === "generate" ? true : false;
+                }
+            }
+        },
+        submitHandler: function (form, event) {
+            var action = $("#formPagoContratista #action").val();
+            if (action === "view") {
+                listAvancesByProyectoTrabajo();
+            } else if (action === "generate") {
+                generate();
+            }
+        }
+    });
+    startDatePicker();
+    fillProyecto();
+    setTimeout(function () {
+        startSelect2ById("proyecto_id");
+        startSelect2ById("proyecto_trabajo_id");
+        startSelect2ById("persona_contratista_id");
+    }, 500);
+</script>

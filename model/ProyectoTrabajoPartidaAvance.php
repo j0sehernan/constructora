@@ -10,6 +10,13 @@ class ProyectoTrabajoPartidaAvance
         return $result;
     }
 
+    function listByProyectoTrabajoAndDateRanges($idProyectoTrabajo, $fechaInicio, $fechaTermino)
+    {
+        $db = new DB();
+        $result = $db->query("call proyecto_trabajo_partida_avance_list_by_pt_and_date_ranges('$idProyectoTrabajo','$fechaInicio','$fechaTermino');");
+        return $result;
+    }
+
     function countByProyectoTrabajoPartida($idProyectoTrabajoPartida)
     {
         $db = new DB();
@@ -42,6 +49,20 @@ class ProyectoTrabajoPartidaAvance
     {
         $db = new DB();
         $result = $db->execute("call proyecto_trabajo_partida_avance_u('$id','$fechaInicioAvance','$fechaTerminoAvance','$precioUnitarioAvance','$cantidadAvance','$precioAvance','$perRegAud');");
+        return $result;
+    }
+
+    function updatePago($id, $pagoGenerado, $idPagoContratista)
+    {
+        $db = new DB();
+        $result = $db->execute("call proyecto_trabajo_partida_avance_u_pago('$id','$pagoGenerado','$idPagoContratista');");
+        return $result;
+    }
+
+    function updateNotPago($idPagoContratista)
+    {
+        $db = new DB();
+        $result = $db->execute("call proyecto_trabajo_partida_avance_u_not_pago('$idPagoContratista');");
         return $result;
     }
 

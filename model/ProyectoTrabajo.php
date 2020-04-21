@@ -10,6 +10,20 @@ class ProyectoTrabajo
         return $result;
     }
 
+    function listContratistasByProyecto($idProyecto)
+    {
+        $db = new DB();
+        $result = $db->query("call proyecto_trabajo_list_contratistas_by_proyecto('$idProyecto');");
+        return $result;
+    }
+
+    function listByContratista($idContratista)
+    {
+        $db = new DB();
+        $result = $db->query("call proyecto_trabajo_list_by_contratista('$idContratista');");
+        return $result;
+    }
+
     function get($id)
     {
         $db = new DB();

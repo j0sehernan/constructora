@@ -9,6 +9,12 @@ $proyectoTrabajo = new ProyectoTrabajo();
 if ($object->{'action'} == "listByProyecto") {
     $result = $proyectoTrabajo->listByProyecto($object->{'proyecto_id'});
     echo (json_encode($result));
+} elseif ($object->{'action'} == "listContratistasByProyecto") {
+    $result = $proyectoTrabajo->listContratistasByProyecto($object->{'proyecto_id'});
+    echo (json_encode($result));
+} elseif ($object->{'action'} == "listByContratista") {
+    $result = $proyectoTrabajo->listByContratista($object->{'persona_contratista_id'});
+    echo (json_encode($result));
 } elseif ($object->{'action'} == "get") {
     $result = $proyectoTrabajo->get($object->{'id'});
     echo (json_encode($result));
