@@ -26,22 +26,28 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-sm-4">
+        <div class="col-sm-3">
             <div class="form-group">
                 <label for="fecha_inicio">Fecha de Inicio</label>
                 <input type="text" class="form-control form-control-sm form-control-date" id="fecha_inicio" name="fecha_inicio" placeholder="Fecha de Inicio" maxlength="10">
             </div>
         </div>
-        <div class="col-sm-4">
+        <div class="col-sm-3">
             <div class="form-group">
                 <label for="fecha_termino">Fecha de Término</label>
                 <input type="text" class="form-control form-control-sm form-control-date" id="fecha_termino" name="fecha_termino" placeholder="Fecha de Término" maxlength="10">
             </div>
         </div>
-        <div class="col-sm-4">
+        <div class="col-sm-3">
             <div class="form-group">
                 <label for="monto_total">Monto Total</label>
                 <input type="text" class="form-control form-control-sm" id="monto_total" name="monto_total" placeholder="Monto Total" readonly>
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <div class="form-group">
+                <label for="cantidad_adelanto_restante">Adelanto Restante</label>
+                <input type="text" class="form-control form-control-sm" id="cantidad_adelanto_restante" name="cantidad_adelanto_restante" placeholder="Cantidad Adelanto Restante" readonly>
             </div>
         </div>
     </div>
@@ -119,7 +125,7 @@
                 $("#formPagoContratista #proyecto_trabajo_id").html('<option value="">Seleccione Trabajo</option>');
                 var arrayProyectoTrabajo = JSON.parse(data);
                 arrayProyectoTrabajo.forEach(function (object, index) {
-                    $("#formPagoContratista #proyecto_trabajo_id").append('<option value="' + object.id + '">' + object.nombre + '</option>');
+                    $("#formPagoContratista #proyecto_trabajo_id").append('<option value="' + object.id + '" data-cantidad_adelanto_restante="' + object.cantidad_adelanto_restante + '">' + object.nombre + '</option>');
                 });
                 if (typeof idProyectoTrabajo !== 'undefined') {
                     $("#formPagoContratista #proyecto_trabajo_id").val(idProyectoTrabajo);

@@ -3,12 +3,14 @@
 @include_once("../model/ProyectoTrabajoPartida.php");
 @include_once("../model/Proyecto.php");
 @include_once("../model/ProyectoTrabajoPartidaAvance.php");
+@include_once("../model/ProyectoTrabajo.php");
 
 $json = file_get_contents(_Configuration::$CONFIGURATION_QUERY_PARAMS);
 $object = json_decode($json);
 $proyectoTrabajoPartida = new ProyectoTrabajoPartida();
 $proyecto = new Proyecto();
 $proyectoTrabajoPartidaAvance = new ProyectoTrabajoPartidaAvance();
+$proyectoTrabajo = new ProyectoTrabajo();
 
 if ($object->{'action'} == "listByProyectoTrabajo") {
     $result = $proyectoTrabajoPartida->listByProyectoTrabajo($object->{'proyecto_trabajo_id'});
@@ -23,6 +25,14 @@ if ($object->{'action'} == "listByProyectoTrabajo") {
         $idProyectoTrabajoPartida = $object->{'proyecto_trabajo_partida_id'};
         $result = $proyectoTrabajoPartida->insert($object->{'codigo'}, $object->{'nombre'}, $object->{'unidad_medida_id'}, $object->{'precio_unitario_plan'}, $object->{'cantidad_plan'}, $object->{'precio_plan'}, $object->{'fecha_inicio_plan'}, $object->{'fecha_termino_plan'}, $object->{'proyecto_trabajo_id'}, $idProyectoTrabajoPartida);
         if ($result) {
+            $canDeleteTrabajo = $proyectoTrabajo->getCanDelete($object->proyecto_trabajo_id);
+            $canDeleteTrabajo = $canDeleteTrabajo[0]["can_delete"];
+
+            if ($canDeleteTrabajo) {
+                $proyectoTrabajo->updateCanDelete($object->proyecto_trabajo_id, false);
+                $canDeleteTrabajo = false;
+            }
+
             $idProyecto = $object->{'proyecto_id'};
             $resultProyectoTrabajoPartida = $proyectoTrabajoPartida->getMaxValuesByProyecto($idProyecto);
             $sumPrecioPlan = $resultProyectoTrabajoPartida[0]["sum_precio_plan"];
@@ -52,7 +62,8 @@ if ($object->{'action'} == "listByProyectoTrabajo") {
                 "min_fecha_inicio_plan" => $minFechaInicioPlan,
                 "max_fecha_termino_plan" => $maxFechaTerminoPlan,
                 "min_fecha_inicio_real" => $minFechaInicioReal,
-                "max_fecha_termino_real" => $maxFechaTerminoReal
+                "max_fecha_termino_real" => $maxFechaTerminoReal,
+                "can_delete_trabajo" => $canDeleteTrabajo
             );
         }
     } else {
@@ -102,6 +113,14 @@ if ($object->{'action'} == "listByProyectoTrabajo") {
 } elseif ($object->{'action'} == "d") {
     $result = $proyectoTrabajoPartida->delete($object->{'id'});
     if ($result) {
+        $countByProyectoTrabajo = $proyectoTrabajoPartida->countByProyectoTrabajo($object->{'proyecto_trabajo_id'});
+        $countByProyectoTrabajo = $countByProyectoTrabajo[0]['cantidad'];
+        $canDeleteTrabajo = false;
+        if ($countByProyectoTrabajo == 0) {
+            $proyectoTrabajo->updateCanDelete($object->{'proyecto_trabajo_id'}, true);
+            $canDeleteTrabajo = true;
+        }
+
         $idProyecto = $object->{'proyecto_id'};
         $resultProyectoTrabajoPartida = $proyectoTrabajoPartida->getMaxValuesByProyecto($idProyecto);
         $sumPrecioPlan = $resultProyectoTrabajoPartida[0]["sum_precio_plan"];
@@ -121,12 +140,13 @@ if ($object->{'action'} == "listByProyectoTrabajo") {
             "min_fecha_inicio_plan" => $minFechaInicioPlan,
             "max_fecha_termino_plan" => $maxFechaTerminoPlan,
             "min_fecha_inicio_real" => $minFechaInicioReal,
-            "max_fecha_termino_real" => $maxFechaTerminoReal
+            "max_fecha_termino_real" => $maxFechaTerminoReal,
+            "can_delete_trabajo" => $canDeleteTrabajo
         );
 
         $idProyectoTrabajoPartida = $object->{'proyecto_trabajo_partida_id'};
 
-        if ($idProyectoTrabajoPartida != "") {
+        if ($idProyectoTrabajoPartida != "" && $idProyectoTrabajoPartida != "null") {
             $canDelete = $proyectoTrabajoPartida->getCanDelete($idProyectoTrabajoPartida);
             $canDelete = $canDelete[0]["can_delete"];
 

@@ -217,6 +217,10 @@
                 var html = "";
                 if (action === "i") {
                     html = createRowPartidaHTML(dataResponse.id, codigo, nombre, unidadMedida, precioUnitarioPlan, cantidadPlan, precioPlan, "", "", "", "", idPadre, codigoPadre, true, fechaInicioPlan, fechaTerminoPlan, fechaInicioReal, fechaTerminoReal);
+                    if (dataResponse.can_delete_trabajo === false) {
+                        $("#proyecto_trabajo_id_general option:selected").attr("data-can_delete", "0");
+                        changeProyectoTrabajo();
+                    }
                     if (idPadre != "") {
                         if ($("#tableProyectoTrabajoPartidas .tr_padre_" + idPadre).length == 0) {
                             $("#tableProyectoTrabajoPartidas tbody").append(html);

@@ -24,6 +24,13 @@ class ProyectoTrabajoPartida
         return $result;
     }
 
+    function countByProyectoTrabajo($idProyectoTrabajo)
+    {
+        $db = new DB();
+        $result = $db->query("call proyecto_trabajo_partida_count_by_proyecto_trabajo('$idProyectoTrabajo');");
+        return $result;
+    }
+
     function countByIdAndProyectoTrabajoAndCodigo($id, $idProyectoTrabajo, $codigo)
     {
         $db = new DB();

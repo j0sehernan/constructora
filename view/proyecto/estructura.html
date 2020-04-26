@@ -134,7 +134,7 @@
                 $("#proyecto_trabajo_id_general").html('<option value="">Seleccione Trabajo</option>');
                 var arrayTrabajos = JSON.parse(data);
                 arrayTrabajos.forEach(function (object, index) {
-                    $("#proyecto_trabajo_id_general").append('<option value="' + object.id + '" data-contratista="' + object.contratista + '" data-cantidad_adelanto="' + object.cantidad_adelanto + '">' + object.nombre + '</option>');
+                    $("#proyecto_trabajo_id_general").append('<option value="' + object.id + '" data-contratista="' + object.contratista + '" data-cantidad_adelanto="' + object.cantidad_adelanto + '" data-can_update="' + object.can_update + '" data-can_delete="' + object.can_delete + '">' + object.nombre + '</option>');
                 });
                 if (typeof idProyectoTrabajo !== 'undefined') {
                     $("#proyecto_trabajo_id_general").val(idProyectoTrabajo);
@@ -152,8 +152,18 @@
             $("#proyecto_trabajo_contratista").text("");
             $("#proyecto_trabajo_cantidad_adelanto").text("");
         } else {
-            $("#proyecto_trabajo_edit_button").show().attr("onclick", "showProyectoTrabajoForm('u'," + idProyectoTrabajo + ");");
-            $("#proyecto_trabajo_delete_button").show().attr("onclick", "deleteProyectoTrabajo(" + idProyectoTrabajo + ");");
+            var can_update = $("#proyecto_trabajo_id_general option:selected").attr("data-can_update");
+            var can_delete = $("#proyecto_trabajo_id_general option:selected").attr("data-can_delete");
+            if (can_update === '1') {
+                $("#proyecto_trabajo_edit_button").show().attr("onclick", "showProyectoTrabajoForm('u'," + idProyectoTrabajo + ");");
+            } else {
+                $("#proyecto_trabajo_edit_button").hide();
+            }
+            if (can_delete === '1') {
+                $("#proyecto_trabajo_delete_button").show().attr("onclick", "deleteProyectoTrabajo(" + idProyectoTrabajo + ");");
+            } else {
+                $("#proyecto_trabajo_delete_button").hide();
+            }
             $("#divProyectoTrabajoPartidas").show();
             var contratista = $("#proyecto_trabajo_id_general option:selected").attr("data-contratista");
             var cantidad_adelanto = $("#proyecto_trabajo_id_general option:selected").attr("data-cantidad_adelanto");
@@ -368,6 +378,10 @@
                                 idPadrePadre = idPadrePadre.replace("tr_padre_", "").replace("odd", "").replace("even", "").trim();
                             }
                             $("#tr_partida_" + idPadre + " td div").last().append('<button type="button" class="btn btn-outline-danger btn-elevate btn-icon btn-circle btn-xs" data-toggle="tooltip" title="Eliminar Partida" onclick="deleteProyectoTrabajoPartida(' + idPadre + ',\'' + idProyecto + '\',\'' + idPadrePadre + '\');"><i class="fa fa-trash"></i></button>');
+                        }
+                        if (dataResponse.can_delete_trabajo === true) {
+                            $("#proyecto_trabajo_id_general option:selected").attr("data-can_delete", "1");
+                            changeProyectoTrabajo();
                         }
                     }
                 });
