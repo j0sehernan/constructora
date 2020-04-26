@@ -10,12 +10,12 @@ class PagoContratista
         return $result;
     }
 
-    /*     function get($id)
+    function countByProyectoTrabajo($idProyectoTrabajo)
     {
         $db = new DB();
-        $result = $db->query("call proyecto_trabajo_get('$id');");
+        $result = $db->query("call pago_contratista_count_by_proyecto_trabajo('$idProyectoTrabajo');");
         return $result;
-    } */
+    }
 
     function insert($idPersonaContratista, $idProyectoTrabajo, $idProyecto, $fechaInicio, $fechaTermino, $montoTotal, $pagado)
     {

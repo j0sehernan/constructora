@@ -31,6 +31,13 @@ class ProyectoTrabajo
         return $result;
     }
 
+    function getCanUpdate($id)
+    {
+        $db = new DB();
+        $result = $db->query("call proyecto_trabajo_get_can_update('$id');");
+        return $result;
+    }
+
     function getCanDelete($id)
     {
         $db = new DB();
@@ -49,6 +56,13 @@ class ProyectoTrabajo
     {
         $db = new DB();
         $result = $db->execute("call proyecto_trabajo_u('$id','$nombre','$idPersonaContratista','$cantidadAdelanto');");
+        return $result;
+    }
+
+    function updateCanUpdate($id, $canUpdate)
+    {
+        $db = new DB();
+        $result = $db->execute("call proyecto_trabajo_u_can_update('$id','$canUpdate');");
         return $result;
     }
 
