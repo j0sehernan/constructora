@@ -73,6 +73,13 @@ class ProyectoTrabajo
         return $result;
     }
 
+    function updateCantidadAdelantoUsado($id, $cantidadAdelantoUsado)
+    {
+        $db = new DB();
+        $result = $db->execute("call proyecto_trabajo_u_cantidad_adelanto_usado('$id','$cantidadAdelantoUsado');");
+        return $result;
+    }
+
     function delete($id)
     {
         $db = new DB();

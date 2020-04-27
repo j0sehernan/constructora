@@ -39,10 +39,11 @@
             </div>
         </div>
         <div class="col-sm-3">
-            <div class="form-group">
-                <label for="monto_total">Monto Total</label>
-                <input type="text" class="form-control form-control-sm" id="monto_total" name="monto_total" placeholder="Monto Total" readonly>
-            </div>
+            <label class="kt-checkbox">
+                <input type="checkbox" id="pagado" name="pagado">
+                Pagado
+                <span></span>
+            </label>
         </div>
         <div class="col-sm-3">
             <div class="form-group">
@@ -51,22 +52,65 @@
             </div>
         </div>
     </div>
+    <div class="row">
+        <div class="col-sm-3">
+            <div class="form-group">
+                <label for="valor_venta">Valor Venta</label>
+                <input type="text" class="form-control form-control-sm" id="valor_venta" name="valor_venta" placeholder="Valor Venta" readonly>
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <div class="form-group">
+                <label for="amortizacion_adelanto">Amortización de Adelanto</label>
+                <input type="text" class="form-control form-control-sm" id="amortizacion_adelanto" name="amortizacion_adelanto" placeholder="Amortización de Adelanto" readonly>
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <div class="form-group">
+                <label for="retencion_fondo_garantia">Retención Fondo de Garantía</label>
+                <input type="text" class="form-control form-control-sm" id="retencion_fondo_garantia" name="retencion_fondo_garantia" placeholder="Retención Fondo Garantía" readonly>
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <div class="form-group">
+                <label for="sub_total">Sub Total</label>
+                <input type="text" class="form-control form-control-sm" id="sub_total" name="sub_total" placeholder="Sub Total" readonly>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-3">
+            <div class="form-group">
+                <label for="igv">I.G.V.</label>
+                <input type="text" class="form-control form-control-sm" id="igv" name="igv" placeholder="I.G.V." readonly>
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <div class="form-group">
+                <label for="total">Total</label>
+                <input type="text" class="form-control form-control-sm" id="total" name="total" placeholder="Total" readonly>
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <div class="form-group">
+                <label for="detraccion">Detracción</label>
+                <input type="text" class="form-control form-control-sm" id="detraccion" name="detraccion" placeholder="Detracción" readonly>
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <div class="form-group">
+                <label for="neto_pagar">Neto a Pagar</label>
+                <input type="text" class="form-control form-control-sm" id="neto_pagar" name="neto_pagar" placeholder="Neto a Pagar" readonly>
+            </div>
+        </div>
+    </div>
     <div class="row" style="margin-bottom: 10px;">
-        <div class="col-sm-4">
-            <label class="kt-checkbox">
-                <input type="checkbox" id="pagado" name="pagado" checked>
-                Pagado
-                <span></span>
-            </label>
-        </div>
-        <div class="col-sm-4">
-
-        </div>
-        <div class="col-sm-4">
+        <div class="col-sm-12">
             <div style="text-align: right;">
                 <input type="hidden" id="action" name="action">
-                <button type="submit" class="btn btn-outline-info btn-sm" onclick="$('#action').val('view')"><i class="la la-eye"></i> Visualizar</button>
-                <button type="submit" class="btn btn-success btn-sm" onclick="$('#action').val('generate')"><i class="la la-save"></i> Generar</button>
+                <input type="hidden" id="id" name="id">
+                <button type="submit" id="btnVisualizar" class="btn btn-outline-info btn-sm" onclick="$('#action').val('view')"><i class="la la-eye"></i> Visualizar</button>
+                <button type="submit" id="btnGenerar" class="btn btn-success btn-sm" onclick="$('#action').val('generate')"><i class="la la-save"></i> Generar</button>
                 <button type="button" class="btn btn-outline-danger btn-sm" onclick="closeLastModal();">Cancelar</button>
             </div>
         </div>
@@ -89,7 +133,7 @@
     </div>
 </form>
 <script>
-    function fillProyecto(idProyecto) {
+    function fillProyecto(idProyecto, callback) {
         postJSON("Proyecto_C.php", { "action": "list" }, function (data) {
             if (!validErrorResponse(data)) {
                 $("#formPagoContratista #proyecto_id").html('<option value="">Seleccione Proyecto</option>');
@@ -101,10 +145,11 @@
                     $("#formPagoContratista #proyecto_id").val(idProyecto);
                 }
                 startSelect2ById("proyecto_id");
+                if (typeof callback !== 'undefined') callback();
             }
         });
     }
-    function fillContratista(idContratista) {
+    function fillContratista(idContratista, callback) {
         postJSON("ProyectoTrabajo_C.php", { "action": "listContratistasByProyecto", proyecto_id: $("#proyecto_id").val() }, function (data) {
             if (!validErrorResponse(data)) {
                 $("#formPagoContratista #persona_contratista_id").html('<option value="">Seleccione Contratista</option>');
@@ -116,6 +161,7 @@
                     $("#formPagoContratista #persona_contratista_id").val(idContratista);
                 }
                 startSelect2ById("persona_contratista_id");
+                if (typeof callback !== 'undefined') callback();
             }
         });
     }
@@ -143,6 +189,10 @@
     });
     $("#persona_contratista_id").change(function () {
         fillProyectoTrabajo();
+    });
+    $("#proyecto_trabajo_id").change(function () {
+        var cantidad_adelanto_restante = $("#proyecto_trabajo_id option:selected").attr("data-cantidad_adelanto_restante");
+        $("#cantidad_adelanto_restante").val(cantidad_adelanto_restante);
     });
     function createRowAvancesHTML(object) {
         var html =
@@ -176,15 +226,30 @@
                 "fecha_termino": fechaTermino
             }, function (data) {
                 if (!validErrorResponse(data)) {
-                    var montoTotal = 0;
+                    var valorVenta = 0;
                     var arrayAvances = JSON.parse(data);
                     arrayAvances.forEach(function (object, index) {
                         var html = createRowAvancesHTML(object);
-                        montoTotal += Number(object.precio_avance);
+                        valorVenta += Number(object.precio_avance);
                         $("#tableAvances tbody").append(html);
                     });
                     $('#tableAvances').DataTable();
-                    $("#monto_total").val(montoTotal);
+                    $("#valor_venta").val(valorVenta.toFixed(2));
+                    var cantidadAdelantoRestante = $("#cantidad_adelanto_restante").val();
+                    var amortizacionAdelanto = valorVenta >= cantidadAdelantoRestante ? cantidadAdelantoRestante : Number(cantidadAdelantoRestante) - Number(valorVenta);
+                    var retencionFondoGarantia = Number(valorVenta) * 0.05;
+                    var subTotal = Number(valorVenta) - Number(amortizacionAdelanto) - Number(retencionFondoGarantia);
+                    var igv = subTotal * 0.18;
+                    var total = Number(subTotal) + Number(igv);
+                    var detraccion = total * 0.12;
+                    var netoPagar = Number(total) + Number(detraccion);
+                    $("#amortizacion_adelanto").val(Number(amortizacionAdelanto).toFixed(2));
+                    $("#retencion_fondo_garantia").val(retencionFondoGarantia.toFixed(2));
+                    $("#sub_total").val(subTotal.toFixed(2));
+                    $("#igv").val(igv.toFixed(2));
+                    $("#total").val(total.toFixed(2));
+                    $("#detraccion").val(detraccion.toFixed(2));
+                    $("#neto_pagar").val(netoPagar.toFixed(2));
                 }
             });
         } else if (idProyectoTrabajo == "") {
@@ -200,6 +265,22 @@
                 $("#fecha_termino").focus();
             });
         }
+    }
+    function listAvancesByProyectoTrabajoView(idPagoContratista) {
+        $("#divTableAvances").show();
+        postJSON("ProyectoTrabajoPartidaAvance_C.php", {
+            "action": "listByPagoContratista",
+            "pago_contratista_id": idPagoContratista
+        }, function (data) {
+            if (!validErrorResponse(data)) {
+                var arrayAvances = JSON.parse(data);
+                arrayAvances.forEach(function (object, index) {
+                    var html = createRowAvancesHTML(object);
+                    $("#tableAvances tbody").append(html);
+                });
+                $('#tableAvances').DataTable();
+            }
+        });
     }
     function generate() {
         var AvanceElements = $("[name=avances]");
@@ -218,7 +299,7 @@
                 proyecto_id: $("#proyecto_id").val(),
                 fecha_inicio: $("#fecha_inicio").val(),
                 fecha_termino: $("#fecha_termino").val(),
-                monto_total: $("#monto_total").val(),
+                valor_venta: $("#valor_venta").val(),
                 pagado: $("#pagado").is(":checked")
             }, function (data) {
                 if (!validErrorResponse(data)) {
@@ -260,7 +341,7 @@
                     return $("#fecha_inicio").val();
                 }
             },
-            monto_total: {
+            valor_venta: {
                 required: function () {
                     return $("#action").val() === "generate" ? true : false;
                 }
@@ -276,10 +357,40 @@
         }
     });
     startDatePicker();
-    fillProyecto();
     setTimeout(function () {
         startSelect2ById("proyecto_id");
         startSelect2ById("proyecto_trabajo_id");
         startSelect2ById("persona_contratista_id");
     }, 500);
+    function viewPagoContratista() {
+        postJSON("PagoContratista_C.php", { action: "get", id: $("#id").val() }, function (data) {
+            if (!validErrorResponse(data)) {
+                $("#cantidad_adelanto_restante").parent().parent().remove();
+                $("#btnVisualizar").remove();
+                $("#btnGenerar").remove();
+                dataResponse = JSON.parse(data)[0];
+                fillProyecto(dataResponse.proyecto_id, function () {
+                    $("#proyecto_id").attr("disabled", true);
+                    fillContratista(dataResponse.persona_contratista_id, function () {
+                        $("#persona_contratista_id").attr("disabled", true);
+                        fillProyectoTrabajo(dataResponse.proyecto_trabajo_id);
+                        $("#proyecto_trabajo_id").attr("disabled", true);
+                    });
+                });
+                $("#fecha_inicio").val(dataResponse.fecha_inicio).attr("disabled", true);
+                $("#fecha_termino").val(dataResponse.fecha_termino).attr("disabled", true);
+                if (dataResponse.pagado === "1") $("#pagado").attr("checked", true).attr("disabled", true);
+                $("#valor_venta").val(dataResponse.valor_venta).attr("disabled", true);
+                $("#amortizacion_adelanto").val(dataResponse.amortizacion_adelanto).attr("disabled", true);
+                $("#retencion_fondo_garantia").val(dataResponse.retencion_fondo_garantia).attr("disabled", true);
+                $("#sub_total").val(dataResponse.sub_total).attr("disabled", true);
+                $("#igv").val(dataResponse.igv).attr("disabled", true);
+                $("#total").val(dataResponse.total).attr("disabled", true);
+                $("#detraccion").val(dataResponse.detraccion).attr("disabled", true);
+                $("#neto_pagar").val(dataResponse.neto_pagar).attr("disabled", true);
+                listAvancesByProyectoTrabajoView($("#id").val());
+                
+            }
+        });
+    }
 </script>

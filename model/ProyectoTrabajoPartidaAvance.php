@@ -17,6 +17,13 @@ class ProyectoTrabajoPartidaAvance
         return $result;
     }
 
+    function listByPagoContratista($idPagoContratista)
+    {
+        $db = new DB();
+        $result = $db->query("call proyecto_trabajo_partida_avance_list_by_pago_contratista('$idPagoContratista');");
+        return $result;
+    }
+
     function countByProyectoTrabajoPartida($idProyectoTrabajoPartida)
     {
         $db = new DB();

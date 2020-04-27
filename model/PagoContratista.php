@@ -10,6 +10,13 @@ class PagoContratista
         return $result;
     }
 
+    function get($id)
+    {
+        $db = new DB();
+        $result = $db->query("call pago_contratista_get('$id');");
+        return $result;
+    }
+
     function countByProyectoTrabajo($idProyectoTrabajo)
     {
         $db = new DB();
@@ -17,10 +24,10 @@ class PagoContratista
         return $result;
     }
 
-    function insert($idPersonaContratista, $idProyectoTrabajo, $idProyecto, $fechaInicio, $fechaTermino, $montoTotal, $pagado)
+    function insert($idPersonaContratista, $idProyectoTrabajo, $idProyecto, $fechaInicio, $fechaTermino, $valorVenta, $amortizacionAdelanto, $retencionFondoGarantia, $subTotal, $igv, $total, $detraccion, $netoPagar, $pagado)
     {
         $db = new DB();
-        $result = $db->executeWithReturn("call pago_contratista_i('$idPersonaContratista','$idProyectoTrabajo','$idProyecto','$fechaInicio','$fechaTermino','$montoTotal','$pagado');");
+        $result = $db->executeWithReturn("call pago_contratista_i('$idPersonaContratista','$idProyectoTrabajo','$idProyecto','$fechaInicio','$fechaTermino','$valorVenta','$amortizacionAdelanto','$retencionFondoGarantia','$subTotal','$igv','$total','$detraccion','$netoPagar','$pagado');");
         return $result;
     }
 

@@ -16,6 +16,9 @@ if ($object->{'action'} == "listByProyectoTrabajoPartida") {
 } elseif ($object->{'action'} == "listByProyectoTrabajo") {
     $result = $proyectoTrabajoPartidaAvance->listByProyectoTrabajoAndDateRanges($object->{'proyecto_trabajo_id'}, $object->{'fecha_inicio'}, $object->{'fecha_termino'});
     echo (json_encode($result));
+} elseif ($object->{'action'} == "listByPagoContratista") {
+    $result = $proyectoTrabajoPartidaAvance->listByPagoContratista($object->pago_contratista_id);
+    echo (json_encode($result));
 } elseif ($object->{'action'} == "get") {
     $result = $proyectoTrabajoPartidaAvance->get($object->{'id'});
     echo (json_encode($result));

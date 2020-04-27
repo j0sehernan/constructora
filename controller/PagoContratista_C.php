@@ -13,16 +13,44 @@ $proyectoTrabajo = new ProyectoTrabajo();
 if ($object->{'action'} == "list") {
     $result = $pagoContratista->list();
     echo (json_encode($result));
+} elseif ($object->{'action'} == "get") {
+    $result = $pagoContratista->get($object->id);
+    echo (json_encode($result));
 } elseif ($object->{'action'} == "i") {
-    $result = $pagoContratista->insert($object->{'persona_contratista_id'}, $object->{'proyecto_trabajo_id'}, $object->{'proyecto_id'}, $object->{'fecha_inicio'}, $object->{'fecha_termino'}, $object->{'monto_total'}, $object->{'pagado'});
+    $idProyectoTrabajo = $object->proyecto_trabajo_id;
+    $fechaInicio = $object->{'fecha_inicio'};
+    $fechaTermino = $object->{'fecha_termino'};
+    //1. Obtener adelanto
+    $cantidadAdelantoRestante = $proyectoTrabajo->get($idProyectoTrabajo);
+    $cantidadAdelantoRestante = $cantidadAdelantoRestante[0]["cantidad_adelanto_restante"];
+    //2. Calcular el Valor Venta
+    $valorVenta = 0;
+    $listAvancesByProyectoTrabajoAndDataRanges = $proyectoTrabajoPartidaAvance->listByProyectoTrabajoAndDateRanges($idProyectoTrabajo, $fechaInicio, $fechaTermino);
+    foreach ($listAvancesByProyectoTrabajoAndDataRanges as $avance) {
+        $valorVenta += $avance["precio_avance"];
+    }
+    //3. Calcular el resto de variables
+    $amortizacionAdelanto = $valorVenta >= $cantidadAdelantoRestante ? $cantidadAdelantoRestante : $cantidadAdelantoRestante - $valorVenta;
+    $retencionFondoGarantia = $valorVenta * 0.05;
+    $subTotal = $valorVenta - $amortizacionAdelanto - $retencionFondoGarantia;
+    $igv = $subTotal * 0.18;
+    $total = $subTotal + $igv;
+    $detraccion = $total * 0.12;
+    $netoPagar = $total + $detraccion;
+    //4. Insertar en pago contratista
+    $result = $pagoContratista->insert($object->{'persona_contratista_id'}, $idProyectoTrabajo, $object->{'proyecto_id'}, $fechaInicio, $fechaTermino, round($valorVenta, 2), round($amortizacionAdelanto, 2), round($retencionFondoGarantia, 2), round($subTotal, 2), round($igv, 2), round($total, 2), round($detraccion, 2), round($netoPagar, 2), $object->{'pagado'});
+
     if ($result) {
+        //5. Actualizar el adelanto restante en Proyecto Trabajo
+        $proyectoTrabajo->updateCantidadAdelantoUsado($idProyectoTrabajo, $amortizacionAdelanto);
+        //6. Actualizar la acción actualizar en Proyecto Trabajo
         $canUpdateTrabajo = $proyectoTrabajo->getCanUpdate($object->proyecto_trabajo_id);
         $canUpdateTrabajo = $canUpdateTrabajo[0]["can_update"];
 
         if ($canUpdateTrabajo) {
             $proyectoTrabajo->updateCanUpdate($object->proyecto_trabajo_id, false);
         }
-
+        //7. Actualizar Avances del proyecto con el Id de Pago Contratista y el campo pago generado
         $idPagoContratista = $result[0]["id"];
         $listAvances = $object->{'listAvances'};
 

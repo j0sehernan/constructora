@@ -43,6 +43,7 @@
                 dataResponse = JSON.parse(data)[0];
                 $("#titleAction").html("Editar Trabajo");
                 $("#nombre").val(dataResponse.nombre);
+                $("#cantidad_adelanto").val(dataResponse.cantidad_adelanto);
                 fillPersonaContratista(dataResponse.persona_contratista_id);
             }
         });
