@@ -1,0 +1,55 @@
+<h3 id="productoText"></h3>
+<div class="only-options-right">
+    <input type="hidden" id="producto_id_general" name="producto_id_general">
+    <a class="btn btn-icon btn btn-label btn-label-brand btn-bold" data-toggle="tooltip" title="Actualizar" data-placement="top" onclick="listProductoStockMinimo();"><i class="flaticon-refresh"></i></a>
+    <a class="btn btn-icon btn btn-label btn-label-brand btn-bold" data-toggle="tooltip" title="Agregar" data-placement="top" onclick="showProductoStockMinimoForm('i');"><i class="flaticon2-add-1"></i></a>
+</div>
+<table id="tableProductoStockMinimo" class="table table-hover table-bordered table-striped table-sm">
+    <thead class="thead-dark"></thead>
+</table>
+<script>
+    function listProductoStockMinimo() {
+        postJSON("ProductoStockMinimo_C.php", { "action": "listByProducto", producto_id: $("#producto_id_general").val() }, function (data) {
+            if (!validErrorResponse(data)) {
+                destroyDataTableIfExists("tableProductoStockMinimo");
+                $('#tableProductoStockMinimo').DataTable({
+                    data: JSON.parse(data),
+                    columns: [
+                        { title: "Unidad de Medida", data: "unidad_medida_id" },
+                        { title: "Stock Mínimo", data: "stock_minimo" },
+                        {
+                            title: "Acciones", className: "td-actions", render: function (data, type, row, meta) {
+                                return '<button type="button" class="btn btn-outline-info btn-elevate btn-icon btn-circle btn-xs" data-toggle="tooltip" title="Editar" onclick="showProductoStockMinimoForm(\'u\',\'' + row.id + '\');"><i class="fa fa-pencil-alt"></i></button>&nbsp;' +
+                                    '<button type="button" class="btn btn-outline-danger btn-elevate btn-icon btn-circle btn-xs" data-toggle="tooltip" title="Eliminar" onclick="deleteProductoStockMinimo(\'' + row.id + '\');"><i class="fa fa-trash"></i></button>'
+                            }
+                        }
+                    ]
+                });
+            }
+        });
+    }
+    function showProductoStockMinimoForm(action, id) {
+        getModalWithCallBackSecond('producto_stock_minimo/iu.html', function () {
+            $("#form #producto_id").val($("#producto_id_general").val());
+            if (action === "i") {
+                fillUnidadMedida();
+            } else if (action === "u") {
+                $("#form #id").val(id);
+                $("#form #action").val("u");
+                getProductoStockMinimo();
+            }
+        });
+    }
+    function deleteProductoStockMinimo(id) {
+        askDelete(function (result) {
+            if (result) {
+                postJSON("ProductoStockMinimo_C.php", { action: "d", id: id }, function (data) {
+                    if (!validErrorResponse(data)) {
+                        notifySuccess();
+                        listProductoStockMinimo();
+                    }
+                });
+            }
+        });
+    }
+</script>

@@ -1,13 +1,13 @@
 <div class="kt-subheader kt-grid__item" id="kt_subheader">
     <div class="kt-container  kt-container--fluid ">
         <div class="kt-subheader__main">
-            <h3 class="kt-subheader__title">Pago Contratista</h3>
+            <h3 class="kt-subheader__title">Requerimiento</h3>
             <span class="kt-subheader__separator kt-hidden"></span>
             <div class="kt-subheader__breadcrumbs">
                 <a href="#" class="kt-subheader__breadcrumbs-home"><i class="flaticon2-shelter"></i></a>
                 <span class="kt-subheader__breadcrumbs-separator"></span>
                 <a href="#" class="kt-subheader__breadcrumbs-link">
-                    Pago Contratistas </a>
+                    Requerimientos </a>
                 <span class="kt-subheader__breadcrumbs-separator"></span>
                 <a href="#" class="kt-subheader__breadcrumbs-link">
                     Listado </a>
@@ -15,46 +15,32 @@
         </div>
         <div class="kt-subheader__toolbar">
             <div class="kt-subheader__wrapper">
-                <a class="btn btn-icon btn btn-label btn-label-brand btn-bold" data-toggle="tooltip" title="Actualizar" data-placement="top" onclick="listPagosContratistas();"><i class="flaticon-refresh"></i></a>
-                <a class="btn btn-icon btn btn-label btn-label-brand btn-bold" data-toggle="tooltip" title="Agregar" data-placement="top" onclick="showPagoContratistaForm();"><i class="flaticon2-add-1"></i></a>
+                <a class="btn btn-icon btn btn-label btn-label-brand btn-bold" data-toggle="tooltip" title="Actualizar" data-placement="top" onclick="listProyectoRequerimientos();"><i class="flaticon-refresh"></i></a>
+                <a class="btn btn-icon btn btn-label btn-label-brand btn-bold" data-toggle="tooltip" title="Agregar" data-placement="top" onclick="showProyectoRequerimientoForm('i');"><i class="flaticon2-add-1"></i></a>
             </div>
         </div>
     </div>
 </div>
 <div class="kt-container  kt-container--fluid kt-grid__item kt-grid__item--fluid">
-    <table id="table" class="table table-hover table-bordered table-striped table-sm">
+    <table id="table" class="table table-hover table-bordered table-striped table-sm responsive">
         <thead class="thead-dark"></thead>
     </table>
 </div>
 <script>
-    function listPagosContratistas() {
-        postJSON("PagoContratista_C.php", { "action": "list" }, function (data) {
+    function listProyectoRequerimientos() {
+        postJSON("ProyectoRequerimiento_C.php", { "action": "list" }, function (data) {
             if (!validErrorResponse(data)) {
                 destroyDataTableIfExists("table");
                 $('#table').DataTable({
                     data: JSON.parse(data),
                     columns: [
-                        { title: "Contratista", data: "contratista" },
                         { title: "Proyecto", data: "proyecto" },
-                        { title: "Trabajo", data: "proyecto_trabajo" },
-                        { title: "Inicio", data: "fecha_inicio" },
-                        { title: "Término", data: "fecha_termino" },
-                        { title: "Neto Pag.", data: "neto_pagar" },
-                        {
-                            title: "Pagado", data: "pagado", render: function (data, type, row, meta) {
-                                return data == 1 ? "Si" : "No";
-                            }
-                        },
+                        { title: "Código", data: "codigo" },
+                        { title: "Fecha Pedido", data: "fecha_pedido" },
                         {
                             title: "Opciones", className: "td-actions", render: function (data, type, row, meta) {
-                                var html = '<button type="button" class="btn btn-outline-info btn-elevate btn-icon btn-circle btn-xs" data-toggle="tooltip" title="Visualizar" onclick="showPagoContratistaForm(\'v\',\'' + row.id + '\');"><i class="fa fa-eye"></i></button>&nbsp;';
-                                if (row.pagado == 0) {
-                                    html +=
-                                        '<button type="button" class="btn btn-outline-success btn-elevate btn-icon btn-circle btn-xs" data-toggle="tooltip" title="Confirmar Pago" onclick="confirmarPagoContratista(\'' + row.id + '\');"><i class="fa fa-check"></i></button>&nbsp;' +
-                                        '<button type="button" class="btn btn-outline-danger btn-elevate btn-icon btn-circle btn-xs" data-toggle="tooltip" title="Eliminar" onclick="deletePagoContratista(\'' + row.id + '\',\'' + row.proyecto_trabajo_id + '\');"><i class="fa fa-trash"></i></button>';
-
-                                }
-                                return html;
+                                return '<button type="button" class="btn btn-outline-info btn-elevate btn-icon btn-circle btn-xs" data-toggle="tooltip" title="Visualizar" onclick="showPagoContratistaForm(\'v\',\'' + row.id + '\');"><i class="fa fa-eye"></i></button>&nbsp;' +
+                                    '<button type="button" class="btn btn-outline-danger btn-elevate btn-icon btn-circle btn-xs" data-toggle="tooltip" title="Eliminar" onclick="deletePagoContratista(\'' + row.id + '\');"><i class="fa fa-trash"></i></button>';
                             }
                         }
                     ]
@@ -62,14 +48,14 @@
             }
         });
     }
-    function showPagoContratistaForm(action, id) {
-        getModalExtraLargeWithCallBack('pago_contratista/iu.html', function () {
-            if (action === "v") {
-                $("#id").val(id);
-                $("#title").text("Visualizar Pago");
-                viewPagoContratista();
-            } else {
-                fillProyecto();
+    function showProyectoRequerimientoForm(action, id) {
+        getModalExtraLargeWithCallBack('proyecto_requerimiento/iu.html', function () {
+            if (action === "i") {
+                fillAlmacen();
+                fillProducto();
+                fillUnidadMedida();
+            } else if (action === "u") {
+                $("#title").text("Editar Requerimiento");
             }
         });
     }
@@ -103,5 +89,5 @@
             }
         });
     }
-    listPagosContratistas();
+    listProyectoRequerimientos();
 </script>

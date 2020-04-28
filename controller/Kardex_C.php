@@ -15,6 +15,9 @@ $ordenCompraDetalle = new OrdenCompraDetalle();
 if ($object->{'action'} == "listByAlmacen") {
     $result = $kardex->listByAlmacen($object->{'almacen_id'});
     echo (json_encode($result));
+} elseif ($object->{'action'} == "listByAlmacenProductoUnidadMedida") {
+    $result = $kardex->listByAlmacenProductoUnidadMedida($object->almacen_id, $object->producto_id, $object->unidad_medida_id);
+    echo (json_encode($result));
 } elseif ($object->{'action'} == "I_PRODUCTO") {
     $result = $kardex->insert($object->{'almacen_id'}, $object->{'producto_id'}, $object->{'unidad_medida_id'}, $object->{'cantidad'}, $object->{'fecha_ingreso'}, $object->{'fecha_vencimiento'});
 

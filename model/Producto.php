@@ -18,17 +18,17 @@ class Producto
         return $result;
     }
 
-    function insert($codigo, $nombre, $descripcion, $stockMinimo)
+    function insert($codigo, $nombre, $descripcion)
     {
         $db = new DB();
-        $result = $db->execute("call producto_i('$codigo', '$nombre', '$descripcion', '$stockMinimo');");
+        $result = $db->execute("call producto_i('$codigo', '$nombre', '$descripcion');");
         return $result;
     }
 
-    function update($id, $codigo, $nombre, $descripcion, $stockMinimo)
+    function update($id, $codigo, $nombre, $descripcion)
     {
         $db = new DB();
-        $result = $db->execute("call producto_u('$id', '$codigo', '$nombre', '$descripcion', '$stockMinimo');");
+        $result = $db->execute("call producto_u('$id', '$codigo', '$nombre', '$descripcion');");
         return $result;
     }
 

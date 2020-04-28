@@ -12,10 +12,6 @@
         <label for="descripcion">Descripción</label>
         <textarea class="form-control form-control-sm" id="descripcion" name="descripcion" placeholder="Descripción" maxlength="200"></textarea>
     </div>
-    <div class="form-group">
-        <label for="stock_minimo">Stock Mínimo</label>
-        <input type="text" class="form-control form-control-sm form-control-decimal" id="stock_minimo" name="stock_minimo" placeholder="Stock Mínimo" maxlength="21">
-    </div>
     <div class="only-options-right">
         <input type="hidden" id="action" name="action" value="i">
         <input type="hidden" id="id" name="id">
@@ -42,7 +38,6 @@
                     $("#codigo").val(dataResponse.codigo);
                     $("#nombre").val(dataResponse.nombre);
                     $("#descripcion").val(dataResponse.descripcion);
-                    $("#stock_minimo").val(dataResponse.stock_minimo);
                 }
             });
         }
@@ -59,26 +54,6 @@
             },
             descripcion: {
                 maxlength: 200
-            },
-            stock_minimo: {
-                maxlength: 21,
-                number: true
-            }
-        },
-        messages: {
-            codigo: {
-                required: STR_CAMPO_REQUERIDO,
-                maxlength: STR_SOLO_SE_PERMITEN + "{0}" + STR_CARACTERES_COMO_MAXIMO
-            },
-            nombre: {
-                required: STR_CAMPO_REQUERIDO,
-                maxlength: STR_SOLO_SE_PERMITEN + "{0}" + STR_CARACTERES_COMO_MAXIMO
-            },
-            descripcion: {
-                maxlength: STR_SOLO_SE_PERMITEN + "{0}" + STR_CARACTERES_COMO_MAXIMO
-            },
-            stock_minimo: {
-                maxlength: STR_SOLO_SE_PERMITEN + "{0}" + STR_CARACTERES_COMO_MAXIMO
             }
         },
         submitHandler: function (form) {

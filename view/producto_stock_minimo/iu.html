@@ -1,0 +1,74 @@
+<h3 id="titleAction">Registro</h3>
+<form id="form">
+    <div class="form-group">
+        <label for="unidad_medida_id">Unidad de Medida</label>
+        <select class="form-control form-control-sm form-control-autocomplete" id="unidad_medida_id" name="unidad_medida_id">
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="stock_minimo">Stock Mínimo</label>
+        <input type="text" class="form-control form-control-sm form-control-decimal" id="stock_minimo" name="stock_minimo" placeholder="Stock Mínimo" maxlength="21">
+    </div>
+    <div class="only-options-right">
+        <input type="hidden" id="producto_id" name="producto_id" value="">
+        <input type="hidden" id="id" name="id" value="">
+        <input type="hidden" id="action" name="action" value="i">
+        <button type="submit" class="btn btn-success btn-sm"><i class="la la-save"></i>Guardar</button>
+        <button type="button" class="btn btn-outline-danger btn-sm" onclick="closeLastModal();">Cancelar</button>
+    </div>
+</form>
+<script>
+    function fillUnidadMedida(idUnidadMedida) {
+        postJSON("UnidadMedida_C.php", { "action": "list" }, function (data) {
+            if (!validErrorResponse(data)) {
+                $("#form #unidad_medida_id").html('<option value="">Seleccione Unidad de Medida</option>');
+                var arrayUnidadMedida = JSON.parse(data);
+                arrayUnidadMedida.forEach(function (object, index) {
+                    $("#form #unidad_medida_id").append('<option value="' + object.codigo + '">' + object.nombre + '</option>');
+                });
+                if (typeof idUnidadMedida !== 'undefined') {
+                    $("#form #unidad_medida_id").val(idUnidadMedida);
+                }
+                startSelect2ById("unidad_medida_id");
+            }
+        });
+    }
+    $("#form").validate({
+        rules: {
+            unidad_medida_id: {
+                required: true
+            },
+            stock_minimo: {
+                required: true,
+                number: true,
+                maxlength: 21
+            }
+        },
+        submitHandler: function (form) {
+            saveProductoStockMinimo();
+        }
+    });
+    function getProductoStockMinimo() {
+        if ($("#action").val() === "u") {
+            postJSON("ProductoStockMinimo_C.php", { action: "get", id: $("#form #id").val() }, function (data) {
+                if (!validErrorResponse(data)) {
+                    dataResponse = JSON.parse(data)[0];
+                    $("#titleAction").html("Editar");
+                    fillUnidadMedida(dataResponse.unidad_medida_id);
+                    $("#unidad_medida_id").attr("disabled", true);
+                    $("#form #stock_minimo").val(dataResponse.stock_minimo);
+                }
+            });
+        }
+    }
+    function saveProductoStockMinimo() {
+        postJSONForm("ProductoStockMinimo_C.php", "form", function (data) {
+            if (!validErrorResponse(data)) {
+                closeLastModal();
+                notifySuccess();
+                listProductoStockMinimo();
+            }
+        });
+    }
+    startDecimalNumbers(18, 2);
+</script>

@@ -1,0 +1,161 @@
+<h3 id="title">Registrar Requerimiento</h3>
+<form id="form">
+    <div class="row">
+        <div class="col-sm-4">
+            <div class="form-group">
+                <label for="almacen_id">Almacen</label>
+                <select class="form-control form-control-sm form-control-autocomplete" id="almacen_id" name="almacen_id" onchange="getKardexByAlmacenProductoUnidadMedida();">
+                </select>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="form-group">
+                <label for="producto_id">Producto</label>
+                <select class="form-control form-control-sm form-control-autocomplete" id="producto_id" name="producto_id" onchange="getKardexByAlmacenProductoUnidadMedida();">
+                </select>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="form-group">
+                <label for="unidad_medida_id">Unidad de Medida</label>
+                <select class="form-control form-control-sm form-control-autocomplete" id="unidad_medida_id" name="unidad_medida_id" onchange="getKardexByAlmacenProductoUnidadMedida();">
+                </select>
+            </div>
+        </div>
+    </div>
+    <div id="divTable" style="display: none;">
+        <table id="table" class="table table-hover table-bordered table-striped table-sm">
+            <thead class="thead-dark"></thead>
+        </table>
+        <div class="only-options-right">
+            <button type="submit" class="btn btn-success btn-sm"><i class="la la-save"></i>Guardar</button>
+            <button type="button" class="btn btn-outline-danger btn-sm" onclick="closeLastModal();">Cancelar</button>
+        </div>
+    </div>
+</form>
+<script>
+    function fillAlmacen(idAlmacen) {
+        postJSON("Almacen_C.php", { "action": "list" }, function (data) {
+            if (!validErrorResponse(data)) {
+                $("#almacen_id").html('<option value="">Seleccione Almacen</option>');
+                var arrayAlmacenes = JSON.parse(data);
+                arrayAlmacenes.forEach(function (object, index) {
+                    $("#almacen_id").append('<option value="' + object.id + '">' + object.nombre + '</option>');
+                });
+                if (typeof idAlmacen !== 'undefined') {
+                    $("#almacen_id").val(idAlmacen);
+                }
+                startSelect2ById("almacen_id");
+            }
+        });
+    }
+    function fillProducto(idProducto) {
+        postJSON("Producto_C.php", { "action": "list" }, function (data) {
+            if (!validErrorResponse(data)) {
+                $("#producto_id").html('<option value="">Seleccione Producto</option>');
+                var arrayProductos = JSON.parse(data);
+                arrayProductos.forEach(function (object, index) {
+                    $("#producto_id").append('<option value="' + object.id + '">' + object.nombre + '</option>');
+                });
+                if (typeof idProducto !== 'undefined') {
+                    $("#producto_id").val(idProducto);
+                }
+                startSelect2ById("producto_id");
+            }
+        });
+    }
+    function fillUnidadMedida(idUnidadMedida) {
+        postJSON("UnidadMedida_C.php", { "action": "list" }, function (data) {
+            if (!validErrorResponse(data)) {
+                $("#unidad_medida_id").html('<option value="">Seleccione Unidad de Medida</option>');
+                var arrayUnidadesMedida = JSON.parse(data);
+                arrayUnidadesMedida.forEach(function (object, index) {
+                    $("#unidad_medida_id").append('<option value="' + object.codigo + '">' + object.nombre + '</option>');
+                });
+                if (typeof idUnidadMedida !== 'undefined') {
+                    $("#unidad_medida_id").val(idUnidadMedida);
+                }
+                startSelect2ById("unidad_medida_id");
+            }
+        });
+    }
+    function getKardexByAlmacenProductoUnidadMedida() {
+        postJSON("Kardex_C.php", {
+            "action": "listByAlmacenProductoUnidadMedida",
+            almacen_id: $("#almacen_id").val(),
+            producto_id: $("#producto_id").val(),
+            unidad_medida_id: $("#unidad_medida_id").val()
+        }, function (data) {
+            if (!validErrorResponse(data)) {
+                //SELECCIONAR EL KARDEX DE DONDE SE VA A EXTRAER 
+
+                //SINO HAY PRODUCTOS INGRESAR REQUERIMIENTO
+
+            }
+        });
+    }
+    $("#formAlmacen").validate({
+        rules: {
+            almacen_origen_id: {
+                required: true
+            },
+            cantidad: {
+                required: true,
+                maxlength: 21,
+                max: function (element) {
+                    return Number($(element).attr("max"));
+                },
+                number: true
+            }
+        },
+        errorPlacement: function (error, element) {
+            idElement = $(element).attr("id");
+            classElemet = $(element).attr("class");
+            error.addClass("invalid-feedback")
+            if (classElemet === "form-control-array") {
+                error.attr("id", idElement);
+                error.insertAfter(element);
+            } else if (classElemet = "form-control-autocomplete") {
+                $(element).parent().append(error);
+            }
+        },
+        submitHandler: function (form) {
+            //saveIAlmacen();
+        }
+    });
+    function saveIAlmacen() {
+        var OCElements = $("[name=kardex]");
+        var JSONElements = {};
+        $.map(OCElements, function (object, index) {
+            id = $(object).val();
+            cantidad = $("#cantidad_" + id).val();
+            if (cantidad > 0) {
+                producto_id = $("#producto_id_" + id).val();
+                unidad_medida_id = $("#unidad_medida_id_" + id).val();
+                cantidad_restante = $("#cantidad_restante_" + id).val();
+                fecha_ingreso = $("#fecha_ingreso_" + id).val();
+                fecha_vencimiento = $("#fecha_vencimiento_" + id).val();
+                JSONElements[index] = {
+                    id: id,
+                    producto_id: producto_id,
+                    unidad_medida_id: unidad_medida_id,
+                    cantidad_restante: cantidad_restante,
+                    cantidad: cantidad,
+                    fecha_ingreso: fecha_ingreso,
+                    fecha_vencimiento: fecha_vencimiento
+                };
+            }
+        });
+        postJSON("ProyectoRequerimiento_C.php", {
+            "action": "i", "listKardex": JSONElements,
+            almacen_origen_id: $("#almacen_origen_id").val(),
+            almacen_id: $("#almacen_id_general").val()
+        }, function (data) {
+            if (!validErrorResponse(data)) {
+                closeLastModal();
+                notifySuccess();
+                listProyectoRequerimientos();
+            }
+        });
+    }
+</script>

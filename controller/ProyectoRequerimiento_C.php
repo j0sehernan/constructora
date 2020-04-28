@@ -1,24 +1,24 @@
 <?php
 @include_once("_Configuration.php");
-@include_once("../model/Producto.php");
+@include_once("../model/ProyectoRequerimiento.php");
 
 $json = file_get_contents(_Configuration::$CONFIGURATION_QUERY_PARAMS);
 $object = json_decode($json);
-$producto = new Producto();
+$proyectoRequerimiento = new ProyectoRequerimiento();
 
 if ($object->{'action'} == "list") {
-    $result = $producto->list();
+    $result = $proyectoRequerimiento->list();
     echo (json_encode($result));
 } elseif ($object->{'action'} == "get") {
-    $result = $producto->get($object->{'id'});
+    $result = $proyectoRequerimiento->get($object->id);
     echo (json_encode($result));
 } elseif ($object->{'action'} == "i") {
-    $result = $producto->insert($object->{'codigo'}, $object->{'nombre'}, $object->{'descripcion'});
+    $result = $proyectoRequerimiento->insert($object->proyecto_id, $object->codigo, $object->fecha_pedido);
     echo (json_encode($result));
 } elseif ($object->{'action'} == "u") {
-    $result = $producto->update($object->{'id'}, $object->{'codigo'}, $object->{'nombre'}, $object->{'descripcion'});
+    $result = $proyectoRequerimiento->update($object->id, $object->proyecto_id, $object->codigo, $object->fecha_pedido);
     echo (json_encode($result));
 } elseif ($object->{'action'} == "d") {
-    $result = $producto->delete($object->{'id'});
+    $result = $proyectoRequerimiento->delete($object->id);
     echo (json_encode($result));
 }

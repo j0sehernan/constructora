@@ -10,6 +10,13 @@ class Kardex
         return $result;
     }
 
+    function listByAlmacenProductoUnidadMedida($idAlmacen, $idProducto, $idUnidadMedida)
+    {
+        $db = new DB();
+        $result = $db->query("call kardex_list_by_almacen_producto_unidad_medida('$idAlmacen','$idProducto','$idUnidadMedida');");
+        return $result;
+    }
+
     function insert($idAlmacen, $idProducto, $idUnidadMedida, $cantidad, $fechaIngreso, $fechaVencimiento)
     {
         $db = new DB();

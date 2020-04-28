@@ -546,6 +546,10 @@ var pages =
         name: "pago_contratista",
         id: "menu-pagoContratista",
         url: "pago_contratista/list.html"
+    }, {
+        name: "requerimiento",
+        id: "menu-proyectoRequerimiento",
+        url: "proyecto_requerimiento/list.html"
     }];
 //set the methods
 $.map(pages, function (object, index) {
