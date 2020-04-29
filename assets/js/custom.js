@@ -597,8 +597,6 @@ function showAlerts() {
                     flagNotification = '<span class="kt-badge kt-badge--dot kt-badge--notify kt-badge--sm kt-badge--brand"></span>';
                     $("#notificationsList").append(html);
                 });
-                $("#notificationsCount").html(count + " Notificaciones.");
-                $("#flagNotification").append(flagNotification);
             }
         }
 
