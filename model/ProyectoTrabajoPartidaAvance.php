@@ -45,6 +45,20 @@ class ProyectoTrabajoPartidaAvance
         return $result;
     }
 
+    function reportAvanceProyecto($idProyectoTrabajoPartida, $fechaInicioAvance, $fechaTerminoAvance)
+    {
+        $db = new DB();
+        $result = $db->query("call proyecto_trabajo_partida_avance_report_avance_proyecto('$idProyectoTrabajoPartida','$fechaInicioAvance','$fechaTerminoAvance');");
+        return $result;
+    }
+
+    function reportAvanceProyectoAcumuladoAnterior($idProyectoTrabajoPartida, $fechaTerminoAvance)
+    {
+        $db = new DB();
+        $result = $db->query("call proyecto_trabajo_partida_avance_report_avance_proyecto_acu_ant('$idProyectoTrabajoPartida','$fechaTerminoAvance');");
+        return $result;
+    }
+
     function getMaxAndSumByProyectoTrabajoPartida($idProyectoTrabajoPartida)
     {
         $db = new DB();

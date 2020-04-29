@@ -45,6 +45,13 @@ class ProyectoTrabajoPartida
         return $result;
     }
 
+    function reportAvanceProyecto($idProyectoTrabajo)
+    {
+        $db = new DB();
+        $result = $db->query("call proyecto_trabajo_partida_report_avance_proyecto('$idProyectoTrabajo');");
+        return $result;
+    }
+
     function get($id)
     {
         $db = new DB();

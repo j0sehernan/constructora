@@ -550,6 +550,10 @@ var pages =
         name: "requerimiento",
         id: "menu-proyectoRequerimiento",
         url: "proyecto_requerimiento/list.html"
+    }, {
+        name: "avanceProyecto",
+        id: "menu-avanceProyecto",
+        url: "reporte/avance_proyecto.html"
     }];
 //set the methods
 $.map(pages, function (object, index) {
