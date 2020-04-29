@@ -38,6 +38,13 @@ class ProyectoTrabajoPartida
         return $result;
     }
 
+    function alertBy90PercentFromPresupuesto()
+    {
+        $db = new DB();
+        $result = $db->query("call proyecto_trabajo_partida_alert_by_90_percent_from_presupuesto();");
+        return $result;
+    }
+
     function get($id)
     {
         $db = new DB();

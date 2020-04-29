@@ -570,3 +570,70 @@ function changePage(pageName) {
     });
 }
 
+//Alerts
+function showAlerts() {
+    postJSON("ProductoStockMinimo_C.php", { action: "alertByStockMinimo" }, function (dataAlertByStockMinimo) {
+        var count = 0;
+        var flagNotification = '<span class="kt-badge kt-badge--dot kt-badge--notify kt-badge--sm kt-badge--brand"></span>';
+        if (!validErrorResponse(dataAlertByStockMinimo)) {
+            listStock = JSON.parse(dataAlertByStockMinimo);
+            if (typeof listStock !== 'undefined') {
+                $.map(listStock, function (object, index) {
+                    count++;
+                    var html = `<a href="#" class="kt-notification__item">
+                                    <div class="kt-notification__item-icon">
+                                        <i class="fa fa-cubes"></i>
+                                    </div>
+                                    <div class="kt-notification__item-details">
+                                        <div class="kt-notification__item-title">
+                                            Stock (` + object.stock_minimo + `) por agotarse
+                                        </div>
+                                        <div class="kt-notification__item-time">
+                                            ` + object.nombre + `
+                                        </div>
+                                    </div>
+                                </a>`;
+
+                    flagNotification = '<span class="kt-badge kt-badge--dot kt-badge--notify kt-badge--sm kt-badge--brand"></span>';
+                    $("#notificationsList").append(html);
+                });
+                $("#notificationsCount").html(count + " Notificaciones.");
+                $("#flagNotification").append(flagNotification);
+            }
+        }
+
+        postJSON("ProyectoTrabajoPartida_C.php", { action: "alertBy90PercentFromPresupuesto" }, function (dataAlertBy90PercentFromPresupuesto) {
+            if (!validErrorResponse(dataAlertBy90PercentFromPresupuesto)) {
+                list90PercentFromPresupuesto = JSON.parse(dataAlertBy90PercentFromPresupuesto);
+                if (typeof list90PercentFromPresupuesto !== 'undefined') {
+                    $.map(list90PercentFromPresupuesto, function (object, index) {
+                        count++;
+                        var html = `<a href="#" class="kt-notification__item">
+                                        <div class="kt-notification__item-icon">
+                                            <i class="fa fa-search-dollar"></i>
+                                        </div>
+                                        <div class="kt-notification__item-details">
+                                            <div class="kt-notification__item-title">
+                                                Partida <strong>` + object.codigo + `</strong> sobrepasa el 90% del presupuesto
+                                            </div>
+                                            <div class="kt-notification__item-time">
+                                                <strong>` + object.partida + `</strong> (` + object.unidad_medida_id + `)<br>
+                                                <span>` + object.trabajo + `</span><br>
+                                                <span>` + object.proyecto + `</span>
+                                            </div>
+                                        </div>
+                                    </a>`;
+                        $("#notificationsList").append(html);
+                    });
+                    if (count > 0) {
+                        $("#notificationsCount").html(count + " Notificaciones.");
+                        $("#flagNotification").append(flagNotification);
+                    }
+                }
+            }
+        });
+
+    });
+}
+
+showAlerts();

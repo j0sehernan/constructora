@@ -11,10 +11,17 @@ class ProductoStockMinimo
         return $result;
     }
 
+    function alertByStockMinimo()
+    {
+        $db = new DB();
+        $result = $db->query("call producto_stock_minimo_alert_stock_minimo();");
+        return $result;
+    }
+
     function countByProductoAndUnidadMedida($idProducto, $idUnidadMedida)
     {
         $db = new DB();
-        $result = $db->query("call producto_unidad_medida_count_by_producto_and_unidad_medida('$idProducto','$idUnidadMedida');");
+        $result = $db->query("call producto_stock_minimo_count_by_producto_and_unidad_medida('$idProducto','$idUnidadMedida');");
         return $result;
     }
 

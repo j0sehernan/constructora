@@ -9,6 +9,9 @@ $productoStockMinimo = new ProductoStockMinimo();
 if ($object->{'action'} == "listByProducto") {
     $result = $productoStockMinimo->listByProducto($object->producto_id);
     echo (json_encode($result));
+} elseif ($object->{'action'} == "alertByStockMinimo") {
+    $result = $productoStockMinimo->alertByStockMinimo();
+    echo (json_encode($result));
 } elseif ($object->{'action'} == "get") {
     $result = $productoStockMinimo->get($object->id);
     echo (json_encode($result));

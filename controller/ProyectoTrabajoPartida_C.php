@@ -18,6 +18,9 @@ if ($object->{'action'} == "listByProyectoTrabajo") {
 } elseif ($object->{'action'} == "get") {
     $result = $proyectoTrabajoPartida->get($object->{'id'});
     echo (json_encode($result));
+} elseif ($object->{'action'} == "alertBy90PercentFromPresupuesto") {
+    $result = $proyectoTrabajoPartida->alertBy90PercentFromPresupuesto();
+    echo (json_encode($result));
 } elseif ($object->{'action'} == "i") {
     $count = $proyectoTrabajoPartida->countByProyectoTrabajoAndCodigo($object->{'proyecto_trabajo_id'}, $object->{'codigo'});
     $count = $count[0]['cantidad'];
