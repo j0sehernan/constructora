@@ -8,8 +8,8 @@ $persona = new Persona();
 
 if ($object->{'action'} == "login") {
     $result = $persona->login($object->{'usuario'}, $object->{'clave'});
-    $result[0]["profile_image"] = _Configuration::$CONFIGURATION_UPLOADS_DIR . $result[0]["profile_image"];
     if (count($result) > 0) {
+        $result[0]["profile_image"] = _Configuration::$CONFIGURATION_UPLOADS_DIR . $result[0]["profile_image"];
         startSessionIfNotSet();
         $_SESSION[_Configuration::$CONFIGURATION_SESSION_PERSONA] = $result;
     }
