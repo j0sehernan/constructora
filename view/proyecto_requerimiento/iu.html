@@ -1,161 +1,179 @@
-<h3 id="title">Registrar Requerimiento</h3>
-<form id="form">
-    <div class="row">
-        <div class="col-sm-4">
-            <div class="form-group">
-                <label for="almacen_id">Almacen</label>
-                <select class="form-control form-control-sm form-control-autocomplete" id="almacen_id" name="almacen_id" onchange="getKardexByAlmacenProductoUnidadMedida();">
-                </select>
+<div class="kt-subheader kt-grid__item" id="kt_subheader">
+    <div class="kt-container  kt-container--fluid ">
+        <div class="kt-subheader__main">
+            <h3 class="kt-subheader__title">Requerimiento</h3>
+            <span class="kt-subheader__separator kt-hidden"></span>
+            <div class="kt-subheader__breadcrumbs">
+                <a href="#" class="kt-subheader__breadcrumbs-home"><i class="flaticon2-shelter"></i></a>
+                <span class="kt-subheader__breadcrumbs-separator"></span>
+                <a href="#" class="kt-subheader__breadcrumbs-link">
+                    Requerimientos </a>
+                <span class="kt-subheader__breadcrumbs-separator"></span>
+                <a href="#" class="kt-subheader__breadcrumbs-link" id="titleAction">
+                    Registro </a>
             </div>
         </div>
-        <div class="col-sm-4">
-            <div class="form-group">
-                <label for="producto_id">Producto</label>
-                <select class="form-control form-control-sm form-control-autocomplete" id="producto_id" name="producto_id" onchange="getKardexByAlmacenProductoUnidadMedida();">
-                </select>
-            </div>
-        </div>
-        <div class="col-sm-4">
-            <div class="form-group">
-                <label for="unidad_medida_id">Unidad de Medida</label>
-                <select class="form-control form-control-sm form-control-autocomplete" id="unidad_medida_id" name="unidad_medida_id" onchange="getKardexByAlmacenProductoUnidadMedida();">
-                </select>
+        <div class="kt-subheader__toolbar">
+            <div class="kt-subheader__wrapper">
+
             </div>
         </div>
     </div>
-    <div id="divTable" style="display: none;">
-        <table id="table" class="table table-hover table-bordered table-striped table-sm">
-            <thead class="thead-dark"></thead>
-        </table>
-        <div class="only-options-right">
-            <button type="submit" class="btn btn-success btn-sm"><i class="la la-save"></i>Guardar</button>
-            <button type="button" class="btn btn-outline-danger btn-sm" onclick="closeLastModal();">Cancelar</button>
+</div>
+<div class="kt-container kt-container--fluid kt-grid__item kt-grid__item--fluid">
+    <form id="form">
+        <div class="row">
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label for="proyecto_id">Proyecto</label>
+                    <select class="form-control form-control-sm form-control-autocomplete" id="proyecto_id" name="proyecto_id">
+                    </select>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label for="codigo">Código</label>
+                    <input type="text" class="form-control form-control-sm" id="codigo" name="codigo" placeholder="Código" maxlength="100">
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label for="fecha_pedido">Fecha de Pedido</label>
+                    <input type="text" class="form-control form-control-sm form-control-date" id="fecha_pedido" name="fecha_pedido" placeholder="Fecha de Pedido" maxlength="10">
+                </div>
+            </div>
         </div>
-    </div>
-</form>
+        <div class="row">
+            <div class="col only-options-right" style="margin-bottom: 10px;">
+                <span id="divOptions" style="display: none;">
+                    <a class="btn btn-icon btn btn-label btn-label-brand btn-bold btn-sm" data-toggle="tooltip" title="Actualizar" data-placement="top" onclick="listProyectoRequerimientoDetalle();"><i class="flaticon-refresh"></i></a>
+                    <a href="#" class="btn btn-icon btn btn-label btn-label-brand btn-bold btn-sm" data-toggle="tooltip" title="Agregar Detalle" data-placement="top" onclick="showProyectoRequerimientoDetalleForm('i')"><i
+                            class="flaticon2-add-1"></i></a>
+                </span>
+                <input type="hidden" id="action" name="action" value="i">
+                <input type="hidden" id="id" name="id">
+                <button type="submit" class="btn btn-success btn-sm"><i class="la la-save"></i>Guardar</button>
+            </div>
+        </div>
+    </form>
+    <table id="tableDetalle" class="table table-hover table-bordered table-striped table-sm">
+        <thead class="thead-dark"></thead>
+    </table>
+</div>
 <script>
-    function fillAlmacen(idAlmacen) {
-        postJSON("Almacen_C.php", { "action": "list" }, function (data) {
+    function fillProyecto(idProyecto, callback) {
+        postJSON("Proyecto_C.php", { "action": "list" }, function (data) {
             if (!validErrorResponse(data)) {
-                $("#almacen_id").html('<option value="">Seleccione Almacen</option>');
-                var arrayAlmacenes = JSON.parse(data);
-                arrayAlmacenes.forEach(function (object, index) {
-                    $("#almacen_id").append('<option value="' + object.id + '">' + object.nombre + '</option>');
+                $("#form #proyecto_id").html('<option value="">Seleccione Proyecto</option>');
+                var arrayProyectos = JSON.parse(data);
+                arrayProyectos.forEach(function (object, index) {
+                    $("#form #proyecto_id").append('<option value="' + object.id + '">' + object.nombre + '</option>');
                 });
-                if (typeof idAlmacen !== 'undefined') {
-                    $("#almacen_id").val(idAlmacen);
+                if (typeof idProyecto !== 'undefined') {
+                    $("#form #proyecto_id").val(idProyecto);
                 }
-                startSelect2ById("almacen_id");
+                startSelect2ById("proyecto_id");
+                if (typeof callback !== 'undefined') callback();
             }
         });
     }
-    function fillProducto(idProducto) {
-        postJSON("Producto_C.php", { "action": "list" }, function (data) {
+    function getProyectoRequerimiento() {
+        postJSON("ProyectoRequerimiento_C.php", { action: "get", id: $("#form #id").val() }, function (data) {
             if (!validErrorResponse(data)) {
-                $("#producto_id").html('<option value="">Seleccione Producto</option>');
-                var arrayProductos = JSON.parse(data);
-                arrayProductos.forEach(function (object, index) {
-                    $("#producto_id").append('<option value="' + object.id + '">' + object.nombre + '</option>');
-                });
-                if (typeof idProducto !== 'undefined') {
-                    $("#producto_id").val(idProducto);
-                }
-                startSelect2ById("producto_id");
+                dataResponse = JSON.parse(data)[0];
+                $("#titleAction").html("Editar");
+                $("#divOptions").show();
+                fillProyecto(dataResponse.proyecto_id);
+                $("#proyecto_id").attr("disabled", true);
+                $("#codigo").val(dataResponse.codigo);
+                $("#fecha_pedido").val(dataResponse.fecha_pedido);
+                listProyectoRequerimientoDetalle();
             }
         });
     }
-    function fillUnidadMedida(idUnidadMedida) {
-        postJSON("UnidadMedida_C.php", { "action": "list" }, function (data) {
-            if (!validErrorResponse(data)) {
-                $("#unidad_medida_id").html('<option value="">Seleccione Unidad de Medida</option>');
-                var arrayUnidadesMedida = JSON.parse(data);
-                arrayUnidadesMedida.forEach(function (object, index) {
-                    $("#unidad_medida_id").append('<option value="' + object.codigo + '">' + object.nombre + '</option>');
-                });
-                if (typeof idUnidadMedida !== 'undefined') {
-                    $("#unidad_medida_id").val(idUnidadMedida);
-                }
-                startSelect2ById("unidad_medida_id");
-            }
-        });
-    }
-    function getKardexByAlmacenProductoUnidadMedida() {
-        postJSON("Kardex_C.php", {
-            "action": "listByAlmacenProductoUnidadMedida",
-            almacen_id: $("#almacen_id").val(),
-            producto_id: $("#producto_id").val(),
-            unidad_medida_id: $("#unidad_medida_id").val()
-        }, function (data) {
-            if (!validErrorResponse(data)) {
-                //SELECCIONAR EL KARDEX DE DONDE SE VA A EXTRAER 
-
-                //SINO HAY PRODUCTOS INGRESAR REQUERIMIENTO
-
-            }
-        });
-    }
-    $("#formAlmacen").validate({
+    $("#form").validate({
         rules: {
-            almacen_origen_id: {
+            proyecto_id: {
                 required: true
             },
-            cantidad: {
+            codigo: {
                 required: true,
-                maxlength: 21,
-                max: function (element) {
-                    return Number($(element).attr("max"));
-                },
-                number: true
-            }
-        },
-        errorPlacement: function (error, element) {
-            idElement = $(element).attr("id");
-            classElemet = $(element).attr("class");
-            error.addClass("invalid-feedback")
-            if (classElemet === "form-control-array") {
-                error.attr("id", idElement);
-                error.insertAfter(element);
-            } else if (classElemet = "form-control-autocomplete") {
-                $(element).parent().append(error);
+                maxlength: 100
+            },
+            fecha_pedido: {
+                required: true,
+                maxlength: 10,
+                dateITA: true
             }
         },
         submitHandler: function (form) {
-            //saveIAlmacen();
+            saveProyectoRequerimiento();
         }
     });
-    function saveIAlmacen() {
-        var OCElements = $("[name=kardex]");
-        var JSONElements = {};
-        $.map(OCElements, function (object, index) {
-            id = $(object).val();
-            cantidad = $("#cantidad_" + id).val();
-            if (cantidad > 0) {
-                producto_id = $("#producto_id_" + id).val();
-                unidad_medida_id = $("#unidad_medida_id_" + id).val();
-                cantidad_restante = $("#cantidad_restante_" + id).val();
-                fecha_ingreso = $("#fecha_ingreso_" + id).val();
-                fecha_vencimiento = $("#fecha_vencimiento_" + id).val();
-                JSONElements[index] = {
-                    id: id,
-                    producto_id: producto_id,
-                    unidad_medida_id: unidad_medida_id,
-                    cantidad_restante: cantidad_restante,
-                    cantidad: cantidad,
-                    fecha_ingreso: fecha_ingreso,
-                    fecha_vencimiento: fecha_vencimiento
-                };
-            }
-        });
-        postJSON("ProyectoRequerimiento_C.php", {
-            "action": "i", "listKardex": JSONElements,
-            almacen_origen_id: $("#almacen_origen_id").val(),
-            almacen_id: $("#almacen_id_general").val()
-        }, function (data) {
+    function saveProyectoRequerimiento() {
+        postJSONForm("ProyectoRequerimiento_C.php", "form", function (data) {
             if (!validErrorResponse(data)) {
-                closeLastModal();
                 notifySuccess();
-                listProyectoRequerimientos();
+                if ($("#form #action").val() === "i") {
+                    dataResponse = JSON.parse(data)[0];
+                    $("#titleAction").html("Editar");
+                    $("#form #id").val(dataResponse.id);
+                    $("#form #action").val("u");
+                    $("#divOptions").show();
+                    listProyectoRequerimientoDetalle();
+                }
             }
         });
     }
+    //DETALLE
+    function showProyectoRequerimientoDetalleForm(action, id) {
+        getModalWithCallBack('proyecto_requerimiento_detalle/iu.html', function () {
+            $("#proyecto_requerimiento_id").val($("#form #id").val());
+            if (action === "i") {
+                fillProyectoTrabajo();
+                fillProducto();
+                fillUnidadMedida();
+            } else if (action === "u") {
+                $("#formProyectoRequerimientoDetalle #id").val(id);
+                $("#formProyectoRequerimientoDetalle #action").val("u");
+                getProyectoRequerimientoDetalle(id);
+            }
+        });
+    }
+    function listProyectoRequerimientoDetalle() {
+        postJSON("ProyectoRequerimientoDetalle_C.php", { "action": "listByProyectoRequerimiento", proyecto_requerimiento_id: $("#form #id").val() }, function (data) {
+            if (!validErrorResponse(data)) {
+                destroyDataTableIfExists("tableDetalle");
+                $('#tableDetalle').DataTable({
+                    data: JSON.parse(data),
+                    columns: [
+                        { title: "Partida", data: "partida" },
+                        { title: "Producto", data: "producto" },
+                        { title: "Unidad de Medida", data: "unidad_medida" },
+                        { title: "Cantidad", data: "cantidad" },
+                        { title: "Fecha en Obra", data: "fecha_en_obra" },
+                        {
+                            title: "Acciones", className: "td-actions", render: function (data, type, row, meta) {
+                                return '<button type="button" class="btn btn-outline-info btn-elevate btn-icon btn-circle btn-xs" data-toggle="tooltip" title="Editar" onclick="showProyectoRequerimientoDetalleForm(\'u\',' + row.id + ');"><i class="fa fa-pencil-alt"></i></button>&nbsp;' +
+                                    '<button type="button" class="btn btn-outline-danger btn-elevate btn-icon btn-circle btn-xs" data-toggle="tooltip" title="Eliminar" onclick="deleteProyectoRequerimientoDetalle(' + row.id + ');"><i class="fa fa-trash"></i></button>';
+                            }
+                        }
+                    ]
+                });
+            }
+        });
+    }
+    function deleteProyectoRequerimientoDetalle(id) {
+        askDelete(function (result) {
+            if (result) {
+                postJSON("ProyectoRequerimientoDetalle_C.php", { action: "d", id: id }, function (data) {
+                    if (!validErrorResponse(data)) {
+                        notifySuccess();
+                        listProyectoRequerimientoDetalle();
+                    }
+                });
+            }
+        });
+    }
+    startDatePicker();
 </script>

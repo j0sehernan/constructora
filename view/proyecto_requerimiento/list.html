@@ -38,9 +38,9 @@
                         { title: "Código", data: "codigo" },
                         { title: "Fecha Pedido", data: "fecha_pedido" },
                         {
-                            title: "Opciones", className: "td-actions", render: function (data, type, row, meta) {
-                                return '<button type="button" class="btn btn-outline-info btn-elevate btn-icon btn-circle btn-xs" data-toggle="tooltip" title="Visualizar" onclick="showPagoContratistaForm(\'v\',\'' + row.id + '\');"><i class="fa fa-eye"></i></button>&nbsp;' +
-                                    '<button type="button" class="btn btn-outline-danger btn-elevate btn-icon btn-circle btn-xs" data-toggle="tooltip" title="Eliminar" onclick="deletePagoContratista(\'' + row.id + '\');"><i class="fa fa-trash"></i></button>';
+                            title: "Acciones", className: "td-actions", render: function (data, type, row, meta) {
+                                return '<button type="button" class="btn btn-outline-info btn-elevate btn-icon btn-circle btn-xs" data-toggle="tooltip" title="Editar" onclick="showProyectoRequerimientoForm(\'u\',\'' + row.id + '\');"><i class="fa fa-pencil-alt"></i></button>&nbsp;' +
+                                    '<button type="button" class="btn btn-outline-danger btn-elevate btn-icon btn-circle btn-xs" data-toggle="tooltip" title="Eliminar" onclick="deleteProyectoRequerimiento(\'' + row.id + '\');"><i class="fa fa-trash"></i></button>';
                             }
                         }
                     ]
@@ -49,41 +49,23 @@
         });
     }
     function showProyectoRequerimientoForm(action, id) {
-        getModalExtraLargeWithCallBack('proyecto_requerimiento/iu.html', function () {
+        getHTMLContainerWithCallBack('proyecto_requerimiento/iu.html', function () {
             if (action === "i") {
-                fillAlmacen();
-                fillProducto();
-                fillUnidadMedida();
+                fillProyecto();
             } else if (action === "u") {
-                $("#title").text("Editar Requerimiento");
+                $("#form #id").val(id);
+                $("#form #action").val(action);
+                getProyectoRequerimiento();
             }
         });
     }
-    function confirmarPagoContratista(id) {
-        bootbox.confirm({
-            message: "¿Está seguro de realizar el pago?",
-            className: "fourth-modal",
-            callback: function (result) {
-                if (result) {
-                    postJSON("PagoContratista_C.php", { action: "u_Pagado", id: id, pagado: true }, function (data) {
-                        if (!validErrorResponse(data)) {
-                            notifySuccess();
-                            listPagosContratistas();
-                        }
-                    });
-                }
-            }
-        }).promise().done(function () {
-            $(".modal-backdrop").last().addClass("fourth-modal-backdrop");
-        });
-    }
-    function deletePagoContratista(id, idProyectoTrabajo) {
-        bootbox.confirm(STR_ASK_DELETE, function (result) {
+    function deleteProyectoRequerimiento(id) {
+        askDelete(function (result) {
             if (result) {
-                postJSON("PagoContratista_C.php", { action: "d", id: id, proyecto_trabajo_id: idProyectoTrabajo }, function (data) {
+                postJSON("ProyectoRequerimiento_C.php", { action: "d", id: id }, function (data) {
                     if (!validErrorResponse(data)) {
                         notifySuccess();
-                        listPagosContratistas();
+                        listProyectoRequerimientos();
                     }
                 });
             }

@@ -18,10 +18,17 @@ class ProyectoRequerimiento
         return $result;
     }
 
+    function alertNew()
+    {
+        $db = new DB();
+        $result = $db->query("call proyecto_requerimiento_alert_new();");
+        return $result;
+    }
+
     function insert($idProyecto, $codigo, $fechaPedido)
     {
         $db = new DB();
-        $result = $db->execute("call proyecto_requerimiento_i('$idProyecto','$codigo','$fechaPedido');");
+        $result = $db->executeWithReturn("call proyecto_requerimiento_i('$idProyecto','$codigo','$fechaPedido');");
         return $result;
     }
 
@@ -29,6 +36,13 @@ class ProyectoRequerimiento
     {
         $db = new DB();
         $result = $db->execute("call proyecto_requerimiento_u('$id','$idProyecto','$codigo','$fechaPedido');");
+        return $result;
+    }
+
+    function updateAlertNewChecked($id, $alertNewChecked)
+    {
+        $db = new DB();
+        $result = $db->execute("call proyecto_requerimiento_u_alert_new_checked('$id','$alertNewChecked');");
         return $result;
     }
 

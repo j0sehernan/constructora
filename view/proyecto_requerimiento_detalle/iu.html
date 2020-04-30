@@ -1,0 +1,160 @@
+<h3 id="titleActionModal">Registro</h3>
+<form id="formProyectoRequerimientoDetalle">
+    <div class="form-group">
+        <label for="proyecto_trabajo_id">Trabajo</label>
+        <select class="form-control form-control-sm form-control-autocomplete" id="proyecto_trabajo_id" name="proyecto_trabajo_id" onchange="fillProyectoTrabajoPartida();">
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="proyecto_trabajo_partida_id">Partida</label>
+        <select class="form-control form-control-sm form-control-autocomplete" id="proyecto_trabajo_partida_id" name="proyecto_trabajo_partida_id">
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="producto_id">Producto</label>
+        <select class="form-control form-control-sm form-control-autocomplete" id="producto_id" name="producto_id">
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="unidad_medida_id">Unidad de Medida</label>
+        <select class="form-control form-control-sm" id="unidad_medida_id" name="unidad_medida_id" placeholder="Unidad de Medida">
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="cantidad">Cantidad</label>
+        <input type="text" class="form-control form-control-sm form-control-decimal" id="cantidad" name="cantidad" placeholder="Cantidad" maxlength="21">
+    </div>
+    <div class="form-group">
+        <label for="fecha_en_obra">Fecha en obra</label>
+        <input type="text" class="form-control form-control-sm form-control-date" id="fecha_en_obra" name="fecha_en_obra" placeholder="Fecha en Obra" maxlength="10">
+    </div>
+    <div class="only-options-right">
+        <input type="hidden" id="proyecto_requerimiento_id" name="proyecto_requerimiento_id" value="">
+        <input type="hidden" id="action" name="action" value="i">
+        <input type="hidden" id="id" name="id">
+        <button type="submit" class="btn btn-success btn-sm"><i class="la la-save"></i>Guardar</button>
+        <button type="button" class="btn btn-outline-danger btn-sm" onclick="closeLastModal();">Cancelar</button>
+    </div>
+</form>
+<script>
+    function fillProyectoTrabajo(idProyectoTrabajo, callback) {
+        postJSON("ProyectoTrabajo_C.php", { "action": "listByProyecto", proyecto_id: $("#form #proyecto_id").val() }, function (data) {
+            if (!validErrorResponse(data)) {
+                $("#formProyectoRequerimientoDetalle #proyecto_trabajo_id").html('<option value="">Seleccione Trabajo</option>');
+                var arrayProyectoTrabajo = JSON.parse(data);
+                arrayProyectoTrabajo.forEach(function (object, index) {
+                    $("#formProyectoRequerimientoDetalle #proyecto_trabajo_id").append('<option value="' + object.id + '">' + object.nombre + '</option>');
+                });
+                if (typeof idProyectoTrabajo !== 'undefined') {
+                    $("#formProyectoRequerimientoDetalle #proyecto_trabajo_id").val(idProyectoTrabajo);
+                }
+                startSelect2ById("proyecto_trabajo_id");
+                if (typeof callback !== 'undefined') callback();
+            }
+        });
+    }
+    function fillProyectoTrabajoPartida(idProyectoTrabajoPartida) {
+        postJSON("ProyectoTrabajoPartida_C.php", { "action": "listByProyectoTrabajo", proyecto_trabajo_id: $("#formProyectoRequerimientoDetalle #proyecto_trabajo_id").val() }, function (data) {
+            if (!validErrorResponse(data)) {
+                $("#formProyectoRequerimientoDetalle #proyecto_trabajo_partida_id").html('<option value="">Seleccione Partida</option>');
+                var arrayProyectoTrabajoPartida = JSON.parse(data);
+                arrayProyectoTrabajoPartida.forEach(function (object, index) {
+                    $("#formProyectoRequerimientoDetalle #proyecto_trabajo_partida_id").append('<option value="' + object.id + '">' + object.nombre + '</option>');
+                });
+                if (typeof idProyectoTrabajoPartida !== 'undefined') {
+                    $("#formProyectoRequerimientoDetalle #proyecto_trabajo_partida_id").val(idProyectoTrabajoPartida);
+                }
+                startSelect2ById("proyecto_trabajo_partida_id");
+            }
+        });
+    }
+    function fillProducto(idProducto) {
+        postJSON("Producto_C.php", { "action": "list" }, function (data) {
+            if (!validErrorResponse(data)) {
+                $("#formProyectoRequerimientoDetalle #producto_id").html('<option value="">Seleccione Producto</option>');
+                var arrayProductos = JSON.parse(data);
+                arrayProductos.forEach(function (object, index) {
+                    $("#formProyectoRequerimientoDetalle #producto_id").append('<option value="' + object.id + '">' + object.nombre + '</option>');
+                });
+                if (typeof idProducto !== 'undefined') {
+                    $("#formProyectoRequerimientoDetalle #producto_id").val(idProducto);
+                }
+                startSelect2ById("formProyectoRequerimientoDetalle #producto_id");
+            }
+        });
+    }
+    function fillUnidadMedida(idUnidadMedida) {
+        postJSON("UnidadMedida_C.php", { "action": "list" }, function (data) {
+            if (!validErrorResponse(data)) {
+                $("#formProyectoRequerimientoDetalle #unidad_medida_id").html('<option value="">Seleccione Unidad de Medida</option>');
+                var arrayUnidadesMedida = JSON.parse(data);
+                arrayUnidadesMedida.forEach(function (object, index) {
+                    $("#formProyectoRequerimientoDetalle #unidad_medida_id").append('<option value="' + object.codigo + '">' + object.nombre + '</option>');
+                });
+                if (typeof idUnidadMedida !== 'undefined') {
+                    $("#formProyectoRequerimientoDetalle #unidad_medida_id").val(idUnidadMedida);
+                }
+                startSelect2ById("formProyectoRequerimientoDetalle #unidad_medida_id");
+            }
+        });
+    }
+    function getProyectoRequerimientoDetalle(id) {
+        postJSON("ProyectoRequerimientoDetalle_C.php", { action: "get", id: id }, function (data) {
+            if (!validErrorResponse(data)) {
+                dataResponse = JSON.parse(data)[0];
+                $("#titleActionModal").html("Editar");
+                fillProyectoTrabajo(dataResponse.proyecto_trabajo_id, function () {
+                    $("#proyecto_trabajo_id").attr("disabled", true);
+                    fillProyectoTrabajoPartida(dataResponse.proyecto_trabajo_partida_id);
+                    $("#proyecto_trabajo_partida_id").attr("disabled", true);
+                });
+                fillProducto(dataResponse.producto_id);
+                $("#producto_id").attr("disabled", true);
+                fillUnidadMedida(dataResponse.unidad_medida_id);
+                $("#unidad_medida_id").attr("disabled", true);
+                $("#formProyectoRequerimientoDetalle #cantidad").val(dataResponse.cantidad);
+                $("#formProyectoRequerimientoDetalle #fecha_en_obra").val(dataResponse.fecha_en_obra);
+            }
+        });
+    }
+    $("#formProyectoRequerimientoDetalle").validate({
+        rules: {
+            proyecto_trabajo_id: {
+                required: true
+            },
+            proyecto_trabajo_partida_id: {
+                required: true
+            },
+            producto_id: {
+                required: true
+            },
+            unidad_medida_id: {
+                required: true
+            },
+            cantidad: {
+                required: true,
+                number: true,
+                maxlength: 21
+            },
+            fecha_en_obra: {
+                required: true,
+                maxlength: 10,
+                dateITA: true
+            }
+        },
+        submitHandler: function (form) {
+            saveProyectoRequerimientoDetalle();
+        }
+    });
+    function saveProyectoRequerimientoDetalle() {
+        postJSONForm("ProyectoRequerimientoDetalle_C.php", "formProyectoRequerimientoDetalle", function (data) {
+            if (!validErrorResponse(data)) {
+                closeLastModal();
+                notifySuccess();
+                listProyectoRequerimientoDetalle();
+            }
+        });
+    }
+    startDatePicker();
+    startDecimalNumbers(18, 2);
+</script>

@@ -12,11 +12,17 @@ if ($object->{'action'} == "list") {
 } elseif ($object->{'action'} == "get") {
     $result = $proyectoRequerimiento->get($object->id);
     echo (json_encode($result));
+} elseif ($object->{'action'} == "alertNew") {
+    $result = $proyectoRequerimiento->alertNew();
+    echo (json_encode($result));
 } elseif ($object->{'action'} == "i") {
     $result = $proyectoRequerimiento->insert($object->proyecto_id, $object->codigo, $object->fecha_pedido);
     echo (json_encode($result));
 } elseif ($object->{'action'} == "u") {
     $result = $proyectoRequerimiento->update($object->id, $object->proyecto_id, $object->codigo, $object->fecha_pedido);
+    echo (json_encode($result));
+} elseif ($object->{'action'} == "uAlertNewChecked") {
+    $result = $proyectoRequerimiento->updateAlertNewChecked($object->id, $object->alert_new_checked);
     echo (json_encode($result));
 } elseif ($object->{'action'} == "d") {
     $result = $proyectoRequerimiento->delete($object->id);
