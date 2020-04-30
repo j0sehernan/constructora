@@ -627,12 +627,38 @@ function showAlerts() {
                                     </a>`;
                         $("#notificationsList").append(html);
                     });
+                }
+            }
+
+            postJSON("ProyectoRequerimiento_C.php", { action: "alertNew" }, function (dataAlertNew) {
+                if (!validErrorResponse(dataAlertNew)) {
+                    listNew = JSON.parse(dataAlertNew);
+                    if (typeof listNew !== 'undefined') {
+                        $.map(listNew, function (object, index) {
+                            count++;
+                            var html = `<a href="#" class="kt-notification__item" onclick="changePage('requerimiento')">
+                                            <div class="kt-notification__item-icon">
+                                                <i class="fa fa-list-ol"></i>
+                                            </div>
+                                            <div class="kt-notification__item-details">
+                                                <div class="kt-notification__item-title">
+                                                    Nuevo requerimiento <strong>(` + object.codigo + `)</strong>
+                                                </div>
+                                                <div class="kt-notification__item-time">
+                                                    <strong>` + object.fecha_pedido + `</strong>
+                                                </div>
+                                            </div>
+                                        </a>`;
+                            $("#notificationsList").append(html);
+                        });
+                    }
                     if (count > 0) {
                         $("#notificationsCount").html(count + " Notificaciones.");
                         $("#flagNotification").append(flagNotification);
                     }
                 }
-            }
+            });
+
         });
 
     });

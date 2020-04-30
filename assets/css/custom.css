@@ -135,3 +135,14 @@
 .text-error, .text-error .kt-widget-3__content-bedge, .text-error .kt-widget-3__content-number {
     color: #fe5962 !important;
 }
+
+.new-row td{
+    background-color: #36a3f7;
+    color: white !important;
+    border: 1px solid #737373;
+}
+
+.new-row .td-actions{
+    background-color: #fafbfc !important;
+    color: #595d6e !important;
+}

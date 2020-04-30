@@ -39,11 +39,20 @@
                         { title: "Fecha Pedido", data: "fecha_pedido" },
                         {
                             title: "Acciones", className: "td-actions", render: function (data, type, row, meta) {
-                                return '<button type="button" class="btn btn-outline-info btn-elevate btn-icon btn-circle btn-xs" data-toggle="tooltip" title="Editar" onclick="showProyectoRequerimientoForm(\'u\',\'' + row.id + '\');"><i class="fa fa-pencil-alt"></i></button>&nbsp;' +
-                                    '<button type="button" class="btn btn-outline-danger btn-elevate btn-icon btn-circle btn-xs" data-toggle="tooltip" title="Eliminar" onclick="deleteProyectoRequerimiento(\'' + row.id + '\');"><i class="fa fa-trash"></i></button>';
+                                if (row.alert_new_checked === "0") {
+                                    return '<button type="button" class="btn btn-outline-success btn-elevate btn-icon btn-circle btn-xs" data-toggle="tooltip" title="Marcar como leído" onclick="updateAlertNewChecked(\'' + row.id + '\');"><i class="fa fa-check"></i></button>&nbsp;' +
+                                        '<button type="button" class="btn btn-outline-info btn-elevate btn-icon btn-circle btn-xs" data-toggle="tooltip" title="Editar" onclick="showProyectoRequerimientoForm(\'u\',\'' + row.id + '\');"><i class="fa fa-pencil-alt"></i></button>&nbsp;' +
+                                        '<button type="button" class="btn btn-outline-danger btn-elevate btn-icon btn-circle btn-xs" data-toggle="tooltip" title="Eliminar" onclick="deleteProyectoRequerimiento(\'' + row.id + '\');"><i class="fa fa-trash"></i></button>';
+                                } else {
+                                    return '<button type="button" class="btn btn-outline-info btn-elevate btn-icon btn-circle btn-xs" data-toggle="tooltip" title="Visualizar" onclick="showProyectoRequerimientoForm(\'v\',\'' + row.id + '\');"><i class="fa fa-eye"></i></button>&nbsp;'
+                                }
+
                             }
                         }
-                    ]
+                    ],
+                    rowCallback: function (row, data) {
+                        if (data.alert_new_checked === "0") $(row).addClass('new-row');
+                    }
                 });
             }
         });
@@ -56,7 +65,29 @@
                 $("#form #id").val(id);
                 $("#form #action").val(action);
                 getProyectoRequerimiento();
+            } else if (action === "v") {
+                $("#form #id").val(id);
+                $("#form #action").val(action);
+                getProyectoRequerimiento();
             }
+        });
+    }
+    function updateAlertNewChecked(id) {
+        bootbox.confirm({
+            message: "¿Está seguro de marcar como leído?",
+            className: "fourth-modal",
+            callback: function (result) {
+                if (result) {
+                    postJSON("ProyectoRequerimiento_C.php", { action: "uAlertNewChecked", id: id, alert_new_checked: true }, function (data) {
+                        if (!validErrorResponse(data)) {
+                            notifySuccess();
+                            listProyectoRequerimientos();
+                        }
+                    });
+                }
+            }
+        }).promise().done(function () {
+            $(".modal-backdrop").last().addClass("fourth-modal-backdrop");
         });
     }
     function deleteProyectoRequerimiento(id) {

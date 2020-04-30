@@ -52,7 +52,8 @@
                 </span>
                 <input type="hidden" id="action" name="action" value="i">
                 <input type="hidden" id="id" name="id">
-                <button type="submit" class="btn btn-success btn-sm"><i class="la la-save"></i>Guardar</button>
+                <input type="hidden" id="alert_new_checked" name="alert_new_checked">
+                <button type="submit" id="btnSave" class="btn btn-success btn-sm"><i class="la la-save"></i>Guardar</button>
             </div>
         </div>
     </form>
@@ -87,7 +88,14 @@
                 $("#proyecto_id").attr("disabled", true);
                 $("#codigo").val(dataResponse.codigo);
                 $("#fecha_pedido").val(dataResponse.fecha_pedido);
+                $("#alert_new_checked").val(dataResponse.alert_new_checked);
                 listProyectoRequerimientoDetalle();
+                if ($("#action").val() === "v") {
+                    $("#codigo").attr("disabled", true);
+                    $("#fecha_pedido").attr("disabled", true);
+                    $("#divOptions").hide();
+                    $("#btnSave").remove();
+                }
             }
         });
     }
@@ -147,6 +155,7 @@
                 $('#tableDetalle').DataTable({
                     data: JSON.parse(data),
                     columns: [
+                        { title: "Trabajo", data: "trabajo" },
                         { title: "Partida", data: "partida" },
                         { title: "Producto", data: "producto" },
                         { title: "Unidad de Medida", data: "unidad_medida" },
@@ -154,8 +163,10 @@
                         { title: "Fecha en Obra", data: "fecha_en_obra" },
                         {
                             title: "Acciones", className: "td-actions", render: function (data, type, row, meta) {
-                                return '<button type="button" class="btn btn-outline-info btn-elevate btn-icon btn-circle btn-xs" data-toggle="tooltip" title="Editar" onclick="showProyectoRequerimientoDetalleForm(\'u\',' + row.id + ');"><i class="fa fa-pencil-alt"></i></button>&nbsp;' +
-                                    '<button type="button" class="btn btn-outline-danger btn-elevate btn-icon btn-circle btn-xs" data-toggle="tooltip" title="Eliminar" onclick="deleteProyectoRequerimientoDetalle(' + row.id + ');"><i class="fa fa-trash"></i></button>';
+                                if ($("#alert_new_checked").val() === "0")
+                                    return '<button type="button" class="btn btn-outline-info btn-elevate btn-icon btn-circle btn-xs" data-toggle="tooltip" title="Editar" onclick="showProyectoRequerimientoDetalleForm(\'u\',' + row.id + ');"><i class="fa fa-pencil-alt"></i></button>&nbsp;' +
+                                        '<button type="button" class="btn btn-outline-danger btn-elevate btn-icon btn-circle btn-xs" data-toggle="tooltip" title="Eliminar" onclick="deleteProyectoRequerimientoDetalle(' + row.id + ');"><i class="fa fa-trash"></i></button>';
+                                else return "";
                             }
                         }
                     ]
