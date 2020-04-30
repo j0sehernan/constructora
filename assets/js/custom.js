@@ -94,48 +94,55 @@ function getModal(url) {
     });
 }
 
-function getModalWithCallBack(url, success) {
+function getModalWithCallBack(url, callback) {
     $.post(VIEW_PATH + url, function (data) {
         bootbox.dialog({
             message: data,
             closeButton: true,
             onEscape: true
-        }).promise().done(success);
+        }).on("shown.bs.modal", function() {
+            callback();
+        });
     });
 }
 
-function getModalWithCallBackSecond(url, success) {
+function getModalWithCallBackSecond(url, callback) {
     $.post(VIEW_PATH + url, function (data) {
         bootbox.dialog({
             message: data,
             closeButton: true,
             onEscape: true,
             className: "second-modal"
-        }).promise().done(function () {
+        }).on("shown.bs.modal", function() {
             $(".modal-backdrop").last().addClass("second-modal-backdrop");
-        }).promise().done(success);
+            callback();
+        });
     });
 }
 
-function getModalLargeWithCallBack(url, success) {
+function getModalLargeWithCallBack(url, callback) {
     $.post(VIEW_PATH + url, function (data) {
         bootbox.dialog({
             message: data,
             closeButton: true,
             onEscape: true,
             size: 'large'
-        }).promise().done(success);
+        }).on("shown.bs.modal", function() {
+            callback();
+        });
     });
 }
 
-function getModalExtraLargeWithCallBack(url, success) {
+function getModalExtraLargeWithCallBack(url, callback) {
     $.post(VIEW_PATH + url, function (data) {
         bootbox.dialog({
             message: data,
             closeButton: true,
             onEscape: true,
             size: 'extra-large'
-        }).promise().done(success);
+        }).on("shown.bs.modal", function() {
+            callback();
+        });
     });
 }
 
@@ -554,6 +561,10 @@ var pages =
         name: "avanceProyecto",
         id: "menu-avanceProyecto",
         url: "reporte/avance_proyecto.html"
+    }, {
+        name: "marca",
+        id: "menu-productoMarca",
+        url: "producto_marca/list.html"
     }];
 //set the methods
 $.map(pages, function (object, index) {

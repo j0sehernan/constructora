@@ -1,0 +1,46 @@
+<h3 id="titleAction">Registro</h3>
+<form id="form">
+    <div class="form-group">
+        <label for="nombre">Nombre</label>
+        <input type="text" class="form-control form-control-sm" id="nombre" name="nombre" placeholder="Nombre" maxlength="100">
+    </div>
+    <div class="only-options-right">
+        <input type="hidden" id="action" name="action" value="i">
+        <input type="hidden" id="id" name="id">
+        <button type="submit" class="btn btn-success btn-sm"><i class="la la-save"></i>Guardar</button>
+        <button type="button" class="btn btn-outline-danger btn-sm" onclick="closeLastModal();">Cancelar</button>
+    </div>
+</form>
+<script>
+    function getProductoMarca() {
+        if ($("#action").val() === "u") {
+            postJSON("ProductoMarca_C.php", { action: "get", id: $("#form #id").val() }, function (data) {
+                if (!validErrorResponse(data)) {
+                    dataResponse = JSON.parse(data)[0];
+                    $("#titleAction").html("Editar");
+                    $("#nombre").val(dataResponse.nombre);
+                }
+            });
+        }
+    }
+    $("#form").validate({
+        rules: {
+            nombre: {
+                required: true,
+                maxlength: 100
+            }
+        },
+        submitHandler: function (form) {
+            saveProductoMarca();
+        }
+    });
+    function saveProductoMarca() {
+        postJSONForm("ProductoMarca_C.php", "form", function (data) {
+            if (!validErrorResponse(data)) {
+                closeLastModal();
+                notifySuccess();
+                listProductoMarca();
+            }
+        });
+    }
+</script>

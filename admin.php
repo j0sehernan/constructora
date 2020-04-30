@@ -138,6 +138,7 @@
 									<ul class="kt-menu__subnav">
 										<li class="kt-menu__item kt-menu__item--parent" aria-haspopup="true"><span class="kt-menu__link"><span class="kt-menu__link-text">Maestros</span></span></li>
 										<li class="kt-menu__item" id="menu-producto"><a class="kt-menu__link"><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Productos</span></a></li>
+										<li class="kt-menu__item" id="menu-productoMarca"><a class="kt-menu__link"><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Marcas</span></a></li>
 										<li class="kt-menu__item" id="menu-almacen"><a class="kt-menu__link"><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Almacen</span></a></li>
 										<li class="kt-menu__item" id="menu-unidadMedida"><a class="kt-menu__link"><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Unidades de Medida</span></a></li>
 										<li class="kt-menu__item" id="menu-emailTipo"><a class="kt-menu__link"><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Tipos de Email</span></a></li>
