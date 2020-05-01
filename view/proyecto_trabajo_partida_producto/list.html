@@ -1,0 +1,33 @@
+<h3>Recursos</h3>
+<div class="only-options-right" style="margin-bottom: 10px;">
+    <input type="hidden" id="proyecto_trabajo_partida_id_general" name="proyecto_trabajo_partida_id_general">
+</div>
+<table id="tableRecursos" class="table table-hover table-bordered table-striped table-sm">
+    <thead class="thead-dark"></thead>
+</table>
+<script>
+    function listProyectoTrabajoPartidaProducto() {
+        postJSON("ProyectoTrabajoPartidaProducto_C.php", { "action": "listByProyectoTrabajoPartida", proyecto_trabajo_partida_id: $("#proyecto_trabajo_partida_id_general").val() }, function (data) {
+            if (!validErrorResponse(data)) {
+                destroyDataTableIfExists("tableRecursos");
+                $('#tableRecursos').DataTable({
+                    data: JSON.parse(data),
+                    columns: [
+                        { title: "Producto", data: "producto" },
+                        { title: "Unidad de Medida", data: "unidad_medida" },
+                        { title: "Cantidad", data: "cantidad" },
+                        { title: "Fecha de Ingreso", data: "fecha_ingreso" },
+                        { title: "Fecha de Vencimiento", data: "fecha_vencimiento" }
+
+                        /*                         {
+                                                    title: "Acciones", className: "td-actions", render: function (data, type, row, meta) {
+                                                        return '<button type="button" class="btn btn-outline-info btn-elevate btn-icon btn-circle btn-xs" data-toggle="tooltip" title="Editar Avance" onclick="showProyectoTrabajoPartidaAvanceForm(\'u\',\'' + row.id + '\');"><i class="fa fa-pencil-alt"></i></button>&nbsp;' +
+                                                            '<button type="button" class="btn btn-outline-danger btn-elevate btn-icon btn-circle btn-xs" data-toggle="tooltip" title="Eliminar Avance" onclick="deleteProyectoTrabajoPartidaAvance(\'' + row.id + '\');"><i class="fa fa-trash"></i></button>'
+                                                    }
+                                                } */
+                    ]
+                });
+            }
+        });
+    }
+</script>

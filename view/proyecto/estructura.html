@@ -103,21 +103,26 @@
             <table class="table-fit table responsive table-bordered table-hover table-striped table-sm responsive" id="tableProyectoTrabajoPartidas">
                 <thead class="thead-dark">
                     <tr>
-                        <th>Código</th>
-                        <th>Nombre</th>
-                        <th data-toggle="tooltip" title="Unidad de Medida" data-placement="top">UM</th>
-                        <th data-toggle="tooltip" title="Precio Unitario Plan" data-placement="top">P.U.P.</th>
-                        <th data-toggle="tooltip" title="Cantidad Plan" data-placement="top">C.P.</th>
-                        <th data-toggle="tooltip" title="Precio Plan" data-placement="top">P.P.</th>
-                        <th data-toggle="tooltip" title="Cantidad Real Acumulada" data-placement="top">C.R.A.</th>
-                        <th data-toggle="tooltip" title="Precio Real Acumulado" data-placement="top">P.R.A.</th>
-                        <th data-toggle="tooltip" title="Cantidad Por Ejecutar" data-placement="top">C.P.E.</th>
-                        <th data-toggle="tooltip" title="Precio Por Ejecutar" data-placement="top">P.P.E.</th>
-                        <th data-toggle="tooltip" title="Fecha Inicio Plan" data-placement="top">F.I.P.</th>
-                        <th data-toggle="tooltip" title="Fecha Término Plan" data-placement="top">F.T.P</th>
-                        <th data-toggle="tooltip" title="Fecha Inicio Real" data-placement="top">F.I.R.</th>
-                        <th data-toggle="tooltip" title="Fecha Término Real" data-placement="top">F.T.R</th>
-                        <th style="width: 100px;">Acciones</th>
+                        <th rowspan="2">Código</th>
+                        <th rowspan="2">Partida</th>
+                        <th rowspan="2" data-toggle="tooltip" title="Unidad de Medida" data-placement="top">UM</th>
+                        <th colspan="5">Plan</th>
+                        <th colspan="4">Real</th>
+                        <th colspan="2">Por Ejecutar</th>
+                        <th rowspan="2" style="width: 100px;">Acciones</th>
+                    </tr>
+                    <tr>
+                        <th data-toggle="tooltip" title="Precio Unitario Plan" data-placement="top">P.Uni.</th>
+                        <th data-toggle="tooltip" title="Cantidad Plan" data-placement="top">Can.</th>
+                        <th data-toggle="tooltip" title="Precio Plan" data-placement="top">Pre.</th>
+                        <th data-toggle="tooltip" title="Fecha Inicio Plan" data-placement="top">Ini.</th>
+                        <th data-toggle="tooltip" title="Fecha Término Plan" data-placement="top">Tér.</th>
+                        <th data-toggle="tooltip" title="Cantidad Real Acumulada" data-placement="top">Can.</th>
+                        <th data-toggle="tooltip" title="Precio Real Acumulado" data-placement="top">Pre.</th>
+                        <th data-toggle="tooltip" title="Fecha Inicio Real" data-placement="top">Ini.</th>
+                        <th data-toggle="tooltip" title="Fecha Término Real" data-placement="top">Tér.</th>
+                        <th data-toggle="tooltip" title="Cantidad Por Ejecutar" data-placement="top">Can.</th>
+                        <th data-toggle="tooltip" title="Precio Por Ejecutar" data-placement="top">Pre.</th>
                     </tr>
                 </thead>
                 <tbody></tbody>
@@ -290,14 +295,14 @@
             '<td style="font-size: 11px;">' + (precioUnitarioPlan == null ? '' : precioUnitarioPlan) + '</td>' +
             '<td style="font-size: 11px;">' + (cantidadPlan == null ? '' : cantidadPlan) + '</td>' +
             '<td style="font-size: 11px;">' + (precioPlan == null ? '' : precioPlan) + '</td>' +
-            '<td style="font-size: 11px;" class="cantidad_real_acumulada">' + (cantidadRealAcumulada == null ? '' : cantidadRealAcumulada) + '</td>' +
-            '<td style="font-size: 11px;" class="precio_real_acumulado">' + (precioRealAcumulado == null ? '' : precioRealAcumulado) + '</td>' +
-            '<td style="font-size: 11px;" class="cantidad_por_ejecutar' + (cantidadPorEjecutar < 0 ? ' td-error' : '') + '">' + (cantidadPorEjecutar == null ? '' : cantidadPorEjecutar) + '</td>' +
-            '<td style="font-size: 11px;" class="precio_por_ejecutar' + (precioPorEjecutar < 0 ? ' td-error' : '') + '">' + (precioPorEjecutar == null ? '' : precioPorEjecutar) + '</td>' +
             '<td style="font-size: 8px;">' + fechaInicioPlan + '</td>' +
             '<td style="font-size: 8px;">' + fechaTerminoPlan + '</td>' +
+            '<td style="font-size: 11px;" class="cantidad_real_acumulada">' + (cantidadRealAcumulada == null ? '' : cantidadRealAcumulada) + '</td>' +
+            '<td style="font-size: 11px;" class="precio_real_acumulado">' + (precioRealAcumulado == null ? '' : precioRealAcumulado) + '</td>' +
             '<td style="font-size: 8px;" class="fecha_inicio_real">' + fechaInicioReal + '</td>' +
             '<td style="font-size: 8px;" class="fecha_termino_real">' + fechaTerminoReal + '</td>' +
+            '<td style="font-size: 11px;" class="cantidad_por_ejecutar' + (cantidadPorEjecutar < 0 ? ' td-error' : '') + '">' + (cantidadPorEjecutar == null ? '' : cantidadPorEjecutar) + '</td>' +
+            '<td style="font-size: 11px;" class="precio_por_ejecutar' + (precioPorEjecutar < 0 ? ' td-error' : '') + '">' + (precioPorEjecutar == null ? '' : precioPorEjecutar) + '</td>' +
             '<td class="td-actions">' +
             '<div class="td_actions_' + id + '" style="display: none;">'
         if (precioPlan > 0) {
@@ -305,6 +310,7 @@
                 '<button type="button" class="btn btn-outline-focus btn-elevate btn-icon btn-circle btn-xs" data-toggle="tooltip" title="Registrar Avance" onclick="showProyectoTrabajoPartidaAvanceListForm(' + id + ');"><i class="fa fa-forward"></i></button>&nbsp;'
         }
         html +=
+            '<button type="button" class="btn btn-outline-success btn-elevate btn-icon btn-circle btn-xs" data-toggle="tooltip" title="Mostrar Recursos" onclick="showProyectoTrabajoPartidaProductoForm(\'' + id + '\');"><i class="fa fa-folder-open"></i></button>&nbsp;' +
             '<button type="button" class="btn btn-outline-success btn-elevate btn-icon btn-circle btn-xs" data-toggle="tooltip" title="Agregar Partida a Partir de esta" onclick="showProyectoTrabajoPartidaForm(\'i_son\', 0, ' + id + ', \'' + codigo + '\');"><i class="fa fa-sitemap"></i></button>&nbsp;' +
             '<button type="button" class="btn btn-outline-info btn-elevate btn-icon btn-circle btn-xs" data-toggle="tooltip" title="Editar Partida" onclick="showProyectoTrabajoPartidaForm(\'u\',' + id + ',\'' + idPadre + '\',\'' + codigoPadre + '\');"><i class="fa fa-pencil-alt"></i></button>&nbsp;'
         if (canDelete == true || canDelete == 1) {
@@ -324,6 +330,12 @@
     function hideActions(element) {
         var id = $(element).attr("id").replace("tr_partida_", "");
         $(".td_actions_" + id).hide();
+    }
+    function showProyectoTrabajoPartidaProductoForm(id) {
+        getModalLargeWithCallBack('proyecto_trabajo_partida_producto/list.html', function () {
+            $("#proyecto_trabajo_partida_id_general").val(id);
+            listProyectoTrabajoPartidaProducto();
+        });
     }
     function showProyectoTrabajoPartidaForm(action, id, idPadre, codigoPadre) {
         getModalLargeWithCallBack('proyecto_trabajo_partida/iu.html', function () {
