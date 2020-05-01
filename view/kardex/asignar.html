@@ -1,0 +1,150 @@
+<h3 id="titleAction"></h3>
+<form id="form">
+    <div class="row">
+        <div class="col-sm-4">
+            <div class="form-group">
+                <label for="proyecto_id">Proyecto</label>
+                <select class="form-control form-control-sm form-control-autocomplete" id="proyecto_id" name="proyecto_id" onchange="fillProyectoTrabajo();">
+                </select>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="form-group">
+                <label for="proyecto_trabajo_id">Trabajo</label>
+                <select class="form-control form-control-sm form-control-autocomplete" id="proyecto_trabajo_id" name="proyecto_trabajo_id" onchange="fillProyectoTrabajoPartida();">
+                </select>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="form-group">
+                <label for="proyecto_trabajo_partida_id">Partida</label>
+                <select class="form-control form-control-sm form-control-autocomplete" id="proyecto_trabajo_partida_id" name="proyecto_trabajo_partida_id">
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-4">
+            <div class="form-group">
+                <label for="unidad_medida">Unidad de Medida</label>
+                <input type="text" class="form-control form-control-sm" id="unidad_medida" name="unidad_medida" placeholder="Unidad de Medida" readonly>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="form-group">
+                <label for="fecha_ingreso">Frecha de ingreso</label>
+                <input type="text" class="form-control form-control-sm" id="fecha_ingreso" name="fecha_ingreso" placeholder="Fecha de Ingreso" maxlength="10" readonly>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="form-group">
+                <label for="fecha_vencimiento">Frecha de vencimiento</label>
+                <input type="text" class="form-control form-control-sm" id="fecha_vencimiento" name="fecha_vencimiento" placeholder="Fecha de vencimiento" maxlength="10" readonly>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-4">
+            <div class="form-group">
+                <label for="cantidad">Cantidad</label>
+                <input type="text" class="form-control form-control-sm form-control-decimal" id="cantidad" name="cantidad" placeholder="Cantidad" maxlength="21">
+            </div>
+        </div>
+        <div class="col-sm-8" style="justify-content: end; align-self: flex-end; margin-bottom: 2rem;">
+            <div class="only-options-right">
+                <input type="hidden" id="action" name="action" value="i">
+                <input type="hidden" id="kardex_id" name="kardex_id">
+                <input type="hidden" id="producto_id" name="producto_id">
+                <input type="hidden" id="unidad_medida_id" name="unidad_medida_id">
+                <input type="hidden" id="cantidad_maxima" name="cantidad_maxima">
+                <input type="hidden" id="id" name="id">
+                <button type="submit" class="btn btn-success btn-sm"><i class="la la-save"></i>Guardar</button>
+                <button type="button" class="btn btn-outline-danger btn-sm" onclick="closeLastModal();">Cancelar</button>
+            </div>
+        </div>
+    </div>
+</form>
+<script>
+    function fillProyecto(idProyecto, callback) {
+        postJSON("Proyecto_C.php", { "action": "list" }, function (data) {
+            if (!validErrorResponse(data)) {
+                $("#form #proyecto_id").html('<option value="">Seleccione Proyecto</option>');
+                var arrayProyectos = JSON.parse(data);
+                arrayProyectos.forEach(function (object, index) {
+                    $("#form #proyecto_id").append('<option value="' + object.id + '">' + object.nombre + '</option>');
+                });
+                if (typeof idProyecto !== 'undefined') {
+                    $("#form #proyecto_id").val(idProyecto);
+                }
+                startSelect2ById("proyecto_id");
+                if (typeof callback !== 'undefined') callback();
+            }
+        });
+    }
+    function fillProyectoTrabajo(idProyectoTrabajo, callback) {
+        postJSON("ProyectoTrabajo_C.php", { "action": "listByProyecto", proyecto_id: $("#form #proyecto_id").val() }, function (data) {
+            if (!validErrorResponse(data)) {
+                $("#form #proyecto_trabajo_id").html('<option value="">Seleccione Trabajo</option>');
+                var arrayProyectoTrabajo = JSON.parse(data);
+                arrayProyectoTrabajo.forEach(function (object, index) {
+                    $("#form #proyecto_trabajo_id").append('<option value="' + object.id + '">' + object.nombre + '</option>');
+                });
+                if (typeof idProyectoTrabajo !== 'undefined') {
+                    $("#form #proyecto_trabajo_id").val(idProyectoTrabajo);
+                }
+                startSelect2ById("proyecto_trabajo_id");
+                if (typeof callback !== 'undefined') callback();
+            }
+        });
+    }
+    function fillProyectoTrabajoPartida(idProyectoTrabajoPartida) {
+        postJSON("ProyectoTrabajoPartida_C.php", { "action": "listByProyectoTrabajo", proyecto_trabajo_id: $("#form #proyecto_trabajo_id").val() }, function (data) {
+            if (!validErrorResponse(data)) {
+                $("#form #proyecto_trabajo_partida_id").html('<option value="">Seleccione Partida</option>');
+                var arrayProyectoTrabajoPartida = JSON.parse(data);
+                arrayProyectoTrabajoPartida.forEach(function (object, index) {
+                    $("#form #proyecto_trabajo_partida_id").append('<option value="' + object.id + '">' + object.nombre + '</option>');
+                });
+                if (typeof idProyectoTrabajoPartida !== 'undefined') {
+                    $("#form #proyecto_trabajo_partida_id").val(idProyectoTrabajoPartida);
+                }
+                startSelect2ById("proyecto_trabajo_partida_id");
+            }
+        });
+    }
+    $("#form").validate({
+        rules: {
+            proyecto_id: {
+                required: true
+            },
+            proyecto_trabajo_id: {
+                required: true
+            },
+            proyecto_trabajo_partida_id: {
+                required: true
+            },
+            cantidad: {
+                required: true,
+                min: 0.01,
+                max: function () {
+                    return $("#cantidad_inicial").val();
+                },
+                maxlength: 21,
+                number: true
+            }
+        },
+        submitHandler: function (form) {
+            asignar();
+        }
+    });
+    function asignar() {
+        postJSONForm("ProyectoTrabajoPartidaProducto_C.php", "form", function (data) {
+            if (!validErrorResponse(data)) {
+                closeLastModal();
+                notifySuccess();
+                listKardexByAlmacen();
+            }
+        });
+    }
+    startDecimalNumbers(18, 2);
+</script>

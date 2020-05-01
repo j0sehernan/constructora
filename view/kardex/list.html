@@ -33,7 +33,17 @@
     </div>
     <div id="divTable">
         <table id="table" class="table table-hover table-bordered table-striped table-sm">
-            <thead class="thead-dark"></thead>
+            <thead class="thead-dark">
+                <tr>
+                    <th>Producto</th>
+                    <th>Unidad de Medida</th>
+                    <th>Cantidad</th>
+                    <th>F.Ingreso</th>
+                    <th>F.Vencimiento</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
         </table>
     </div>
 </div>
@@ -65,22 +75,29 @@
             ubicacion !== "" ? $("#ubicacion").text(ubicacion) : ""
             postJSON("Kardex_C.php", { "action": "listByAlmacen", "almacen_id": idAlmacen }, function (data) {
                 if (!validErrorResponse(data)) {
+                    var listKardex = JSON.parse(data);
                     destroyDataTableIfExists("table");
-                    $('#table').DataTable({
-                        data: JSON.parse(data),
-                        columns: [
-                            { title: "Producto", data: "producto" },
-                            { title: "Unidad de Medida", data: "unidad_medida_id" },
-                            { title: "Cantidad", data: "cantidad" },
-                            { title: "F.Ingreso", data: "fecha_ingreso" },
-                            { title: "F.Vencimiento", data: "fecha_vencimiento" },
-                            {
-                                title: "Acciones", className: "td-actions", render: function (data, type, row, meta) {
-                                    return '<button type="button" class="btn btn-outline-info btn-elevate btn-icon btn-circle btn-xs" data-toggle="tooltip" title="Convertir" onclick="showConvertForm(' + row.id + ',\'' + row.unidad_medida_id + '\',\'' + row.unidad_medida + '\',\'' + row.cantidad + '\',\'' + row.producto + '\',\'' + row.producto_id + '\',\'' + row.fecha_ingreso + '\',\'' + row.fecha_vencimiento + '\');"><i class="fa fa-exchange-alt"></i></button>&nbsp;' +
-                                        '<button type="button" class="btn btn-outline-danger btn-elevate btn-icon btn-circle btn-xs" data-toggle="tooltip" title="Eliminar" onclick="delKardex(' + row.id + ');"><i class="fa fa-trash"></i></button>'
-                                }
-                            }
-                        ]
+                    $('#table tbody').html("");
+                    foreach(listKardex, function (object, index) {
+                        var html =
+                            `
+                            <tr>
+                                <td>`+ object.producto + `</td>
+                                <td>`+ object.unidad_medida_id + `</td>
+                                <td>`+ object.cantidad + `</td>
+                                <td>`+ object.fecha_ingreso + `</td>
+                                <td>`+ object.fecha_vencimiento + `</td>
+                                <td class="td-actions">
+                                    <button type="button" class="btn btn-outline-info btn-elevate btn-icon btn-circle btn-xs" data-toggle="tooltip" title="Convertir" onclick="showConvertForm('` + object.id + `','` + object.unidad_medida_id + `','` + object.unidad_medida + `','` + object.cantidad + `','` + object.producto + `','` + object.producto_id + `','` + object.fecha_ingreso + `','` + object.fecha_vencimiento + `');"><i class="fa fa-exchange-alt"></i></button>&nbsp;
+                                    <button type="button" class="btn btn-outline-info btn-elevate btn-icon btn-circle btn-xs" data-toggle="tooltip" title="Asignar"><i class="fa fa-sign-out-alt"></i></button>&nbsp;
+                                    <button type="button" class="btn btn-outline-danger btn-elevate btn-icon btn-circle btn-xs" data-toggle="tooltip" title="Eliminar" onclick="delKardex('` + object.id + `');"><i class="fa fa-trash"></i></button>
+                                </td>
+                            </tr>
+                            `;
+                        $('#table tbody').append(html);
+                        $('#table tbody tr:last').find("[title='Asignar']").click(function () {
+                            showAsignarForm(object);
+                        });
                     });
                 }
             });
@@ -104,6 +121,19 @@
             $("#fecha_ingreso").val(fechaIngreso);
             $("#fecha_vencimiento").val(fechaVencimiento);
             fillUnidadMedida();
+        });
+    }
+    function showAsignarForm(objectKardex) {
+        getModalLargeWithCallBack('kardex/asignar.html', function () {
+            $("#titleAction").text(objectKardex.producto);
+            $("#unidad_medida").val(objectKardex.unidad_medida);
+            $("#fecha_ingreso").val(objectKardex.fecha_ingreso);
+            $("#fecha_vencimiento").val(objectKardex.fecha_vencimiento);
+            $("#kardex_id").val(objectKardex.id);
+            $("#unidad_medida_id").val(objectKardex.unidad_medida_id);
+            $("#producto_id").val(objectKardex.producto_id);
+            $("#cantidad_maxima").val(objectKardex.cantidad);
+            fillProyecto();
         });
     }
     function delKardex(id) {

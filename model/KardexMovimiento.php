@@ -50,4 +50,11 @@ class KardexMovimiento
         $result = $db->execute("call kardex_movimiento_i_convert_new('$idKardexMovimiento','$idKardex','$idUnidadMedida','$cantidad','$idKardexOrigen',',$perRegAud');");
         return $result;
     }
+
+    function insertSalidaProyectoTrabajoPartida($idKardexMovimiento, $cantidad, $cantidadSalida, $perRegAud, $idProyectoTrabajoPartidaSalida)
+    {
+        $db = new DB();
+        $result = $db->execute("call kardex_movimiento_i_s_proyecto_trabajo_partida('$idKardexMovimiento','$cantidad','$cantidadSalida','$perRegAud','$idProyectoTrabajoPartidaSalida');");
+        return $result;
+    }
 }
