@@ -1,0 +1,71 @@
+<h3 id="titleActionModal">Registro</h3>
+<form id="formProyectoVentaDetalle">
+    <div class="form-group">
+        <label for="proyecto_inmueble_id">Producto</label>
+        <select class="form-control form-control-sm form-control-autocomplete" id="proyecto_inmueble_id" name="proyecto_inmueble_id" onchange="changePrecio();">
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="precio">Precio</label>
+        <input type="text" class="form-control form-control-sm form-control-decimal" id="precio" name="precio" placeholder="Precio" maxlength="21" readonly>
+    </div>
+    <div class="only-options-right">
+        <input type="hidden" id="proyecto_venta_id" name="proyecto_venta_id" value="">
+        <button type="submit" class="btn btn-success btn-sm"><i class="la la-save"></i>Guardar</button>
+        <button type="button" class="btn btn-outline-danger btn-sm" onclick="closeLastModal();">Cancelar</button>
+    </div>
+</form>
+<script>
+    function fillProyectoInmueble(idProyectoInmueble) {
+        postJSON("ProyectoInmueble_C.php", { "action": "listByProyecto", proyecto_id: $("#proyecto_id").val() }, function (data) {
+            if (!validErrorResponse(data)) {
+                $("#formProyectoVentaDetalle #proyecto_inmueble_id").html('<option value="">Seleccione Inmueble</option>');
+                var arrayProyectoInmueble = JSON.parse(data);
+                arrayProyectoInmueble.forEach(function (object, index) {
+                    $("#formProyectoVentaDetalle #proyecto_inmueble_id").append('<option value="' + object.id + '" data-precio="' + object.precio + '">' + object.codigo + ' ' + object.nombre + '</option>');
+                });
+                if (typeof idProyectoInmueble !== 'undefined') {
+                    $("#formProyectoVentaDetalle #proyecto_inmueble_id").val(idProyectoInmueble);
+                }
+                startSelect2ById("formProyectoVentaDetalle #proyecto_inmueble_id");
+            }
+        });
+    }
+    function changePrecio() {
+        var precio = $("#proyecto_inmueble_id option:selected").attr("data-precio");
+        $("#precio").val(precio);
+    }
+    $("#formProyectoVentaDetalle").validate({
+        rules: {
+            proyecto_inmueble_id: {
+                required: true
+            },
+            precio: {
+                required: true,
+                maxlength: 21,
+                number: true
+            }
+        },
+        submitHandler: function (form) {
+            saveProyectoVentaDetalle();
+        }
+    });
+    function saveProyectoVentaDetalle() {
+        postJSON("ProyectoVentaDetalle_C.php", {
+            action: "i",
+            proyecto_venta_id: $("#proyecto_venta_id").val(),
+            proyecto_inmueble_id: $("#proyecto_inmueble_id").val(),
+            precio: $("#precio").val()
+        }, function (data) {
+            if (!validErrorResponse(data)) {
+                dataResponse = JSON.parse(data);
+                $("#total_a_pagar").val(dataResponse.total_a_pagar);
+                $("#saldo_por_pagar").val(dataResponse.saldo_por_pagar);
+                closeLastModal();
+                notifySuccess();
+                listProyectoVentaDetalle();
+            }
+        });
+    }
+    startDecimalNumbers(18, 2);
+</script>

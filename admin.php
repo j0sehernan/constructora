@@ -123,6 +123,7 @@
 								<div class="kt-menu__submenu "><span class="kt-menu__arrow"></span>
 									<ul class="kt-menu__subnav">
 										<li class="kt-menu__item kt-menu__item--parent" aria-haspopup="true"><span class="kt-menu__link"><span class="kt-menu__link-text">Menú</span></span></li>
+										<li class="kt-menu__item" id="menu-proyectoVenta"><a class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Ventas</span></a></li>
 										<li class="kt-menu__item" id="menu-proyectoRequerimiento"><a class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Requerimientos</span></a></li>
 										<li class="kt-menu__item" id="menu-kardex"><a class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Kardex</span></a></li>
 										<li class="kt-menu__item" id="menu-pagoContratista"><a class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Pagos a Contratistas</span></a></li>
@@ -198,7 +199,7 @@
 										<div class="kt-head__sub"><span id="notificationsCount" class="kt-head__desc">0 Notificaciones</span></div>
 									</div>
 									<div id="notificationsList" class="kt-notification kt-margin-t-30 kt-margin-b-20 kt-scroll" data-scroll="true" data-height="270" data-mobile-height="220">
-										
+
 									</div>
 								</form>
 							</div>

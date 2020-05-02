@@ -100,7 +100,7 @@ function getModalWithCallBack(url, callback) {
             message: data,
             closeButton: true,
             onEscape: true
-        }).on("shown.bs.modal", function() {
+        }).on("shown.bs.modal", function () {
             callback();
         });
     });
@@ -113,7 +113,7 @@ function getModalWithCallBackSecond(url, callback) {
             closeButton: true,
             onEscape: true,
             className: "second-modal"
-        }).on("shown.bs.modal", function() {
+        }).on("shown.bs.modal", function () {
             $(".modal-backdrop").last().addClass("second-modal-backdrop");
             callback();
         });
@@ -127,7 +127,7 @@ function getModalLargeWithCallBack(url, callback) {
             closeButton: true,
             onEscape: true,
             size: 'large'
-        }).on("shown.bs.modal", function() {
+        }).on("shown.bs.modal", function () {
             callback();
         });
     });
@@ -140,7 +140,7 @@ function getModalExtraLargeWithCallBack(url, callback) {
             closeButton: true,
             onEscape: true,
             size: 'extra-large'
-        }).on("shown.bs.modal", function() {
+        }).on("shown.bs.modal", function () {
             callback();
         });
     });
@@ -565,6 +565,10 @@ var pages =
         name: "marca",
         id: "menu-productoMarca",
         url: "producto_marca/list.html"
+    }, {
+        name: "proyectoVenta",
+        id: "menu-proyectoVenta",
+        url: "proyecto_venta/list.html"
     }];
 //set the methods
 $.map(pages, function (object, index) {

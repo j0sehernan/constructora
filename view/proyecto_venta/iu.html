@@ -1,0 +1,226 @@
+<div class="kt-subheader kt-grid__item" id="kt_subheader">
+    <div class="kt-container  kt-container--fluid ">
+        <div class="kt-subheader__main">
+            <h3 class="kt-subheader__title">Venta</h3>
+            <span class="kt-subheader__separator kt-hidden"></span>
+            <div class="kt-subheader__breadcrumbs">
+                <a href="#" class="kt-subheader__breadcrumbs-home"><i class="flaticon2-shelter"></i></a>
+                <span class="kt-subheader__breadcrumbs-separator"></span>
+                <a href="#" class="kt-subheader__breadcrumbs-link">
+                    Ventas </a>
+                <span class="kt-subheader__breadcrumbs-separator"></span>
+                <a href="#" class="kt-subheader__breadcrumbs-link" id="titleAction">
+                    Registro </a>
+            </div>
+        </div>
+        <div class="kt-subheader__toolbar">
+            <div class="kt-subheader__wrapper">
+
+            </div>
+        </div>
+    </div>
+</div>
+<div class="kt-container kt-container--fluid kt-grid__item kt-grid__item--fluid">
+    <form id="form">
+        <div class="kt-portlet kt-portlet--height-fluid">
+            <div class="kt-portlet__body">
+                <div class="row">
+                    <div class="col-sm-3">
+                        <div class="form-group">
+                            <label for="proyecto_id">Proyecto</label>
+                            <select class="form-control form-control-sm form-control-autocomplete" id="proyecto_id" name="proyecto_id">
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+                        <div class="form-group">
+                            <label for="persona_cliente_id">Cliente</label>
+                            <select class="form-control form-control-sm form-control-autocomplete" id="persona_cliente_id" name="persona_cliente_id">
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+                        <div class="form-group">
+                            <label for="moneda">Moneda</label>
+                            <input type="text" class="form-control form-control-sm" id="moneda" name="moneda" placeholder="Moneda" maxlength="10" value="USD" readonly>
+                        </div>
+                    </div>
+                    <div class="col-sm-3" style="display: none;">
+                        <div class="form-group">
+                            <label for="total_a_pagar">Total a Pagar</label>
+                            <input type="text" class="form-control form-control-sm form-control-decimal" id="total_a_pagar" name="total_a_pagar" placeholder="Total a Pagar" maxlength="21" readonly>
+                        </div>
+                    </div>
+                    <div class="col-sm-3" style="justify-content: end;align-self: flex-end; text-align: right; padding-bottom: 2em;">
+                        <button id="saveVenta" type="submit" class="btn btn-success btn-sm"><i class="la la-save"></i>Guardar</button>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-3" style="display: none;">
+                        <div class="form-group">
+                            <label for="acumulado_pagado">Acumulado Pagado</label>
+                            <input type="text" class="form-control form-control-sm form-control-decimal" id="acumulado_pagado" name="acumulado_pagado" placeholder="Acumulado Pagado" maxlength="21" readonly>
+                        </div>
+                    </div>
+                    <div class="col-sm-3" style="display: none;">
+                        <div class="form-group">
+                            <label for="saldo_por_pagar">Saldo por Pagar</label>
+                            <input type="text" class="form-control form-control-sm form-control-decimal" id="saldo_por_pagar" name="saldo_por_pagar" placeholder="Saldo por Pagar" maxlength="21" readonly>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <input type="hidden" id="action" name="action" value="i">
+        <input type="hidden" id="id" name="id">
+    </form>
+    <div class="kt-portlet kt-portlet--height-fluid" style="display: none;">
+        <div class="kt-portlet__body">
+            <div class="row">
+                <div class="col-sm-6">
+                    <h5>Detalles</h5>
+                </div>
+                <div class="col-sm-6">
+                    <div style="text-align: right; padding-bottom: 2em;">
+                        <a class="btn btn-icon btn btn-label btn-label-brand btn-bold btn-sm" data-toggle="tooltip" title="Actualizar" data-placement="top" onclick="listProyectoVentaDetalle();"><i class="flaticon-refresh"></i></a>
+                        <a href="#" class="btn btn-icon btn btn-label btn-label-brand btn-bold btn-sm" data-toggle="tooltip" title="Agregar Inmueble" data-placement="top" onclick="showProyectoVentaDetalleForm('i')"><i class="flaticon2-add-1"></i></a>
+                    </div>
+                </div>
+            </div>
+            <table id="tableDetalle" class="table table-hover table-bordered table-striped table-sm">
+                <thead class="thead-dark"></thead>
+            </table>
+        </div>
+    </div>
+</div>
+<script>
+    function fillProyecto(idProyecto, callback) {
+        postJSON("Proyecto_C.php", { "action": "list" }, function (data) {
+            if (!validErrorResponse(data)) {
+                $("#form #proyecto_id").html('<option value="">Seleccione Proyecto</option>');
+                var arrayProyectos = JSON.parse(data);
+                arrayProyectos.forEach(function (object, index) {
+                    $("#form #proyecto_id").append('<option value="' + object.id + '">' + object.nombre + '</option>');
+                });
+                if (typeof idProyecto !== 'undefined') {
+                    $("#form #proyecto_id").val(idProyecto);
+                }
+                startSelect2ById("proyecto_id");
+                if (typeof callback !== 'undefined') callback();
+            }
+        });
+    }
+    function fillPersonaCliente(idPersona) {
+        postJSON("Persona_C.php", { "action": "listByPersonaTipo", "persona_tipo_id": "N" }, function (data) {
+            if (!validErrorResponse(data)) {
+                $("#persona_cliente_id").html('<option value="">Seleccione Cliente</option>');
+                var arrayAlmacenes = JSON.parse(data);
+                arrayAlmacenes.forEach(function (object, index) {
+                    $("#persona_cliente_id").append('<option value="' + object.id + '">' + (object.nombre_1 || '') + (object.nombre_2 === null ? '' : " " + object.nombre_2) + (object.nombre_3 === null ? '' : " " + object.nombre_3) + (object.apellido_paterno === null ? '' : " " + object.apellido_paterno) + (object.apellido_materno === null ? '' : " " + object.apellido_materno) + '</option>');
+                });
+                if (typeof idPersona !== 'undefined') {
+                    $("#persona_cliente_id").val(idPersona);
+                }
+                startSelect2ById("persona_cliente_id");
+            }
+        });
+    }
+    function getVenta() {
+        postJSON("ProyectoVenta_C.php", { action: "get", id: $("#id").val() }, function (data) {
+            if (!validErrorResponse(data)) {
+                dataResponse = JSON.parse(data)[0];
+                $("#titleAction").html("Editar");
+                fillProyecto(dataResponse.proyecto_id);
+                $("#proyecto_id").attr("disabled", true);
+                fillPersonaCliente(dataResponse.persona_cliente_id);
+                $("#persona_cliente_id").attr("disabled", true);
+                $("#moneda").val(dataResponse.moneda);
+                $("#total_a_pagar").val(dataResponse.total_a_pagar);
+                $("#acumulado_pagado").val(dataResponse.acumulado_pagado);
+                $("#saldo_por_pagar").val(dataResponse.saldo_por_pagar);
+                $("#total_a_pagar").parent().parent().show();
+                $("#acumulado_pagado").parent().parent().show();
+                $("#saldo_por_pagar").parent().parent().show();
+                $("#tableDetalle").parent().parent().show();
+                listProyectoVentaDetalle();
+                $("#saveVenta").parent().remove();
+            }
+        });
+    }
+    $("#form").validate({
+        rules: {
+            proyecto_id: {
+                required: true
+            },
+            persona_cliente_id: {
+                required: true
+            },
+            moneda: {
+                required: true,
+                maxlength: 10
+            }
+        },
+        submitHandler: function (form) {
+            saveProyectoVenta();
+        }
+    });
+    function saveProyectoVenta() {
+        postJSONForm("ProyectoVenta_C.php", "form", function (data) {
+            if (!validErrorResponse(data)) {
+                notifySuccess();
+                if ($("#form #action").val() === "i") {
+                    dataResponse = JSON.parse(data)[0];
+                    $("#titleAction").html("Editar");
+                    $("#id").val(dataResponse.id);
+                    $("#action").val("u");
+                    getVenta();
+                }
+            }
+        });
+    }
+    //DETALLE
+    function listProyectoVentaDetalle() {
+        postJSON("ProyectoVentaDetalle_C.php", { "action": "listByProyectoVenta", proyecto_venta_id: $("#id").val() }, function (data) {
+            if (!validErrorResponse(data)) {
+                destroyDataTableIfExists("tableDetalle");
+                $('#tableDetalle').DataTable({
+                    data: JSON.parse(data),
+                    columns: [
+                        { title: "Código", data: "codigo" },
+                        { title: "Inmueble", data: "inmueble" },
+                        { title: "Precio", data: "precio" },
+                        {
+                            title: "Acciones", className: "td-actions", render: function (data, type, row, meta) {
+                                return '<button type="button" class="btn btn-outline-info btn-elevate btn-icon btn-circle btn-xs" data-toggle="tooltip" title="Editar" onclick="showProyectoVentaDetalleForm(\'u\',' + row.id + ');"><i class="fa fa-pencil-alt"></i></button>&nbsp;' +
+                                    '<button type="button" class="btn btn-outline-danger btn-elevate btn-icon btn-circle btn-xs" data-toggle="tooltip" title="Eliminar" onclick="deleteProyectoVentaDetalle(' + row.id + ');"><i class="fa fa-trash"></i></button>';
+                            }
+                        }
+                    ]
+                });
+            }
+        });
+    }
+    function showProyectoVentaDetalleForm(action, id) {
+        getModalWithCallBack('proyecto_venta_detalle/iu.html', function () {
+            $("#proyecto_venta_id").val($("#form #id").val());
+            if (action === "i") {
+                fillProyectoInmueble();
+            }
+        });
+    }
+    function deleteProyectoVentaDetalle(id) {
+        askDelete(function (result) {
+            if (result) {
+                postJSON("ProyectoVentaDetalle_C.php", { action: "d", id: id }, function (data) {
+                    if (!validErrorResponse(data)) {
+                        dataResponse = JSON.parse(data);
+                        $("#total_a_pagar").val(dataResponse.total_a_pagar);
+                        $("#saldo_por_pagar").val(dataResponse.saldo_por_pagar);
+                        notifySuccess();
+                        listProyectoVentaDetalle();
+                    }
+                });
+            }
+        });
+    }
+</script>
