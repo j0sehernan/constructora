@@ -41,7 +41,8 @@
                         { title: "Fecha de Término", data: "fecha_termino_plan" },
                         {
                             title: "Acciones", className: "td-actions", render: function (data, type, row, meta) {
-                                return '<button type="button" class="btn btn-outline-success btn-elevate btn-icon btn-circle btn-xs" data-toggle="tooltip" title="Estructura" onclick="getProyectoEstructuraForm(' + row.id + ');"><i class="fa fa-gopuram"></i></button>&nbsp;' +
+                                return '<button type="button" class="btn btn-outline-focus btn-elevate btn-icon btn-circle btn-xs" data-toggle="tooltip" title="Inmuebles" onclick="showProyectoInmuebleListForm(' + row.id + ');"><i class="fa fa-building"></i></button>&nbsp;' +
+                                    '<button type="button" class="btn btn-outline-success btn-elevate btn-icon btn-circle btn-xs" data-toggle="tooltip" title="Estructura" onclick="getProyectoEstructuraForm(' + row.id + ');"><i class="fa fa-gopuram"></i></button>&nbsp;' +
                                     '<button type="button" class="btn btn-outline-info btn-elevate btn-icon btn-circle btn-xs" data-toggle="tooltip" title="Editar" onclick="showProyectoForm(\'u\',' + row.id + ');"><i class="fa fa-pencil-alt"></i></button>&nbsp;' +
                                     '<button type="button" class="btn btn-outline-danger btn-elevate btn-icon btn-circle btn-xs" data-toggle="tooltip" title="Eliminar" onclick="deleteProyecto(' + row.id + ');"><i class="fa fa-trash"></i></button>'
                             }
@@ -76,6 +77,12 @@
         getHTMLContainerWithCallBack('proyecto/estructura.html', function (data) {
             $("#proyecto_id_general").val(idProyecto);
             getProyectoView();
+        });
+    }
+    function showProyectoInmuebleListForm(idProyecto) {
+        getModalWithCallBack('proyecto_inmueble/list.html', function () {
+            $("#proyecto_id_general").val(idProyecto);
+            listProyectoInmueble();
         });
     }
     listProyectos();

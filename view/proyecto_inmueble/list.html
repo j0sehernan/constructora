@@ -1,0 +1,55 @@
+<h3>Inmuebles</h3>
+<div class="only-options-right" style="margin-bottom: 10px;">
+    <input type="hidden" id="proyecto_id_general" name="proyecto_id_general">
+    <a class="btn btn-icon btn btn-label btn-label-brand btn-bold" data-toggle="tooltip" title="Actualizar" data-placement="top" onclick="listProyectoInmueble();"><i class="flaticon-refresh"></i></a>
+    <a class="btn btn-icon btn btn-label btn-label-brand btn-bold" data-toggle="tooltip" title="Agregar" data-placement="top" onclick="showProyectoInmuebleForm('i');"><i class="flaticon2-add-1"></i></a>
+</div>
+<table id="tableInmueble" class="table table-hover table-bordered table-striped table-sm">
+    <thead class="thead-dark"></thead>
+</table>
+<script>
+    function listProyectoInmueble() {
+        postJSON("ProyectoInmueble_C.php", { "action": "listByProyecto", proyecto_id: $("#proyecto_id_general").val() }, function (data) {
+            if (!validErrorResponse(data)) {
+                destroyDataTableIfExists("tableInmueble");
+                $('#tableInmueble').DataTable({
+                    data: JSON.parse(data),
+                    columns: [
+                        { title: "Código", data: "codigo" },
+                        { title: "Nombre", data: "nombre" },
+                        { title: "Precio", data: "precio" },
+                        {
+                            title: "Acciones", className: "td-actions", render: function (data, type, row, meta) {
+                                return '<button type="button" class="btn btn-outline-info btn-elevate btn-icon btn-circle btn-xs" data-toggle="tooltip" title="Editar" onclick="showProyectoInmuebleForm(\'u\',\'' + row.id + '\');"><i class="fa fa-pencil-alt"></i></button>&nbsp;' +
+                                    '<button type="button" class="btn btn-outline-danger btn-elevate btn-icon btn-circle btn-xs" data-toggle="tooltip" title="Eliminar" onclick="deleteProyectoInmueble(\'' + row.id + '\');"><i class="fa fa-trash"></i></button>'
+                            }
+                        }
+                    ]
+                });
+            }
+        });
+    }
+    function showProyectoInmuebleForm(action, id) {
+        getModalWithCallBackSecond('proyecto_inmueble/iu.html', function () {
+            $("#proyecto_id").val($("#proyecto_id_general").val());
+            if (action === "i") {
+            } else if (action === "u") {
+                $("#id").val(id);
+                $("#action").val("u");
+                getProyectoInmueble();
+            }
+        });
+    }
+    function deleteProyectoInmueble(id) {
+        askDelete(function (result) {
+            if (result) {
+                postJSON("ProyectoInmueble_C.php", { action: "d", id: id }, function (data) {
+                    if (!validErrorResponse(data)) {
+                        notifySuccess();
+                        listProyectoInmueble();
+                    }
+                });
+            }
+        });
+    }
+</script>
