@@ -1,0 +1,177 @@
+<h3 id="titleActionModal">Registro</h3>
+<form id="formProyectoVentaCronogramaPago">
+    <div class="row">
+        <div class="col-sm-4">
+            <div class="form-group">
+                <label for="fecha">Fecha</label>
+                <input type="text" class="form-control form-control-sm form-control-date" id="fecha" name="fecha" placeholder="Fecha" maxlength="10">
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="form-group">
+                <label for="comprobante_codigo">Comprobante</label>
+                <input type="text" class="form-control form-control-sm" id="comprobante_codigo" name="comprobante_codigo" placeholder="Comprobante" maxlength="100">
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="form-group">
+                <label for="monto_moneda_venta">Monto Moneda Venta</label>
+                <input type="text" class="form-control form-control-sm form-control-decimal" id="monto_moneda_venta" name="monto_moneda_venta" placeholder="Monto Moneda Venta" maxlength="21" onchange="sumTotals();">
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-4">
+            <div class="form-group">
+                <label for="moneda_pago">Monto Moneda Venta</label>
+                <select class="form-control form-control-sm" id="moneda_pago" name="moneda_pago" onchange="changeMonedaPago();">
+                    <option id="USD">USD</option>
+                    <option id="PEN">PEN</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="form-group">
+                <label for="moneda_pago_valor_conversion">Tipo Cambio</label>
+                <input type="text" class="form-control form-control-sm form-control-decimal" id="moneda_pago_valor_conversion" name="moneda_pago_valor_conversion" placeholder="Tipo de Cambio" maxlength="21" value="1" readonly onchange="sumTotals();">
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="form-group">
+                <label for="monto_moneda_pago">Monto Moneda Pago</label>
+                <input type="text" class="form-control form-control-sm form-control-decimal" id="monto_moneda_pago" name="monto_moneda_pago" placeholder="Monto Moneda Pago" maxlength="21" readonly>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-4">
+            <div class="form-group">
+                <label for="igv">I.G.V.</label>
+                <input type="text" class="form-control form-control-sm form-control-decimal" id="igv" name="igv" placeholder="I.G.V." maxlength="21" value="0" onchange="sumTotals();">
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="form-group">
+                <label for="monto_total_moneda_pago">Total</label>
+                <input type="text" class="form-control form-control-sm form-control-decimal" id="monto_total_moneda_pago" name="monto_total_moneda_pago" placeholder="Total" maxlength="21" readonly>
+            </div>
+        </div>
+        <div class="col-sm-4" style="align-self: flex-end; padding-bottom: 2em;">
+            <div class="only-options-right">
+                <input type="hidden" id="proyecto_venta_id" name="proyecto_venta_id" value="">
+                <input type="hidden" id="action_modal" name="action_modal" value="i">
+                <input type="hidden" id="id_modal" name="id_modal">
+                <button type="submit" class="btn btn-success btn-sm"><i class="la la-save"></i>Guardar</button>
+                <button type="button" class="btn btn-outline-danger btn-sm" onclick="closeLastModal();">Cancelar</button>
+            </div>
+        </div>
+    </div>
+</form>
+<script>
+    function changeMonedaPago() {
+        if ($("#moneda_pago").val() === "USD") {
+            $("#moneda_pago_valor_conversion").val(1).attr("readonly", true);
+        } else {
+            $("#moneda_pago_valor_conversion").attr("readonly", false);
+        }
+    }
+    function sumTotals() {
+        var monto_moneda_venta = $("#monto_moneda_venta").val();
+        var moneda_pago_valor_conversion = $("#moneda_pago_valor_conversion").val();
+        var igv = $("#igv").val();
+        if (monto_moneda_venta != null && moneda_pago_valor_conversion != null && igv != null) {
+            var monto_moneda_pago = Number(monto_moneda_venta) * Number(moneda_pago_valor_conversion);
+            igv = Number(monto_moneda_pago) * 0.18;
+            var monto_total_moneda_pago = Number(monto_moneda_pago) + Number(igv);
+            $("#igv").val(igv);
+            $("#monto_moneda_pago").val(monto_moneda_pago);
+            $("#monto_total_moneda_pago").val(monto_total_moneda_pago);
+        }
+    }
+    function getProyectoVentaPago() {
+        postJSON("ProyectoVentaPago_C.php", { action: "get", id: $("#id_modal").val() }, function (data) {
+            if (!validErrorResponse(data)) {
+                dataResponse = JSON.parse(data)[0];
+                $("#titleActionModal").html("Editar");
+                $("#fecha").val(dataResponse.fecha);
+                $("#comprobante_codigo").val(dataResponse.comprobante_codigo);
+                $("#monto_moneda_venta").val(dataResponse.monto_moneda_venta);
+                $("#moneda_pago").val(dataResponse.moneda_pago);
+                $("#moneda_pago_valor_conversion").val(dataResponse.moneda_pago_valor_conversion);
+                $("#monto_moneda_pago").val(dataResponse.monto_moneda_pago);
+                $("#igv").val(dataResponse.igv);
+                $("#monto_total_moneda_pago").val(dataResponse.igv);
+            }
+        });
+    }
+    $("#formProyectoVentaCronogramaPago").validate({
+        rules: {
+            fecha: {
+                required: true,
+                maxlength: 10,
+                dateITA: true
+            },
+            comprobante_codigo: {
+                required: true,
+                maxlength: 100
+            },
+            monto_moneda_venta: {
+                required: true,
+                maxlength: 21,
+                number: true
+            },
+            moneda_pago: {
+                required: true
+            },
+            moneda_pago_valor_conversion: {
+                required: true,
+                maxlength: 21,
+                number: true
+            },
+            monto_moneda_pago: {
+                required: true,
+                maxlength: 21,
+                number: true
+            },
+            igv: {
+                required: true,
+                maxlength: 21,
+                number: true
+            },
+            monto_total_moneda_pago: {
+                required: true,
+                maxlength: 21,
+                number: true
+            }
+        },
+        submitHandler: function (form) {
+            saveProyectoVentaPago();
+        }
+    });
+    function saveProyectoVentaPago() {
+        postJSON("ProyectoVentaPago_C.php", {
+            action: $("#action_modal").val(),
+            id: $("#id_modal").val(),
+            proyecto_venta_id: $("#proyecto_venta_id").val(),
+            fecha: $("#fecha").val(),
+            comprobante_codigo: $("#comprobante_codigo").val(),
+            monto_moneda_venta: $("#monto_moneda_venta").val(),
+            moneda_pago: $("#moneda_pago").val(),
+            moneda_pago_valor_conversion: $("#moneda_pago_valor_conversion").val(),
+            monto_moneda_pago: $("#monto_moneda_pago").val(),
+            igv: $("#igv").val(),
+            monto_total_moneda_pago: $("#monto_total_moneda_pago").val()
+        }, function (data) {
+            if (!validErrorResponse(data)) {
+                dataResponse = JSON.parse(data);
+                $("#acumulado_pagado").val(dataResponse.acumulado_pagado);
+                $("#saldo_por_pagar").val(dataResponse.saldo_por_pagar);
+                closeLastModal();
+                notifySuccess();
+                listProyectoVentaPago();
+            }
+        });
+    }
+    startDecimalNumbers(18, 2);
+    startDatePicker();
+</script>

@@ -44,7 +44,7 @@ switch ($object->action) {
         //2.Eliminamos
         $result = $proyectoVentaDetalle->delete($id);
         if ($result) {
-            //2. Sum new accumulate values
+            //3. Sum new accumulate values
             $listProyectoVenta = $proyectoVenta->get($idProyectoVenta );
 
             $totalAPagar = $listProyectoVenta[0]["total_a_pagar"] - $listProyectoVentaDetalle[0]["precio"];
