@@ -74,22 +74,48 @@
         <input type="hidden" id="action" name="action" value="i">
         <input type="hidden" id="id" name="id">
     </form>
-    <div class="kt-portlet kt-portlet--height-fluid" style="display: none;">
-        <div class="kt-portlet__body">
-            <div class="row">
-                <div class="col-sm-6">
-                    <h5>Detalles</h5>
-                </div>
-                <div class="col-sm-6">
-                    <div style="text-align: right; padding-bottom: 2em;">
-                        <a class="btn btn-icon btn btn-label btn-label-brand btn-bold btn-sm" data-toggle="tooltip" title="Actualizar" data-placement="top" onclick="listProyectoVentaDetalle();"><i class="flaticon-refresh"></i></a>
-                        <a href="#" class="btn btn-icon btn btn-label btn-label-brand btn-bold btn-sm" data-toggle="tooltip" title="Agregar Inmueble" data-placement="top" onclick="showProyectoVentaDetalleForm('i')"><i class="flaticon2-add-1"></i></a>
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="kt-portlet kt-portlet--height-fluid" style="display: none;">
+                <div class="kt-portlet__body">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <h5>Detalles</h5>
+                        </div>
+                        <div class="col-sm-6">
+                            <div style="text-align: right; padding-bottom: 2em;">
+                                <a class="btn btn-icon btn btn-label btn-label-brand btn-bold btn-sm" data-toggle="tooltip" title="Actualizar" data-placement="top" onclick="listProyectoVentaDetalle();"><i class="flaticon-refresh"></i></a>
+                                <a href="#" class="btn btn-icon btn btn-label btn-label-brand btn-bold btn-sm" data-toggle="tooltip" title="Agregar Inmueble" data-placement="top" onclick="showProyectoVentaDetalleForm('i')"><i
+                                        class="flaticon2-add-1"></i></a>
+                            </div>
+                        </div>
                     </div>
+                    <table id="tableDetalle" class="table table-hover table-bordered table-striped table-sm responsive">
+                        <thead class="thead-dark"></thead>
+                    </table>
                 </div>
             </div>
-            <table id="tableDetalle" class="table table-hover table-bordered table-striped table-sm">
-                <thead class="thead-dark"></thead>
-            </table>
+        </div>
+        <div class="col-sm-6">
+            <div class="kt-portlet kt-portlet--height-fluid" style="display: none;">
+                <div class="kt-portlet__body">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <h5>Cronograma de Pagos</h5>
+                        </div>
+                        <div class="col-sm-6">
+                            <div style="text-align: right; padding-bottom: 2em;">
+                                <a class="btn btn-icon btn btn-label btn-label-brand btn-bold btn-sm" data-toggle="tooltip" title="Actualizar" data-placement="top" onclick="listProyectoVentaCronogramaPago();"><i class="flaticon-refresh"></i></a>
+                                <a href="#" class="btn btn-icon btn btn-label btn-label-brand btn-bold btn-sm" data-toggle="tooltip" title="Agregar Inmueble" data-placement="top" onclick="showProyectoVentaCronogramaPagoForm('i')"><i
+                                        class="flaticon2-add-1"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <table id="tableCronograma" class="table table-hover table-bordered table-striped table-sm">
+                        <thead class="thead-dark"></thead>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -142,7 +168,9 @@
                 $("#acumulado_pagado").parent().parent().show();
                 $("#saldo_por_pagar").parent().parent().show();
                 $("#tableDetalle").parent().parent().show();
+                $("#tableCronograma").parent().parent().show();
                 listProyectoVentaDetalle();
+                listProyectoVentaCronogramaPago();
                 $("#saveVenta").parent().remove();
             }
         });
@@ -191,12 +219,12 @@
                         { title: "Precio", data: "precio" },
                         {
                             title: "Acciones", className: "td-actions", render: function (data, type, row, meta) {
-                                return '<button type="button" class="btn btn-outline-info btn-elevate btn-icon btn-circle btn-xs" data-toggle="tooltip" title="Editar" onclick="showProyectoVentaDetalleForm(\'u\',' + row.id + ');"><i class="fa fa-pencil-alt"></i></button>&nbsp;' +
-                                    '<button type="button" class="btn btn-outline-danger btn-elevate btn-icon btn-circle btn-xs" data-toggle="tooltip" title="Eliminar" onclick="deleteProyectoVentaDetalle(' + row.id + ');"><i class="fa fa-trash"></i></button>';
+                                return '<button type="button" class="btn btn-outline-danger btn-elevate btn-icon btn-circle btn-xs" data-toggle="tooltip" title="Eliminar" onclick="deleteProyectoVentaDetalle(' + row.id + ');"><i class="fa fa-trash"></i></button>';
                             }
                         }
                     ]
                 });
+                $("#tableDetalle_filter").find("[type='search']").css("width", "140px")
             }
         });
     }
@@ -218,6 +246,50 @@
                         $("#saldo_por_pagar").val(dataResponse.saldo_por_pagar);
                         notifySuccess();
                         listProyectoVentaDetalle();
+                    }
+                });
+            }
+        });
+    }
+    //CRONOGRAMA PAGO
+    function listProyectoVentaCronogramaPago() {
+        postJSON("ProyectoVentaCronogramaPago_C.php", { "action": "listByProyectoVenta", proyecto_venta_id: $("#id").val() }, function (data) {
+            if (!validErrorResponse(data)) {
+                destroyDataTableIfExists("tableCronograma");
+                $('#tableCronograma').DataTable({
+                    data: JSON.parse(data),
+                    columns: [
+                        { title: "Monto a Pagar", data: "monto_a_pagar" },
+                        { title: "Fecha Programada", data: "fecha_programada" },
+                        {
+                            title: "Acciones", className: "td-actions", render: function (data, type, row, meta) {
+                                return '<button type="button" class="btn btn-outline-info btn-elevate btn-icon btn-circle btn-xs" data-toggle="tooltip" title="Editar" onclick="showProyectoVentaCronogramaPagoForm(\'u\',' + row.id + ');"><i class="fa fa-pencil-alt"></i></button>&nbsp;' +
+                                    '<button type="button" class="btn btn-outline-danger btn-elevate btn-icon btn-circle btn-xs" data-toggle="tooltip" title="Eliminar" onclick="deleteProyectoVentaCronogramaPago(' + row.id + ');"><i class="fa fa-trash"></i></button>';
+                            }
+                        }
+                    ]
+                });
+                $("#tableCronograma_filter").find("[type='search']").css("width", "140px")
+            }
+        });
+    }
+    function showProyectoVentaCronogramaPagoForm(action, id) {
+        getModalWithCallBack('proyecto_venta_cronograma_pago/iu.html', function () {
+            $("#proyecto_venta_id").val($("#form #id").val());
+            if (action === "u") {
+                $("#action_modal").val("u");
+                $("#id_modal").val(id);
+                getProyectoVentaCronogramaPago();
+            }
+        });
+    }
+    function deleteProyectoVentaCronogramaPago(id) {
+        askDelete(function (result) {
+            if (result) {
+                postJSON("ProyectoVentaCronogramaPago_C.php", { action: "d", id: id }, function (data) {
+                    if (!validErrorResponse(data)) {
+                        notifySuccess();
+                        listProyectoVentaCronogramaPago();
                     }
                 });
             }
