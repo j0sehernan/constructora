@@ -63,7 +63,11 @@
 </div>
 <script>
     function fillPersonaByPersonaTipo(idPersona) {
-        postJSON("Persona_C.php", { "action": "listByPersonaTipo", "persona_tipo_id": "J" }, function (data) {
+        postJSON("PersonaRol_C.php", {
+            action: "listByPersonaTipoAndRolNombre",
+            persona_tipo_id: "J",
+            rol_nombre: "PROVEEDOR",
+        }, function (data) {
             if (!validErrorResponse(data)) {
                 $("#persona_proveedor_id").html('<option value="">Seleccione Proveedor</option>');
                 var arrayAlmacenes = JSON.parse(data);

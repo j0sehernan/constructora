@@ -11,6 +11,10 @@ switch ($object->action) {
         $result = $personaRol->listByPersona($object->persona_id);
         echo (json_encode($result));
         break;
+    case "listByPersonaTipoAndRolNombre":
+        $result = $personaRol->listByPersonaTipoAndRolNombre($object->persona_tipo_id, $object->rol_nombre);
+        echo (json_encode($result));
+        break;
     case "i":
         $result = $personaRol->insert($object->persona_id, $object->rol_id);
         echo (json_encode($result));

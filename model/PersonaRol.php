@@ -11,6 +11,14 @@ class PersonaRol
         return $result;
     }
 
+    function listByPersonaTipoAndRolNombre($idPersonaTipo, $nombreRol)
+    {
+        $db = new DB();
+        $result = $db->query("call persona_rol_list_by_persona_tipo_and_rol_nombre('$idPersonaTipo','$nombreRol');");
+        return $result;
+    }
+
+
     function insert($idPersona, $idRol)
     {
         $db = new DB();
