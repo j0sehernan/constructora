@@ -60,9 +60,13 @@
             } else if (action === "u") {
                 $("#form #id").val(id);
                 $("#form #action").val("u");
+                $("#tab_title_email").show();
+                $("#tab_title_telefono").show();
+                $("#tab_title_direccion").show();
                 getPersona();
                 listEmails();
                 listTelefonos();
+                listDirecciones();
             }
         });
     }

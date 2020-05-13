@@ -1,0 +1,149 @@
+<h3 id="titleActionPersonaDireccion">Registro</h3>
+<form id="formDireccion">
+    <div class="form-group">
+        <label for="ubigeo_peru_department_id">Departamento</label>
+        <select class="form-control form-control-sm" id="ubigeo_peru_department_id" name="ubigeo_peru_department_id" onchange="fillUbigeoPeruProvince();">
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="ubigeo_peru_province_id">Provincia</label>
+        <select class="form-control form-control-sm" id="ubigeo_peru_province_id" name="ubigeo_peru_province_id" onchange="fillUbigeoPeruDistrict();">
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="ubigeo_peru_district_id">Distrito</label>
+        <select class="form-control form-control-sm" id="ubigeo_peru_district_id" name="ubigeo_peru_district_id">
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="direccion">Dirección</label>
+        <input type="text" class="form-control form-control-sm" id="direccion" name="direccion" placeholder="Dirección" maxlength="200">
+    </div>
+    <div class="form-group">
+        <label for="referencia">Referencia</label>
+        <input type="text" class="form-control form-control-sm" id="referencia" name="referencia" placeholder="Referencia" maxlength="200">
+    </div>
+    <div class="only-options-right">
+        <input type="hidden" id="persona_id" name="persona_id">
+        <input type="hidden" id="action" name="action" value="i">
+        <input type="hidden" id="id" name="id">
+        <button type="submit" class="btn btn-success btn-sm"><i class="la la-save"></i>Guardar</button>
+        <button type="button" class="btn btn-outline-danger btn-sm" onclick="closeLastModal();">Cancelar</button>
+    </div>
+</form>
+<script>
+    function fillUbigeoPeruDepartment(idSelected, callback) {
+        $("#formDireccion #ubigeo_peru_department_id").html('<option value="">Seleccione Departamento</option>');
+        postJSON("UbigeoPeruDepartment_C.php", { "action": "list" }, function (data) {
+            if (!validErrorResponse(data)) {
+                var arrayUbigeo = JSON.parse(data);
+                arrayUbigeo.forEach(function (object, index) {
+                    $("#formDireccion #ubigeo_peru_department_id").append('<option value="' + object.id + '">' + object.name + '</option>');
+                });
+                if (typeof idSelected !== 'undefined') {
+                    $("#formDireccion #ubigeo_peru_department_id").val(idSelected);
+                }
+                startSelect2ById("ubigeo_peru_department_id");
+                if (typeof callback !== 'undefined') callback();
+            }
+        });
+    }
+    function fillUbigeoPeruProvince(idSelected, callback) {
+        $("#formDireccion #ubigeo_peru_province_id").html('<option value="">Seleccione Provincia</option>');
+        postJSON("UbigeoPeruProvince_C.php", { "action": "listByDepartment", ubigeo_peru_department_id: $("#ubigeo_peru_department_id").val() }, function (data) {
+            if (!validErrorResponse(data)) {
+                var arrayUbigeo = JSON.parse(data);
+                arrayUbigeo.forEach(function (object, index) {
+                    $("#formDireccion #ubigeo_peru_province_id").append('<option value="' + object.id + '">' + object.name + '</option>');
+                });
+                if (typeof idSelected !== 'undefined') {
+                    $("#formDireccion #ubigeo_peru_province_id").val(idSelected);
+                }
+                startSelect2ById("ubigeo_peru_province_id");
+                if (typeof callback !== 'undefined') callback();
+            }
+        });
+    }
+    function fillUbigeoPeruDistrict(idSelected, callback) {
+        $("#formDireccion #ubigeo_peru_district_id").html('<option value="">Seleccione Distrito</option>');
+        postJSON("UbigeoPeruDistrict_C.php", { "action": "listByDepartmentAndProvince", ubigeo_peru_department_id: $("#ubigeo_peru_department_id").val(), ubigeo_peru_province_id: $("#ubigeo_peru_province_id").val() }, function (data) {
+            if (!validErrorResponse(data)) {
+                var arrayUbigeo = JSON.parse(data);
+                arrayUbigeo.forEach(function (object, index) {
+                    $("#formDireccion #ubigeo_peru_district_id").append('<option value="' + object.id + '">' + object.name + '</option>');
+                });
+                if (typeof idSelected !== 'undefined') {
+                    $("#formDireccion #ubigeo_peru_district_id").val(idSelected);
+                }
+                startSelect2ById("ubigeo_peru_district_id");
+                if (typeof callback !== 'undefined') callback();
+            }
+        });
+    }
+    function getPersonaDireccion() {
+        if ($("#formDireccion #action").val() === "u") {
+            postJSON("PersonaDireccion_C.php", { action: "get", id: $("#formDireccion #id").val() }, function (data) {
+                if (!validErrorResponse(data)) {
+                    dataResponse = JSON.parse(data)[0];
+                    $("#titleActionPersonaDireccion").html("Editar");
+                    fillUbigeoPeruDepartment(dataResponse.ubigeo_peru_department_id, function () {
+                        fillUbigeoPeruProvince(dataResponse.ubigeo_peru_province_id, function () {
+                            fillUbigeoPeruDistrict(dataResponse.ubigeo_peru_district_id);
+                        });
+                    });
+                    $("#formDireccion #direccion").val(dataResponse.direccion);
+                    $("#formDireccion #referencia").val(dataResponse.referencia);
+                }
+            });
+        }
+    }
+    function savePersonaDireccion() {
+        postJSONForm("PersonaDireccion_C.php", "formDireccion", function (data) {
+            if (!validErrorResponse(data)) {
+                dataResponse = JSON.parse(data)[0];
+                if ($("#formDireccion #action").val() === "i") {
+                    if ($(".personaDireccionTr").length === 0) {
+                        $("#tablePersonaDireccion tbody").html("");
+                    }
+                    createPersonaDireccionHTMLTr(dataResponse.id,
+                        $("#formDireccion #ubigeo_peru_department_id option:selected").text(),
+                        $("#formDireccion #ubigeo_peru_province_id option:selected").text(),
+                        $("#formDireccion #ubigeo_peru_district_id option:selected").text(),
+                        $("#formDireccion #direccion").val(),
+                        $("#formDireccion #referencia").val());
+                } else if ($("#formDireccion #action").val() === "u") {
+                    var id = $("#formDireccion #id").val();
+                    $("#personaDireccionTr_" + id).remove();
+                    createPersonaDireccionHTMLTr(id,
+                        $("#formDireccion #ubigeo_peru_department_id option:selected").text(),
+                        $("#formDireccion #ubigeo_peru_province_id option:selected").text(),
+                        $("#formDireccion #ubigeo_peru_district_id option:selected").text(),
+                        $("#formDireccion #direccion").val(),
+                        $("#formDireccion #referencia").val());
+                }
+                closeLastModal();
+                notifySuccess();
+            }
+        });
+    }
+    $("#formDireccion").validate({
+        rules: {
+            ubigeo_peru_department_id: {
+                required: true
+            },
+            ubigeo_peru_province_id: {
+                required: true
+            },
+            ubigeo_peru_district_id: {
+                required: true
+            },
+            direccion: {
+                required: true,
+                maxlength: 200
+            }
+        },
+        submitHandler: function (form) {
+            savePersonaDireccion();
+        }
+    });
+</script>

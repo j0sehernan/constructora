@@ -26,15 +26,15 @@
                                 <a class="nav-link active" data-toggle="tab" href="#kt_portlet_tabs_1_1_content" role="tab" aria-selected="true"> Identificación
                                 </a>
                             </li>
-                            <li class="nav-item">
+                            <li class="nav-item" id="tab_title_email" style="display: none;">
                                 <a class="nav-link" data-toggle="tab" href="#kt_portlet_tabs_1_2_content" role="tab" aria-selected="false"> Emails
                                 </a>
                             </li>
-                            <li class="nav-item">
+                            <li class="nav-item" id="tab_title_telefono" style="display: none;">
                                 <a class="nav-link" data-toggle="tab" href="#kt_portlet_tabs_1_3_content" role="tab" aria-selected="false"> Teléfonos
                                 </a>
                             </li>
-                            <li class="nav-item">
+                            <li class="nav-item" id="tab_title_direccion" style="display: none;">
                                 <a class="nav-link" data-toggle="tab" href="#kt_portlet_tabs_1_4_content" role="tab" aria-selected="false"> Direcciones
                                 </a>
                             </li>
@@ -224,7 +224,24 @@
                             </table>
                         </div>
                         <div class="tab-pane" id="kt_portlet_tabs_1_4_content" role="tabpanel">
-                            4
+                            <div class="sub-settings">
+                                <a class="btn btn-icon btn btn-label btn-label-brand btn-bold" data-toggle="tooltip" title="Actualizar" data-placement="top" onclick="listDirecciones();"><i class="flaticon-refresh"></i></a>
+                                <a href="#" class="btn btn-icon btn btn-label btn-label-brand btn-bold" data-toggle="tooltip" title="Agregar" data-placement="top" onclick="showPersonaDireccionForm('i')"><i class="flaticon2-add-1"></i></a>
+                            </div>
+                            <table class="table-fit table table-bordered table-hover table-striped table-sm" id="tablePersonaDireccion">
+                                <thead class="thead-dark">
+                                    <tr>
+                                        <th>Departamento</th>
+                                        <th>Provincia</th>
+                                        <th>Distrito</th>
+                                        <th>Dirección</th>
+                                        <th>Referencia</th>
+                                        <th style="width: 1px;">Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
@@ -483,6 +500,69 @@
                         $("#personaTelefonoTr_" + id).remove();
                         if ($(".personaTelefonoTr").length === 0) {
                             createPersonaTelefonoHTMLTrEmpty();
+                        }
+                        notifySuccess();
+                    }
+                });
+            }
+        });
+    }
+    //DIRECCIONES
+    function createPersonaDireccionHTMLTr(id, departamento, provincia, distrito, direccion, referencia) {
+        var html = '<tr id="personaDireccionTr_' + id + '" class="personaDireccionTr">';
+        html += '<td>' + departamento + '</td>';
+        html += '<td>' + provincia + '</td>';
+        html += '<td>' + distrito + '</td>';
+        html += '<td>' + direccion + '</td>';
+        html += '<td>' + referencia + '</td>';
+        html += '<td style="width: 1px;">';
+        html += '<button type="button" class="btn btn-outline-info btn-elevate btn-icon btn-circle btn-xs" data-toggle="tooltip" title="Editar" onclick="showPersonaDireccionForm(\'u\',' + id + ');"><i class="fa fa-pencil-alt"></i></button>';
+        html += '<button type="button" class="btn btn-outline-danger btn-elevate btn-icon btn-circle btn-xs" data-toggle="tooltip" title="Eliminar" onclick="deletePersonaDireccion(' + id + ');"><i class="fa fa-trash"></i></button>';
+        html += '</td>';
+        html += '</tr>';
+        $("#tablePersonaDireccion tbody").append(html);
+    }
+    function createPersonaDireccionHTMLTrEmpty() {
+        var html = '<tr>'
+        html += '<td colspan="4">' + STR_NO_SE_ENCONTRARON_REGISTROS + '</td>';
+        html += '</tr>';
+        $("#tablePersonaDireccion tbody").append(html);
+    }
+    function listDirecciones() {
+        postJSON("PersonaDireccion_C.php", { "action": "listByPersona", "persona_id": $("#form #id").val() }, function (data) {
+            if (!validErrorResponse(data)) {
+                $("#tablePersonaDireccion tbody").html("");
+                var arrayPersonaDireccion = JSON.parse(data);
+                if (arrayPersonaDireccion.length > 0) {
+                    arrayPersonaDireccion.forEach(function (object, index) {
+                        createPersonaDireccionHTMLTr(object.id, object.departamento, object.provincia, object.distrito, object.direccion, object.referencia);
+                    });
+                } else {
+                    createPersonaDireccionHTMLTrEmpty();
+                }
+            }
+        });
+    }
+    function showPersonaDireccionForm(action, id) {
+        getModalWithCallBack('persona_direccion/iu.html', function () {
+            $("#formDireccion #persona_id").val($("#form #id").val());
+            if (action === "i") {
+                fillUbigeoPeruDepartment();
+            } else if (action === "u") {
+                $("#formDireccion #id").val(id);
+                $("#formDireccion #action").val("u");
+                getPersonaDireccion();
+            }
+        });
+    }
+    function deletePersonaDireccion(id) {
+        bootbox.confirm(STR_ASK_DELETE, function (result) {
+            if (result) {
+                postJSON("PersonaDireccion_C.php", { action: "d", id: id }, function (data) {
+                    if (!validErrorResponse(data)) {
+                        $("#personaDireccionTr_" + id).remove();
+                        if ($(".personaDireccionTr").length === 0) {
+                            createPersonaDireccionHTMLTrEmpty();
                         }
                         notifySuccess();
                     }
