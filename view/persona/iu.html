@@ -584,16 +584,14 @@
                 var arrayRol = JSON.parse(data);
                 if (arrayRol.length > 0) {
                     arrayRol.forEach(function (object, index) {
-                        if (object.nombre !== "ADMINISTRADOR") {
-                            $("#divRoles").append(
-                                `
-                                <label class="kt-checkbox">
-                                    <input type="checkbox" id="rol_`+ object.id + `" name="` + object.id + `" onchange="changeRolState(this.id);">
-                                    ` + object.nombre + `
-                                    <span></span>
-                                </label>&nbsp&nbsp&nbsp
-                                `);
-                        }
+                        $("#divRoles").append(
+                        `
+                        <label class="kt-checkbox">
+                            <input type="checkbox" id="rol_`+ object.id + `" name="` + object.id + `" onchange="changeRolState(this.id);">
+                            ` + object.nombre + `
+                            <span></span>
+                        </label>&nbsp&nbsp&nbsp
+                        `);
                     });
                     postJSON("PersonaRol_C.php", { "action": "listByPersona", persona_id: $("#form #id").val() }, function (data) {
                         if (!validErrorResponse(data)) {
@@ -601,7 +599,6 @@
                             if (arrayPersonaRol.length > 0) {
                                 arrayPersonaRol.forEach(function (object, index) {
                                     $("#rol_" + object.rol_id).prop("checked", true);
-                                    console.log(object.id);
                                     $("#rol_" + object.rol_id).attr("data-id", object.id);
                                 });
                             }
