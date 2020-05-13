@@ -15,10 +15,8 @@
         </div>
         <div class="kt-subheader__toolbar">
             <div class="kt-subheader__wrapper">
-                <a class="btn btn-icon btn btn-label btn-label-brand btn-bold" data-toggle="tooltip" title="Actualizar"
-                    data-placement="top" onclick="listRoles();"><i class="flaticon-refresh"></i></a>
-                <a class="btn btn-icon btn btn-label btn-label-brand btn-bold" data-toggle="tooltip" title="Agregar"
-                    data-placement="top" onclick="getModal('rol/iu.html');"><i class="flaticon2-add-1"></i></a>
+                <a class="btn btn-icon btn btn-label btn-label-brand btn-bold" data-toggle="tooltip" title="Actualizar" data-placement="top" onclick="listRoles();"><i class="flaticon-refresh"></i></a>
+                <a class="btn btn-icon btn btn-label btn-label-brand btn-bold" data-toggle="tooltip" title="Agregar" data-placement="top" onclick="getModal('rol/iu.html');"><i class="flaticon2-add-1"></i></a>
             </div>
         </div>
     </div>
@@ -39,10 +37,13 @@
                         { title: "Nombre", data: "nombre" },
                         {
                             title: "Acciones", className: "td-actions", render: function (data, type, row, meta) {
-                                return '<button type="button" class="btn btn-outline-info btn-elevate btn-icon btn-circle btn-xs" data-toggle="tooltip" title="Editar" onclick="showRol(' + row.id + ');">' +
-                                    '<i class="fa fa-pencil-alt"></i></button>&nbsp;' +
-                                    '<button type="button" class="btn btn-outline-danger btn-elevate btn-icon btn-circle btn-xs" data-toggle="tooltip" title="Eliminar" onclick="deleteRol(' + row.id + ');">' +
-                                    '<i class="fa fa-trash"></i></button>'
+                                if (row.nombre !== "ADMINISTRADOR" && row.nombre !== "CONTRATISTA" && row.nombre !== "PROVEEDOR") {
+                                    return '<button type="button" class="btn btn-outline-info btn-elevate btn-icon btn-circle btn-xs" data-toggle="tooltip" title="Editar" onclick="showRol(' + row.id + ');"><i class="fa fa-pencil-alt"></i></button>&nbsp;' +
+                                        '<button type="button" class="btn btn-outline-danger btn-elevate btn-icon btn-circle btn-xs" data-toggle="tooltip" title="Eliminar" onclick="deleteRol(' + row.id + ');"><i class="fa fa-trash"></i></button>'
+                                } else {
+                                    return "";
+                                }
+
                             }
                         }
                     ]
