@@ -109,56 +109,57 @@
 					<div id="kt_aside_menu" class="kt-aside-menu " data-ktmenu-vertical="1" data-ktmenu-scroll="1" data-ktmenu-dropdown-timeout="500">
 						<ul class="kt-menu__nav ">
 							<!-- kt-menu__item--open kt-menu__item--here -->
-							<li class="kt-menu__item kt-menu__item--submenu" aria-haspopup="true" data-ktmenu-submenu-toggle="hover">
+							<li class="kt-menu__item kt-menu__item--submenu -modulo-" aria-haspopup="true" data-ktmenu-submenu-toggle="hover" id="modulo-reportes">
 								<a href="javascript:;" class="kt-menu__link kt-menu__toggle"><i class="kt-menu__link-icon fa fa-print"></i><span class="kt-menu__link-text">Reportes</span><i class="kt-menu__ver-arrow la la-angle-right"></i></a>
 								<div class="kt-menu__submenu "><span class="kt-menu__arrow"></span>
 									<ul class="kt-menu__subnav">
 										<li class="kt-menu__item kt-menu__item--parent" aria-haspopup="true"><span class="kt-menu__link"><span class="kt-menu__link-text">Reportes</span></span></li>
-										<li class="kt-menu__item" id="menu-avanceProyecto"><a class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Avance de Proyecto</span></a></li>
+										<li class="kt-menu__item -menu-" id="menu-avanceProyecto"><a class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Avance de Proyecto</span></a></li>
 									</ul>
 								</div>
 							</li>
-							<li class="kt-menu__item kt-menu__item--submenu" aria-haspopup="true" data-ktmenu-submenu-toggle="hover">
+							<li class="kt-menu__item kt-menu__item--submenu -modulo-" aria-haspopup="true" data-ktmenu-submenu-toggle="hover" id="modulo-menu">
 								<a href="javascript:;" class="kt-menu__link kt-menu__toggle"><i class="kt-menu__link-icon flaticon2-graphic"></i><span class="kt-menu__link-text">Menú</span><i class="kt-menu__ver-arrow la la-angle-right"></i></a>
 								<div class="kt-menu__submenu "><span class="kt-menu__arrow"></span>
 									<ul class="kt-menu__subnav">
 										<li class="kt-menu__item kt-menu__item--parent" aria-haspopup="true"><span class="kt-menu__link"><span class="kt-menu__link-text">Menú</span></span></li>
-										<li class="kt-menu__item" id="menu-proyectoVenta"><a class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Ventas</span></a></li>
-										<li class="kt-menu__item" id="menu-proyectoRequerimiento"><a class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Requerimientos</span></a></li>
-										<li class="kt-menu__item" id="menu-kardex"><a class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Kardex</span></a></li>
-										<li class="kt-menu__item" id="menu-pagoContratista"><a class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Pagos a Contratistas</span></a></li>
-										<li class="kt-menu__item" id="menu-proyecto"><a class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Proyectos</span></a></li>
-										<li class="kt-menu__item" id="menu-ordenCompra"><a class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Ordenes de Compra</span></a></li>
-										<li class="kt-menu__item" id="menu-persona"><a class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Personas</span></a></li>
+										<li class="kt-menu__item -menu-" id="menu-proyectoVenta"><a class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Ventas</span></a></li>
+										<li class="kt-menu__item -menu-" id="menu-proyectoRequerimiento"><a class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Requerimientos</span></a></li>
+										<li class="kt-menu__item -menu-" id="menu-kardex"><a class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Kardex</span></a></li>
+										<li class="kt-menu__item -menu-" id="menu-pagoContratista"><a class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Pagos a Contratistas</span></a></li>
+										<li class="kt-menu__item -menu-" id="menu-proyecto"><a class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Proyectos</span></a></li>
+										<li class="kt-menu__item -menu-" id="menu-ordenCompra"><a class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Ordenes de Compra</span></a></li>
+										<li class="kt-menu__item -menu-" id="menu-persona"><a class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Personas</span></a></li>
 									</ul>
 								</div>
 							</li>
-							<li class="kt-menu__item kt-menu__item--submenu" aria-haspopup="true" data-ktmenu-submenu-toggle="hover">
+							<li class="kt-menu__item kt-menu__item--submenu -modulo-" aria-haspopup="true" data-ktmenu-submenu-toggle="hover" id="modulo-maestros">
 								<a href="javascript:;" class="kt-menu__link kt-menu__toggle"><i class="kt-menu__link-icon fa fa-database"></i><span class="kt-menu__link-text">Maestros</span><i class="kt-menu__ver-arrow la la-angle-right"></i></a>
 								<div class="kt-menu__submenu"><span class="kt-menu__arrow"></span>
 									<ul class="kt-menu__subnav">
 										<li class="kt-menu__item kt-menu__item--parent" aria-haspopup="true"><span class="kt-menu__link"><span class="kt-menu__link-text">Maestros</span></span></li>
-										<li class="kt-menu__item" id="menu-producto"><a class="kt-menu__link"><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Productos</span></a></li>
-										<li class="kt-menu__item" id="menu-productoMarca"><a class="kt-menu__link"><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Marcas</span></a></li>
-										<li class="kt-menu__item" id="menu-almacen"><a class="kt-menu__link"><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Almacen</span></a></li>
-										<li class="kt-menu__item" id="menu-unidadMedida"><a class="kt-menu__link"><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Unidades de Medida</span></a></li>
-										<li class="kt-menu__item" id="menu-emailTipo"><a class="kt-menu__link"><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Tipos de Email</span></a></li>
-										<li class="kt-menu__item" id="menu-telefonoTipo"><a class="kt-menu__link"><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Tipos de Teléfono</span></a></li>
-										<li class="kt-menu__item" id="menu-estadoCivil"><a class="kt-menu__link"><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Estados Civiles</span></a></li>
-										<li class="kt-menu__item" id="menu-comprobantePagoTipo"><a class="kt-menu__link"><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Tipos de Comprobantes de Pago</span></a></li>
+										<li class="kt-menu__item -menu-" id="menu-producto"><a class="kt-menu__link"><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Productos</span></a></li>
+										<li class="kt-menu__item -menu-" id="menu-productoMarca"><a class="kt-menu__link"><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Marcas</span></a></li>
+										<li class="kt-menu__item -menu-" id="menu-almacen"><a class="kt-menu__link"><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Almacen</span></a></li>
+										<li class="kt-menu__item -menu-" id="menu-unidadMedida"><a class="kt-menu__link"><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Unidades de Medida</span></a></li>
+										<li class="kt-menu__item -menu-" id="menu-emailTipo"><a class="kt-menu__link"><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Tipos de Email</span></a></li>
+										<li class="kt-menu__item -menu-" id="menu-telefonoTipo"><a class="kt-menu__link"><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Tipos de Teléfono</span></a></li>
+										<li class="kt-menu__item -menu-" id="menu-estadoCivil"><a class="kt-menu__link"><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Estados Civiles</span></a></li>
+										<li class="kt-menu__item -menu-" id="menu-comprobantePagoTipo"><a class="kt-menu__link"><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Tipos de Comprobantes de Pago</span></a></li>
 									</ul>
 								</div>
 							</li>
-							<li class="kt-menu__item kt-menu__item--submenu" aria-haspopup="true" data-ktmenu-submenu-toggle="hover">
+							<li class="kt-menu__item kt-menu__item--submenu -modulo-" aria-haspopup="true" data-ktmenu-submenu-toggle="hover" id="modulo-sistema">
 								<a href="javascript:;" class="kt-menu__link kt-menu__toggle"><i class="kt-menu__link-icon fa fa-cogs"></i><span class="kt-menu__link-text">Sistema</span><i class="kt-menu__ver-arrow la la-angle-right"></i></a>
 								<div class="kt-menu__submenu "><span class="kt-menu__arrow"></span>
 									<ul class="kt-menu__subnav">
 										<li class="kt-menu__item kt-menu__item--parent" aria-haspopup="true"><span class="kt-menu__link"><span class="kt-menu__link-text">Sistema</span></span></li>
-										<li class="kt-menu__item" id="menu-formaPago"><a class="kt-menu__link"><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Formas de Pago</span></a></li>
-										<li class="kt-menu__item" id="menu-rol"><a class="kt-menu__link"><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Roles</span></a></li>
-										<li class="kt-menu__item" id="menu-personaTipo"><a class="kt-menu__link"><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Tipos de Persona</span></a></li>
-										<li class="kt-menu__item" id="menu-documentoIdentidad"><a class="kt-menu__link"><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Documentos de Identidad</span></a></li>
-										<li class="kt-menu__item" id="menu-genero"><a class="kt-menu__link"><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Géneros</span></a></li>
+										<li class="kt-menu__item -menu-" id="menu-formaPago"><a class="kt-menu__link"><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Formas de Pago</span></a></li>
+										<li class="kt-menu__item -menu-" id="menu-rol"><a class="kt-menu__link"><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Roles</span></a></li>
+										<li class="kt-menu__item -menu-" id="menu-rolPermiso"><a class="kt-menu__link"><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Permisos por Rol</span></a></li>
+										<li class="kt-menu__item -menu-" id="menu-personaTipo"><a class="kt-menu__link"><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Tipos de Persona</span></a></li>
+										<li class="kt-menu__item -menu-" id="menu-documentoIdentidad"><a class="kt-menu__link"><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Documentos de Identidad</span></a></li>
+										<li class="kt-menu__item -menu-" id="menu-genero"><a class="kt-menu__link"><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Géneros</span></a></li>
 									</ul>
 								</div>
 							</li>

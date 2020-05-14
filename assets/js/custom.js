@@ -482,111 +482,33 @@ $(document).ajaxStart(function () {
 //Change URL
 /* $(window).on("hashchange",function(){
     getHTMLContainer(location.hash.slice(1));
-});
- */
-var pages =
-    [{
-        name: "kardex",
-        id: "menu-kardex",
-        url: "kardex/list.html"
-    }, {
-        name: "proyecto",
-        id: "menu-proyecto",
-        url: "proyecto/list.html"
-    }, {
-        name: "ordenCompra",
-        id: "menu-ordenCompra",
-        url: "orden_compra/list.html"
-    }, {
-        name: "persona",
-        id: "menu-persona",
-        url: "persona/list.html"
-    }, {
-        name: "producto",
-        id: "menu-producto",
-        url: "producto/list.html"
-    }, {
-        name: "almacen",
-        id: "menu-almacen",
-        url: "almacen/list.html"
-    }, {
-        name: "unidadMedida",
-        id: "menu-unidadMedida",
-        url: "unidad_medida/list.html"
-    }, {
-        name: "emailTipo",
-        id: "menu-emailTipo",
-        url: "email_tipo/list.html"
-    }, {
-        name: "telefonoTipo",
-        id: "menu-telefonoTipo",
-        url: "telefono_tipo/list.html"
-    }, {
-        name: "estadoCivil",
-        id: "menu-estadoCivil",
-        url: "estado_civil/list.html"
-    }, {
-        name: "comprobantePagoTipo",
-        id: "menu-comprobantePagoTipo",
-        url: "comprobante_pago_tipo/list.html"
-    }, {
-        name: "formaPago",
-        id: "menu-formaPago",
-        url: "forma_pago/list.html"
-    }, {
-        name: "rol",
-        id: "menu-rol",
-        url: "rol/list.html"
-    }, {
-        name: "personaTipo",
-        id: "menu-personaTipo",
-        url: "persona_tipo/list.html"
-    }, {
-        name: "documentoIdentidad",
-        id: "menu-documentoIdentidad",
-        url: "documento_identidad/list.html"
-    }, {
-        name: "genero",
-        id: "menu-genero",
-        url: "genero/list.html"
-    }, {
-        name: "pago_contratista",
-        id: "menu-pagoContratista",
-        url: "pago_contratista/list.html"
-    }, {
-        name: "requerimiento",
-        id: "menu-proyectoRequerimiento",
-        url: "proyecto_requerimiento/list.html"
-    }, {
-        name: "avanceProyecto",
-        id: "menu-avanceProyecto",
-        url: "reporte/avance_proyecto.html"
-    }, {
-        name: "marca",
-        id: "menu-productoMarca",
-        url: "producto_marca/list.html"
-    }, {
-        name: "proyectoVenta",
-        id: "menu-proyectoVenta",
-        url: "proyecto_venta/list.html"
-    }];
-//set the methods
-$.map(pages, function (object, index) {
-    $("#" + object.id).click(function () {
-        changePage(object.name);
-    });
+});*/
+
+//Get Menu Items
+postJSON("RolPermiso_C.php", { action: "listByPersona" }, function (data) {
+    if (!validErrorResponse(data)) {
+        pages = JSON.parse(data);
+        $.map(pages, function (object, index) {
+            if (object.tipo === "MENU") {
+                $("#" + object.accion).removeClass("-menu-");
+                $("#" + object.accion).data("url", object.url);
+                $("#" + object.accion).click(function () {
+                    changePage(object);
+                });
+            } else if (object.tipo === "MODULO") {
+                $("#" + object.accion).removeClass("-modulo-");
+            }
+        });
+        $(".-menu-").remove();
+        $(".-modulo-").remove();
+    }
 });
 
-function changePage(pageName) {
+function changePage(object) {
     classActiveMenu = "kt-menu__item--active";
     $("." + classActiveMenu).removeClass(classActiveMenu);
-    $.map(pages, function (object, index) {
-        if (object.name === pageName) {
-            getHTMLContainer(object.url);
-            $("#" + object.id).addClass(classActiveMenu);
-            return;
-        }
-    });
+    getHTMLContainer(object.url);
+    $("#" + object.accion).addClass(classActiveMenu);
 }
 
 //Alerts
@@ -651,7 +573,7 @@ function showAlerts() {
                     if (typeof listNew !== 'undefined') {
                         $.map(listNew, function (object, index) {
                             count++;
-                            var html = `<a href="#" class="kt-notification__item" onclick="changePage('requerimiento')">
+                            var html = `<a href="#" class="kt-notification__item" onclick="changePage({tipo:'MENU',accion:'menu-proyectoRequerimiento',url:'proyecto_requerimiento/list.html'})">
                                             <div class="kt-notification__item-icon">
                                                 <i class="fa fa-list-ol"></i>
                                             </div>

@@ -1,0 +1,93 @@
+<h3 id="titleAction">Registro</h3>
+<form id="form">
+    <div class="form-group">
+        <label for="rol_id">Rol</label>
+        <select class="form-control form-control-sm form-control-autocomplete" id="rol_id" name="rol_id">
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="tipo">Tipo</label>
+        <select class="form-control form-control-sm" id="tipo" name="tipo">
+            <option id="MODULO">MODULO</option>
+            <option id="MENU">MENÚ</option>
+            <option id="ACCION">ACCIÓN</option>
+            <option id="ALERTA">ALERTA</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="accion">Acción</label>
+        <input type="text" class="form-control form-control-sm" id="accion" name="accion" placeholder="Acción" maxlength="200">
+    </div>
+    <div class="form-group">
+        <label for="url">URL</label>
+        <input type="text" class="form-control form-control-sm" id="url" name="url" placeholder="URL" maxlength="500">
+    </div>
+    <div class="only-options-right">
+        <input type="hidden" id="action" name="action" value="i">
+        <input type="hidden" id="id" name="id">
+        <button type="submit" class="btn btn-success btn-sm"><i class="la la-save"></i>Guardar</button>
+        <button type="button" class="btn btn-outline-danger btn-sm" onclick="closeLastModal();">Cancelar</button>
+    </div>
+</form>
+<script>
+    function fillRol(idSelected, callback) {
+        postJSON("Rol_C.php", { "action": "list" }, function (data) {
+            if (!validErrorResponse(data)) {
+                $("#form #rol_id").html('<option value="">Seleccione Rol</option>');
+                var arrayProyectos = JSON.parse(data);
+                arrayProyectos.forEach(function (object, index) {
+                    $("#form #rol_id").append('<option value="' + object.id + '">' + object.nombre + '</option>');
+                });
+                if (typeof idSelected !== 'undefined') {
+                    $("#form #rol_id").val(idSelected);
+                }
+                startSelect2ById("rol_id");
+                if (typeof callback !== 'undefined') callback();
+            }
+        });
+    }
+    function saveRolPermiso() {
+        postJSONForm("RolPermiso_C.php", "form", function (data) {
+            if (!validErrorResponse(data)) {
+                closeLastModal();
+                notifySuccess();
+                listRolPermisos();
+            }
+        });
+    }
+    function getRolPermiso() {
+        if ($("#action").val() === "u") {
+            postJSON("RolPermiso_C.php", { action: "get", id: $("#form #id").val() }, function (data) {
+                if (!validErrorResponse(data)) {
+                    dataResponse = JSON.parse(data)[0];
+                    fillRol(dataResponse.rol_id);
+                    $("#titleAction").html("Editar");
+                    $("#tipo").val(dataResponse.tipo);
+                    $("#accion").val(dataResponse.accion);
+                    $("#url").val(dataResponse.url);
+                }
+            });
+        }
+    }
+    $("#form").validate({
+        rules: {
+            rol_id: {
+                required: true
+            },
+            tipo: {
+                required: true
+            },
+            accion: {
+                required: true,
+                maxlength: 200
+            },
+            url: {
+                required: true,
+                maxlength: 500
+            }
+        },
+        submitHandler: function (form) {
+            saveRolPermiso();
+        }
+    });
+</script>
