@@ -16,7 +16,7 @@ if ($object->{'action'} == "list") {
     $result = $proyectoRequerimiento->alertNew();
     echo (json_encode($result));
 } elseif ($object->{'action'} == "i") {
-    $result = $proyectoRequerimiento->insert($object->proyecto_id, $object->codigo, $object->fecha_pedido);
+    $result = $proyectoRequerimiento->insert($object->proyecto_id, $object->codigo, $object->fecha_pedido, getPersonaFullName());
     echo (json_encode($result));
 } elseif ($object->{'action'} == "u") {
     $result = $proyectoRequerimiento->update($object->id, $object->proyecto_id, $object->codigo, $object->fecha_pedido);

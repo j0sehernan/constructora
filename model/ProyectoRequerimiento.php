@@ -25,10 +25,10 @@ class ProyectoRequerimiento
         return $result;
     }
 
-    function insert($idProyecto, $codigo, $fechaPedido)
+    function insert($idProyecto, $codigo, $fechaPedido, $perRegAud)
     {
         $db = new DB();
-        $result = $db->executeWithReturn("call proyecto_requerimiento_i('$idProyecto','$codigo','$fechaPedido');");
+        $result = $db->executeWithReturn("call proyecto_requerimiento_i('$idProyecto','$codigo','$fechaPedido','$perRegAud');");
         return $result;
     }
 
