@@ -394,6 +394,7 @@
 	<!--begin::Page Scripts(used by this page) -->
 	<script src="assets/js/pages/dashboard.js" type="text/javascript"></script>
 	<script src="assets/js/custom.js" type="text/javascript"></script>
+	<script src="assets/js/admin.js" type="text/javascript"></script>
 	<!--end::Page Scripts -->
 </body>
 <!-- end::Body -->
