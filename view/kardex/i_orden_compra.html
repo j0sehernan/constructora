@@ -50,6 +50,7 @@
         <div class="only-options-right">
             <input type="hidden" id="action" name="action" value="I_OC">
             <input type="hidden" id="orden_compra_used" name="action" value="false">
+            <input type="hidden" id="orden_compra_can_delete" name="action" value="false">
             <button type="submit" class="btn btn-success btn-sm"><i class="la la-save"></i>Guardar</button>
             <button type="button" class="btn btn-outline-danger btn-sm" onclick="closeLastModal();">Cancelar</button>
         </div>
@@ -62,7 +63,7 @@
                 $("#orden_compra_id").html('<option value="">Seleccione Orden de Compra</option>');
                 var arrayOC = JSON.parse(data);
                 arrayOC.forEach(function (object, index) {
-                    $("#orden_compra_id").append('<option value="' + object.id + '">' + object.codigo + '</option>');
+                    $("#orden_compra_id").append('<option value="' + object.id + '" data-can_delete="' + object.can_delete + '">' + object.codigo + '</option>');
                 });
                 if (typeof idOrdenCompra !== 'undefined') {
                     $("#orden_compra_id").val(idOrdenCompra);
@@ -215,6 +216,7 @@
             }
         });
         var orden_compra_used = OCElements.length === count_orden_compra_used ? true : false;
+        var orden_compra_can_delete = $("#orden_compra_id option:selected").attr("data-can_delete") === "1" ? true : false;
         postJSON("Kardex_C.php", {
             "action": $("#action").val(), "listOC": JSONElements,
             orden_compra_id: $("#orden_compra_id").val(),
@@ -222,7 +224,8 @@
             comprobante_pago_tipo_id: $("#comprobante_pago_tipo_id").val(),
             comprobante_pago_codigo: $("#comprobante_pago_codigo").val(),
             guia_remision: $("#guia_remision").val(),
-            almacen_id: $("#almacen_id_general").val()
+            almacen_id: $("#almacen_id_general").val(),
+            orden_compra_can_delete: orden_compra_can_delete
         }, function (data) {
             if (!validErrorResponse(data)) {
                 closeLastModal();

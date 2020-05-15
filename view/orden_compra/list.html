@@ -40,10 +40,12 @@
                         { title: "Proforma", data: "proforma_codigo" },
                         {
                             title: "Acciones", className: "td-actions", render: function (data, type, row, meta) {
-                                return '<button type="button" class="btn btn-outline-info btn-elevate btn-icon btn-circle btn-xs" data-toggle="tooltip" title="Editar" onclick="showOrdenCompraForm(\'u\',' + row.id + ');">' +
-                                    '<i class="fa fa-pencil-alt"></i></button>&nbsp;' +
-                                    '<button type="button" class="btn btn-outline-danger btn-elevate btn-icon btn-circle btn-xs" data-toggle="tooltip" title="Eliminar" onclick="deleteOrdenCompra(' + row.id + ');">' +
-                                    '<i class="fa fa-trash"></i></button>'
+                                if (row.can_delete === "0") {
+                                    return '<button type="button" class="btn btn-outline-info btn-elevate btn-icon btn-circle btn-xs" data-toggle="tooltip" title="Editar" onclick="showOrdenCompraForm(\'v\',' + row.id + ');"><i class="fa fa-eye"></i></button>'
+                                } else {
+                                    return '<button type="button" class="btn btn-outline-info btn-elevate btn-icon btn-circle btn-xs" data-toggle="tooltip" title="Editar" onclick="showOrdenCompraForm(\'u\',' + row.id + ');"><i class="fa fa-pencil-alt"></i></button>&nbsp;' +
+                                        '<button type="button" class="btn btn-outline-danger btn-elevate btn-icon btn-circle btn-xs" data-toggle="tooltip" title="Eliminar" onclick="deleteOrdenCompra(' + row.id + ');"><i class="fa fa-trash"></i></button>'
+                                }
                             }
                         }
                     ]
@@ -61,6 +63,14 @@
                 $("#form #id").val(id);
                 $("#form #action").val("u");
                 getOrdenCompra(id);
+            } else if (action === "v") {
+                $("#form #id").val(id);
+                $("#form #action").val("v");
+                getOrdenCompra(id);
+                $("#persona_proveedor_id").attr("disabled", true);
+                $("#fecha").attr("disabled", true);
+                $("#proforma_codigo").attr("disabled", true);
+                $("#divOptionsOrdenCompraDetalle").parent().parent().remove();
             }
         });
     }

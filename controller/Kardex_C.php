@@ -32,6 +32,7 @@ if ($object->{'action'} == "listByAlmacen") {
     $almacen_id =  $object->{'almacen_id'};
     $orden_compra_id = $object->{'orden_compra_id'};
     $orden_compra_used = $object->{'orden_compra_used'};
+    $orden_compra_can_delete = $object->orden_compra_can_delete;
     $comprobante_pago_tipo_id = $object->{'comprobante_pago_tipo_id'};
     $comprobante_pago_codigo = $object->{'comprobante_pago_codigo'};
     $guia_remision = $object->{'guia_remision'};
@@ -55,7 +56,11 @@ if ($object->{'action'} == "listByAlmacen") {
     }
 
     if ($orden_compra_used) {
-        $result = $ordenCompra->updateUsed($orden_compra_id, '0', '1');
+        $result = $ordenCompra->updateUsed($orden_compra_id, '1');
+    }
+
+    if ($orden_compra_can_delete) {
+        $result = $ordenCompra->updateCanDelete($orden_compra_id, '0');
     }
 
     echo (json_encode($result));

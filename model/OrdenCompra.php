@@ -53,6 +53,13 @@ class OrdenCompra
         return $result;
     }
 
+    function updateCanDelete($id, $canDelete)
+    {
+        $db = new DB();
+        $result = $db->execute("call orden_compra_u_can_delete('$id','$canDelete');");
+        return $result;
+    }
+
     function delete($id)
     {
         $db = new DB();
