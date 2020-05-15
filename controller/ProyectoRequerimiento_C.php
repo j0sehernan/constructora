@@ -12,6 +12,9 @@ if ($object->{'action'} == "list") {
 } elseif ($object->{'action'} == "get") {
     $result = $proyectoRequerimiento->get($object->id);
     echo (json_encode($result));
+} elseif ($object->{'action'} == "generateNextCodigo") {
+    $result = $proyectoRequerimiento->generateNextCodigo();
+    echo (json_encode($result));
 } elseif ($object->{'action'} == "alertNew") {
     $result = $proyectoRequerimiento->alertNew();
     echo (json_encode($result));

@@ -55,6 +55,7 @@
         getModalWithCallBack('producto/iu.html', function () {
             if (action === "i") {
                 fillProductoMarca();
+                generateNextCodigo();
             } else if (action === "u") {
                 $("#id").val(id);
                 $("#action").val("u");

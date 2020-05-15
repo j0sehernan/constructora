@@ -18,6 +18,13 @@ class OrdenCompra
         return $result;
     }
 
+    function generateNextCodigo()
+    {
+        $db = new DB();
+        $result = $db->query("call orden_compra_generate_next_codigo();");
+        return $result;
+    }
+
     function get($id)
     {
         $db = new DB();

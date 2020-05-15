@@ -62,6 +62,7 @@
         getHTMLContainerWithCallBack('proyecto_requerimiento/iu.html', function () {
             if (action === "i") {
                 fillProyecto();
+                generateNextCodigo();
             } else if (action === "u") {
                 $("#form #id").val(id);
                 $("#form #action").val(action);

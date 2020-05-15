@@ -15,6 +15,10 @@ switch ($object->action) {
         $result = $producto->get($object->id);
         echo (json_encode($result));
         break;
+    case "generateNextCodigo":
+        $result = $producto->generateNextCodigo();
+        echo (json_encode($result));
+        break;
     case "i":
         $result = $producto->insert($object->codigo, $object->nombre, $object->descripcion, $object->producto_marca_id);
         echo (json_encode($result));

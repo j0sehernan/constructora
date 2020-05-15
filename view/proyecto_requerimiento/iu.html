@@ -33,7 +33,7 @@
             <div class="col-sm-4">
                 <div class="form-group">
                     <label for="codigo">Código</label>
-                    <input type="text" class="form-control form-control-sm" id="codigo" name="codigo" placeholder="Código" maxlength="100">
+                    <input type="text" class="form-control form-control-sm" id="codigo" name="codigo" placeholder="Código" maxlength="100" readonly>
                 </div>
             </div>
             <div class="col-sm-4">
@@ -75,6 +75,14 @@
                 }
                 startSelect2ById("proyecto_id");
                 if (typeof callback !== 'undefined') callback();
+            }
+        });
+    }
+    function generateNextCodigo() {
+        postJSON("ProyectoRequerimiento_C.php", { action: "generateNextCodigo" }, function (data) {
+            if (!validErrorResponse(data)) {
+                dataResponse = JSON.parse(data)[0];
+                $("#codigo").val(dataResponse.next_codigo);
             }
         });
     }

@@ -18,6 +18,13 @@ class ProyectoRequerimiento
         return $result;
     }
 
+    function generateNextCodigo()
+    {
+        $db = new DB();
+        $result = $db->query("call proyecto_requerimiento_generate_next_codigo();");
+        return $result;
+    }
+
     function alertNew()
     {
         $db = new DB();

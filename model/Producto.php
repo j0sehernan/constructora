@@ -18,6 +18,13 @@ class Producto
         return $result;
     }
 
+    function generateNextCodigo()
+    {
+        $db = new DB();
+        $result = $db->query("call producto_generate_next_codigo();");
+        return $result;
+    }
+
     function insert($codigo, $nombre, $descripcion, $idProductoMarca)
     {
         $db = new DB();
