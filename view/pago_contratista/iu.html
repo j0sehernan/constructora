@@ -107,6 +107,8 @@
     <div class="row" style="margin-bottom: 10px;">
         <div class="col-sm-12">
             <div style="text-align: right;">
+                <input type="hidden" id="porcentaje_amortizacion_adelanto" name="porcentaje_amortizacion_adelanto">
+                <input type="hidden" id="porcentaje_retencion_fondo_garantia" name="porcentaje_retencion_fondo_garantia">
                 <input type="hidden" id="action" name="action">
                 <input type="hidden" id="id" name="id">
                 <button type="submit" id="btnVisualizar" class="btn btn-outline-info btn-sm" onclick="$('#action').val('view')"><i class="la la-eye"></i> Visualizar</button>
@@ -166,12 +168,12 @@
         });
     }
     function fillProyectoTrabajo(idProyectoTrabajo) {
-        postJSON("ProyectoTrabajo_C.php", { "action": "listByContratista", persona_contratista_id: $("#persona_contratista_id").val() }, function (data) {
+        postJSON("ProyectoTrabajo_C.php", { "action": "listByProyectoAndContratista", proyecto_id: $("#proyecto_id").val(), persona_contratista_id: $("#persona_contratista_id").val() }, function (data) {
             if (!validErrorResponse(data)) {
                 $("#formPagoContratista #proyecto_trabajo_id").html('<option value="">Seleccione Trabajo</option>');
                 var arrayProyectoTrabajo = JSON.parse(data);
                 arrayProyectoTrabajo.forEach(function (object, index) {
-                    $("#formPagoContratista #proyecto_trabajo_id").append('<option value="' + object.id + '" data-cantidad_adelanto_restante="' + object.cantidad_adelanto_restante + '">' + object.nombre + '</option>');
+                    $("#formPagoContratista #proyecto_trabajo_id").append('<option value="' + object.id + '" data-cantidad_adelanto_restante="' + object.cantidad_adelanto_restante + '" data-porcentaje_amortizacion_adelanto="' + object.porcentaje_amortizacion_adelanto + '" data-porcentaje_retencion_fondo_garantia="' + object.porcentaje_retencion_fondo_garantia + '">' + object.nombre + '</option>');
                 });
                 if (typeof idProyectoTrabajo !== 'undefined') {
                     $("#formPagoContratista #proyecto_trabajo_id").val(idProyectoTrabajo);
@@ -192,7 +194,11 @@
     });
     $("#proyecto_trabajo_id").change(function () {
         var cantidad_adelanto_restante = $("#proyecto_trabajo_id option:selected").attr("data-cantidad_adelanto_restante");
+        var porcentaje_amortizacion_adelanto = $("#proyecto_trabajo_id option:selected").attr("data-porcentaje_amortizacion_adelanto");
+        var porcentaje_retencion_fondo_garantia = $("#proyecto_trabajo_id option:selected").attr("data-porcentaje_retencion_fondo_garantia");
         $("#cantidad_adelanto_restante").val(cantidad_adelanto_restante);
+        $("#porcentaje_amortizacion_adelanto").val(porcentaje_amortizacion_adelanto);
+        $("#porcentaje_retencion_fondo_garantia").val(porcentaje_retencion_fondo_garantia);
     });
     function createRowAvancesHTML(object) {
         var html =
@@ -204,8 +210,6 @@
             '<td>' + object.precio_avance + '</td>' +
             '<td>' + object.fecha_inicio_avance + '</td>' +
             '<td>' + object.fecha_termino_avance + '</td>' +
-            /* '<td class="td-actions">' +
-            '</td>' + */
             '</tr>'
         return html;
     }
@@ -236,8 +240,12 @@
                     $('#tableAvances').DataTable();
                     $("#valor_venta").val(valorVenta.toFixed(2));
                     var cantidadAdelantoRestante = $("#cantidad_adelanto_restante").val();
-                    var amortizacionAdelanto = valorVenta >= cantidadAdelantoRestante ? cantidadAdelantoRestante : Number(cantidadAdelantoRestante) - Number(valorVenta);
-                    var retencionFondoGarantia = Number(valorVenta) * 0.05;
+                    var porcentaje_amortizacion_adelanto = $("#porcentaje_amortizacion_adelanto").val();
+                    porcentaje_amortizacion_adelanto = Number(porcentaje_amortizacion_adelanto) / 100;
+                    var porcentaje_retencion_fondo_garantia = $("#porcentaje_retencion_fondo_garantia").val();
+                    porcentaje_retencion_fondo_garantia = Number(porcentaje_retencion_fondo_garantia) / 100;
+                    var amortizacionAdelanto = valorVenta * porcentaje_amortizacion_adelanto;
+                    var retencionFondoGarantia = Number(valorVenta) * porcentaje_retencion_fondo_garantia;
                     var subTotal = Number(valorVenta) - Number(amortizacionAdelanto) - Number(retencionFondoGarantia);
                     var igv = subTotal * 0.18;
                     var total = Number(subTotal) + Number(igv);

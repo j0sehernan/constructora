@@ -1,5 +1,6 @@
 <h3>Avance</h3>
 <div class="only-options-right" style="margin-bottom: 10px;">
+    <input type="hidden" id="proyecto_trabajo_partida_precio_unitario_plan" name="proyecto_trabajo_partida_precio_unitario_plan">
     <input type="hidden" id="proyecto_trabajo_partida_id_general" name="proyecto_trabajo_partida_id_general">
     <a class="btn btn-icon btn btn-label btn-label-brand btn-bold" data-toggle="tooltip" title="Actualizar" data-placement="top" onclick="listProyectoTrabajoPartidaAvances();"><i class="flaticon-refresh"></i></a>
     <a class="btn btn-icon btn btn-label btn-label-brand btn-bold" data-toggle="tooltip" title="Agregar" data-placement="top" onclick="showProyectoTrabajoPartidaAvanceForm('i');"><i class="flaticon2-add-1"></i></a>
@@ -35,6 +36,7 @@
         getModalWithCallBackSecond('proyecto_trabajo_partida_avance/iu.html', function () {
             $("#formProyectoTrabajoPartidaAvance #proyecto_trabajo_partida_id").val($("#proyecto_trabajo_partida_id_general").val());
             $("#formProyectoTrabajoPartidaAvance #proyecto_id").val($("#proyecto_id_general").val());
+            $("#formProyectoTrabajoPartidaAvance #precio_unitario_avance").val($("#proyecto_trabajo_partida_precio_unitario_plan").val());
             if (action === "i") {
             } else if (action === "u") {
                 $("#formProyectoTrabajoPartidaAvance #id").val(id);

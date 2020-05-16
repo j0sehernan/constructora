@@ -79,7 +79,7 @@
         <div class="col">
             <div class="form-group">
                 <div class="input-group flex-nowrap">
-                    <select class="form-control form-control-sm form-control-autocomplete" id="proyecto_trabajo_id_general" name="proyecto_trabajo_id_general" onchange="changeProyectoTrabajo();">
+                    <select class="form-control form-control-sm form-control-autocomplete" id="proyecto_trabajo_id_general" name="proyecto_trabajo_id_general" onchange="changeProyectoTrabajo(); listProyectoTrabajoPartidasStart();">
                     </select>
                     <div class="input-group-append">
                         <button class="btn btn-secondary btn-sm" type="button" data-toggle="tooltip" data-placement="top" data-original-title="Agregar Trabajo" onclick="showProyectoTrabajoForm('i');"><i class="flaticon2-add-1"></i></button>
@@ -90,6 +90,8 @@
                     </div>
                 </div>
                 <span id="proyecto_trabajo_contratista" style="margin-left: 15px;" data-toggle="tooltip" data-placement="top" data-original-title="Contratista"></span><br>
+                <span id="proyecto_trabajo_porcentaje_amortizacion_adelanto" style="margin-left: 15px;" data-toggle="tooltip" data-placement="top" data-original-title="% Amortización e Adelanto"></span>
+                <span id="proyecto_trabajo_porcentaje_retencion_fondo_garantia" style="margin-left: 15px;" data-toggle="tooltip" data-placement="top" data-original-title="% Retención de Fondo de Garantía"></span>
                 <span id="proyecto_trabajo_cantidad_adelanto" style="margin-left: 15px;" data-toggle="tooltip" data-placement="top" data-original-title="Cantidad Adelanto"></span>
             </div>
         </div>
@@ -139,12 +141,13 @@
                 $("#proyecto_trabajo_id_general").html('<option value="">Seleccione Trabajo</option>');
                 var arrayTrabajos = JSON.parse(data);
                 arrayTrabajos.forEach(function (object, index) {
-                    $("#proyecto_trabajo_id_general").append('<option value="' + object.id + '" data-contratista="' + object.contratista + '" data-cantidad_adelanto="' + object.cantidad_adelanto + '" data-can_update="' + object.can_update + '" data-can_delete="' + object.can_delete + '">' + object.nombre + '</option>');
+                    $("#proyecto_trabajo_id_general").append('<option value="' + object.id + '" data-contratista="' + object.contratista + '" data-cantidad_adelanto="' + object.cantidad_adelanto + '" data-can_update="' + object.can_update + '" data-can_delete="' + object.can_delete + '" data-porcentaje_amortizacion_adelanto="' + object.porcentaje_amortizacion_adelanto + '" data-porcentaje_retencion_fondo_garantia="' + object.porcentaje_retencion_fondo_garantia + '">' + object.nombre + '</option>');
                 });
                 if (typeof idProyectoTrabajo !== 'undefined') {
                     $("#proyecto_trabajo_id_general").val(idProyectoTrabajo);
                 }
                 changeProyectoTrabajo();
+                listProyectoTrabajoPartidasStart();
             }
         });
     }
@@ -156,6 +159,8 @@
             $("#divProyectoTrabajoPartidas").hide();
             $("#proyecto_trabajo_contratista").text("");
             $("#proyecto_trabajo_cantidad_adelanto").text("");
+            $("#proyecto_trabajo_porcentaje_amortizacion_adelanto").text("");
+            $("#proyecto_trabajo_porcentaje_retencion_fondo_garantia").text("");
         } else {
             var can_update = $("#proyecto_trabajo_id_general option:selected").attr("data-can_update");
             var can_delete = $("#proyecto_trabajo_id_general option:selected").attr("data-can_delete");
@@ -172,12 +177,15 @@
             $("#divProyectoTrabajoPartidas").show();
             var contratista = $("#proyecto_trabajo_id_general option:selected").attr("data-contratista");
             var cantidad_adelanto = $("#proyecto_trabajo_id_general option:selected").attr("data-cantidad_adelanto");
+            var porcentaje_amortizacion_adelanto = $("#proyecto_trabajo_id_general option:selected").attr("data-porcentaje_amortizacion_adelanto");
+            var porcentaje_retencion_fondo_garantia = $("#proyecto_trabajo_id_general option:selected").attr("data-porcentaje_retencion_fondo_garantia");
             $("#proyecto_trabajo_contratista").text(contratista);
             $("#proyecto_trabajo_cantidad_adelanto").text(cantidad_adelanto);
+            $("#proyecto_trabajo_porcentaje_amortizacion_adelanto").text(porcentaje_amortizacion_adelanto + " %");
+            $("#proyecto_trabajo_porcentaje_retencion_fondo_garantia").text(porcentaje_retencion_fondo_garantia + " %");
         }
         startSelect2ById("proyecto_trabajo_id_general");
         startTooltip();
-        listProyectoTrabajoPartidasStart();
     }
     function getProyectoView() {
         postJSON("Proyecto_C.php", { action: "get", id: $("#proyecto_id_general").val() }, function (data) {
@@ -307,7 +315,7 @@
             '<div class="td_actions_' + id + '" style="display: none;">'
         if (precioPlan > 0) {
             html +=
-                '<button type="button" class="btn btn-outline-focus btn-elevate btn-icon btn-circle btn-xs" data-toggle="tooltip" title="Registrar Avance" onclick="showProyectoTrabajoPartidaAvanceListForm(' + id + ');"><i class="fa fa-forward"></i></button>&nbsp;'
+                '<button type="button" class="btn btn-outline-focus btn-elevate btn-icon btn-circle btn-xs" data-toggle="tooltip" title="Registrar Avance" onclick="showProyectoTrabajoPartidaAvanceListForm(' + id + ',\'' + precioUnitarioPlan + '\');"><i class="fa fa-forward"></i></button>&nbsp;'
         }
         html +=
             '<button type="button" class="btn btn-outline-success btn-elevate btn-icon btn-circle btn-xs" data-toggle="tooltip" title="Mostrar Recursos" onclick="showProyectoTrabajoPartidaProductoForm(\'' + id + '\');"><i class="fa fa-folder-open"></i></button>&nbsp;' +
@@ -395,14 +403,17 @@
                             $("#proyecto_trabajo_id_general option:selected").attr("data-can_delete", "1");
                             changeProyectoTrabajo();
                         }
+                        $("#proyecto_trabajo_id_general option:selected").attr("data-cantidad_adelanto", dataResponse.cantidad_adelanto);
+                        changeProyectoTrabajo();
                     }
                 });
             }
         });
     }
-    function showProyectoTrabajoPartidaAvanceListForm(idProyectoTrabajoPartida) {
+    function showProyectoTrabajoPartidaAvanceListForm(idProyectoTrabajoPartida, precioUnitarioPlan) {
         getModalLargeWithCallBack('proyecto_trabajo_partida_avance/list.html', function () {
             $("#proyecto_trabajo_partida_id_general").val(idProyectoTrabajoPartida);
+            $("#proyecto_trabajo_partida_precio_unitario_plan").val(precioUnitarioPlan);
             listProyectoTrabajoPartidaAvances();
             startTooltip();
         });

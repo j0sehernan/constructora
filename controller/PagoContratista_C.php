@@ -20,9 +20,11 @@ if ($object->{'action'} == "list") {
     $idProyectoTrabajo = $object->proyecto_trabajo_id;
     $fechaInicio = $object->{'fecha_inicio'};
     $fechaTermino = $object->{'fecha_termino'};
-    //1. Obtener adelanto
-    $cantidadAdelantoRestante = $proyectoTrabajo->get($idProyectoTrabajo);
-    $cantidadAdelantoRestante = $cantidadAdelantoRestante[0]["cantidad_adelanto_restante"];
+    //1. Obtener datos del Proyecto Trabajo
+    $listProyectoTrabajo = $proyectoTrabajo->get($idProyectoTrabajo);
+    $cantidadAdelantoRestante = $listProyectoTrabajo[0]["cantidad_adelanto_restante"];
+    $porcentajeAmortizacionAdelanto = $listProyectoTrabajo[0]["porcentaje_amortizacion_adelanto"];
+    $porcentajeRetencionFondoGarantia = $listProyectoTrabajo[0]["porcentaje_retencion_fondo_garantia"];
     //2. Calcular el Valor Venta
     $valorVenta = 0;
     $listAvancesByProyectoTrabajoAndDataRanges = $proyectoTrabajoPartidaAvance->listByProyectoTrabajoAndDateRanges($idProyectoTrabajo, $fechaInicio, $fechaTermino);
@@ -30,8 +32,8 @@ if ($object->{'action'} == "list") {
         $valorVenta += $avance["precio_avance"];
     }
     //3. Calcular el resto de variables
-    $amortizacionAdelanto = $valorVenta >= $cantidadAdelantoRestante ? $cantidadAdelantoRestante : $cantidadAdelantoRestante - $valorVenta;
-    $retencionFondoGarantia = $valorVenta * 0.05;
+    $amortizacionAdelanto = $valorVenta * $porcentajeAmortizacionAdelanto / 100;
+    $retencionFondoGarantia = $valorVenta * $porcentajeRetencionFondoGarantia / 100;
     $subTotal = $valorVenta - $amortizacionAdelanto - $retencionFondoGarantia;
     $igv = $subTotal * 0.18;
     $total = $subTotal + $igv;

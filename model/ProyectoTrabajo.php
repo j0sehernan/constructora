@@ -17,10 +17,10 @@ class ProyectoTrabajo
         return $result;
     }
 
-    function listByContratista($idContratista)
+    function listByProyectoAndContratista($idProyecto, $idContratista)
     {
         $db = new DB();
-        $result = $db->query("call proyecto_trabajo_list_by_contratista('$idContratista');");
+        $result = $db->query("call proyecto_trabajo_list_by_proyecto_and_contratista('$idProyecto','$idContratista');");
         return $result;
     }
 
@@ -45,10 +45,10 @@ class ProyectoTrabajo
         return $result;
     }
 
-    function insert($nombre, $idProyecto, $idPersonaContratista, $cantidadAdelanto)
+    function insert($nombre, $idProyecto, $idPersonaContratista, $porcentajeAmortizacionAdelanto, $porcentajeRetencionFondoGarantia)
     {
         $db = new DB();
-        $result = $db->executeWithReturn("call proyecto_trabajo_i('$nombre','$idProyecto','$idPersonaContratista','$cantidadAdelanto');");
+        $result = $db->executeWithReturn("call proyecto_trabajo_i('$nombre','$idProyecto','$idPersonaContratista','$porcentajeAmortizacionAdelanto','$porcentajeRetencionFondoGarantia');");
         return $result;
     }
 
@@ -77,6 +77,13 @@ class ProyectoTrabajo
     {
         $db = new DB();
         $result = $db->execute("call proyecto_trabajo_u_cantidad_adelanto_usado('$id','$cantidadAdelantoUsado');");
+        return $result;
+    }
+
+    function generateCantidadAdelanto($id)
+    {
+        $db = new DB();
+        $result = $db->executeWithReturn("call proyecto_trabajo_generate_cantidad_adelanto('$id');");
         return $result;
     }
 
