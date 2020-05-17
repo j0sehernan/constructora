@@ -48,7 +48,7 @@
                         {
                             title: "Opciones", className: "td-actions", render: function (data, type, row, meta) {
                                 var html = '<button type="button" class="btn btn-outline-info btn-elevate btn-icon btn-circle btn-xs" data-toggle="tooltip" title="Visualizar" onclick="showPagoContratistaForm(\'v\',\'' + row.id + '\');"><i class="fa fa-eye"></i></button>&nbsp;';
-                                if (row.pagado == 0) {
+                                if (row.pagado === "0") {
                                     html +=
                                         '<button type="button" class="btn btn-outline-success btn-elevate btn-icon btn-circle btn-xs" data-toggle="tooltip" title="Confirmar Pago" onclick="confirmarPagoContratista(\'' + row.id + '\');"><i class="fa fa-check"></i></button>&nbsp;' +
                                         '<button type="button" class="btn btn-outline-danger btn-elevate btn-icon btn-circle btn-xs" data-toggle="tooltip" title="Eliminar" onclick="deletePagoContratista(\'' + row.id + '\',\'' + row.proyecto_trabajo_id + '\');"><i class="fa fa-trash"></i></button>';

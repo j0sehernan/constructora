@@ -11,27 +11,6 @@
     <div class="row">
         <div class="col-sm-4">
             <div class="form-group">
-                <label for="comprobante_pago_tipo_id">Tipo de Comprobante</label>
-                <select class="form-control form-control-sm form-control-autocomplete" id="comprobante_pago_tipo_id" name="comprobante_pago_tipo_id">
-                </select>
-            </div>
-        </div>
-        <div class="col-sm-4">
-            <div class="form-group">
-                <label for="comprobante_pago_codigo">N° Comprobante</label>
-                <input type="text" class="form-control form-control-sm" id="comprobante_pago_codigo" name="comprobante_pago_codigo" placeholder="N° Comprobante" maxlength="100">
-            </div>
-        </div>
-        <div class="col-sm-4">
-            <div class="form-group">
-                <label for="guia_remision">Guía de Remisión</label>
-                <input type="text" class="form-control form-control-sm" id="guia_remision" name="guia_remision" placeholder="Guía Remisión" maxlength="100">
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-sm-4">
-            <div class="form-group">
                 <label for="fecha_ingreso_all">Fecha de Ingreso</label>
                 <input type="text" class="form-control form-control-sm form-control-date" id="fecha_ingreso_all" name="fecha_ingreso_all" placeholder="Fecha de Ingreso" maxlength="10">
             </div>
@@ -40,6 +19,12 @@
             <div class="form-group">
                 <label for="fecha_vencimiento_all">Fecha de Vencimiento</label>
                 <input type="text" class="form-control form-control-sm form-control-date" id="fecha_vencimiento_all" name="fecha_vencimiento_all" placeholder="Fecha de Vencimiento" maxlength="10">
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="form-group">
+                <label for="guia_remision">Guía de Remisión</label>
+                <input type="text" class="form-control form-control-sm" id="guia_remision" name="guia_remision" placeholder="Guía Remisión" maxlength="100">
             </div>
         </div>
     </div>
@@ -147,13 +132,6 @@
             orden_compra_id: {
                 required: true
             },
-            comprobante_pago_tipo_id: {
-                required: true
-            },
-            comprobante_pago_codigo: {
-                required: true,
-                maxlength: 100
-            },
             guia_remision: {
                 required: true,
                 maxlength: 100
@@ -221,8 +199,6 @@
             "action": $("#action").val(), "listOC": JSONElements,
             orden_compra_id: $("#orden_compra_id").val(),
             orden_compra_used: orden_compra_used,
-            comprobante_pago_tipo_id: $("#comprobante_pago_tipo_id").val(),
-            comprobante_pago_codigo: $("#comprobante_pago_codigo").val(),
             guia_remision: $("#guia_remision").val(),
             almacen_id: $("#almacen_id_general").val(),
             orden_compra_can_delete: orden_compra_can_delete

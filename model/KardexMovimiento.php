@@ -10,6 +10,13 @@ class KardexMovimiento
         return $result;
     }
 
+    function listByOCAndGuiaRemision($idOrdenCompra, $guiaRemision)
+    {
+        $db = new DB();
+        $result = $db->query("call kardex_movimiento_list_by_oc_and_guia_remision('$idOrdenCompra','$guiaRemision');");
+        return $result;
+    }
+
     function insertProducto($idKardex, $idAlmacen, $idProducto, $idUnidadMedida, $cantidad, $fechaMovimiento, $fechaVencimiento, $precio, $idComprobantePagoTipo, $comprobantePagoCodigo, $usuRegAud)
     {
         $db = new DB();
@@ -17,10 +24,10 @@ class KardexMovimiento
         return $result;
     }
 
-    function insertOrdenCompra($idKardex, $idAlmacen, $idProducto, $idUnidadMedida, $cantidad, $fechaMovimiento, $fechaVencimiento, $precio, $idComprobantePagoTipo, $comprobantePagoCodigo, $usuRegAud, $guiaRemision, $idOrdenCompra)
+    function insertOrdenCompra($idKardex, $idAlmacen, $idProducto, $idUnidadMedida, $cantidad, $fechaMovimiento, $fechaVencimiento, $precio, $usuRegAud, $guiaRemision, $idOrdenCompra)
     {
         $db = new DB();
-        $result = $db->execute("call kardex_movimiento_i_orden_compra('$idKardex','$idAlmacen','$idProducto','$idUnidadMedida','$cantidad','$fechaMovimiento','$fechaVencimiento','$precio','$idComprobantePagoTipo','$comprobantePagoCodigo','$usuRegAud','$guiaRemision','$idOrdenCompra');");
+        $result = $db->execute("call kardex_movimiento_i_orden_compra('$idKardex','$idAlmacen','$idProducto','$idUnidadMedida','$cantidad','$fechaMovimiento','$fechaVencimiento','$precio','$usuRegAud','$guiaRemision','$idOrdenCompra');");
         return $result;
     }
     function insertAlmacen($id, $idKardex, $idKardexOrigen, $idAlmacenOrigen, $idAlmacen, $cantidad, $usuRegAud)
@@ -55,6 +62,13 @@ class KardexMovimiento
     {
         $db = new DB();
         $result = $db->execute("call kardex_movimiento_i_s_proyecto_trabajo_partida('$idKardexMovimiento','$cantidad','$cantidadSalida','$perRegAud','$idProyectoTrabajoPartidaSalida');");
+        return $result;
+    }
+
+    function updateGuiaRemisionPagada($id, $guiaRemisionPagada)
+    {
+        $db = new DB();
+        $result = $db->execute("call kardex_movimiento_u_guia_remision_pagada('$id','$guiaRemisionPagada');");
         return $result;
     }
 }

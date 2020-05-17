@@ -1,0 +1,333 @@
+<h3 id="title">Generar Pago</h3>
+<form id="formPagoProveedor">
+    <div class="row">
+        <div class="col-sm-3">
+            <div class="form-group">
+                <label for="orden_compra_id">Orden de Compra</label>
+                <select class="form-control form-control-sm form-control-autocomplete" id="orden_compra_id" name="orden_compra_id">
+                </select>
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <div class="form-group">
+                <label for="persona_proveedor">Proveedor</label>
+                <input type="text" class="form-control form-control-sm" id="persona_proveedor" name="persona_proveedor" placeholder="Proveedor" readonly>
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <div class="form-group">
+                <label for="guia_remision">Guía de Remisión</label>
+                <input type="text" class="form-control form-control-sm" id="guia_remision" name="guia_remision" placeholder="Guía Remisión" maxlength="100">
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <label class="kt-checkbox">
+                <input type="checkbox" id="pagado" name="pagado">
+                Pagado
+                <span></span>
+            </label>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-3">
+            <div class="form-group">
+                <label for="comprobante_pago_tipo_id">Tipo Comprobante</label>
+                <select class="form-control form-control-sm form-control-autocomplete" id="comprobante_pago_tipo_id" name="comprobante_pago_tipo_id">
+                </select>
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <div class="form-group">
+                <label for="comprobante_pago_codigo">Código Comprobante</label>
+                <input type="text" class="form-control form-control-sm" id="comprobante_pago_codigo" name="comprobante_pago_codigo" placeholder="Código Comprobante" maxlength="100">
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <div class="form-group">
+                <label for="fecha_pago">Fecha de Pago</label>
+                <input type="text" class="form-control form-control-sm form-control-date" id="fecha_pago" name="fecha_pago" placeholder="Fecha de Pago" maxlength="10">
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <div class="form-group">
+                <label for="monto_total">Monto Total</label>
+                <input type="text" class="form-control form-control-sm" id="monto_total" name="monto_total" placeholder="Monto Total" readonly>
+            </div>
+        </div>
+    </div>
+    <div class="row" style="margin-bottom: 10px;">
+        <div class="col-sm-12">
+            <div style="text-align: right;">
+                <input type="hidden" id="generate" name="generate">
+                <input type="hidden" id="action" name="action" value="i">
+                <input type="hidden" id="id" name="id">
+                <button type="button" id="btnVisualizar" class="btn btn-outline-info btn-sm"><i class="la la-eye"></i> Visualizar</button>
+                <button type="submit" id="btnGenerar" class="btn btn-success btn-sm"><i class="la la-save"></i> Generar</button>
+                <button type="button" class="btn btn-outline-danger btn-sm" onclick="closeLastModal();">Cancelar</button>
+            </div>
+        </div>
+    </div>
+    <div id="divTableDetalle" style="display: none;">
+        <table id="tableDetalle" class="table table-hover table-bordered table-striped table-sm">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Producto</th>
+                    <th>Unidad Medida</th>
+                    <th>Precio</th>
+                    <th>Cantidad</th>
+                    <th>Sub Total</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</form>
+<script>
+    function fillOrdenCompra(idOrdenCompra, callback) {
+        postJSON("OrdenCompra_C.php", { "action": "list" }, function (data) {
+            if (!validErrorResponse(data)) {
+                $("#formPagoProveedor #orden_compra_id").html('<option value="">Seleccione Orden de Compra</option>');
+                var arrayOC = JSON.parse(data);
+                arrayOC.forEach(function (object, index) {
+                    $("#formPagoProveedor #orden_compra_id").append('<option value="' + object.id + '" data-proveedor="' + object.proveedor + '">' + object.codigo + '</option>');
+                });
+                if (typeof idOrdenCompra !== 'undefined') {
+                    $("#formPagoProveedor #orden_compra_id").val(idOrdenCompra);
+                }
+                startSelect2ById("orden_compra_id");
+                if (typeof callback !== 'undefined') callback();
+            }
+        });
+    }
+    $("#orden_compra_id").change(function () {
+        clearGenerate();
+        var proveedor = $("#orden_compra_id option:selected").attr("data-proveedor");
+        $("#persona_proveedor").val(proveedor);
+    });
+    $("#guia_remision").change(function () {
+        clearGenerate();
+    });
+    function fillComprobantePagoTipo(idComprobantePagoTipo, callback) {
+        postJSON("ComprobantePagoTipo_C.php", { "action": "list" }, function (data) {
+            if (!validErrorResponse(data)) {
+                $("#formPagoProveedor #comprobante_pago_tipo_id").html('<option value="">Seleccione Tipo Comprobante</option>');
+                var arrayTipoComprobante = JSON.parse(data);
+                arrayTipoComprobante.forEach(function (object, index) {
+                    $("#formPagoProveedor #comprobante_pago_tipo_id").append('<option value="' + object.codigo + '">' + object.nombre + '</option>');
+                });
+                if (typeof idComprobantePagoTipo !== 'undefined') {
+                    $("#formPagoProveedor #comprobante_pago_tipo_id").val(idComprobantePagoTipo);
+                }
+                startSelect2ById("comprobante_pago_tipo_id");
+                if (typeof callback !== 'undefined') callback();
+            }
+        });
+    }
+    $("#btnVisualizar").click(function () {
+        var idOrdenCompra = $("#orden_compra_id").val();
+        var guiaRemision = $("#guia_remision").val();
+        if (idOrdenCompra !== "" && guiaRemision !== "") {
+            listByOCAndGuiaRemision();
+        } else if (idOrdenCompra === "") {
+            customAlert("Seleccione Orden de Compra", function () {
+                $("#orden_compra_id").select2("open");
+            });
+        } else if (guiaRemision === "") {
+            customAlert("Ingrese Guía de Remisión", function () {
+                $("#guia_remision").focus();
+            });
+        }
+    });
+    function clearGenerate() {
+        $("#generate").val("false");
+        $("#divTableDetalle").hide();
+        destroyDataTableIfExists("tableDetalle");
+        $("#tableDetalle tbody").html("");
+        $("#monto_total").val("");
+    }
+    function createTrDetalle(object) {
+        var html =
+            `
+        <tr>
+            <td>`+ object.producto + `</td>
+            <td>`+ object.unidad_medida + `</td>
+            <td>`+ object.precio_unitario + `</td>
+            <td>`+ object.cantidad + `</td>
+            <td>`+ Number(object.sub_total).toFixed(2) + `</td>
+        </tr>
+        `;
+        return html;
+    }
+    function listByOCAndGuiaRemision() {
+        clearGenerate();
+        postJSON("KardexMovimiento_C.php", {
+            action: "listByOCAndGuiaRemision",
+            orden_compra_id: $("#orden_compra_id").val(),
+            guia_remision: $("#guia_remision").val()
+        }, function (data) {
+            if (!validErrorResponse(data)) {
+                $("#divTableDetalle").show();
+                list = JSON.parse(data);
+                if (list.length > 0) {
+                    $("#generate").val("true");
+                    var montoTotal = 0;
+                    list.forEach(function (object, index) {
+                        var subTotal = Number(object.cantidad) * Number(object.precio);
+                        object.precio_unitario = object.precio;
+                        object.sub_total = subTotal;
+                        montoTotal += subTotal;
+                        var html = createTrDetalle(object);
+                        $("#tableDetalle tbody").append(html);
+                    });
+                    $("#monto_total").val(montoTotal);
+                }
+                $('#tableDetalle').DataTable();
+            }
+        });
+    }
+    function getPagoProveedor() {
+        $("#btnVisualizar").remove();
+        $("#btnGenerar").text("Guardar");
+        $("#generate").val("true");
+        postJSON("PagoProveedor_C.php", { action: "get", id: $("#id").val() }, function (data) {
+            if (!validErrorResponse(data)) {
+                dataResponse = JSON.parse(data)[0];
+                $("#titleAction").html("Editar Pago");
+                fillOrdenCompra(dataResponse.orden_compra_id);
+                $("#persona_proveedor").val(dataResponse.persona_proveedor);
+                $("#guia_remision").val(dataResponse.guia_remision);
+                fillComprobantePagoTipo(dataResponse.comprobante_pago_tipo_id);
+                $("#comprobante_pago_codigo").val(dataResponse.comprobante_pago_codigo);
+                $("#fecha_pago").val(dataResponse.fecha_pago);
+                $("#monto_total").val(dataResponse.monto_total);
+                $("#pagado").prop("checked", dataResponse.pagado === "1" ? true : false);
+                listPagoProveedorDetalles();
+                $("#orden_compra_id").attr("disabled", true);
+                $("#guia_remision").attr("disabled", true);
+            }
+        });
+    }
+    function viewPagoProveedor() {
+        $("#btnVisualizar").remove();
+        $("#btnGenerar").remove();
+        $("#generate").val("true");
+        postJSON("PagoProveedor_C.php", { action: "get", id: $("#id").val() }, function (data) {
+            if (!validErrorResponse(data)) {
+                dataResponse = JSON.parse(data)[0];
+                $("#titleAction").html("Editar Pago");
+                fillOrdenCompra(dataResponse.orden_compra_id);
+                $("#persona_proveedor").val(dataResponse.persona_proveedor);
+                $("#guia_remision").val(dataResponse.guia_remision);
+                fillComprobantePagoTipo(dataResponse.comprobante_pago_tipo_id);
+                $("#comprobante_pago_codigo").val(dataResponse.comprobante_pago_codigo);
+                $("#fecha_pago").val(dataResponse.fecha_pago);
+                $("#monto_total").val(dataResponse.monto_total);
+                $("#pagado").prop("checked", dataResponse.pagado === "1" ? true : false);
+                listPagoProveedorDetalles();
+                $("#orden_compra_id").attr("disabled", true);
+                $("#guia_remision").attr("disabled", true);
+                $("#comprobante_pago_tipo_id").attr("disabled", true);
+                $("#comprobante_pago_codigo").attr("disabled", true);
+                $("#fecha_pago").attr("disabled", true);
+                $("#pagado").attr("disabled", true);
+            }
+        });
+    }
+    function listPagoProveedorDetalles() {
+        postJSON("PagoProveedorDetalle_C.php", {
+            action: "listByPagoProveedor",
+            pago_proveedor_id: $("#id").val()
+        }, function (data) {
+            if (!validErrorResponse(data)) {
+                $("#divTableDetalle").show();
+                list = JSON.parse(data);
+                if (list.length > 0) {
+                    list.forEach(function (object, index) {
+                        var html = createTrDetalle(object);
+                        $("#tableDetalle tbody").append(html);
+                    });
+                }
+                $('#tableDetalle').DataTable();
+            }
+        });
+    }
+    function generate() {
+        if ($("#generate").val() === "true") {
+            postJSON("PagoProveedor_C.php", {
+                action: $("#action").val(),
+                orden_compra_id: $("#orden_compra_id").val(),
+                persona_proveedor: $("#persona_proveedor").val(),
+                guia_remision: $("#guia_remision").val(),
+                comprobante_pago_tipo_id: $("#comprobante_pago_tipo_id").val(),
+                comprobante_pago_codigo: $("#comprobante_pago_codigo").val(),
+                fecha_pago: $("#fecha_pago").val(),
+                pagado: $("#pagado").is(":checked")
+            }, function (data) {
+                if (!validErrorResponse(data)) {
+                    closeLastModal();
+                    notifySuccess();
+                    listPagoProveedores();
+                }
+            });
+        } else {
+            customAlert("Para generar un pago, se debe tener registrado al menos un detalle.");
+        }
+    }
+    function update() {
+        if ($("#generate").val() === "true") {
+            postJSON("PagoProveedor_C.php", {
+                action: $("#action").val(),
+                id: $("#id").val(),
+                comprobante_pago_tipo_id: $("#comprobante_pago_tipo_id").val(),
+                comprobante_pago_codigo: $("#comprobante_pago_codigo").val(),
+                fecha_pago: $("#fecha_pago").val(),
+                pagado: $("#pagado").is(":checked")
+            }, function (data) {
+                if (!validErrorResponse(data)) {
+                    closeLastModal();
+                    notifySuccess();
+                    listPagoProveedores();
+                }
+            });
+        } else {
+            customAlert("Para generar un pago, se debe tener registrado al menos un detalle.");
+        }
+    }
+    $("#formPagoProveedor").validate({
+        rules: {
+            orden_compra_id: {
+                required: true
+            },
+            persona_proveedor: {
+                required: true
+            },
+            guia_remision: {
+                required: true,
+                maxlength: 100
+            },
+            comprobante_pago_tipo_id: {
+                required: true
+            },
+            comprobante_pago_codigo: {
+                required: true
+            },
+            fecha_pago: {
+                required: true,
+                maxlength: 10,
+                dateITA: true
+            },
+            monto_total: {
+                required: true
+            }
+        },
+        submitHandler: function (form, event) {
+            var action = $("#action").val();
+            if (action === "i") {
+                generate();
+            } else if (action === "u") {
+                update();
+            }
+        }
+    });
+    startDatePicker();
+</script>

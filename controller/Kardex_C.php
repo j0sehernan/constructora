@@ -33,8 +33,6 @@ if ($object->{'action'} == "listByAlmacen") {
     $orden_compra_id = $object->{'orden_compra_id'};
     $orden_compra_used = $object->{'orden_compra_used'};
     $orden_compra_can_delete = $object->orden_compra_can_delete;
-    $comprobante_pago_tipo_id = $object->{'comprobante_pago_tipo_id'};
-    $comprobante_pago_codigo = $object->{'comprobante_pago_codigo'};
     $guia_remision = $object->{'guia_remision'};
     $listOC = $object->{'listOC'};
 
@@ -43,7 +41,7 @@ if ($object->{'action'} == "listByAlmacen") {
 
         if ($resultKardex) {
             $idKardex = $resultKardex[0]["id"];
-            $resultKardexMovimiento = $kardexMovimiento->insertOrdenCompra($idKardex, $almacen_id, $obj->producto_id, $obj->unidad_medida_id, $obj->cantidad, $obj->fecha_ingreso, $obj->fecha_vencimiento, $obj->precio_unitario, $comprobante_pago_tipo_id, $comprobante_pago_codigo, getPersonaFullName(), $guia_remision, $orden_compra_id);
+            $resultKardexMovimiento = $kardexMovimiento->insertOrdenCompra($idKardex, $almacen_id, $obj->producto_id, $obj->unidad_medida_id, $obj->cantidad, $obj->fecha_ingreso, $obj->fecha_vencimiento, $obj->precio_unitario, getPersonaFullName(), $guia_remision, $orden_compra_id);
 
             if ($resultKardexMovimiento) {
                 if ($obj->used) {
