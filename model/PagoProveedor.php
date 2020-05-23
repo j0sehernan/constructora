@@ -17,6 +17,13 @@ class PagoProveedor
         return $result;
     }
 
+    function reportByFechaPagoInicioTermino($fechaPagoInicio, $fechaPagoTermino)
+    {
+        $db = new DB();
+        $result = $db->query("call pago_proveedor_report_by_fecha_pago_inicio_termino('$fechaPagoInicio','$fechaPagoTermino');");
+        return $result;
+    }
+
     function insert($idOrdenCompra, $guiaRemision, $personaProveedor, $idComprobantePagoTipo, $comprobantePagoCodigo, $fechaPago, $montoTotal, $pagado)
     {
         $db = new DB();
@@ -37,7 +44,7 @@ class PagoProveedor
         $result = $db->execute("call pago_proveedor_u_monto_total('$id','$montoTotal');");
         return $result;
     }
-    
+
     function updatePagado($id, $pagado)
     {
         $db = new DB();

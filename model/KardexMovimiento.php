@@ -10,6 +10,13 @@ class KardexMovimiento
         return $result;
     }
 
+    function reportByAlmacenAndFechaInicioAndFechaTermino($idAlmacen, $fechaInicio, $fechaTermino)
+    {
+        $db = new DB();
+        $result = $db->query("call kardex_movimiento_report_by_almacen('$idAlmacen','$fechaInicio','$fechaTermino');");
+        return $result;
+    }
+
     function listByOCAndGuiaRemision($idOrdenCompra, $guiaRemision)
     {
         $db = new DB();

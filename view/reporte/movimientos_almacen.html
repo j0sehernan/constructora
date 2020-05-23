@@ -7,7 +7,7 @@
                 <a href="#" class="kt-subheader__breadcrumbs-home"><i class="flaticon2-shelter"></i></a>
                 <span class="kt-subheader__breadcrumbs-separator"></span>
                 <a href="#" class="kt-subheader__breadcrumbs-link">
-                    Avances de Proyecto </a>
+                    Movimientos de Almacen </a>
             </div>
         </div>
     </div>
@@ -15,28 +15,20 @@
 <form id="form">
     <div class="kt-container kt-container--fluid kt-grid__item kt-grid__item--fluid">
         <div class="row">
-            <div class="col-sm-3">
+            <div class="col-sm-4">
                 <div class="form-group">
-                    <label for="proyecto_id">Proyecto</label>
-                    <select class="form-control form-control-sm form-control-autocomplete" id="proyecto_id" name="proyecto_id" onchange="fillProyectoTrabajo(); changeInputsReport();">
+                    <label for="almacen_id">Almacen</label>
+                    <select class="form-control form-control-sm form-control-autocomplete" id="almacen_id" name="almacen_id" onchange="changeInputsReport();">
                     </select>
                 </div>
             </div>
-            <div class="col-sm-3">
-                <div class="form-group">
-                    <label for="proyecto_trabajo_id">Trabajo</label>
-                    <select class="form-control form-control-sm form-control-autocomplete" id="proyecto_trabajo_id" name="proyecto_trabajo_id" onchange="changeInputsReport();">
-                        <option value="">Seleccione Trabajo</option>
-                    </select>
-                </div>
-            </div>
-            <div class="col-sm-3">
+            <div class="col-sm-4">
                 <div class="form-group">
                     <label for="fecha_inicio">Fecha de Inicio</label>
                     <input type="text" class="form-control form-control-sm form-control-date" id="fecha_inicio" name="fecha_inicio" placeholder="Fecha de Inicio" maxlength="10" onchange="changeInputsReport();">
                 </div>
             </div>
-            <div class="col-sm-3">
+            <div class="col-sm-4">
                 <div class="form-group">
                     <label for="fecha_termino">Fecha de Término</label>
                     <input type="text" class="form-control form-control-sm form-control-date" id="fecha_termino" name="fecha_termino" placeholder="Fecha de Término" maxlength="10" onchange="changeInputsReport();">
@@ -49,7 +41,7 @@
         <div class="row" style="margin-bottom: 10px;">
             <div class="col-sm-12">
                 <div style="text-align: right;">
-                    <input type="hidden" id="action" name="action" value="reportAvanceProyecto">
+                    <input type="hidden" id="action" name="action" value="reportByAlmacenAndFechaInicioAndFechaTermino">
                     <button type="button" id="btnImprimir" class="btn btn-outline-info btn-sm" style="display: none;"><i class="fa fa-print"></i> Imprimir</button>
                     <button type="submit" id="btnGenerar" class="btn btn-success btn-sm"><i class="la la-save"></i> Generar</button>
                 </div>
@@ -59,19 +51,13 @@
             <table id="table" class="table table-hover table-bordered table-striped table-sm">
                 <thead class="thead-dark">
                     <tr>
-                        <th rowspan="2" style="vertical-align: middle; text-align: center;">Código</th>
-                        <th rowspan="2" style="vertical-align: middle; text-align: center;">Partida</th>
-                        <th rowspan="2" style="vertical-align: middle; text-align: center;">UM</th>
-                        <th colspan="2" style="text-align: center;">Plan</th>
-                        <th colspan="2" style="text-align: center;">Avance</th>
-                        <th colspan="2" style="text-align: center;">Acumulado</th>
-                    </tr>
-                    <tr>
+                        <th style="text-align: center;">Tipo Movimiento</th>
+                        <th style="text-align: center;">Producto</th>
+                        <th style="text-align: center;">UM</th>
                         <th style="text-align: center;">Cantidad</th>
-                        <th style="text-align: center;">Precio</th>
-                        <th style="text-align: center;">Cantidad </th>
-                        <th style="text-align: center;">Precio</th>
-                        <th style="text-align: center;">Cantidad</th>
+                        <th style="text-align: center;">Fecha de Movimiento</th>
+                        <th style="text-align: center;">Fecha de Vencimiento</th>
+                        <th style="text-align: center;">Fecha de Término</th>
                         <th style="text-align: center;">Precio</th>
                     </tr>
                 </thead>
@@ -81,46 +67,26 @@
     </div>
 </form>
 <script>
-    function fillProyecto(idProyecto, callback) {
-        postJSON("Proyecto_C.php", { "action": "list" }, function (data) {
+    function fillAlmacen(idAlmacen, callback) {
+        postJSON("Almacen_C.php", { "action": "list" }, function (data) {
             if (!validErrorResponse(data)) {
-                $("#proyecto_id").html('<option value="">Seleccione Proyecto</option>');
+                $("#almacen_id").html('<option value="">Seleccione Almacen</option>');
                 var arrayProyectos = JSON.parse(data);
                 arrayProyectos.forEach(function (object, index) {
-                    $("#proyecto_id").append('<option value="' + object.id + '">' + object.nombre + '</option>');
+                    $("#almacen_id").append('<option value="' + object.id + '">' + object.nombre + '</option>');
                 });
-                if (typeof idProyecto !== 'undefined') {
-                    $("#proyecto_id").val(idProyecto);
+                if (typeof idAlmacen !== 'undefined') {
+                    $("#almacen_id").val(idAlmacen);
                 }
-                startSelect2ById("proyecto_id");
+                startSelect2ById("almacen_id");
                 if (typeof callback !== 'undefined') callback();
-            }
-        });
-    }
-    function fillProyectoTrabajo(idProyectoTrabajo) {
-        postJSON("ProyectoTrabajo_C.php", { "action": "listByProyecto", proyecto_id: $("#proyecto_id").val() }, function (data) {
-            if (!validErrorResponse(data)) {
-                $("#proyecto_trabajo_id").html('<option value="">Seleccione Trabajo</option>');
-                var arrayProyectoTrabajo = JSON.parse(data);
-                arrayProyectoTrabajo.forEach(function (object, index) {
-                    $("#proyecto_trabajo_id").append('<option value="' + object.id + '" data-cantidad_adelanto_restante="' + object.cantidad_adelanto_restante + '">' + object.nombre + '</option>');
-                });
-                if (typeof idProyectoTrabajo !== 'undefined') {
-                    $("#proyecto_trabajo_id").val(idProyectoTrabajo);
-                }
-                startSelect2ById("proyecto_trabajo_id");
             }
         });
     }
     $("#form").validate({
         rules: {
-            proyecto_id: {
+            almacen_id: {
                 required: true
-            },
-            proyecto_trabajo_id: {
-                required: true,
-                maxlength: 21,
-                number: true
             },
             fecha_inicio: {
                 required: true,
@@ -144,7 +110,7 @@
         }
     });
     function report() {
-        postJSONForm("Proyecto_C.php", "form", function (data) {
+        postJSONForm("KardexMovimiento_C.php", "form", function (data) {
             destroyDataTableIfExists("table");
             $("#table tbody").html("");
             if (!validErrorResponse(data)) {
@@ -154,15 +120,14 @@
                         var html =
                             `
                             <tr>
-                                <td>`+ object.codigo + `</td>
-                                <td>`+ object.partida + `</td>
+                                <td>`+ object.tipo_movimiento + `</td>
+                                <td>`+ object.producto + `</td>
                                 <td>`+ object.unidad_medida + `</td>
-                                <td>`+ object.cantidad_plan + `</td>
-                                <td>`+ object.precio_plan + `</td>
-                                <td>`+ object.precio_avance + `</td>
-                                <td>`+ object.cantidad_avance + `</td>
-                                <td>`+ object.cantidad_acumulada + `</td>
-                                <td>`+ object.precio_acumulado + `</td>
+                                <td>`+ object.cantidad + `</td>
+                                <td>`+ object.fecha_movimiento + `</td>
+                                <td>`+ object.fecha_vencimiento + `</td>
+                                <td>`+ object.fecha_termino + `</td>
+                                <td>`+ object.precio + `</td>
                             </tr>
                             `;
                         $("#table tbody").append(html);
@@ -175,7 +140,7 @@
         });
     }
     $("#btnImprimir").click(function () {
-        title = `<h1 style="text-align: center;">REPORTE DE AVANCE DE PROYECTO</h1>`;
+        title = `<h1 style="text-align: center;">REPORTE DE MOVIMIENTOS DE ALMACEN</h1>`;
         body = `<table width="100%" border="1" style="border-collapse: collapse;">` + $("#table").html() + `</table>`;
         w = window.open();
         w.document.write(title + body);
@@ -187,5 +152,5 @@
         $("#divAlertImprimir").show();
     }
     startDatePicker();
-    fillProyecto();
+    fillAlmacen();
 </script>

@@ -19,6 +19,10 @@ switch ($object->action) {
         $result = $pagoProveedor->get($object->id);
         echo (json_encode($result));
         break;
+    case "reportByFechaPagoInicioTermino":
+        $result = $pagoProveedor->reportByFechaPagoInicioTermino($object->fecha_pago_inicio, $object->fecha_pago_termino);
+        echo (json_encode($result));
+        break;
     case "i":
         $idOrdenCompra = $object->orden_compra_id;
         $guiaRemision = $object->guia_remision;

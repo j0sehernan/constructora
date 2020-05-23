@@ -32,6 +32,13 @@ class OrdenCompra
         return $result;
     }
 
+    function reportByFechaInicioAndFechaTermino($fechaInicio, $fechaTermino)
+    {
+        $db = new DB();
+        $result = $db->query("call orden_compra_report_by_fecha_inicio_termino('$fechaInicio','$fechaTermino');");
+        return $result;
+    }
+
     function insert($persona_proveedor_id, $fecha, $proforma_codigo, $codigo)
     {
         $db = new DB();

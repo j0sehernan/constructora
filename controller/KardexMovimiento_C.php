@@ -11,4 +11,8 @@ switch ($object->action) {
         $result = $kardexMovimiento->listByOCAndGuiaRemision($object->orden_compra_id, $object->guia_remision);
         echo (json_encode($result));
         break;
+    case "reportByAlmacenAndFechaInicioAndFechaTermino":
+        $result = $kardexMovimiento->reportByAlmacenAndFechaInicioAndFechaTermino($object->almacen_id, $object->fecha_inicio, $object->fecha_termino);
+        echo (json_encode($result));
+        break;
 }

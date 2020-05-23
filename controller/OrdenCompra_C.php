@@ -23,6 +23,10 @@ switch ($object->action) {
         $result = $ordenCompra->get($object->id);
         echo (json_encode($result));
         break;
+    case "reportByFechaInicioAndFechaTermino":
+        $result = $ordenCompra->reportByFechaInicioAndFechaTermino($object->fecha_inicio, $object->fecha_termino);
+        echo (json_encode($result));
+        break;
     case "i":
         $result = $ordenCompra->insert($object->{'persona_proveedor_id'}, $object->{'fecha'}, $object->{'proforma_codigo'}, $object->{'codigo'});
         echo (json_encode($result));
