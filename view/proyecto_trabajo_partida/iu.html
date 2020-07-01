@@ -4,7 +4,7 @@
         <div class="col-sm-4">
             <div class="form-group">
                 <label for="codigo">Código</label>
-                <input type="text" class="form-control form-control-sm" id="codigo" name="codigo" placeholder="Código">
+                <input type="text" class="form-control form-control-sm" id="codigo" name="codigo" placeholder="Código" maxlength="12">
             </div>
         </div>
         <div class="col-sm-8">
@@ -132,7 +132,7 @@
         rules: {
             codigo: {
                 required: true,
-                maxlength: 10,
+                maxlength: 12,
                 startWithValue: function () {
                     return $("#codigo_padre").val();
                 },

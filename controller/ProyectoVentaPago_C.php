@@ -22,7 +22,7 @@ switch ($object->action) {
         $idProyectoVenta = $object->proyecto_venta_id;
         $montoMonedaVenta = $object->monto_moneda_venta;
         //1.Insert
-        $result = $proyectoVentaPago->insert($idProyectoVenta, $object->fecha, $object->comprobante_codigo, $montoMonedaVenta, $object->moneda_pago, $object->moneda_pago_valor_conversion, $object->monto_moneda_pago, $object->igv, $object->monto_total_moneda_pago);
+        $result = $proyectoVentaPago->insert($idProyectoVenta, $object->fecha, $object->comprobante_codigo, $montoMonedaVenta, $object->moneda_pago, $object->moneda_pago_valor_conversion, $object->monto_moneda_pago, $object->igv, $object->monto_total_moneda_pago, $object->detraccion);
         if ($result) {
             //2. Sum new accumulate values
             $listProyectoVenta = $proyectoVenta->get($idProyectoVenta);
@@ -47,7 +47,7 @@ switch ($object->action) {
         //1.Get Proyecto Venta Pago
         $listProyectoVentaPago = $proyectoVentaPago->get($id);
         //2.Eliminamos
-        $result = $proyectoVentaPago->update($id, $object->fecha, $object->comprobante_codigo, $montoMonedaVenta, $object->moneda_pago, $object->moneda_pago_valor_conversion, $object->monto_moneda_pago, $object->igv, $object->monto_total_moneda_pago);
+        $result = $proyectoVentaPago->update($id, $object->fecha, $object->comprobante_codigo, $montoMonedaVenta, $object->moneda_pago, $object->moneda_pago_valor_conversion, $object->monto_moneda_pago, $object->igv, $object->monto_total_moneda_pago, $object->detraccion);
         if ($result) {
             //3. Subtract new accumulate values
             $listProyectoVenta = $proyectoVenta->get($idProyectoVenta);

@@ -12,6 +12,10 @@ switch ($object->action) {
         $result = $proyectoVentaCronogramaPago->listByProyectoVenta($object->proyecto_venta_id);
         echo (json_encode($result));
         break;
+    case "alert8Days":
+        $result = $proyectoVentaCronogramaPago->aler8Days();
+        echo (json_encode($result));
+        break;
     case "get":
         $result = $proyectoVentaCronogramaPago->get($object->id);
         echo (json_encode($result));

@@ -103,11 +103,37 @@ function showAlerts() {
                             $("#notificationsList").append(html);
                         });
                     }
-                    if (count > 0) {
-                        $("#notificationsCount").html(count + " Notificaciones.");
-                        $("#flagNotification").append(flagNotification);
-                    }
                 }
+
+                postJSON("ProyectoCronogramaPago_C.php", { action: "alert8Days" }, function (dataAlertNew) {
+                    if (!validErrorResponse(dataAlertNew)) {
+                        listNew = JSON.parse(dataAlertNew);
+                        if (typeof listNew !== 'undefined') {
+                            $.map(listNew, function (object, index) {
+                                count++;
+                                var html = `<a href="#" class="kt-notification__item" onclick="changePage({tipo:'MENU',accion:'menu-ventas',url:'proyecto_venta/list.html'})">
+                                                <div class="kt-notification__item-icon">
+                                                    <i class="fa fa-list-ol"></i>
+                                                </div>
+                                                <div class="kt-notification__item-details">
+                                                    <div class="kt-notification__item-title">
+                                                        La cuota del cliente <strong>(` + object.nombre_1 + ` ` + object.nombre_2 + ` ` + object.nombre_3 + ` ` + object.apellido_paterno + ` ` + object.apellido_materno + ` ` + +`)</strong>
+                                                        se vence en 8 días.
+                                                    </div>
+                                                    <div class="kt-notification__item-time">
+                                                        <strong>` + object.fecha_programada + `</strong>
+                                                    </div>
+                                                </div>
+                                            </a>`;
+                                $("#notificationsList").append(html);
+                            });
+                        }
+                        if (count > 0) {
+                            $("#notificationsCount").html(count + " Notificaciones.");
+                            $("#flagNotification").append(flagNotification);
+                        }
+                    }
+                });
             });
 
         });

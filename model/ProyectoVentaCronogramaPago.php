@@ -11,6 +11,13 @@ class ProyectoVentaCronogramaPago
         return $result;
     }
 
+    function aler8Days()
+    {
+        $db = new DB();
+        $result = $db->query("call proyecto_venta_cronograma_pago_alert_8_days();");
+        return $result;
+    }
+
     function get($id)
     {
         $db = new DB();

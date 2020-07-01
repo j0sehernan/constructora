@@ -38,7 +38,7 @@
         </div>
         <div class="col-sm-4">
             <div class="form-group">
-                <label for="monto_moneda_pago">Monto Moneda Pago</label>
+                <label for="monto_moneda_pago">Monto Total del pago</label>
                 <input type="text" class="form-control form-control-sm form-control-decimal" id="monto_moneda_pago" name="monto_moneda_pago" placeholder="Monto Moneda Pago" maxlength="21" readonly>
             </div>
         </div>
@@ -46,16 +46,24 @@
     <div class="row">
         <div class="col-sm-4">
             <div class="form-group">
-                <label for="igv">I.G.V.</label>
+                <label for="igv">Operación No Gravada</label>
                 <input type="text" class="form-control form-control-sm form-control-decimal" id="igv" name="igv" placeholder="I.G.V." maxlength="21" value="0" onchange="sumTotals();">
             </div>
         </div>
         <div class="col-sm-4">
             <div class="form-group">
-                <label for="monto_total_moneda_pago">Total</label>
+                <label for="monto_total_moneda_pago">Operación Gravada</label>
                 <input type="text" class="form-control form-control-sm form-control-decimal" id="monto_total_moneda_pago" name="monto_total_moneda_pago" placeholder="Total" maxlength="21" readonly>
             </div>
         </div>
+        <div class="col-sm-4">
+            <div class="form-group">
+                <label for="detraccion">Detracción</label>
+                <input type="text" class="form-control form-control-sm form-control-decimal" id="detraccion" name="detraccion" placeholder="Detracción" maxlength="21" readonly>
+            </div>
+        </div>
+    </div>
+    <div class="row">
         <div class="col-sm-4" style="align-self: flex-end; padding-bottom: 2em;">
             <div class="only-options-right">
                 <input type="hidden" id="proyecto_venta_id" name="proyecto_venta_id" value="">
@@ -81,11 +89,13 @@
         var igv = $("#igv").val();
         if (monto_moneda_venta != null && moneda_pago_valor_conversion != null && igv != null) {
             var monto_moneda_pago = Number(monto_moneda_venta) * Number(moneda_pago_valor_conversion);
-            igv = Number(monto_moneda_pago) * 0.18;
+            igv = Number(monto_moneda_pago) / 2.18;
             var monto_total_moneda_pago = Number(monto_moneda_pago) + Number(igv);
+            var detraccion = monto_moneda_pago * 0.04;
             $("#igv").val(igv);
             $("#monto_moneda_pago").val(monto_moneda_pago);
             $("#monto_total_moneda_pago").val(monto_total_moneda_pago);
+            $("#detraccion").val(detraccion);
         }
     }
     function getProyectoVentaPago() {
@@ -101,6 +111,7 @@
                 $("#monto_moneda_pago").val(dataResponse.monto_moneda_pago);
                 $("#igv").val(dataResponse.igv);
                 $("#monto_total_moneda_pago").val(dataResponse.igv);
+                $("#detraccion").val(dataResponse.detraccion);
             }
         });
     }
@@ -142,7 +153,12 @@
                 required: true,
                 maxlength: 21,
                 number: true
-            }
+            },
+            detraccion: {
+                required: true,
+                maxlength: 21,
+                number: true
+            },
         },
         submitHandler: function (form) {
             saveProyectoVentaPago();
@@ -160,7 +176,8 @@
             moneda_pago_valor_conversion: $("#moneda_pago_valor_conversion").val(),
             monto_moneda_pago: $("#monto_moneda_pago").val(),
             igv: $("#igv").val(),
-            monto_total_moneda_pago: $("#monto_total_moneda_pago").val()
+            monto_total_moneda_pago: $("#monto_total_moneda_pago").val(),
+            detraccion: $("#detraccion").val()
         }, function (data) {
             if (!validErrorResponse(data)) {
                 dataResponse = JSON.parse(data);

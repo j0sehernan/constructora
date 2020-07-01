@@ -18,17 +18,17 @@ class ProyectoVentaPago
         return $result;
     }
 
-    function insert($idProyectoVenta, $fecha, $comprobanteCodigo, $montoMonedaVenta, $monedaPago, $monedaPagoValorConversion, $montoMonedaPago, $igv, $montoTotalMonedaPago)
+    function insert($idProyectoVenta, $fecha, $comprobanteCodigo, $montoMonedaVenta, $monedaPago, $monedaPagoValorConversion, $montoMonedaPago, $igv, $montoTotalMonedaPago, $detraccion)
     {
         $db = new DB();
-        $result = $db->execute("call proyecto_venta_pago_i('$idProyectoVenta','$fecha','$comprobanteCodigo','$montoMonedaVenta','$monedaPago','$monedaPagoValorConversion','$montoMonedaPago','$igv','$montoTotalMonedaPago');");
+        $result = $db->execute("call proyecto_venta_pago_i('$idProyectoVenta','$fecha','$comprobanteCodigo','$montoMonedaVenta','$monedaPago','$monedaPagoValorConversion','$montoMonedaPago','$igv','$montoTotalMonedaPago','$detraccion');");
         return $result;
     }
 
-    function update($id, $fecha, $comprobanteCodigo, $montoMonedaVenta, $monedaPago, $monedaPagoValorConversion, $montoMonedaPago, $igv, $montoTotalMonedaPago)
+    function update($id, $fecha, $comprobanteCodigo, $montoMonedaVenta, $monedaPago, $monedaPagoValorConversion, $montoMonedaPago, $igv, $montoTotalMonedaPago, $detraccion)
     {
         $db = new DB();
-        $result = $db->execute("call proyecto_venta_pago_u('$id','$fecha','$comprobanteCodigo','$montoMonedaVenta','$monedaPago','$monedaPagoValorConversion','$montoMonedaPago','$igv','$montoTotalMonedaPago');");
+        $result = $db->execute("call proyecto_venta_pago_u('$id','$fecha','$comprobanteCodigo','$montoMonedaVenta','$monedaPago','$monedaPagoValorConversion','$montoMonedaPago','$igv','$montoTotalMonedaPago','$detraccion');");
         return $result;
     }
 
