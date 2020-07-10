@@ -105,7 +105,7 @@ function showAlerts() {
                     }
                 }
 
-                postJSON("ProyectoCronogramaPago_C.php", { action: "alert8Days" }, function (dataAlertNew) {
+                postJSON("ProyectoVentaCronogramaPago_C.php", { action: "alert8Days" }, function (dataAlertNew) {
                     if (!validErrorResponse(dataAlertNew)) {
                         listNew = JSON.parse(dataAlertNew);
                         if (typeof listNew !== 'undefined') {

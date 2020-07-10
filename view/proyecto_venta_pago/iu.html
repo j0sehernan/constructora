@@ -90,7 +90,7 @@
         if (monto_moneda_venta != null && moneda_pago_valor_conversion != null && igv != null) {
             var monto_moneda_pago = Number(monto_moneda_venta) * Number(moneda_pago_valor_conversion);
             igv = Number(monto_moneda_pago) / 2.18;
-            var monto_total_moneda_pago = Number(monto_moneda_pago) + Number(igv);
+            var monto_total_moneda_pago = (Number(igv) * 0.18) + Number(igv);
             var detraccion = monto_moneda_pago * 0.04;
             $("#igv").val(igv);
             $("#monto_moneda_pago").val(monto_moneda_pago);
