@@ -13,7 +13,7 @@
         <textarea class="form-control form-control-sm" id="descripcion" name="descripcion" placeholder="Descripción" maxlength="200"></textarea>
     </div>
     <div class="form-group">
-        <label for="producto_marca_id">Marca</label>
+        <label for="producto_marca_id">Familia</label>
         <select class="form-control form-control-sm form-control-autocomplete" id="producto_marca_id" name="producto_marca_id">
         </select>
     </div>
@@ -28,7 +28,7 @@
     function fillProductoMarca(idProductoMarca, callback) {
         postJSON("ProductoMarca_C.php", { "action": "list" }, function (data) {
             if (!validErrorResponse(data)) {
-                $("#producto_marca_id").html('<option value="">Seleccione Marca</option>');
+                $("#producto_marca_id").html('<option value="">Seleccione Familia</option>');
                 var arrayProductoMarca = JSON.parse(data);
                 arrayProductoMarca.forEach(function (object, index) {
                     $("#producto_marca_id").append('<option value="' + object.id + '">' + object.nombre + '</option>');

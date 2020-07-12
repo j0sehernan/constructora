@@ -23,8 +23,8 @@
     <div class="row">
         <div class="col-sm-4">
             <div class="form-group">
-                <label for="moneda_pago">Monto Moneda Venta</label>
-                <select class="form-control form-control-sm" id="moneda_pago" name="moneda_pago" onchange="changeMonedaPago();">
+                <label for="moneda_pago">Moneda Pago</label>
+                <select class="form-control form-control-sm" id="moneda_pago" name="moneda_pago" onchange="sumTotals();">
                     <option id="USD">USD</option>
                     <option id="PEN">PEN</option>
                 </select>
@@ -33,7 +33,7 @@
         <div class="col-sm-4">
             <div class="form-group">
                 <label for="moneda_pago_valor_conversion">Tipo Cambio</label>
-                <input type="text" class="form-control form-control-sm form-control-decimal" id="moneda_pago_valor_conversion" name="moneda_pago_valor_conversion" placeholder="Tipo de Cambio" maxlength="21" value="1" readonly onchange="sumTotals();">
+                <input type="text" class="form-control form-control-sm form-control-decimal" id="moneda_pago_valor_conversion" name="moneda_pago_valor_conversion" placeholder="Tipo de Cambio" maxlength="21" value="1" onchange="sumTotals();">
             </div>
         </div>
         <div class="col-sm-4">
@@ -76,22 +76,28 @@
     </div>
 </form>
 <script>
-    function changeMonedaPago() {
+    /*function changeMonedaPago() {
         if ($("#moneda_pago").val() === "USD") {
             $("#moneda_pago_valor_conversion").val(1).attr("readonly", true);
         } else {
             $("#moneda_pago_valor_conversion").attr("readonly", false);
         }
-    }
+    }*/
     function sumTotals() {
         var monto_moneda_venta = $("#monto_moneda_venta").val();
         var moneda_pago_valor_conversion = $("#moneda_pago_valor_conversion").val();
+        if ($("#moneda_pago").val() === "USD") {
+            moneda_pago_valor_conversion = 1;
+        }
         var igv = $("#igv").val();
         if (monto_moneda_venta != null && moneda_pago_valor_conversion != null && igv != null) {
             var monto_moneda_pago = Number(monto_moneda_venta) * Number(moneda_pago_valor_conversion);
             igv = Number(monto_moneda_pago) / 2.18;
             var monto_total_moneda_pago = (Number(igv) * 0.18) + Number(igv);
             var detraccion = monto_moneda_pago * 0.04;
+            if ($("#moneda_pago").val() === "USD") {
+                detraccion = detraccion * Number($("#moneda_pago_valor_conversion").val());
+            }
             $("#igv").val(igv);
             $("#monto_moneda_pago").val(monto_moneda_pago);
             $("#monto_total_moneda_pago").val(monto_total_moneda_pago);
