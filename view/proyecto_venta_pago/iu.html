@@ -135,7 +135,10 @@
             monto_moneda_venta: {
                 required: true,
                 maxlength: 21,
-                number: true
+                number: true,
+                max: function (element) {
+                    return $("#saldo_por_pagar").val();
+                }
             },
             moneda_pago: {
                 required: true
