@@ -72,6 +72,10 @@ if ($object->{'action'} == "listByProyectoTrabajo") {
                 "can_delete_trabajo" => $canDeleteTrabajo,
                 "cantidad_adelanto" => $cantidadAdelanto
             );
+        } else {
+            $result = array(
+                "error_message" => "idProyectoTrabajoPartida: $idProyectoTrabajoPartida",
+            );
         }
     } else {
         $result = array(
