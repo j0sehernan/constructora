@@ -76,6 +76,7 @@ class ProyectoTrabajoPartida
     function insert($codigo, $nombre, $idUnidadMedida, $precioUnitarioPlan, $cantidadPlan, $precioPlan, $fechaInicioPlan, $fechaTerminoPlan, $idProyectoTrabajo, $idProyectoTrabajoPartida)
     {
         $db = new DB();
+        $nombre = str_replace("'", "\'", $nombre);
         $result = $db->executeWithReturn("call proyecto_trabajo_partida_i('$codigo','$nombre','$idUnidadMedida','$precioUnitarioPlan','$cantidadPlan','$precioPlan','$fechaInicioPlan','$fechaTerminoPlan','$idProyectoTrabajo','$idProyectoTrabajoPartida');");
         return $result;
     }
