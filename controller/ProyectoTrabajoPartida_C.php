@@ -114,6 +114,10 @@ if ($object->{'action'} == "listByProyectoTrabajo") {
                 "precio_por_ejecutar" => $precioPorEjecutar,
                 "cantidad_adelanto" => $cantidadAdelanto
             );
+        } else {
+            $result = array(
+                "error_message" => "ERROR: $result.",
+            );
         }
     } else {
         $result = array(
