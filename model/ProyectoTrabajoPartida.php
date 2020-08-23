@@ -84,6 +84,7 @@ class ProyectoTrabajoPartida
     function update($id, $codigo, $nombre, $idUnidadMedida, $precioUnitarioPlan, $cantidadPlan, $precioPlan, $fechaInicioPlan, $fechaTerminoPlan)
     {
         $db = new DB();
+        $nombre = str_replace("'", "\'", $nombre);
         $result = $db->executeWithReturn("call proyecto_trabajo_partida_u('$id','$codigo','$nombre','$idUnidadMedida','$precioUnitarioPlan','$cantidadPlan','$precioPlan','$fechaInicioPlan','$fechaTerminoPlan');");
         return $result;
     }
