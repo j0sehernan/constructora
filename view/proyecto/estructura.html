@@ -313,10 +313,10 @@
             '<td style="font-size: 11px;" class="precio_por_ejecutar' + (precioPorEjecutar < 0 ? ' td-error' : '') + '">' + (precioPorEjecutar == null ? '' : precioPorEjecutar) + '</td>' +
             '<td class="td-actions">' +
             '<div class="td_actions_' + id + '" style="display: none;">'
-        if (precioPlan > 0) {
+        //if (precioPlan > 0) {
             html +=
                 '<button type="button" class="btn btn-outline-focus btn-elevate btn-icon btn-circle btn-xs" data-toggle="tooltip" title="Registrar Avance" onclick="showProyectoTrabajoPartidaAvanceListForm(' + id + ',\'' + precioUnitarioPlan + '\');"><i class="fa fa-forward"></i></button>&nbsp;'
-        }
+        //}
         html +=
             '<button type="button" class="btn btn-outline-success btn-elevate btn-icon btn-circle btn-xs" data-toggle="tooltip" title="Mostrar Recursos" onclick="showProyectoTrabajoPartidaProductoForm(\'' + id + '\');"><i class="fa fa-folder-open"></i></button>&nbsp;' +
             '<button type="button" class="btn btn-outline-success btn-elevate btn-icon btn-circle btn-xs" data-toggle="tooltip" title="Agregar Partida a Partir de esta" onclick="showProyectoTrabajoPartidaForm(\'i_son\', 0, ' + id + ', \'' + codigo + '\');"><i class="fa fa-sitemap"></i></button>&nbsp;' +
