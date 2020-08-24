@@ -26,16 +26,22 @@ if ($object->{'action'} == "list") {
             $listAvance = $proyectoTrabajoPartidaAvance->reportAvanceProyecto($idProyectoTrabajoPartida, $object->fecha_inicio, $object->fecha_termino);
             $listAvanceAcumulado = $proyectoTrabajoPartidaAvance->reportAvanceProyectoAcumuladoAnterior($idProyectoTrabajoPartida, $object->fecha_termino);
 
+            $cantidad_por_ejecutar  = $objPartida["cantidad_plan"] - $listAvanceAcumulado[0]["cantidad_acumulada"];
+            $precio_por_ejecutar = $objPartida["precio_plan"] - $listAvanceAcumulado[0]["precio_acumulado"];
+
             $objectReport = array(
                 "codigo" => $objPartida["codigo"],
                 "partida" => $objPartida["partida"],
                 "unidad_medida" => $objPartida["unidad_medida"],
+                "precio_unitario_plan" => $objPartida["precio_unitario_plan"],
                 "cantidad_plan" => $objPartida["cantidad_plan"],
                 "precio_plan" => $objPartida["precio_plan"],
                 "precio_avance" => $listAvance[0]["precio_avance"],
                 "cantidad_avance" => $listAvance[0]["cantidad_avance"],
                 "cantidad_acumulada" => $listAvanceAcumulado[0]["cantidad_acumulada"],
-                "precio_acumulado" => $listAvanceAcumulado[0]["precio_acumulado"]
+                "precio_acumulado" => $listAvanceAcumulado[0]["precio_acumulado"],
+                "cantidad_por_ejecutar" => $cantidad_por_ejecutar,
+                "precio_por_ejecutar" => $precio_por_ejecutar
             );
             array_push($resultReport, $objectReport);
         }
