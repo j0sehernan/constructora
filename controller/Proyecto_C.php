@@ -26,8 +26,8 @@ if ($object->{'action'} == "list") {
             $listAvance = $proyectoTrabajoPartidaAvance->reportAvanceProyecto($idProyectoTrabajoPartida, $object->fecha_inicio, $object->fecha_termino);
             $listAvanceAcumulado = $proyectoTrabajoPartidaAvance->reportAvanceProyectoAcumuladoAnterior($idProyectoTrabajoPartida, $object->fecha_termino);
 
-            $cantidad_por_ejecutar  = $objPartida["cantidad_plan"] - $listAvanceAcumulado[0]["cantidad_acumulada"];
-            $precio_por_ejecutar = $objPartida["precio_plan"] - $listAvanceAcumulado[0]["precio_acumulado"];
+            $cantidad_por_ejecutar  = round($objPartida["cantidad_plan"] - $listAvanceAcumulado[0]["cantidad_acumulada"], 2);
+            $precio_por_ejecutar = round($objPartida["precio_plan"] - $listAvanceAcumulado[0]["precio_acumulado"], 2);
 
             $objectReport = array(
                 "codigo" => $objPartida["codigo"],
