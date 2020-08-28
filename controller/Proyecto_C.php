@@ -29,6 +29,14 @@ if ($object->{'action'} == "list") {
             $cantidad_por_ejecutar  = round($objPartida["cantidad_plan"] - $listAvanceAcumulado[0]["cantidad_acumulada"], 2);
             $precio_por_ejecutar = round($objPartida["precio_plan"] - $listAvanceAcumulado[0]["precio_acumulado"], 2);
 
+            if ($cantidad_por_ejecutar < 0) {
+                $cantidad_por_ejecutar = 0;
+            }
+
+            if ($precio_por_ejecutar < 0) {
+                $precio_por_ejecutar = 0;
+            }
+
             $objectReport = array(
                 "codigo" => $objPartida["codigo"],
                 "partida" => $objPartida["partida"],
