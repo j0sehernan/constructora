@@ -208,6 +208,7 @@ function getFormData(form) {
     jQuery.each(inputFiles, function (index, object) {
         indexed_array[object["name"]] = object['value'];
     }); */
+    console.log(indexed_array);
     return indexed_array;
 }
 

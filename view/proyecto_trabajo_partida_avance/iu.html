@@ -74,7 +74,7 @@
                 required: true,
                 number: true,
                 maxlength: 21,
-                min: 0.1
+                min: 0.001
             },
             cantidad_avance: {
                 required: true,
@@ -86,7 +86,7 @@
                 required: true,
                 number: true,
                 maxlength: 21,
-                min: 0.1
+                min: 0.001
             }
         },
         submitHandler: function (form) {
@@ -126,5 +126,5 @@
         });
     }
     startDatePicker();
-    startDecimalNumbers(16, 4);
+    startDecimalNumbers(17, 3);
 </script>
