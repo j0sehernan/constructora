@@ -203,12 +203,16 @@ function getFormData(form) {
     $.map(unindexed_array, function (n, i) {
         indexed_array[n['name']] = n['value'];
     });
+    //Add Checkbox
+    var checkboxElements = form.find(':input[type=checkbox]');
+    $.map(checkboxElements, function (n, i) {
+        indexed_array[n['name']] = $(n).is(":checked");
+    });
     //Add files
     /* var inputFiles = form.find("input[type=file]");
     jQuery.each(inputFiles, function (index, object) {
         indexed_array[object["name"]] = object['value'];
     }); */
-    console.log(indexed_array);
     return indexed_array;
 }
 

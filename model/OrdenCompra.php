@@ -46,10 +46,19 @@ class OrdenCompra
         return $result;
     }
 
-    function update($id, $persona_proveedor_id, $fecha, $proforma_codigo, $codigo)
+    function update($id, $persona_proveedor_id, $fecha, $proforma_codigo, $codigo, $incluye_igv, $total_sin_igv, $igv, $total)
     {
         $db = new DB();
-        $result = $db->execute("call orden_compra_u('$id','$persona_proveedor_id','$fecha','$proforma_codigo','$codigo');");
+        $result = $db->execute("update orden_compra " .
+            "set persona_proveedor_id = $persona_proveedor_id," .
+            "fecha = _get_date_from_varchar('$fecha')," .
+            "proforma_codigo = '$proforma_codigo'," .
+            "codigo = '$codigo'," .
+            "incluye_igv = $incluye_igv," .
+            "total_sin_igv = $total_sin_igv," .
+            "igv = $igv," .
+            "total = $total " .
+            "where id = $id;");
         return $result;
     }
 
