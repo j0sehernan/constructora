@@ -54,7 +54,7 @@ class OrdenCompra
         $db = new DB();
         $result = $db->execute("update orden_compra " .
             "set persona_proveedor_id = $persona_proveedor_id," .
-            "fecha = _get_date_from_varchar('$fecha')," .
+            "fecha = if('$fecha'='', null, str_to_date('$fecha', '%d/%m/%Y'))," .
             "proforma_codigo = '$proforma_codigo'," .
             "codigo = '$codigo'," .
             "incluye_igv = $incluye_igv," .
