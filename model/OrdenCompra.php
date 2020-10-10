@@ -28,7 +28,7 @@ class OrdenCompra
     function get($id)
     {
         $db = new DB();
-        $result = $db->query("select id,persona_proveedor_id,_get_varchar_from_date(fecha) as fecha," .
+        $result = $db->query("select id,persona_proveedor_id,if(fecha='0000-00-00', '', date_format(fecha, '%d/%m/%Y')) as fecha," .
             "proforma_codigo,codigo,moneda,tipo_cambio " .
             "from orden_compra " .
             "where id = $id;");
