@@ -7,7 +7,7 @@ class OrdenCompraDetalle
     function listByOrdenCompra($orden_compra_id)
     {
         $db = new DB();
-        $result = $db->query("select oc.id,p.nombre as producto,um.nombre as unidad_medida,oc.cantidad,oc.cantidad_usada," .
+        $result = $db->query("select oc.id,oc.producto_id,p.nombre as producto,oc.unidad_medida_id,um.nombre as unidad_medida,oc.cantidad,oc.cantidad_usada," .
             "oc.cantidad_restante,oc.precio_unitario,oc.in_progress,oc.used,oc.sub_total " .
             "from orden_compra_detalle oc " .
             "inner join producto p on oc.producto_id = p.id " .

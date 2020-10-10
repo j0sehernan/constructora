@@ -20,10 +20,23 @@ switch ($object->action) {
         echo (json_encode($result));
         break;
     case "i":
-        $cantidad = $object->cantidad;
-        $precio_unitario = $object->precio_unitario;
-        $sub_total = $cantidad * $precio_unitario;
-        $result = $ordenCompraDetalle->insert($object->producto_id, $object->unidad_medida_id, $cantidad, $precio_unitario, $object->orden_compra_id, $sub_total);
+        $list = $ordenCompraDetalle->listByOrdenCompra($object->orden_compra_id);
+        $exists = false;
+        foreach ($list as $row) {
+            if ($row["producto_id"] == $object->producto_id && $row["unidad_medida_id"] == $object->unidad_medida_id) {
+                $exists = true;
+                $result = array(
+                    "error_message" => "El producto ya cuenta con esta unidad de medida en la Orden de Compra.",
+                );
+                break;
+            }
+        }
+        if ($exists == false) {
+            $cantidad = $object->cantidad;
+            $precio_unitario = $object->precio_unitario;
+            $sub_total = $cantidad * $precio_unitario;
+            $result = $ordenCompraDetalle->insert($object->producto_id, $object->unidad_medida_id, $cantidad, $precio_unitario, $object->orden_compra_id, $sub_total);
+        }
         echo (json_encode($result));
         break;
     case "u":
