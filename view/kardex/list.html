@@ -16,8 +16,9 @@
         <div class="kt-subheader__toolbar" id="divToolbar">
             <div class="kt-subheader__wrapper">
                 <a class="btn btn-icon btn btn-label btn-label-brand btn-bold" data-toggle="tooltip" title="Actualizar" data-placement="top" onclick="listKardexByAlmacen();"><i class="flaticon-refresh"></i></a>
-                <a class="btn btn-icon btn btn-label btn-label-brand btn-bold" data-toggle="tooltip" title="Mostrar Eliminados" data-placement="top" onclick="listKardexByAlmacenDeletes();"><i class="flaticon-eye"></i></a>
+                <a class="btn btn-icon btn btn-label btn-label-danger btn-bold" data-toggle="tooltip" title="Mostrar Eliminados" data-placement="top" onclick="changeViewType();" id="btn_view_type"><i class="flaticon-eye"></i></a>
                 <a href="#" class="btn btn-icon btn btn-label btn-label-brand btn-bold" data-toggle="tooltip" title="Registrar Ingreso" data-placement="top" onclick="showKardexForm('i');"><i class="flaticon2-add-1"></i></a>
+                <input type="hidden" id="view_del" value="0">
             </div>
         </div>
     </div>
@@ -53,6 +54,22 @@
     </div>
 </div>
 <script>
+    function changeViewType() {
+        var view_del = $("#view_del").val();
+        if (view_del === "0") {
+            $("#view_del").val("1");
+            $("#btn_view_type").attr("class", "btn btn-icon btn btn-label btn-label-brand btn-bold");
+            $("#btn_view_type").attr("data-original-title", "Mostrar Registros actuales.");
+            $("#btn_view_type").attr("title", "Mostrar Registros actuales.");
+        } else {
+            $("#view_del").val("0");
+            $("#btn_view_type").attr("class", "btn btn-icon btn btn-label btn-label-danger btn-bold");
+            $("#btn_view_type").attr("data-original-title", "Mostrar Registros actuales.");
+            $("#btn_view_type").attr("title", "Mostrar Eliminados.")
+        }
+        listKardexByAlmacen();
+        startTooltip();
+    }
     function fillAlmacen(idAlmacen) {
         postJSON("Almacen_C.php", { "action": "list" }, function (data) {
             if (!validErrorResponse(data)) {
@@ -78,11 +95,12 @@
             $("#divToolbar").show();
             var ubicacion = $("#almacen_id_general option:selected").attr("data-ubicacion");
             ubicacion !== "" ? $("#ubicacion").text(ubicacion) : ""
-            postJSON("Kardex_C.php", { "action": "listByAlmacen", "almacen_id": idAlmacen }, function (data) {
+            postJSON("Kardex_C.php", { action: "listByAlmacen", almacen_id: idAlmacen, del: $("#view_del").val() }, function (data) {
                 if (!validErrorResponse(data)) {
                     var listKardex = JSON.parse(data);
                     destroyDataTableIfExists("table");
                     $('#table tbody').html("");
+                    var view_del = $("#view_del").val();
                     foreach(listKardex, function (object, index) {
                         var html =
                             `
@@ -92,13 +110,17 @@
                                 <td>`+ object.cantidad + `</td>
                                 <td>`+ object.fecha_ingreso + `</td>
                                 <td>`+ object.fecha_vencimiento + `</td>
-                                <td class="td-actions">
-                                    <button type="button" class="btn btn-outline-info btn-elevate btn-icon btn-circle btn-xs" data-toggle="tooltip" title="Convertir" onclick="showConvertForm('` + object.id + `','` + object.unidad_medida_id + `','` + object.unidad_medida + `','` + object.cantidad + `','` + object.producto + `','` + object.producto_id + `','` + object.fecha_ingreso + `','` + object.fecha_vencimiento + `');"><i class="fa fa-exchange-alt"></i></button>&nbsp;
-                                    <button type="button" class="btn btn-outline-info btn-elevate btn-icon btn-circle btn-xs" data-toggle="tooltip" title="Asignar"><i class="fa fa-sign-out-alt"></i></button>&nbsp;
-                                    <button type="button" class="btn btn-outline-danger btn-elevate btn-icon btn-circle btn-xs" data-toggle="tooltip" title="Eliminar" onclick="delKardex('` + object.id + `');"><i class="fa fa-trash"></i></button>
+                                <td class="td-actions">`;
+                        if (view_del === "0") {
+                            html += `<button type="button" class="btn btn-outline-info btn-elevate btn-icon btn-circle btn-xs" data-toggle="tooltip" title="Convertir" onclick="showConvertForm('` + object.id + `','` + object.unidad_medida_id + `','` + object.unidad_medida + `','` + object.cantidad + `','` + object.producto + `','` + object.producto_id + `','` + object.fecha_ingreso + `','` + object.fecha_vencimiento + `');" > <i class="fa fa-exchange-alt"></i></button>&nbsp;
+                                     <button type="button" class="btn btn-outline-info btn-elevate btn-icon btn-circle btn-xs" data-toggle="tooltip" title="Asignar"><i class="fa fa-sign-out-alt"></i></button>&nbsp;
+                                     <button type="button" class="btn btn-outline-danger btn-elevate btn-icon btn-circle btn-xs" data-toggle="tooltip" title="Eliminar" onclick="delKardex('` + object.id + `');"><i class="fa fa-trash"></i></button>&nbsp;`;
+                        }
+
+                        html +=
+                            `       <button type="button" class="btn btn-outline-success btn-elevate btn-icon btn-circle btn-xs" data-toggle="tooltip" title="Movimientos" onclick="showKardexMovimientosListForm('` + object.id + `');"><i class="fa fa-eye"></i></button>
                                 </td>
-                            </tr>
-                            `;
+                            </tr>`;
                         $('#table tbody').append(html);
                         $('#table tbody tr:last').find("[title='Asignar']").click(function () {
                             showAsignarForm(object);
@@ -107,6 +129,12 @@
                 }
             });
         }
+    }
+    function showKardexMovimientosListForm(kardex_id) {
+        getModalExtraLargeWithCallBack('kardex_movimiento/list_only_view.html', function () {
+            $("#kardex_id").val(kardex_id);
+            listKardexMovimientoByKardexId();
+        });
     }
     function showKardexForm(action, id) {
         getModalExtraLargeWithCallBack('kardex/iu.html', function () {

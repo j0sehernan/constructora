@@ -7,6 +7,10 @@ $object = json_decode($json);
 $kardexMovimiento = new KardexMovimiento();
 
 switch ($object->action) {
+    case "listByKardexId":
+        $result = $kardexMovimiento->listByKardexId($object->kardex_id);
+        echo (json_encode($result));
+        break;
     case "listByOCAndGuiaRemision":
         $result = $kardexMovimiento->listByOCAndGuiaRemision($object->orden_compra_id, $object->guia_remision);
         echo (json_encode($result));

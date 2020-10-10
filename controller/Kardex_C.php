@@ -13,7 +13,7 @@ $ordenCompra = new OrdenCompra();
 $ordenCompraDetalle = new OrdenCompraDetalle();
 
 if ($object->{'action'} == "listByAlmacen") {
-    $result = $kardex->listByAlmacen($object->{'almacen_id'});
+    $result = $kardex->listByAlmacen($object->almacen_id, $object->del);
     echo (json_encode($result));
 } elseif ($object->{'action'} == "listByAlmacenProductoUnidadMedida") {
     $result = $kardex->listByAlmacenProductoUnidadMedida($object->almacen_id, $object->producto_id, $object->unidad_medida_id);
@@ -128,6 +128,31 @@ if ($object->{'action'} == "listByAlmacen") {
 
     echo (json_encode($result));
 } elseif ($object->{'action'} == "del") {
-    $result = $kardex->del($object->{'id'});
+    $result = $kardex->deleteLogical($object->{'id'});
+    $listKardexMovimientoLast = $kardexMovimiento->getLastMovimientoByKardexId($object->id);
+    $kardexMovimiento->insert(
+        $object->id,
+        "D",
+        $listKardexMovimientoLast[0]["almacen_id"],
+        $listKardexMovimientoLast[0]["producto_id"],
+        $listKardexMovimientoLast[0]["unidad_medida_id"],
+        $listKardexMovimientoLast[0]["cantidad"],
+        $listKardexMovimientoLast[0]["motivo"],
+        $listKardexMovimientoLast[0]["fecha_vencimiento"],
+        $listKardexMovimientoLast[0]["fecha_termino"],
+        $listKardexMovimientoLast[0]["precio"],
+        $listKardexMovimientoLast[0]["almacen_origen_id"],
+        $listKardexMovimientoLast[0]["proyecto_origen_id"],
+        $listKardexMovimientoLast[0]["proyecto_trabajo_partida_origen_id"],
+        $listKardexMovimientoLast[0]["orden_compra_id"],
+        $listKardexMovimientoLast[0]["comprobante_pago_tipo_id"],
+        $listKardexMovimientoLast[0]["comprobante_pago_codigo"],
+        getPersonaFullName(),
+        $listKardexMovimientoLast[0]["kardex_origen_id"],
+        $listKardexMovimientoLast[0]["guia_remision"],
+        $listKardexMovimientoLast[0]["guia_remision_pagada"],
+        $listKardexMovimientoLast[0]["cantidad_salida"],
+        $listKardexMovimientoLast[0]["proyecto_trabajo_partida_salida_id"]
+    );
     echo (json_encode($result));
 }

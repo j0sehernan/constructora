@@ -1,0 +1,22 @@
+<table id="table_movimientos" class="table table-hover table-bordered table-striped table-sm">
+    <thead class="thead-dark"></thead>
+</table>
+<input type="hidden" id="kardex_id">
+<script>
+    function listKardexMovimientoByKardexId() {
+        postJSON("Kardex_Movimiento_C.php", { action: "listByKardexId", kardex_id: $("#kardex_id").val() }, function (data) {
+            if (!validErrorResponse(data)) {
+                destroyDataTableIfExists("table_movimientos");
+                $('#table_movimientos').DataTable({
+                    data: JSON.parse(data),
+                    columns: [
+                        { title: "Tipo", data: "tipo_movimiento" },
+                        { title: "U.M.", data: "unidad_medida_id" },
+
+
+                    ]
+                });
+            }
+        });
+    }
+</script>

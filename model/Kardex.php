@@ -3,10 +3,19 @@
 
 class Kardex
 {
-    function listByAlmacen($idAlmacen)
+    function listByAlmacen($almacen_id, $del)
     {
         $db = new DB();
-        $result = $db->query("call kardex_list_by_almacen('$idAlmacen');");
+        $result = $db->query("select k.id, k.almacen_id, k.producto_id, k.cantidad," .
+            "k.unidad_medida_id, um.nombre as unidad_medida," .
+            "p.nombre as producto," .
+            "_get_varchar_from_date(k.fecha_ingreso) as fecha_ingreso," .
+            "ifnull(_get_varchar_from_date(k.fecha_vencimiento), '')as fecha_vencimiento " .
+            "from kardex k " .
+            "inner join producto p on k.producto_id = p.id " .
+            "inner join unidad_medida um on k.unidad_medida_id = um.codigo " .
+            "where k.almacen_id = $almacen_id " .
+            "and del = $del");
         return $result;
     }
 
@@ -31,10 +40,10 @@ class Kardex
         return $result;
     }
 
-    function del($id)
+    function deleteLogical($id)
     {
         $db = new DB();
-        $result = $db->execute("call kardex_del('$id');");
+        $result = $db->execute("update kardex set del = true where id = $id;");
         return $result;
     }
 }
