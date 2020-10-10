@@ -9,8 +9,8 @@ class Kardex
         $result = $db->query("select k.id, k.almacen_id, k.producto_id, k.cantidad," .
             "k.unidad_medida_id, um.nombre as unidad_medida," .
             "p.nombre as producto," .
-            "_get_varchar_from_date(k.fecha_ingreso) as fecha_ingreso," .
-            "ifnull(_get_varchar_from_date(k.fecha_vencimiento), '')as fecha_vencimiento " .
+            "if(k.fecha_ingreso='0000-00-00', '', date_format(k.fecha_ingreso, '%d/%m/%Y')) as fecha_ingreso," .
+            "ifnull(if(k.fecha_vencimiento='0000-00-00', '', date_format(k.fecha_vencimiento, '%d/%m/%Y')), '')as fecha_vencimiento " .
             "from kardex k " .
             "inner join producto p on k.producto_id = p.id " .
             "inner join unidad_medida um on k.unidad_medida_id = um.codigo " .
