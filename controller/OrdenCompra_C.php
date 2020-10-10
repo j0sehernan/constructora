@@ -47,7 +47,7 @@ switch ($object->action) {
             $igv = $total_sin_igv * 0.18;
             $total = $total_sin_igv + $igv;
         }
-        $result = $ordenCompra->update($object->id, $object->persona_proveedor_id, $object->fecha, $object->proforma_codigo, $object->codigo, $incluye_igv, $total_sin_igv, $igv, $total);
+        $result = $ordenCompra->update($object->id, $object->persona_proveedor_id, $object->fecha, $object->proforma_codigo, $object->codigo, $incluye_igv, $total_sin_igv, $igv, $total, $object->moneda, $object->tipo_cambio);
         echo (json_encode($result));
         break;
     case "d":

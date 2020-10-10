@@ -28,7 +28,10 @@ class OrdenCompra
     function get($id)
     {
         $db = new DB();
-        $result = $db->query("call orden_compra_get('$id');");
+        $result = $db->query("select id,persona_proveedor_id,_get_varchar_from_date(fecha) as fecha," .
+            "proforma_codigo,codigo,moneda,tipo_cambio " .
+            "from orden_compra " .
+            "where id = $id;");
         return $result;
     }
 
@@ -46,7 +49,7 @@ class OrdenCompra
         return $result;
     }
 
-    function update($id, $persona_proveedor_id, $fecha, $proforma_codigo, $codigo, $incluye_igv, $total_sin_igv, $igv, $total)
+    function update($id, $persona_proveedor_id, $fecha, $proforma_codigo, $codigo, $incluye_igv, $total_sin_igv, $igv, $total, $moneda, $tipo_cambio)
     {
         $db = new DB();
         $result = $db->execute("update orden_compra " .
@@ -57,7 +60,9 @@ class OrdenCompra
             "incluye_igv = $incluye_igv," .
             "total_sin_igv = $total_sin_igv," .
             "igv = $igv," .
-            "total = $total " .
+            "total = $total," .
+            "moneda = '$moneda'," .
+            "tipo_cambio = $tipo_cambio " .
             "where id = $id;");
         return $result;
     }

@@ -25,29 +25,51 @@
         <div class="kt-portlet__body">
             <form id="form">
                 <div class="row">
-                    <div class="col">
+                    <div class="col-sm-9">
                         <div class="form-group">
                             <label for="persona_proveedor_id">Proveedor</label>
                             <select class="form-control form-control-sm form-control-autocomplete" id="persona_proveedor_id" name="persona_proveedor_id">
                             </select>
                         </div>
+                    </div>
+                    <div class="col-sm-3">
                         <div class="form-group">
                             <label for="codigo">Código</label>
                             <input type="text" class="form-control form-control-sm" id="codigo" name="codigo" placeholder="Código" maxlength="100" readonly>
                         </div>
                     </div>
-                    <div class="col">
+                </div>
+                <div class="row">
+
+                    <div class="col-sm-3">
                         <div class="form-group">
                             <label for="fecha">Fecha</label>
                             <input type="text" class="form-control form-control-sm form-control-date" id="fecha" name="fecha" placeholder="Fecha" maxlength="10">
                         </div>
+                    </div>
+                    <div class="col-sm-3">
                         <div class="form-group">
                             <label for="proforma_codigo">Proforma</label>
                             <input type="text" class="form-control form-control-sm" id="proforma_codigo" name="proforma_codigo" placeholder="Proforma" maxlength="100">
                         </div>
                     </div>
+                    <div class="col-sm-3" style="display: none;">
+                        <div class="form-group">
+                            <label for="moneda">Moneda</label>
+                            <select class="form-control form-control-sm" name="moneda" id="moneda" onchange="changeMoneda();sumTotals();">
+                                <option value="PEN">SOLES</option>
+                                <option value="USD">DÓLARES</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-3" style="display: none;">
+                        <div class="form-group">
+                            <label for="tipo_cambio">Tipo de Cambio</label>
+                            <input type="text" class="form-control form-control-sm form-control-decimal" id="tipo_cambio" name="tipo_cambio" placeholder="Tipo de Cambio" maxlength="21" value="1" onchange="sumTotals();">
+                        </div>
+                    </div>
                 </div>
-                <div class="row">
+                <div class="row" id="div_total" style="display: none;">
                     <div class="col-md-3">
                         <div class="form-group">
                             <label class="kt-checkbox">
@@ -97,6 +119,14 @@
     </div>
 </div>
 <script>
+    function changeMoneda() {
+        if ($("#moneda").val() === "PEN") {
+            $("#tipo_cambio").parent().parent().hide();
+            $("#tipo_cambio").val(1);
+        } else {
+            $("#tipo_cambio").parent().parent().show();
+        }
+    }
     function fillPersonaByPersonaTipo(idPersona) {
         postJSON("PersonaRol_C.php", {
             action: "listByPersonaTipoAndRolNombre",
@@ -125,6 +155,11 @@
                 $("#fecha").val(dataResponse.fecha);
                 $("#proforma_codigo").val(dataResponse.proforma_codigo);
                 $("#codigo").val(dataResponse.codigo);
+                $("#div_total").show();
+                $("#moneda").val(dataResponse.moneda);
+                $("#tipo_cambio").val(dataResponse.tipo_cambio);
+                $("#moneda").parent().parent().show();
+                changeMoneda();
                 listOrdenCompraDetalles();
             }
         });
@@ -153,6 +188,12 @@
             proforma_codigo: {
                 required: true,
                 maxlength: 100
+            },
+            tipo_cambio: {
+                required: function () {
+                    return $("#moneda").val() === "PEN" ? false : true
+                },
+                min: 0.001
             }
         },
         submitHandler: function (form) {
@@ -176,6 +217,7 @@
     }
     //DETALLE
     function sumTotals() {
+        var tipo_cambio = $("#tipo_cambio").val();
         var total = 0;
         var total_sin_igv = 0;
         var igv = 0;
@@ -192,6 +234,9 @@
             igv = total_sin_igv * 0.18;
             total = total_sin_igv + igv;
         }
+        total = total * tipo_cambio;
+        total_sin_igv = total_sin_igv * tipo_cambio;
+        igv = igv * tipo_cambio;
         $("#total").val(total.toFixed(3));
         $("#total_sin_igv").val(total_sin_igv.toFixed(3));
         $("#igv").val(igv.toFixed(3));
