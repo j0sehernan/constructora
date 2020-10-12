@@ -1,17 +1,37 @@
+<h3>Movimientos <span id="titleAction"></span></h3>
 <table id="table_movimientos" class="table table-hover table-bordered table-striped table-sm">
     <thead class="thead-dark"></thead>
 </table>
 <input type="hidden" id="kardex_id">
 <script>
     function listKardexMovimientoByKardexId() {
-        postJSON("Kardex_Movimiento_C.php", { action: "listByKardexId", kardex_id: $("#kardex_id").val() }, function (data) {
+        postJSON("KardexMovimiento_C.php", { "action": "listByKardexId", "kardex_id": $("#kardex_id").val() }, function (data) {
             if (!validErrorResponse(data)) {
                 destroyDataTableIfExists("table_movimientos");
                 $('#table_movimientos').DataTable({
                     data: JSON.parse(data),
                     columns: [
-                        { title: "Tipo", data: "tipo_movimiento" },
+                        {
+                            title: "Tipo", data: "tipo_movimiento", render: function (data, type, row, meta) {
+                                var tipo_movimiento = ""
+                                switch (data) {
+                                    case "D": tipo_movimiento = "ELIMINADO"; break;
+                                    case "I_PRODUCTO": tipo_movimiento = "INGRESO POR PRODUCTO"; break;
+                                    case "I_ALMACEN": tipo_movimiento = "INGRESO POR CAMBIO DE ALMACEN"; break;
+                                    case "I_ALMACEN_UPDATE": tipo_movimiento = "INGRESO POR CAMBIO DE ALMACEN"; break;
+                                    case "I_ALMACEN_UPDATE_FINISH": tipo_movimiento = "INGRESO POR CAMBIO DE ALMACEN Y FINALIZACIÓN DE CANTIDAD"; break;
+                                    case "I_CONVERT_NEW": tipo_movimiento = "INGRESO POR CONVERSIÓN DE UM"; break;
+                                    case "I_OC": tipo_movimiento = "INGRESO POR ORDEN DE COMPRA"; break;
+                                    case "S_PARTIDA": tipo_movimiento = "SALIDA POR ASIGNACIÓN A PARTIDA"; break;
+                                    case "I_CONVERT_UPDATE": tipo_movimiento = "ACTUALIZACIÓN DE CANTIDAD POR CONVERSIÓN DE UM"; break;
+                                    case "I_CONVERT_UPDATE_FINISH": tipo_movimiento = "ACTUALIZACIÓN Y FINALIZACIÓN DE CANTIDAD POR CONVERSIÓN DE UM"; break;
+                                    case "I_CONVERT_NEW": tipo_movimiento = "GENERACIÓN POR CONVERSIÓN DE UM"; break;
+                                };
+                                return tipo_movimiento;
+                            }
+                        },
                         { title: "U.M.", data: "unidad_medida_id" },
+                        { title: "Fecha Movimiento", data: "fecha_movimiento" }
 
 
                     ]

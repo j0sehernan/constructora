@@ -8,7 +8,8 @@ class KardexMovimiento
         $db = new DB();
         $result = $db->query("select id,tipo_movimiento,almacen_id,producto_id,unidad_medida_id,cantidad,motivo,fecha_movimiento,fecha_vencimiento,fecha_termino,precio,almacen_origen_id,proyecto_origen_id,proyecto_trabajo_partida_origen_id,orden_compra_id,comprobante_pago_tipo_id,comprobante_pago_codigo,per_reg_aud,fec_reg_aud,kardex_origen_id,guia_remision,guia_remision_pagada,cantidad_salida,proyecto_trabajo_partida_salida_id " .
             "from kardex_movimiento " .
-            "where kardex_id = $kardex_id ");
+            "where kardex_id = $kardex_id ".
+            "order by fecha_movimiento desc;");
         return $result;
     }
 
