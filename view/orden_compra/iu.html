@@ -96,6 +96,15 @@
                         </div>
                     </div>
                 </div>
+                <div class="row">
+                    <div class="col only-options-right" style="margin-bottom: 10px;">
+                        <span id="divOptionsOrdenCompraDetalle">
+                            <a class="btn btn-icon btn btn-label btn-label-brand btn-bold btn-sm" data-toggle="tooltip" title="Actualizar" data-placement="top" onclick="listOrdenCompraDetalles();"><i class="flaticon-refresh"></i></a>
+                            <a href="#" class="btn btn-icon btn btn-label btn-label-brand btn-bold btn-sm" data-toggle="tooltip" title="Agregar Detalle" data-placement="top" onclick="showOrdenCompraDetalleForm('i')"><i class="flaticon2-add-1"></i></a>
+                        </span>
+                        <button type="submit" class="btn btn-success btn-sm"><i class="la la-save"></i>Guardar</button>
+                    </div>
+                </div>
                 <input type="hidden" id="action" name="action" value="i">
                 <input type="hidden" id="id" name="id">
             </form>
@@ -103,15 +112,6 @@
     </div>
     <div class="kt-portlet kt-portlet--height-fluid">
         <div class="kt-portlet__body">
-            <div class="row">
-                <div class="col only-options-right" style="margin-bottom: 10px;">
-                    <span id="divOptionsOrdenCompraDetalle">
-                        <a class="btn btn-icon btn btn-label btn-label-brand btn-bold btn-sm" data-toggle="tooltip" title="Actualizar" data-placement="top" onclick="listOrdenCompraDetalles();"><i class="flaticon-refresh"></i></a>
-                        <a href="#" class="btn btn-icon btn btn-label btn-label-brand btn-bold btn-sm" data-toggle="tooltip" title="Agregar Detalle" data-placement="top" onclick="showOrdenCompraDetalleForm('i')"><i class="flaticon2-add-1"></i></a>
-                    </span>
-                    <button type="submit" class="btn btn-success btn-sm"><i class="la la-save"></i>Guardar</button>
-                </div>
-            </div>
             <table id="tableDetalle" class="table table-hover table-bordered table-striped table-sm">
                 <thead class="thead-dark"></thead>
             </table>
