@@ -46,7 +46,7 @@
             $("#divTableAlmacenOrigen").show();
             //var ubicacion = $("#almacen_id_general option:selected").attr("data-ubicacion");
             //ubicacion !== "" ? $("#ubicacion").text(ubicacion) : ""
-            postJSON("Kardex_C.php", { "action": "listByAlmacen", "almacen_id": idAlmacen }, function (data) {
+            postJSON("Kardex_C.php", { "action": "listByAlmacen", "almacen_id": idAlmacen, del: 0 }, function (data) {
                 if (!validErrorResponse(data)) {
                     destroyDataTableIfExists("tableAlmacenOrigen");
                     $('#tableAlmacenOrigen').DataTable({
