@@ -228,7 +228,7 @@
             $.map($("[name=orden_compra_detalle_object]"), function (object, index) {
                 total += Number($(object).attr("data-sub_total"));
             });
-            igv = total * 0.18;
+            igv = total / 1.18;
             total_sin_igv = total - igv;
         } else {
             $.map($("[name=orden_compra_detalle_object]"), function (object, index) {
