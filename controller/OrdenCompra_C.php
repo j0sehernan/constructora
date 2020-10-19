@@ -39,8 +39,8 @@ switch ($object->action) {
         $igv = 0;
         if ($incluye_igv == true) {
             $total = calcTotalsByOrdenCompra($object->id);
-            $igv = $total / 1.18;
-            $total_sin_igv = $total - $igv;
+            $total_sin_igv = $total / 1.18;
+            $igv = $total - $total_sin_igv;
         } else {
             $incluye_igv = 0;
             $total_sin_igv = calcTotalsByOrdenCompra($object->id);
