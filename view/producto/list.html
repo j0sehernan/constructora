@@ -40,8 +40,8 @@
                         { title: "Familia", data: "marca" },
                         {
                             title: "Acciones", className: "td-actions", render: function (data, type, row, meta) {
-                                return '<button type="button" class="btn btn-outline-info btn-elevate btn-icon btn-circle btn-xs" data-toggle="tooltip" title="Stock Mínimo" onclick="showProductoStockMinimoListForm(' + row.id + ',\'' + row.nombre.replace('"', '\\x22') + '\');"><i class="fa fa-cubes"></i></button>&nbsp;' +
-                                    '<button type="button" class="btn btn-outline-info btn-elevate btn-icon btn-circle btn-xs" data-toggle="tooltip" title="Factores de Conversión" onclick="showProductoUnidadMedidaListForm(' + row.id + ',\'' + row.nombre.replace('"', '\\x22') + '\');"><i class="fa fa-exchange-alt"></i></button>&nbsp;' +
+                                return '<button type="button" class="btn btn-outline-info btn-elevate btn-icon btn-circle btn-xs" data-toggle="tooltip" title="Stock Mínimo" onclick="showProductoStockMinimoListForm(' + row.id + ',\'' + row.nombre.replace('"', '\\x22').replace('"', '\\x22').replace('"', '\\x22') + '\');"><i class="fa fa-cubes"></i></button>&nbsp;' +
+                                    '<button type="button" class="btn btn-outline-info btn-elevate btn-icon btn-circle btn-xs" data-toggle="tooltip" title="Factores de Conversión" onclick="showProductoUnidadMedidaListForm(' + row.id + ',\'' + row.nombre.replace('"', '\\x22').replace('"', '\\x22').replace('"', '\\x22') + '\');"><i class="fa fa-exchange-alt"></i></button>&nbsp;' +
                                     '<button type="button" class="btn btn-outline-info btn-elevate btn-icon btn-circle btn-xs" data-toggle="tooltip" title="Editar" onclick="showProductoForm(\'u\',' + row.id + ');"><i class="fa fa-pencil-alt"></i></button>&nbsp;' +
                                     '<button type="button" class="btn btn-outline-danger btn-elevate btn-icon btn-circle btn-xs" data-toggle="tooltip" title="Eliminar" onclick="deleteProducto(' + row.id + ');"><i class="fa fa-trash"></i></button>'
                             }

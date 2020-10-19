@@ -112,7 +112,7 @@
                                 <td>`+ object.fecha_vencimiento + `</td>
                                 <td class="td-actions">`;
                         if (view_del === "0") {
-                            html += `<button type="button" class="btn btn-outline-info btn-elevate btn-icon btn-circle btn-xs" data-toggle="tooltip" title="Convertir" onclick="showConvertForm('` + object.id + `','` + object.unidad_medida_id + `','` + object.unidad_medida + `','` + object.cantidad + `','` + object.producto.replace('"', '\\x22') + `','` + object.producto_id + `','` + object.fecha_ingreso + `','` + object.fecha_vencimiento + `');" > <i class="fa fa-exchange-alt"></i></button>&nbsp;
+                            html += `<button type="button" class="btn btn-outline-info btn-elevate btn-icon btn-circle btn-xs" data-toggle="tooltip" title="Convertir" onclick="showConvertForm('` + object.id + `','` + object.unidad_medida_id + `','` + object.unidad_medida + `','` + object.cantidad + `','` + object.producto.replace('"', '\\x22').replace('"', '\\x22').replace('"', '\\x22') + `','` + object.producto_id + `','` + object.fecha_ingreso + `','` + object.fecha_vencimiento + `');" > <i class="fa fa-exchange-alt"></i></button>&nbsp;
                                      <button type="button" class="btn btn-outline-info btn-elevate btn-icon btn-circle btn-xs" data-toggle="tooltip" title="Asignar"><i class="fa fa-sign-out-alt"></i></button>&nbsp;
                                      <button type="button" class="btn btn-outline-danger btn-elevate btn-icon btn-circle btn-xs" data-toggle="tooltip" title="Eliminar" onclick="delKardex('` + object.id + `');"><i class="fa fa-trash"></i></button>&nbsp;`;
                         }
