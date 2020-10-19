@@ -51,9 +51,6 @@
                             <input type="text" class="form-control form-control-sm form-control-decimal" id="total_a_pagar" name="total_a_pagar" placeholder="Total a Pagar" maxlength="21" readonly>
                         </div>
                     </div>
-                    <div class="col-sm-3" style="justify-content: end;align-self: flex-end; text-align: right; padding-bottom: 2em;">
-                        <button id="saveVenta" type="submit" class="btn btn-success btn-sm"><i class="la la-save"></i>Guardar</button>
-                    </div>
                 </div>
                 <div class="row">
                     <div class="col-sm-3" style="display: none;">
@@ -67,6 +64,31 @@
                             <label for="saldo_por_pagar">Saldo por Pagar</label>
                             <input type="text" class="form-control form-control-sm form-control-decimal" id="saldo_por_pagar" name="saldo_por_pagar" placeholder="Saldo por Pagar" maxlength="21" readonly>
                         </div>
+                    </div>
+                    <div class="col-sm-3" style="display: none;">
+                        <div class="form-group">
+                            <label for="tipo_venta">Tipo de Venta</label>
+                            <select class="form-control form-control-sm" id="tipo_venta" name="tipo_venta">
+                                <option value="CONTADO">CONTADO</option>
+                                <option value="FINANCIAMIENTO_DIRECTO">FINANCIAMIENTO DIRECTO</option>
+                                <option value="CREDITO_HIPOTECARIO_IBK">CRÉDITO HIPOTECARIO IBK</option>
+                                <option value="CREDITO_HIPOTECARIO_OB">CRÉDITO HIPOTECARIO OB</option>
+                                <option value="AHORRO_CASA">AHORRO CASA</option>
+                                <option value="CANJE">CANJE</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-sm-3" style="display: none;">
+                        <div class="form-group">
+                            <label for="monto_financiado">Monto Financiado</label>
+                            <input type="text" class="form-control form-control-sm form-control-decimal" id="monto_financiado" name="monto_financiado" placeholder="Monto Financiado" maxlength="21">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-9"></div>
+                    <div class="col-sm-3" style="justify-content: end;align-self: flex-end; text-align: right; padding-bottom: 2em;">
+                        <button id="saveVenta" type="submit" class="btn btn-success btn-sm"><i class="la la-save"></i>Guardar</button>
                     </div>
                 </div>
             </div>
@@ -85,8 +107,7 @@
                         <div class="col-sm-6">
                             <div style="text-align: right; padding-bottom: 2em;">
                                 <a class="btn btn-icon btn btn-label btn-label-brand btn-bold btn-sm" data-toggle="tooltip" title="Actualizar" data-placement="top" onclick="listProyectoVentaPago();"><i class="flaticon-refresh"></i></a>
-                                <a href="#" class="btn btn-icon btn btn-label btn-label-brand btn-bold btn-sm" data-toggle="tooltip" title="Agregar Pago" data-placement="top" onclick="showProyectoVentaPagoForm('i')"><i
-                                        class="flaticon2-add-1"></i></a>
+                                <a href="#" class="btn btn-icon btn btn-label btn-label-brand btn-bold btn-sm" data-toggle="tooltip" title="Agregar Pago" data-placement="top" onclick="showProyectoVentaPagoForm('i')"><i class="flaticon2-add-1"></i></a>
                             </div>
                         </div>
                     </div>
@@ -108,8 +129,7 @@
                         <div class="col-sm-6">
                             <div style="text-align: right; padding-bottom: 2em;">
                                 <a class="btn btn-icon btn btn-label btn-label-brand btn-bold btn-sm" data-toggle="tooltip" title="Actualizar" data-placement="top" onclick="listProyectoVentaDetalle();"><i class="flaticon-refresh"></i></a>
-                                <a href="#" class="btn btn-icon btn btn-label btn-label-brand btn-bold btn-sm" data-toggle="tooltip" title="Agregar Inmueble" data-placement="top" onclick="showProyectoVentaDetalleForm('i')"><i
-                                        class="flaticon2-add-1"></i></a>
+                                <a href="#" class="btn btn-icon btn btn-label btn-label-brand btn-bold btn-sm" data-toggle="tooltip" title="Agregar Inmueble" data-placement="top" onclick="showProyectoVentaDetalleForm('i')"><i class="flaticon2-add-1"></i></a>
                             </div>
                         </div>
                     </div>
@@ -129,8 +149,7 @@
                         <div class="col-sm-6">
                             <div style="text-align: right; padding-bottom: 2em;">
                                 <a class="btn btn-icon btn btn-label btn-label-brand btn-bold btn-sm" data-toggle="tooltip" title="Actualizar" data-placement="top" onclick="listProyectoVentaCronogramaPago();"><i class="flaticon-refresh"></i></a>
-                                <a href="#" class="btn btn-icon btn btn-label btn-label-brand btn-bold btn-sm" data-toggle="tooltip" title="Agregar Cronograma de Pago" data-placement="top" onclick="showProyectoVentaCronogramaPagoForm('i')"><i
-                                        class="flaticon2-add-1"></i></a>
+                                <a href="#" class="btn btn-icon btn btn-label btn-label-brand btn-bold btn-sm" data-toggle="tooltip" title="Agregar Cronograma de Pago" data-placement="top" onclick="showProyectoVentaCronogramaPagoForm('i')"><i class="flaticon2-add-1"></i></a>
                             </div>
                         </div>
                     </div>
@@ -187,16 +206,19 @@
                 $("#total_a_pagar").val(dataResponse.total_a_pagar);
                 $("#acumulado_pagado").val(dataResponse.acumulado_pagado);
                 $("#saldo_por_pagar").val(dataResponse.saldo_por_pagar);
+                $("#tipo_venta").val(dataResponse.tipo_venta);
+                $("#monto_financiado").val(dataResponse.monto_financiado);
                 $("#total_a_pagar").parent().parent().show();
                 $("#acumulado_pagado").parent().parent().show();
                 $("#saldo_por_pagar").parent().parent().show();
+                $("#tipo_venta").parent().parent().show();
+                $("#monto_financiado").parent().parent().show();
                 $("#tableDetalle").parent().parent().show();
                 $("#tableCronograma").parent().parent().show();
                 $("#tablePago").parent().parent().show();
                 listProyectoVentaDetalle();
                 listProyectoVentaCronogramaPago();
                 listProyectoVentaPago();
-                $("#saveVenta").parent().remove();
             }
         });
     }
@@ -211,6 +233,9 @@
             moneda: {
                 required: true,
                 maxlength: 10
+            },
+            monto_financiado: {
+                maxlength: 21
             }
         },
         submitHandler: function (form) {

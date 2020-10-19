@@ -20,7 +20,7 @@ switch ($object->action) {
         echo (json_encode($result));
         break;
     case "u":
-        $result = $proyectoVenta->update($object->id, $object->total_a_pagar, $object->acumulado_pagado, $saldo_por_pagar);
+        $result = $proyectoVenta->update($object->id, $object->total_a_pagar, $object->acumulado_pagado, $object->saldo_por_pagar, $object->tipo_venta, $object->monto_financiado);
         echo (json_encode($result));
         break;
     case "d":

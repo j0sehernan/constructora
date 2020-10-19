@@ -25,10 +25,10 @@ class ProyectoVenta
         return $result;
     }
 
-    function update($id, $totalAPagar, $acumuladoPagado, $saldoPorPagar)
+    function update($id, $totalAPagar, $acumuladoPagado, $saldoPorPagar, $tipo_venta, $monto_financiado)
     {
         $db = new DB();
-        $result = $db->execute("call proyecto_venta_u('$id','$totalAPagar','$acumuladoPagado','$saldoPorPagar');");
+        $result = $db->execute("call proyecto_venta_u('$id','$totalAPagar','$acumuladoPagado','$saldoPorPagar','$tipo_venta','$monto_financiado');");
         return $result;
     }
 
