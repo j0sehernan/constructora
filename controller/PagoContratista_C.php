@@ -35,6 +35,12 @@ if ($object->{'action'} == "list") {
     $amortizacionAdelanto = $valorVenta * $porcentajeAmortizacionAdelanto / 100;
     $retencionFondoGarantia = $valorVenta * $porcentajeRetencionFondoGarantia / 100;
     $subTotal = $valorVenta - $amortizacionAdelanto - $retencionFondoGarantia;
+
+    $proyecto_trabajo_text = $object->proyecto_trabajo_text;
+    if ($proyecto_trabajo_text == "ESTRUCTURA" || $proyecto_trabajo_text == "ARQUITECTURA" || $proyecto_trabajo_text == "ADICIONALES") {
+        $subTotal = $subTotal + ($subTotal * 0.04);
+    }
+
     $igv = $subTotal * 0.18;
     $total = $subTotal + $igv;
     $detraccion = $total * 0.12;

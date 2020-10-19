@@ -247,6 +247,10 @@
                     var amortizacionAdelanto = valorVenta * porcentaje_amortizacion_adelanto;
                     var retencionFondoGarantia = Number(valorVenta) * porcentaje_retencion_fondo_garantia;
                     var subTotal = Number(valorVenta) - Number(amortizacionAdelanto) - Number(retencionFondoGarantia);
+                    var proyecto_trabajo_text = $("#proyecto_trabajo_id option:selected").text();
+                    if (proyecto_trabajo_text === "ESTRUCTURA" || proyecto_trabajo_text === "ARQUITECTURA" || proyecto_trabajo_text === "ADICIONALES") {
+                        subTotal = subTotal + (subTotal * 0.04);
+                    }
                     var igv = subTotal * 0.18;
                     var total = Number(subTotal) + Number(igv);
                     var detraccion = total * 0.12;
@@ -304,6 +308,7 @@
                 "action": "i", "listAvances": JSONElements,
                 persona_contratista_id: $("#persona_contratista_id").val(),
                 proyecto_trabajo_id: $("#proyecto_trabajo_id").val(),
+                proyecto_trabajo_text: $("#proyecto_trabajo_id option:selected").text(),
                 proyecto_id: $("#proyecto_id").val(),
                 fecha_inicio: $("#fecha_inicio").val(),
                 fecha_termino: $("#fecha_termino").val(),
