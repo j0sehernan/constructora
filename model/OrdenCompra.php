@@ -29,7 +29,7 @@ class OrdenCompra
     {
         $db = new DB();
         $result = $db->query("select id,persona_proveedor_id,if(fecha='0000-00-00', '', date_format(fecha, '%d/%m/%Y')) as fecha," .
-            "proforma_codigo,codigo,moneda,tipo_cambio " .
+            "proforma_codigo,codigo,moneda,tipo_cambio, incluye_igv " .
             "from orden_compra " .
             "where id = $id;");
         return $result;

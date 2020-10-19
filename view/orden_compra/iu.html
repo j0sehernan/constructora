@@ -159,6 +159,7 @@
                 $("#moneda").val(dataResponse.moneda);
                 $("#tipo_cambio").val(dataResponse.tipo_cambio);
                 $("#moneda").parent().parent().show();
+                $("#incluye_igv").prop("checked", dataResponse.incluye_igv === 1 ? true : false);
                 changeMoneda();
                 listOrdenCompraDetalles();
             }
