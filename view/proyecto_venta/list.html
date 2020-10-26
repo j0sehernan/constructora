@@ -28,7 +28,7 @@
 </div>
 <script>
     function listVenta() {
-        postJSON("ProyectoVenta_C.php", { "action": "list" }, function (data) {
+        postJSON("ProyectoVenta_C.php", { "action": "report_by_proyecto_venta" }, function (data) {
             if (!validErrorResponse(data)) {
                 destroyDataTableIfExists("table");
                 $('#table').DataTable({
@@ -40,6 +40,19 @@
                         { title: "Total a Pagar", data: "total_a_pagar" },
                         { title: "Acumulado Pagado", data: "acumulado_pagado" },
                         { title: "Saldo por Pagar", data: "saldo_por_pagar" },
+                        {
+                            title: "Inmuebles", render: function (data, type, row, meta) {
+                                var detalle = "";
+
+                                $.map(row.detalle, function (objectDetalle, indexDetalle) {
+                                    detalle += objectDetalle.codigo + ","
+                                });
+
+                                detalle = detalle.substring(0, detalle.length - 1);
+
+                                return detalle
+                            }
+                        },
                         {
                             title: "Acciones", className: "td-actions", render: function (data, type, row, meta) {
                                 return '<button type="button" class="btn btn-outline-info btn-elevate btn-icon btn-circle btn-xs" data-toggle="tooltip" title="Editar" onclick="showVentaForm(\'u\',' + row.id + ');"><i class="fa fa-pencil-alt"></i></button>&nbsp;' +
