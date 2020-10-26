@@ -183,9 +183,23 @@
     }
     $("#btnImprimir").click(function () {
         title = `<h1 style="text-align: center;">REPORTE DE AVANCE DE PROYECTO</h1>`;
+        subTitle = `
+        <table width="100%">
+            <thead>
+                <tr>
+                    <td>PROYECTO:` + $("#proyecto_id :selected").text() + `</td>
+                    <td>FECHA INICIO: ` + $("#fecha_inicio").val() + `</td>
+                </tr>
+                <tr>
+                    <td>TRABAJO:` + $("#proyecto_trabajo_id :selected").text() + `</td>
+                    <td>FECHA TÉRMINO: ` + $("#fecha_termino").val() + `</td>
+                </tr>
+            </thead>
+        </table>
+        `;
         body = `<table width="100%" border="1" style="border-collapse: collapse;">` + $("#table").html() + `</table>`;
         w = window.open();
-        w.document.write(title + body);
+        w.document.write(title + subTitle + body);
         w.print();
         w.close();
     });
