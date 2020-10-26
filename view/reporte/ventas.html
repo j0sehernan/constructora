@@ -36,6 +36,7 @@
                         <th style="text-align: center;">Total a Pagar</th>
                         <th style="text-align: center;">Acumulado Pagado</th>
                         <th style="text-align: center;">Saldo por Pagar</th>
+                        <th style="text-align: center;">Inmuebles</th>
                     </tr>
                 </thead>
                 <tbody></tbody>
@@ -52,13 +53,22 @@
         }
     });
     function report() {
-        postJSON("ProyectoVenta_C.php", { "action": "list" }, function (data) {
+        postJSON("ProyectoVenta_C.php", { "action": "report_by_proyecto_venta" }, function (data) {
             destroyDataTableIfExists("table");
             $("#table tbody").html("");
             if (!validErrorResponse(data)) {
                 dataResponse = JSON.parse(data);
                 if (dataResponse.length > 0) {
+
                     $.map(dataResponse, function (object, index) {
+                        var detalle = "";
+
+                        $.map(object.detalle, function (objectDetalle, indexDetalle) {
+                            detalle += objectDetalle.codigo + ","
+                        });
+
+                        detalle = detalle.substring(0, detalle.length - 1);
+
                         var html =
                             `
                             <tr>
@@ -68,10 +78,12 @@
                                 <td>`+ object.total_a_pagar + `</td>
                                 <td>`+ object.acumulado_pagado + `</td>
                                 <td>`+ object.saldo_por_pagar + `</td>
+                                <td>`+ detalle + `</td>
                             </tr>
                             `;
                         $("#table tbody").append(html);
                     });
+
                     $("#btnImprimir").show();
                     $("#divAlertImprimir").hide();
                 }

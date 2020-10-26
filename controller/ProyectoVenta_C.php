@@ -1,14 +1,26 @@
 <?php
 @include_once("_Configuration.php");
 @include_once("../model/ProyectoVenta.php");
+@include_once("../model/ProyectoVentaDetalle.php");
 
 $json = file_get_contents(_Configuration::$CONFIGURATION_QUERY_PARAMS);
 $object = json_decode($json);
 $proyectoVenta = new ProyectoVenta();
+$proyectoVentaDetalle = new ProyectoVentaDetalle();
 
 switch ($object->action) {
     case "list":
         $result = $proyectoVenta->list();
+        echo (json_encode($result));
+        break;
+    case "report_by_proyecto_venta":
+        $result = $proyectoVenta->list();
+
+        for ($i = 0; $i < count($result); ++$i) {
+            $resultVentaDetalle = $proyectoVentaDetalle->listByProyectoVenta($result[$i]["id"]);
+            $result[$i]["detalle"] = $resultVentaDetalle;
+        }
+
         echo (json_encode($result));
         break;
     case "get":
