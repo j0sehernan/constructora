@@ -99,6 +99,15 @@
         </div>
         <div class="col-sm-3">
             <div class="form-group">
+                <label for="descuento_adelanto">Descuento por adelanto</label>
+                <input type="text" class="form-control form-control-sm form-control-decimal" id="descuento_adelanto" name="descuento_adelanto" placeholder="Descuento por adelanto" maxlength="21" onchange="changeNetoPagar();">
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-9"></div>
+        <div class="col-sm-3">
+            <div class="form-group">
                 <label for="neto_pagar">Neto a Pagar</label>
                 <input type="text" class="form-control form-control-sm" id="neto_pagar" name="neto_pagar" placeholder="Neto a Pagar" readonly>
             </div>
@@ -213,6 +222,12 @@
             '</tr>'
         return html;
     }
+    function changeNetoPagar() {
+        var detraccion = $("#detraccion").val();
+        var descuento_adelanto = $("#descuento_adelanto").val() === "" ? 0 : $("#descuento_adelanto").val();
+        var netoPagar = Number(total) - Number(detraccion) - Number(descuento_adelanto);
+        $("#neto_pagar").val(netoPagar.toFixed(2));
+    }
     function listAvancesByProyectoTrabajo() {
         $("#divTableAvances").hide();
         $("#monto_total").val("");
@@ -254,7 +269,8 @@
                     var igv = subTotal * 0.18;
                     var total = Number(subTotal) + Number(igv);
                     var detraccion = total * 0.12;
-                    var netoPagar = Number(total) + Number(detraccion);
+                    var descuento_adelanto = $("#descuento_adelanto").val();
+                    var netoPagar = Number(total) - Number(detraccion) - Number(descuento_adelanto);
                     $("#amortizacion_adelanto").val(Number(amortizacionAdelanto).toFixed(2));
                     $("#retencion_fondo_garantia").val(retencionFondoGarantia.toFixed(2));
                     $("#sub_total").val(subTotal.toFixed(2));
@@ -406,4 +422,5 @@
             }
         });
     }
+    startDecimalNumbers(18, 2);
 </script>
