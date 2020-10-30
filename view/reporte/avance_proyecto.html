@@ -155,7 +155,6 @@
                 dataResponse = JSON.parse(data);
                 if (dataResponse.length > 0) {
                     $.map(dataResponse, function (object, index) {
-                        console.log("Codigo: " + object.codigo + " : " + object.proyecto_trabajo_partida_id);
                         var filaResaltada = object.proyecto_trabajo_partida_id !== "style='background-color:red;'" ? "" : "";
                         var html =
                             `

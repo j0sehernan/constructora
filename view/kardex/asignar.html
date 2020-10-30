@@ -46,6 +46,12 @@
     <div class="row">
         <div class="col-sm-4">
             <div class="form-group">
+                <label for="fecha_salida">Fecha de Salida</label>
+                <input type="text" class="form-control form-control-sm form-control-date" id="fecha_salida" name="fecha_salida" placeholder="Fecha de salida" maxlength="10">
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="form-group">
                 <label for="cantidad">Cantidad</label>
                 <input type="text" class="form-control form-control-sm form-control-decimal" id="cantidad" name="cantidad" placeholder="Cantidad" maxlength="21">
             </div>
@@ -147,4 +153,5 @@
         });
     }
     startDecimalNumbers(18, 2);
+    startDatePicker();
 </script>
