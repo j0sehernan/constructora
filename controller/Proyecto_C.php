@@ -19,6 +19,9 @@ if ($object->{'action'} == "list") {
 } elseif ($object->{'action'} == "reportAvanceProyecto") {
     $listPartida = $proyectoTrabajoPartida->reportAvanceProyecto($object->proyecto_trabajo_id);
     $resultReport = array();
+    $totalAcumuladoCantidad = 0;
+    $totalAcumuladoPrecio = 0;
+
     if (count($listPartida) > 0) {
         foreach ($listPartida as $objPartida) {
             $idProyectoTrabajoPartida = $objPartida["id"];
@@ -37,6 +40,9 @@ if ($object->{'action'} == "list") {
                 $precio_por_ejecutar = 0;
             }
 
+            $totalAcumuladoCantidad += $listAvanceAcumulado[0]["cantidad_acumulada"];
+            $totalAcumuladoPrecio += $listAvanceAcumulado[0]["precio_acumulado"];
+
             $objectReport = array(
                 "codigo" => $objPartida["codigo"],
                 "partida" => $objPartida["partida"],
@@ -53,6 +59,22 @@ if ($object->{'action'} == "list") {
             );
             array_push($resultReport, $objectReport);
         }
+
+        $objectReportTotal = array(
+            "codigo" => "",
+            "partida" => "VALOR VENTA",
+            "unidad_medida" => "",
+            "precio_unitario_plan" => "",
+            "cantidad_plan" => "",
+            "precio_plan" => "",
+            "precio_avance" => "",
+            "cantidad_avance" => "",
+            "cantidad_acumulada" => $totalAcumuladoCantidad,
+            "precio_acumulado" => $totalAcumuladoPrecio,
+            "cantidad_por_ejecutar" => "",
+            "precio_por_ejecutar" => ""
+        );
+        array_push($resultReport, $objectReportTotal);
     }
     echo (json_encode($resultReport));
 } elseif ($object->{'action'} == "i") {
