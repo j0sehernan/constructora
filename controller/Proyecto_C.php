@@ -63,7 +63,8 @@ if ($object->{'action'} == "list") {
                 "cantidad_acumulada" => $listAvanceAcumulado[0]["cantidad_acumulada"],
                 "precio_acumulado" => $listAvanceAcumulado[0]["precio_acumulado"],
                 "cantidad_por_ejecutar" => $cantidad_por_ejecutar,
-                "precio_por_ejecutar" => $precio_por_ejecutar
+                "precio_por_ejecutar" => $precio_por_ejecutar,
+                "proyecto_trabajo_partida_id" => $objPartida["proyecto_trabajo_partida_id"]
             );
             array_push($resultReport, $objectReport);
         }
@@ -80,7 +81,8 @@ if ($object->{'action'} == "list") {
             "cantidad_acumulada" => round($totalAcumuladoCantidad, 2),
             "precio_acumulado" => round($totalAcumuladoPrecio, 2),
             "cantidad_por_ejecutar" => round($totalPorEjecutarCantidad, 2),
-            "precio_por_ejecutar" => round($totalPorEjecutarPrecio, 2)
+            "precio_por_ejecutar" => round($totalPorEjecutarPrecio, 2),
+            "proyecto_trabajo_partida_id" => ""
         );
         array_push($resultReport, $objectReportTotal);
     }
