@@ -49,15 +49,16 @@
                         {
                             title: "Acciones", className: "td-actions", render: function (data, type, row, meta) {
                                 /* if (row.pagado === "0") { */
-                                    return '<button type="button" class="btn btn-outline-success btn-elevate btn-icon btn-circle btn-xs" data-toggle="tooltip" title="Confirmar Pago" onclick="confirmarPagoProveedor(\'' + row.id + '\');"><i class="fa fa-check"></i></button>&nbsp;' +
-                                        '<button type="button" class="btn btn-outline-info btn-elevate btn-icon btn-circle btn-xs" data-toggle="tooltip" title="Editar" onclick="showPagoProveedorForm(\'u\',\'' + row.id + '\');"><i class="fa fa-pencil-alt"></i></button>&nbsp;' +
-                                        '<button type="button" class="btn btn-outline-danger btn-elevate btn-icon btn-circle btn-xs" data-toggle="tooltip" title="Eliminar" onclick="deletePagoProveedor(\'' + row.id + '\',\'' + row.proyecto_trabajo_id + '\');"><i class="fa fa-trash"></i></button>';
+                                return '<button type="button" class="btn btn-outline-success btn-elevate btn-icon btn-circle btn-xs" data-toggle="tooltip" title="Confirmar Pago" onclick="confirmarPagoProveedor(\'' + row.id + '\');"><i class="fa fa-check"></i></button>&nbsp;' +
+                                    '<button type="button" class="btn btn-outline-info btn-elevate btn-icon btn-circle btn-xs" data-toggle="tooltip" title="Editar" onclick="showPagoProveedorForm(\'u\',\'' + row.id + '\');"><i class="fa fa-pencil-alt"></i></button>&nbsp;' +
+                                    '<button type="button" class="btn btn-outline-danger btn-elevate btn-icon btn-circle btn-xs" data-toggle="tooltip" title="Eliminar" onclick="deletePagoProveedor(\'' + row.id + '\',\'' + row.proyecto_trabajo_id + '\');"><i class="fa fa-trash"></i></button>';
                                 /* } else {
                                     return '<button type="button" class="btn btn-outline-info btn-elevate btn-icon btn-circle btn-xs" data-toggle="tooltip" title="Visualizar" onclick="showPagoProveedorForm(\'v\',\'' + row.id + '\');"><i class="fa fa-eye"></i></button>&nbsp;';
                                 } */
                             }
                         }
-                    ]
+                    ],
+                    "order": [[6, "desc"]]
                 });
             }
         });
