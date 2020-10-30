@@ -19,6 +19,8 @@ if ($object->{'action'} == "list") {
 } elseif ($object->{'action'} == "reportAvanceProyecto") {
     $listPartida = $proyectoTrabajoPartida->reportAvanceProyecto($object->proyecto_trabajo_id);
     $resultReport = array();
+    $totalAvanceCantidad = 0;
+    $totalAvancePrecio = 0;
     $totalAcumuladoCantidad = 0;
     $totalAcumuladoPrecio = 0;
     $totalPorEjecutarCantidad = 0;
@@ -42,6 +44,8 @@ if ($object->{'action'} == "list") {
                 $precio_por_ejecutar = 0;
             }
 
+            $totalAvanceCantidad += $listAvance[0]["cantidad_avance"];
+            $totalAvancePrecio += $listAvance[0]["precio_avance"];
             $totalAcumuladoCantidad += $listAvanceAcumulado[0]["cantidad_acumulada"];
             $totalAcumuladoPrecio += $listAvanceAcumulado[0]["precio_acumulado"];
             $totalPorEjecutarCantidad += $cantidad_por_ejecutar;
@@ -71,8 +75,8 @@ if ($object->{'action'} == "list") {
             "precio_unitario_plan" => "",
             "cantidad_plan" => "",
             "precio_plan" => "",
-            "precio_avance" => "",
-            "cantidad_avance" => "",
+            "precio_avance" => round($totalAvancePrecio, 2),
+            "cantidad_avance" => round($totalAvanceCantidad, 2),
             "cantidad_acumulada" => round($totalAcumuladoCantidad, 2),
             "precio_acumulado" => round($totalAcumuladoPrecio, 2),
             "cantidad_por_ejecutar" => round($totalPorEjecutarCantidad, 2),
