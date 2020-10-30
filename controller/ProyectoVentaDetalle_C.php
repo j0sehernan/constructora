@@ -17,25 +17,35 @@ switch ($object->action) {
     case "i":
         $idProyectoVenta = $object->proyecto_venta_id;
         $precio = $object->precio;
-        //1.Insert
-        $result = $proyectoVentaDetalle->insert($idProyectoVenta, $object->proyecto_inmueble_id, $precio);
-        if ($result) {
-            //2. Sum new accumulate values
-            $listProyectoVenta = $proyectoVenta->get($idProyectoVenta);
+        //0.Validation
+        $listValidation = $proyectoVentaDetalle->countByProyectoInmuebleId($object->proyecto_inmueble_id);
 
-            $totalAPagar = $listProyectoVenta[0]["total_a_pagar"] + $precio;
-            $acumuladoPagado = $listProyectoVenta[0]["acumulado_pagado"];
-            $tipo_venta = $listProyectoVenta[0]["tipo_venta"];
-            $monto_financiado = $listProyectoVenta[0]["monto_financiado"];
-            $saldoPorPagar = $totalAPagar - $acumuladoPagado;
+        if ($listValidation[0]["cantidad"] == 0) {
+            //1.Insert
+            $result = $proyectoVentaDetalle->insert($idProyectoVenta, $object->proyecto_inmueble_id, $precio);
+            if ($result) {
+                //2. Sum new accumulate values
+                $listProyectoVenta = $proyectoVenta->get($idProyectoVenta);
 
-            $proyectoVenta->update($idProyectoVenta, $totalAPagar, $acumuladoPagado, $saldoPorPagar, $tipo_venta, $monto_financiado);
+                $totalAPagar = $listProyectoVenta[0]["total_a_pagar"] + $precio;
+                $acumuladoPagado = $listProyectoVenta[0]["acumulado_pagado"];
+                $tipo_venta = $listProyectoVenta[0]["tipo_venta"];
+                $monto_financiado = $listProyectoVenta[0]["monto_financiado"];
+                $saldoPorPagar = $totalAPagar - $acumuladoPagado;
 
+                $proyectoVenta->update($idProyectoVenta, $totalAPagar, $acumuladoPagado, $saldoPorPagar, $tipo_venta, $monto_financiado);
+
+                $result = array(
+                    "total_a_pagar" => $totalAPagar,
+                    "saldo_por_pagar" => $saldoPorPagar
+                );
+            }
+        } else {
             $result = array(
-                "total_a_pagar" => $totalAPagar,
-                "saldo_por_pagar" => $saldoPorPagar
+                "error_message" => "El Inmueble ya ha sido asignado.",
             );
         }
+
         echo (json_encode($result));
         break;
     case "d":

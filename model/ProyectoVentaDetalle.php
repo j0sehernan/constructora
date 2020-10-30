@@ -11,6 +11,15 @@ class ProyectoVentaDetalle
         return $result;
     }
 
+    function countByProyectoInmuebleId($proyecto_inmueble_id)
+    {
+        $db = new DB();
+        $result = $db->query("select count(*) as cantidad " .
+            "from proyecto_venta_detalle " .
+            "where proyecto_inmueble_id = $proyecto_inmueble_id");
+        return $result;
+    }
+
     function get($id)
     {
         $db = new DB();
