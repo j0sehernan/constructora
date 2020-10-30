@@ -69,8 +69,8 @@ if ($object->{'action'} == "list") {
             "precio_plan" => "",
             "precio_avance" => "",
             "cantidad_avance" => "",
-            "cantidad_acumulada" => $totalAcumuladoCantidad,
-            "precio_acumulado" => $totalAcumuladoPrecio,
+            "cantidad_acumulada" => round($totalAcumuladoCantidad, 2),
+            "precio_acumulado" => round($totalAcumuladoPrecio, 2),
             "cantidad_por_ejecutar" => "",
             "precio_por_ejecutar" => ""
         );
