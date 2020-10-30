@@ -21,6 +21,8 @@ if ($object->{'action'} == "list") {
     $resultReport = array();
     $totalAcumuladoCantidad = 0;
     $totalAcumuladoPrecio = 0;
+    $totalPorEjecutarCantidad = 0;
+    $totalPorEjecutarPrecio = 0;
 
     if (count($listPartida) > 0) {
         foreach ($listPartida as $objPartida) {
@@ -42,6 +44,8 @@ if ($object->{'action'} == "list") {
 
             $totalAcumuladoCantidad += $listAvanceAcumulado[0]["cantidad_acumulada"];
             $totalAcumuladoPrecio += $listAvanceAcumulado[0]["precio_acumulado"];
+            $totalPorEjecutarCantidad += $cantidad_por_ejecutar;
+            $totalPorEjecutarPrecio += $precio_por_ejecutar;
 
             $objectReport = array(
                 "codigo" => $objPartida["codigo"],
@@ -71,8 +75,8 @@ if ($object->{'action'} == "list") {
             "cantidad_avance" => "",
             "cantidad_acumulada" => round($totalAcumuladoCantidad, 2),
             "precio_acumulado" => round($totalAcumuladoPrecio, 2),
-            "cantidad_por_ejecutar" => "",
-            "precio_por_ejecutar" => ""
+            "cantidad_por_ejecutar" => round($totalPorEjecutarCantidad, 2),
+            "precio_por_ejecutar" => round($totalPorEjecutarPrecio, 2)
         );
         array_push($resultReport, $objectReportTotal);
     }
