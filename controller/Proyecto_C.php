@@ -61,7 +61,7 @@ if ($object->{'action'} == "list") {
         }
 
         $objectReportTotal = array(
-            "codigo" => "",
+            "codigo" => "TOTAL",
             "partida" => "VALOR VENTA",
             "unidad_medida" => "",
             "precio_unitario_plan" => "",
