@@ -1,6 +1,10 @@
 <h3 id="titleActionModal">Registro</h3>
 <form id="formProyectoVentaCronogramaPago">
     <div class="form-group">
+        <label for="cuota">Cuota</label>
+        <input type="text" class="form-control form-control-sm" id="cuota" name="cuota" placeholder="Cuota" maxlength="10">
+    </div>
+    <div class="form-group">
         <label for="monto_a_pagar">Monto a Pagar</label>
         <input type="text" class="form-control form-control-sm form-control-decimal" id="monto_a_pagar" name="monto_a_pagar" placeholder="Monto a Pagar" maxlength="21">
     </div>
@@ -24,6 +28,7 @@
                 $("#titleActionModal").html("Editar");
                 $("#monto_a_pagar").val(dataResponse.monto_a_pagar);
                 $("#fecha_programada").val(dataResponse.fecha_programada);
+                $("#cuota").val(dataResponse.cuota);
             }
         });
     }
@@ -38,6 +43,10 @@
                 required: true,
                 maxlength: 10,
                 dateITA: true
+            },
+            codigo: {
+                required: true,
+                maxlength: 10
             }
         },
         submitHandler: function (form) {
@@ -50,7 +59,8 @@
             id: $("#id_modal").val(),
             proyecto_venta_id: $("#proyecto_venta_id").val(),
             monto_a_pagar: $("#monto_a_pagar").val(),
-            fecha_programada: $("#fecha_programada").val()
+            fecha_programada: $("#fecha_programada").val(),
+            cuota: $("#cuota").val()
         }, function (data) {
             if (!validErrorResponse(data)) {
                 closeLastModal();

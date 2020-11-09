@@ -2,11 +2,13 @@
 @include_once("_Configuration.php");
 @include_once("../model/ProyectoVenta.php");
 @include_once("../model/ProyectoVentaPago.php");
+@include_once("../model/ProyectoVentaCronogramaPago.php");
 
 $json = file_get_contents(_Configuration::$CONFIGURATION_QUERY_PARAMS);
 $object = json_decode($json);
 $proyectoVenta = new ProyectoVenta();
 $proyectoVentaPago = new ProyectoVentaPago();
+$proyectoVentaCronogramaPago = new ProyectoVentaCronogramaPago();
 
 
 switch ($object->action) {
@@ -22,7 +24,10 @@ switch ($object->action) {
         $idProyectoVenta = $object->proyecto_venta_id;
         $montoMonedaVenta = $object->monto_moneda_venta;
         //1.Insert
-        $result = $proyectoVentaPago->insert($idProyectoVenta, $object->fecha, $object->comprobante_codigo, $montoMonedaVenta, $object->moneda_pago, $object->moneda_pago_valor_conversion, $object->monto_moneda_pago, $object->igv, $object->monto_total_moneda_pago, $object->detraccion);
+        $result = $proyectoVentaPago->insert($idProyectoVenta, $object->fecha, $object->comprobante_codigo, $montoMonedaVenta, $object->moneda_pago, $object->moneda_pago_valor_conversion, $object->monto_moneda_pago, $object->igv, $object->monto_total_moneda_pago, $object->detraccion, $object->cuota);
+
+        $proyectoVentaCronogramaPago->deleteByProyectoVentaAndCuota($idProyectoVenta, $object->cuota);
+
         if ($result) {
             //2. Sum new accumulate values
             $listProyectoVenta = $proyectoVenta->get($idProyectoVenta);
@@ -32,14 +37,16 @@ switch ($object->action) {
             $tipo_venta = $listProyectoVenta[0]["tipo_venta"];
             $monto_financiado = $listProyectoVenta[0]["monto_financiado"];
             $saldoPorPagar = $totalAPagar - $acumuladoPagado;
+            $moneda = $listProyectoVenta[0]["moneda"];
 
-            $proyectoVenta->update($idProyectoVenta, $totalAPagar, $acumuladoPagado, $saldoPorPagar, $tipo_venta, $monto_financiado);
+            $proyectoVenta->update($idProyectoVenta, $totalAPagar, $acumuladoPagado, $saldoPorPagar, $tipo_venta, $monto_financiado, $moneda);
 
             $result = array(
                 "acumulado_pagado" => $acumuladoPagado,
                 "saldo_por_pagar" => $saldoPorPagar
             );
         }
+
         echo (json_encode($result));
         break;
     case "u":
@@ -86,7 +93,7 @@ switch ($object->action) {
             $monto_financiado = $listProyectoVenta[0]["monto_financiado"];
             $saldoPorPagar = $totalAPagar - $acumuladoPagado;
 
-            $proyectoVenta->update($idProyectoVenta, $totalAPagar, $acumuladoPagado, $saldoPorPagar, $tipo_venta, $monto_financiados);
+            $proyectoVenta->update($idProyectoVenta, $totalAPagar, $acumuladoPagado, $saldoPorPagar, $tipo_venta, $monto_financiado);
 
             $result = array(
                 "acumulado_pagado" => $acumuladoPagado,

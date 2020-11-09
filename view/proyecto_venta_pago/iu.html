@@ -64,7 +64,14 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-sm-4" style="align-self: flex-end; padding-bottom: 2em;">
+        <div class="col-sm-4">
+            <div class="form-group">
+                <label for="cuota">Cuota</label>
+                <select class="form-control form-control-sm" id="cuota" name="cuota">
+                </select>
+            </div>
+        </div>
+        <div class="col-sm-8" style="align-self: flex-end; padding-bottom: 2em;">
             <div class="only-options-right">
                 <input type="hidden" id="proyecto_venta_id" name="proyecto_venta_id" value="">
                 <input type="hidden" id="action_modal" name="action_modal" value="i">
@@ -76,13 +83,21 @@
     </div>
 </form>
 <script>
-    /*function changeMonedaPago() {
-        if ($("#moneda_pago").val() === "USD") {
-            $("#moneda_pago_valor_conversion").val(1).attr("readonly", true);
-        } else {
-            $("#moneda_pago_valor_conversion").attr("readonly", false);
-        }
-    }*/
+    function fillCuota(cuota) {
+        postJSON("ProyectoVentaCronogramaPago_C.php", { action: "listByProyectoVenta", proyecto_venta_id: $("#proyecto_venta_id").val() }, function (data) {
+            if (!validErrorResponse(data)) {
+                $("#cuota").html('<option value="">Seleccione Cuota</option>');
+                var arrayAlmacenes = JSON.parse(data);
+                arrayAlmacenes.forEach(function (object, index) {
+                    $("#cuota").append('<option value="' + object.cuota + '">' + object.cuota + '</option>');
+                });
+                if (typeof cuota !== 'undefined') {
+                    $("#cuota").val(cuota);
+                }
+                startSelect2ById("cuota");
+            }
+        });
+    }
     function sumTotals() {
         var monto_moneda_venta = $("#monto_moneda_venta").val();
         var moneda_pago_valor_conversion = $("#moneda_pago_valor_conversion").val();
@@ -118,6 +133,7 @@
                 $("#igv").val(dataResponse.igv);
                 $("#monto_total_moneda_pago").val(dataResponse.igv);
                 $("#detraccion").val(dataResponse.detraccion);
+                fillCuota(dataResponse.cuota);
             }
         });
     }
@@ -168,6 +184,9 @@
                 maxlength: 21,
                 number: true
             },
+            cuota: {
+                required: true
+            }
         },
         submitHandler: function (form) {
             saveProyectoVentaPago();
@@ -186,7 +205,8 @@
             monto_moneda_pago: $("#monto_moneda_pago").val(),
             igv: $("#igv").val(),
             monto_total_moneda_pago: $("#monto_total_moneda_pago").val(),
-            detraccion: $("#detraccion").val()
+            detraccion: $("#detraccion").val(),
+            cuota: $("#cuota").val()
         }, function (data) {
             if (!validErrorResponse(data)) {
                 dataResponse = JSON.parse(data);
@@ -195,6 +215,7 @@
                 closeLastModal();
                 notifySuccess();
                 listProyectoVentaPago();
+                listProyectoVentaCronogramaPago();
             }
         });
     }

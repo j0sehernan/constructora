@@ -42,7 +42,10 @@
                     <div class="col-sm-3">
                         <div class="form-group">
                             <label for="moneda">Moneda</label>
-                            <input type="text" class="form-control form-control-sm" id="moneda" name="moneda" placeholder="Moneda" maxlength="10" value="USD" readonly>
+                            <select class="form-control form-control-sm" id="moneda" name="moneda">
+                                <option id="USD">USD</option>
+                                <option id="PEN">PEN</option>
+                            </select>
                         </div>
                     </div>
                     <div class="col-sm-3" style="display: none;">
@@ -231,8 +234,7 @@
                 required: true
             },
             moneda: {
-                required: true,
-                maxlength: 10
+                required: true
             },
             monto_financiado: {
                 maxlength: 21
@@ -309,6 +311,7 @@
                 $('#tableCronograma').DataTable({
                     data: JSON.parse(data),
                     columns: [
+                        { title: "Cuota", data: "cuota" },
                         { title: "Monto a Pagar", data: "monto_a_pagar" },
                         { title: "Fecha Programada", data: "fecha_programada" },
                         {
@@ -353,6 +356,7 @@
                 $('#tablePago').DataTable({
                     data: JSON.parse(data),
                     columns: [
+                        { title: "Cuota", data: "cuota" },
                         { title: "Fecha", data: "fecha" },
                         { title: "Comprobante", data: "comprobante_codigo" },
                         { title: "Monto Moneda Venta", data: "monto_moneda_venta" },
@@ -363,8 +367,8 @@
                         { title: "Total Moneda Pago", data: "monto_total_moneda_pago" },
                         {
                             title: "Acciones", className: "td-actions", render: function (data, type, row, meta) {
-                                return '<button type="button" class="btn btn-outline-info btn-elevate btn-icon btn-circle btn-xs" data-toggle="tooltip" title="Editar" onclick="showProyectoVentaPagoForm(\'u\',' + row.id + ');"><i class="fa fa-pencil-alt"></i></button>&nbsp;' +
-                                    '<button type="button" class="btn btn-outline-danger btn-elevate btn-icon btn-circle btn-xs" data-toggle="tooltip" title="Eliminar" onclick="deleteProyectoVentaPago(' + row.id + ');"><i class="fa fa-trash"></i></button>';
+                                //'<button type="button" class="btn btn-outline-info btn-elevate btn-icon btn-circle btn-xs" data-toggle="tooltip" title="Editar" onclick="showProyectoVentaPagoForm(\'u\',' + row.id + ');"><i class="fa fa-pencil-alt"></i></button>&nbsp;' +
+                                return '<button type="button" class="btn btn-outline-danger btn-elevate btn-icon btn-circle btn-xs" data-toggle="tooltip" title="Eliminar" onclick="deleteProyectoVentaPago(' + row.id + ');"><i class="fa fa-trash"></i></button>';
                             }
                         }
                     ]
@@ -375,6 +379,7 @@
     function showProyectoVentaPagoForm(action, id) {
         getModalLargeWithCallBack('proyecto_venta_pago/iu.html', function () {
             $("#proyecto_venta_id").val($("#form #id").val());
+            fillCuota();
             if (action === "u") {
                 $("#action_modal").val("u");
                 $("#id_modal").val(id);

@@ -21,11 +21,29 @@ switch ($object->action) {
         echo (json_encode($result));
         break;
     case "i":
-        $result = $proyectoVentaCronogramaPago->insert($object->proyecto_venta_id, $object->monto_a_pagar, $object->fecha_programada);
+        $listValidation = $proyectoVentaCronogramaPago->countByProyectoVentaAndCuota($object->proyecto_venta_id, $object->cuota);
+
+        if ($listValidation[0]["cantidad"] == 0) {
+            $result = $proyectoVentaCronogramaPago->insert($object->proyecto_venta_id, $object->monto_a_pagar, $object->fecha_programada, $object->cuota);
+        } else {
+            $result = array(
+                "error_message" => "La cuota ya ha sido asignada.",
+            );
+        }
+
         echo (json_encode($result));
         break;
     case "u":
-        $result = $proyectoVentaCronogramaPago->update($object->id, $object->monto_a_pagar, $object->fecha_programada);
+        $listValidation = $proyectoVentaCronogramaPago->countByProyectoVentaAndCuotaAndDiffOwnId($object->proyecto_venta_id, $object->cuota, $object->id);
+
+        if ($listValidation[0]["cantidad"] == 0) {
+            $result = $proyectoVentaCronogramaPago->update($object->id, $object->monto_a_pagar, $object->fecha_programada, $object->cuota);
+        } else {
+            $result = array(
+                "error_message" => "La cuota ya ha sido asignada.",
+            );
+        }
+
         echo (json_encode($result));
         break;
     case "d":
