@@ -66,8 +66,9 @@ switch ($object->action) {
             $tipo_venta = $listProyectoVenta[0]["tipo_venta"];
             $monto_financiado = $listProyectoVenta[0]["monto_financiado"];
             $saldoPorPagar = $totalAPagar - $acumuladoPagado;
+            $moneda = $listProyectoVenta[0]["moneda"];
 
-            $proyectoVenta->update($idProyectoVenta, $totalAPagar, $acumuladoPagado, $saldoPorPagar, $tipo_venta, $monto_financiado);
+            $proyectoVenta->update($idProyectoVenta, $totalAPagar, $acumuladoPagado, $saldoPorPagar, $tipo_venta, $monto_financiado, $moneda);
 
             $result = array(
                 "acumulado_pagado" => $acumuladoPagado,
@@ -92,8 +93,9 @@ switch ($object->action) {
             $tipo_venta = $listProyectoVenta[0]["tipo_venta"];
             $monto_financiado = $listProyectoVenta[0]["monto_financiado"];
             $saldoPorPagar = $totalAPagar - $acumuladoPagado;
+            $moneda = $listProyectoVenta[0]["moneda"];
 
-            $proyectoVenta->update($idProyectoVenta, $totalAPagar, $acumuladoPagado, $saldoPorPagar, $tipo_venta, $monto_financiado);
+            $proyectoVenta->update($idProyectoVenta, $totalAPagar, $acumuladoPagado, $saldoPorPagar, $tipo_venta, $monto_financiado, $moneda);
 
             $result = array(
                 "acumulado_pagado" => $acumuladoPagado,
