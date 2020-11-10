@@ -476,10 +476,10 @@ $.blockUI.defaults = {
 };
 
 $(document).ajaxStart(function () {
-    //$.blockUI();
+    $.blockUI();
     startTooltip();
 }).ajaxStop(function () {
-    //$.unblockUI();
+    $.unblockUI();
     startTooltip();
 }
 );
