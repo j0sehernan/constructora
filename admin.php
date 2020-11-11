@@ -3,7 +3,7 @@
 @include_once("controller/_ValidSession_Login.php");
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <!-- begin::Head -->
 
 <head>

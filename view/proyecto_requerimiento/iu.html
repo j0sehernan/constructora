@@ -45,7 +45,7 @@
         </div>
         <div class="row">
             <div class="col only-options-right" style="margin-bottom: 10px;">
-                <a href="#" class="btn btn-icon btn btn-label btn-label-brand btn-bold btn-sm" data-toggle="tooltip" title="Exportar a Excel" data-placement="top" onclick="exportTableToExcel('print_table')"><i class="fa fa-file-download"></i></a>
+                <a id="btn-export" style="display: none;" href="#" class="btn btn-icon btn btn-label btn-label-brand btn-bold btn-sm" data-toggle="tooltip" title="Exportar a Excel" data-placement="top" onclick="exportTableToExcel('print_table','REPORTE_REQUERIMIENTO')"><i class="fa fa-file-download"></i></a>
                 <span id="divOptions" style="display: none;">
                     <a class="btn btn-icon btn btn-label btn-label-brand btn-bold btn-sm" data-toggle="tooltip" title="Actualizar" data-placement="top" onclick="listProyectoRequerimientoDetalle();"><i class="flaticon-refresh"></i></a>
                     <a href="#" class="btn btn-icon btn btn-label btn-label-brand btn-bold btn-sm" data-toggle="tooltip" title="Agregar Detalle" data-placement="top" onclick="showProyectoRequerimientoDetalleForm('i')"><i class="flaticon2-add-1"></i></a>
@@ -57,10 +57,33 @@
             </div>
         </div>
     </form>
-    <table id="print_table">
-        <tr>
-            <td>test</td>
-        </tr>
+    <table id="print_table" border="1" style="display: none;">
+        <thead>
+            <tr>
+                <th colspan="6">HOJA DE REQUERIMIENTOS</th>
+            </tr>
+            <tr>
+                <th colspan="2">No</th>
+                <th colspan="4" id="rep_codigo"></th>
+            </tr>
+            <tr>
+                <th colspan="2">PROYECTO</th>
+                <th colspan="4" id="rep_proyecto"></th>
+            </tr>
+            <tr>
+                <th colspan="2">FECHA PEDIDO</th>
+                <th colspan="4" id="rep_fecha_pedido"></th>
+            </tr>
+            <tr>
+                <th>ITEM</th>
+                <th>CANTIDAD</th>
+                <th>UM</th>
+                <th>DESCRIPCION</th>
+                <th>FECHA EN OBRA</th>
+                <th>OBSERVACION</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
     </table>
     <table id="tableDetalle" class="table table-hover table-bordered table-striped table-sm">
         <thead class="thead-dark"></thead>
@@ -80,6 +103,7 @@
                 }
                 startSelect2ById("proyecto_id");
                 if (typeof callback !== 'undefined') callback();
+                $("#rep_proyecto").text($("#form #proyecto_id :selected").text());
             }
         });
     }
@@ -103,12 +127,15 @@
                 $("#fecha_pedido").val(dataResponse.fecha_pedido);
                 $("#alert_new_checked").val(dataResponse.alert_new_checked);
                 listProyectoRequerimientoDetalle();
+                $("#rep_codigo").text(dataResponse.codigo);
+                $("#rep_fecha_pedido").text(dataResponse.fecha_pedido);
                 if ($("#action").val() === "v") {
                     $("#codigo").attr("disabled", true);
                     $("#fecha_pedido").attr("disabled", true);
                     $("#divOptions").hide();
                     $("#btnSave").remove();
                 }
+                $("#btn-export").show();
             }
         });
     }
@@ -165,6 +192,7 @@
         postJSON("ProyectoRequerimientoDetalle_C.php", { "action": "listByProyectoRequerimiento", proyecto_requerimiento_id: $("#form #id").val() }, function (data) {
             if (!validErrorResponse(data)) {
                 destroyDataTableIfExists("tableDetalle");
+                $("#print_table tbody").html("");
                 $('#tableDetalle').DataTable({
                     data: JSON.parse(data),
                     columns: [
@@ -183,6 +211,19 @@
                             }
                         }
                     ]
+                });
+
+                var list = JSON.parse(data);
+                list.forEach((row, index) => {
+                    $("#print_table tbody").append(`
+                    <tr>
+                        <th>`+ (index + 1) + `</th>
+                        <th>`+ row.cantidad + `</th>
+                        <th>`+ row.unidad_medida + `</th>
+                        <th>`+ row.producto + `</th>
+                        <th>`+ row.fecha_en_obra + `</th>
+                        <th></th>
+                    </tr>`);
                 });
             }
         });
