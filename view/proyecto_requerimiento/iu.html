@@ -45,7 +45,8 @@
         </div>
         <div class="row">
             <div class="col only-options-right" style="margin-bottom: 10px;">
-                <a id="btn-export" style="display: none;" href="#" class="btn btn-icon btn btn-label btn-label-brand btn-bold btn-sm" data-toggle="tooltip" title="Exportar a Excel" data-placement="top" onclick="exportTableToExcel('print_table','REPORTE_REQUERIMIENTO')"><i class="fa fa-file-download"></i></a>
+                <a id="btn-imprimir" style="display: none;" href="#" class="btn btn-icon btn btn-label btn-label-brand btn-bold btn-sm" data-toggle="tooltip" title="Imprimir" data-placement="top"><i class="fa fa-print"></i></a>
+                <!-- <a id="btn-export" style="display: none;" href="#" class="btn btn-icon btn btn-label btn-label-brand btn-bold btn-sm" data-toggle="tooltip" title="Exportar a Excel" data-placement="top" onclick="exportTableToExcel('print_table','REPORTE_REQUERIMIENTO')"><i class="fa fa-file-download"></i></a> -->
                 <span id="divOptions" style="display: none;">
                     <a class="btn btn-icon btn btn-label btn-label-brand btn-bold btn-sm" data-toggle="tooltip" title="Actualizar" data-placement="top" onclick="listProyectoRequerimientoDetalle();"><i class="flaticon-refresh"></i></a>
                     <a href="#" class="btn btn-icon btn btn-label btn-label-brand btn-bold btn-sm" data-toggle="tooltip" title="Agregar Detalle" data-placement="top" onclick="showProyectoRequerimientoDetalleForm('i')"><i class="flaticon2-add-1"></i></a>
@@ -57,39 +58,49 @@
             </div>
         </div>
     </form>
-    <table id="print_table" border="1" style="display: none;">
-        <thead>
-            <tr>
-                <th colspan="6">HOJA DE REQUERIMIENTOS</th>
-            </tr>
-            <tr>
-                <th colspan="2">N°</th>
-                <th colspan="4" id="rep_codigo"></th>
-            </tr>
-            <tr>
-                <th colspan="2">PROYECTO</th>
-                <th colspan="4" id="rep_proyecto"></th>
-            </tr>
-            <tr>
-                <th colspan="2">FECHA PEDIDO</th>
-                <th colspan="4" id="rep_fecha_pedido"></th>
-            </tr>
-            <tr>
-                <th>ITEM</th>
-                <th>CANTIDAD</th>
-                <th>UM</th>
-                <th>DESCRIPCIÓN</th>
-                <th>FECHA EN OBRA</th>
-                <th>OBSERVACIÓN</th>
-            </tr>
-        </thead>
-        <tbody></tbody>
-    </table>
+    <div style="display: none;">
+        <table id="print_table" width="100%" border="1" style="border-collapse: collapse;">
+            <thead>
+                <tr>
+                    <th>ITEM</th>
+                    <th>CANTIDAD</th>
+                    <th>UM</th>
+                    <th>DESCRIPCIÓN</th>
+                    <th>FECHA EN OBRA</th>
+                    <th>OBSERVACIÓN</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
     <table id="tableDetalle" class="table table-hover table-bordered table-striped table-sm">
         <thead class="thead-dark"></thead>
     </table>
 </div>
 <script>
+    $("#btn-imprimir").click(function () {
+        title = `<h1 style="text-align: center;">HOJA DE REQUERIMIENTOS</h1>`;
+        subTitle = `
+        <table width="100%">
+            <thead>
+                <tr>
+                    <td>N°:` + $("#codigo").val() + `</td>
+                </tr>
+                <tr>
+                    <td>PROYECTO:` + $("#proyecto_id :selected").text() + `</td>
+                </tr>
+                <tr>
+                    <td>FECHA PEDIDO:` + $("#fecha_pedido").val() + `</td>
+                </tr>
+            </thead>
+        </table>
+        `;
+        body = `<table width="100%" border="1" style="border-collapse: collapse;">` + $("#print_table").html() + `</table>`;
+        w = window.open();
+        w.document.write(title + subTitle + body);
+        w.print();
+        w.close();
+    });
     function fillProyecto(idProyecto, callback) {
         postJSON("Proyecto_C.php", { "action": "list" }, function (data) {
             if (!validErrorResponse(data)) {
@@ -136,6 +147,7 @@
                     $("#btnSave").remove();
                 }
                 $("#btn-export").show();
+                $("#btn-imprimir").show();
             }
         });
     }
