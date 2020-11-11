@@ -162,7 +162,7 @@ function exportTableToExcel(tableID, filename = '') {
         navigator.msSaveOrOpenBlob(blob, filename);
     } else {
         // Create a link to the file
-        downloadLink.href = 'data:' + dataType + ', ' + tableHTML;
+        downloadLink.href = 'data:' + dataType + ', <html><head><meta charset="utf-8" /></head><body>' + tableHTML + '</body></html>';
 
         // Setting the file name
         downloadLink.download = filename;
