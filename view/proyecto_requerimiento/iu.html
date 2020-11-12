@@ -96,7 +96,8 @@
 </div>
 <script>
     $("#btn-imprimir").click(function () {
-        title = `<img src="http://localhost/constructora/assets/media/logos/logo-deza-nuevo.jpg" style="height: 40;position: absolute;"><h1 style="text-align: center;">HOJA DE REQUERIMIENTOS</h1>`;
+        url_logo = window.location.href.replace("#", "").replace("admin.php", "");
+        title = `<img src="` + url_logo + `/assets/media/logos/logo-deza-nuevo.jpg" style="height: 40;position: absolute;"><h1 style="text-align: center;">HOJA DE REQUERIMIENTOS</h1>`;
         subTitle = `
         <table width="100%">
             <thead>
