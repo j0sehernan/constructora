@@ -23,7 +23,7 @@
 
 <body class="text-center">
     <form id="form" class="form-signin">
-        <img class="mb-4" src="assets/media/logos/logo-deza-nuevo.jpg" height="72">
+        <img class="mb-4" src="assets/media/logos/logo_deza_full.png" height="72">
         <h1 class="h3 mb-3 font-weight-normal">Por favor Ingrese</h1>
         <label for="inputEmail" class="sr-only">Usuario</label>
         <input type="text" id="usuario" name="usuario" class="form-control" placeholder="Usuario">
