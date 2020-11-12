@@ -64,7 +64,13 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-sm-12" style="justify-content: end; align-self: flex-end; margin-bottom: 2rem;">
+        <div class="col-sm-4">
+            <div class="form-group">
+                <label for="numero_vale">N° Vale</label>
+                <input type="text" class="form-control form-control-sm" id="numero_vale" name="numero_vale" placeholder="N° Vale" maxlength="100">
+            </div>
+        </div>
+        <div class="col-sm-8" style="justify-content: end; align-self: flex-end; margin-bottom: 2rem;">
             <div class="only-options-right">
                 <input type="hidden" id="action" name="action" value="i">
                 <input type="hidden" id="kardex_id" name="kardex_id">
@@ -141,7 +147,7 @@
                 required: true,
                 min: 0.01,
                 max: function () {
-                    return $("#cantidad_maxima").val();
+                    return Number($("#cantidad_maxima").val());
                 },
                 maxlength: 21,
                 number: true

@@ -34,6 +34,7 @@ class ProyectoVentaPago
             "monto_moneda_pago, " .
             "igv, " .
             "monto_total_moneda_pago, " .
+            "detraccion, " .
             "cuota " .
             "from proyecto_venta_pago " .
             "where id = $id;");

@@ -28,7 +28,7 @@ switch ($object->action) {
             $idKardexMovimiento = $kardexMovimiento->getMaxIdByKardex($idKardex);
             $idKardexMovimiento = $idKardexMovimiento[0]["id"];
             //3.Insert Exit Movement
-            $kardexMovimiento->insertSalidaProyectoTrabajoPartida($idKardexMovimiento, $cantidadRestante, $cantidad, getPersonaFullName(), $idProyectoTrabajoPartida, $object->fecha_salida);
+            $kardexMovimiento->insertSalidaProyectoTrabajoPartida($idKardexMovimiento, $cantidadRestante, $cantidad, getPersonaFullName(), $idProyectoTrabajoPartida, $object->fecha_salida, $object->numero_vale);
             //4.Update Kardex
             $kardex->updateCantidad($idKardex, $cantidadRestante);
         }

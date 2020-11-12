@@ -118,12 +118,15 @@
                         }
 
                         html +=
-                            `       <button type="button" class="btn btn-outline-success btn-elevate btn-icon btn-circle btn-xs" data-toggle="tooltip" title="Movimientos" onclick="showKardexMovimientosListForm('` + object.id + `');"><i class="fa fa-eye"></i></button>
+                            `       <button type="button" class="btn btn-outline-success btn-elevate btn-icon btn-circle btn-xs" data-toggle="tooltip" title="Movimientos"><i class="fa fa-eye"></i></button>
                                 </td>
                             </tr>`;
                         $('#table tbody').append(html);
                         $('#table tbody tr:last').find("[title='Asignar']").click(function () {
                             showAsignarForm(object);
+                        });
+                        $('#table tbody tr:last').find("[title='Movimientos']").click(function () {
+                            showKardexMovimientosListForm(object);
                         });
                     });
                     $('#table').DataTable();
@@ -131,9 +134,10 @@
             });
         }
     }
-    function showKardexMovimientosListForm(kardex_id) {
+    function showKardexMovimientosListForm(object) {
         getModalExtraLargeWithCallBack('kardex_movimiento/list_only_view.html', function () {
-            $("#kardex_id").val(kardex_id);
+            $("#kardex_id").val(object.id);
+            $("#titleAction").text(object.producto);
             listKardexMovimientoByKardexId();
         });
     }
