@@ -105,7 +105,25 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-sm-9"></div>
+        <div class="col-sm-3">
+            <div class="form-group">
+                <label for="comprobante_pago_tipo_id">Tipo Comprobante</label>
+                <select class="form-control form-control-sm form-control-autocomplete" id="comprobante_pago_tipo_id" name="comprobante_pago_tipo_id">
+                </select>
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <div class="form-group">
+                <label for="comprobante_pago_codigo">Código Comprobante</label>
+                <input type="text" class="form-control form-control-sm" id="comprobante_pago_codigo" name="comprobante_pago_codigo" placeholder="Código Comprobante" maxlength="100">
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <div class="form-group">
+                <label for="fecha_pago">Fecha de Pago</label>
+                <input type="text" class="form-control form-control-sm form-control-date" id="fecha_pago" name="fecha_pago" placeholder="Fecha de Pago" maxlength="10">
+            </div>
+        </div>
         <div class="col-sm-3">
             <div class="form-group">
                 <label for="neto_pagar">Neto a Pagar</label>
@@ -144,6 +162,22 @@
     </div>
 </form>
 <script>
+    function fillComprobantePagoTipo(idComprobantePagoTipo, callback) {
+        postJSON("ComprobantePagoTipo_C.php", { "action": "list" }, function (data) {
+            if (!validErrorResponse(data)) {
+                $("#formPagoContratista #comprobante_pago_tipo_id").html('<option value="">Seleccione Tipo Comprobante</option>');
+                var arrayTipoComprobante = JSON.parse(data);
+                arrayTipoComprobante.forEach(function (object, index) {
+                    $("#formPagoContratista #comprobante_pago_tipo_id").append('<option value="' + object.codigo + '">' + object.nombre + '</option>');
+                });
+                if (typeof idComprobantePagoTipo !== 'undefined') {
+                    $("#formPagoContratista #comprobante_pago_tipo_id").val(idComprobantePagoTipo);
+                }
+                startSelect2ById("comprobante_pago_tipo_id");
+                if (typeof callback !== 'undefined') callback();
+            }
+        });
+    }
     function fillProyecto(idProyecto, callback) {
         postJSON("Proyecto_C.php", { "action": "list" }, function (data) {
             if (!validErrorResponse(data)) {
@@ -224,8 +258,8 @@
     }
     function changeNetoPagar() {
         var detraccion = $("#detraccion").val();
-        var descuento_adelanto = $("#descuento_adelanto").val() === "" ? 0 : $("#descuento_adelanto").val();
-        var netoPagar = Number(total) - Number(detraccion) - Number(descuento_adelanto);
+        var descuento_adelanto = $("#descuento_adelanto").val() === "" ? Number(0) : Number($("#descuento_adelanto").val());
+        var netoPagar = Number($("#total").val()) - Number(detraccion) - Number(descuento_adelanto);
         $("#neto_pagar").val(netoPagar.toFixed(2));
     }
     function listAvancesByProyectoTrabajo() {
@@ -329,7 +363,11 @@
                 fecha_inicio: $("#fecha_inicio").val(),
                 fecha_termino: $("#fecha_termino").val(),
                 valor_venta: $("#valor_venta").val(),
-                pagado: $("#pagado").is(":checked")
+                pagado: $("#pagado").is(":checked"),
+                descuento_adelanto: $("#descuento_adelanto").val(),
+                comprobante_pago_tipo_id: $("#comprobante_pago_tipo_id").val(),
+                comprobante_pago_codigo: $("#comprobante_pago_codigo").val(),
+                fecha_pago: $("#fecha_pago").val()
             }, function (data) {
                 if (!validErrorResponse(data)) {
                     closeLastModal();
@@ -417,8 +455,13 @@
                 $("#total").val(dataResponse.total).attr("disabled", true);
                 $("#detraccion").val(dataResponse.detraccion).attr("disabled", true);
                 $("#neto_pagar").val(dataResponse.neto_pagar).attr("disabled", true);
+                $("#descuento_adelanto").val(dataResponse.descuento_adelanto).attr("disabled", true);
+                $("#comprobante_pago_codigo").val(dataResponse.comprobante_pago_codigo).attr("disabled", true);
+                $("#fecha_pago").val(dataResponse.fecha_pago).attr("disabled", true);
+                fillComprobantePagoTipo(dataResponse.comprobante_pago_tipo_id, function () {
+                    $("#comprobante_pago_tipo_id").attr("disabled", true);
+                });
                 listAvancesByProyectoTrabajoView($("#id").val());
-
             }
         });
     }
