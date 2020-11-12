@@ -116,8 +116,10 @@
         body = `<table width="100%" border="1" style="border-collapse: collapse;">` + $("#print_table").html() + `</table>`;
         w = window.open();
         w.document.write(title + subTitle + body);
-        w.print();
-        w.close();
+        setTimeout(function () {
+            w.print();
+            w.close();
+        }, 1000);
     });
     function fillProyecto(idProyecto, callback) {
         postJSON("Proyecto_C.php", { "action": "list" }, function (data) {
