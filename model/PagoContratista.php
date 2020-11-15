@@ -46,7 +46,7 @@ class PagoContratista
     function insert($idPersonaContratista, $idProyectoTrabajo, $idProyecto, $fechaInicio, $fechaTermino, $valorVenta, $amortizacionAdelanto, $retencionFondoGarantia, $subTotal, $igv, $total, $detraccion, $netoPagar, $pagado, $descuento_adelanto, $comprobante_pago_tipo_id, $comprobante_pago_codigo, $fecha_pago)
     {
         $db = new DB();
-        $result = $db->executeWithReturn("call pago_contratista_i('$idPersonaContratista','$idProyectoTrabajo','$idProyecto','$fechaInicio','$fechaTermino','$valorVenta','$amortizacionAdelanto','$retencionFondoGarantia','$subTotal','$igv','$total','$detraccion','$netoPagar','$pagado','$descuento_adelanto','$comprobante_pago_tipo_id','$comprobante_pago_codigo',if('$fecha_pago'='', null, str_to_date('$fecha_pago', '%d/%m/%Y')));");
+        $result = $db->executeWithReturn("call pago_contratista_i('$idPersonaContratista','$idProyectoTrabajo','$idProyecto','$fechaInicio','$fechaTermino','$valorVenta','$amortizacionAdelanto','$retencionFondoGarantia','$subTotal','$igv','$total','$detraccion','$netoPagar','$pagado','$descuento_adelanto','$comprobante_pago_tipo_id','$comprobante_pago_codigo','$fecha_pago');");
         return $result;
     }
 
