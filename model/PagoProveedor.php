@@ -24,10 +24,10 @@ class PagoProveedor
         return $result;
     }
 
-    function insert($idOrdenCompra, $guiaRemision, $personaProveedor, $idComprobantePagoTipo, $comprobantePagoCodigo, $fechaPago, $montoTotal, $pagado)
+    function insert($idOrdenCompra, $guiaRemision, $personaProveedor, $idComprobantePagoTipo, $comprobantePagoCodigo, $fechaPago, $montoTotal, $pagado, $igv, $moneda)
     {
         $db = new DB();
-        $result = $db->executeWithReturn("call pago_proveedor_i('$idOrdenCompra','$guiaRemision','$personaProveedor','$idComprobantePagoTipo','$comprobantePagoCodigo','$fechaPago','$montoTotal','$pagado');");
+        $result = $db->executeWithReturn("call pago_proveedor_i('$idOrdenCompra','$guiaRemision','$personaProveedor','$idComprobantePagoTipo','$comprobantePagoCodigo','$fechaPago','$montoTotal','$pagado','$igv','$moneda');");
         return $result;
     }
 

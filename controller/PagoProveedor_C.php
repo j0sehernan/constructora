@@ -28,7 +28,7 @@ switch ($object->action) {
         $guiaRemision = $object->guia_remision;
         $montoTotal = 0;
         //1. Insertamos el Pago a Proveedor con monto total 0
-        $resultPagoProveedor = $pagoProveedor->insert($idOrdenCompra, $guiaRemision, $object->persona_proveedor, $object->comprobante_pago_tipo_id, $object->comprobante_pago_codigo, $object->fecha_pago, $montoTotal, $object->pagado);
+        $resultPagoProveedor = $pagoProveedor->insert($idOrdenCompra, $guiaRemision, $object->persona_proveedor, $object->comprobante_pago_tipo_id, $object->comprobante_pago_codigo, $object->fecha_pago, $montoTotal, $object->pagado, $object->igv, $object->moneda);
 
         if ($resultPagoProveedor) {
             //2. Obtenemos el id de Pago a Proveeor

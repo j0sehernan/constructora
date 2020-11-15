@@ -7,7 +7,17 @@ class OrdenCompra
     function list()
     {
         $db = new DB();
-        $result = $db->query("call orden_compra_list();");
+        $result = $db->query("select oc.id, " .
+            "p.nombre_1 as proveedor, " .
+            "_get_varchar_from_date(oc.fecha) as fecha, " .
+            "oc.proforma_codigo, oc.codigo, " .
+            "oc.used, " .
+            "oc.can_delete, " .
+            "oc.igv, " .
+            "oc.moneda " .
+            "from orden_compra oc " .
+            "inner join persona p on oc.persona_proveedor_id = p.id " .
+            "order by oc.id desc;");
         return $result;
     }
 
