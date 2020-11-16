@@ -14,7 +14,8 @@ class OrdenCompra
             "oc.used, " .
             "oc.can_delete, " .
             "oc.igv, " .
-            "oc.moneda " .
+            "oc.moneda, " .
+            "oc.incluye_igv " .
             "from orden_compra oc " .
             "inner join persona p on oc.persona_proveedor_id = p.id " .
             "order by oc.id desc;");

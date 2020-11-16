@@ -109,7 +109,7 @@
                 $("#formPagoProveedor #orden_compra_id").html('<option value="">Seleccione Orden de Compra</option>');
                 var arrayOC = JSON.parse(data);
                 arrayOC.forEach(function (object, index) {
-                    $("#formPagoProveedor #orden_compra_id").append('<option value="' + object.id + '" data-proveedor="' + object.proveedor + '" data-igv="' + object.igv + '" data-moneda="' + object.moneda + '">' + object.codigo + '</option>');
+                    $("#formPagoProveedor #orden_compra_id").append('<option value="' + object.id + '" data-proveedor="' + object.proveedor + '" data-igv="' + object.igv + '" data-moneda="' + object.moneda + '" data-incluye_igv="' + object.incluye_igv + '">' + object.codigo + '</option>');
                 });
                 if (typeof idOrdenCompra !== 'undefined') {
                     $("#formPagoProveedor #orden_compra_id").val(idOrdenCompra);
@@ -203,6 +203,10 @@
                         var html = createTrDetalle(object);
                         $("#tableDetalle tbody").append(html);
                     });
+                    if ($("#orden_compra_id option:selected").attr("data-incluye_igv") === "1") {
+                        var igv = Number($("#igv").val());
+                        montoTotal = Number(montoTotal) + Number(igv);
+                    }
                     $("#monto_total").val(montoTotal);
                 }
                 $('#tableDetalle').DataTable();
