@@ -3,10 +3,19 @@
 
 class ProyectoTrabajo
 {
-    function listByProyecto($idProyecto)
+    function listByProyecto($proyecto_id)
     {
         $db = new DB();
-        $result = $db->query("call proyecto_trabajo_list_by_proyecto('$idProyecto');");
+        $result = $db->query("select pt.id, pt.nombre, pt.persona_contratista_id, " .
+            "p.nombre_1 as 'contratista', " .
+            "cantidad_adelanto, " .
+            "can_update, can_delete, " .
+            "porcentaje_amortizacion_adelanto, " .
+            "porcentaje_retencion_fondo_garantia, " .
+            "porcentaje_gastos_generales " .
+            "from proyecto_trabajo pt " .
+            "inner join persona p on pt.persona_contratista_id = p.id " .
+            "where pt.proyecto_id = $proyecto_id;");
         return $result;
     }
 
@@ -27,7 +36,10 @@ class ProyectoTrabajo
     function get($id)
     {
         $db = new DB();
-        $result = $db->query("call proyecto_trabajo_get('$id');");
+        $result = $db->query("select nombre, persona_contratista_id, cantidad_adelanto, cantidad_adelanto_restante, " .
+            "porcentaje_amortizacion_adelanto, porcentaje_retencion_fondo_garantia, porcentaje_gastos_generales " .
+            "from proyecto_trabajo " .
+            "where id = $id;");
         return $result;
     }
 
@@ -45,17 +57,23 @@ class ProyectoTrabajo
         return $result;
     }
 
-    function insert($nombre, $idProyecto, $idPersonaContratista, $porcentajeAmortizacionAdelanto, $porcentajeRetencionFondoGarantia)
+    function insert($nombre, $idProyecto, $idPersonaContratista, $porcentajeAmortizacionAdelanto, $porcentajeRetencionFondoGarantia, $porcentaje_gastos_generales)
     {
         $db = new DB();
-        $result = $db->executeWithReturn("call proyecto_trabajo_i('$nombre','$idProyecto','$idPersonaContratista','$porcentajeAmortizacionAdelanto','$porcentajeRetencionFondoGarantia');");
+        $result = $db->executeWithReturn("call proyecto_trabajo_i('$nombre','$idProyecto','$idPersonaContratista','$porcentajeAmortizacionAdelanto','$porcentajeRetencionFondoGarantia','$porcentaje_gastos_generales');");
         return $result;
     }
 
-    function update($id, $nombre, $idPersonaContratista, $cantidadAdelanto)
+    function update($id, $nombre, $persona_contratista_id, $cantidad_adelanto, $porcentaje_gastos_generales)
     {
         $db = new DB();
-        $result = $db->execute("call proyecto_trabajo_u('$id','$nombre','$idPersonaContratista','$cantidadAdelanto');");
+        $result = $db->execute("update proyecto_trabajo " .
+            "set nombre = '$nombre', " .
+            "persona_contratista_id = '$persona_contratista_id', " .
+            "cantidad_adelanto = '$cantidad_adelanto', " .
+            "cantidad_adelanto_restante = '$cantidad_adelanto' - cantidad_adelanto_usado, " .
+            "porcentaje_gastos_generales = '$porcentaje_gastos_generales' " .
+            "where id = $id;");
         return $result;
     }
 

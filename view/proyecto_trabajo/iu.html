@@ -21,6 +21,10 @@
         <label for="cantidad_adelanto">Adelanto</label>
         <input type="text" class="form-control form-control-sm form-control-decimal" id="cantidad_adelanto" name="cantidad_adelanto" placeholder="Cantidad Adelanto" maxlength="21" value="0">
     </div>
+    <div class="form-group">
+        <label for="porcentaje_gastos_generales">% Gastos Generales</label>
+        <input type="text" class="form-control form-control-sm form-control-decimal" id="porcentaje_gastos_generales" name="porcentaje_gastos_generales" placeholder="% Gastos Generales" maxlength="6">
+    </div>
     <div class="only-options-right">
         <input type="hidden" id="proyecto_id" name="proyecto_id">
         <input type="hidden" id="action" name="action" value="i">
@@ -54,6 +58,7 @@
                 $("#porcentaje_amortizacion_adelanto").val(dataResponse.porcentaje_amortizacion_adelanto);
                 $("#porcentaje_retencion_fondo_garantia").val(dataResponse.porcentaje_retencion_fondo_garantia);
                 $("#cantidad_adelanto").val(dataResponse.cantidad_adelanto);
+                $("#porcentaje_gastos_generales").val(dataResponse.porcentaje_gastos_generales);
                 fillPersonaContratista(dataResponse.persona_contratista_id);
             }
         });
@@ -67,12 +72,12 @@
             persona_contratista_id: {
                 required: true
             },
-            porcentaje_amortizacion_adelanto:{
+            porcentaje_amortizacion_adelanto: {
                 required: true,
                 maxlength: 6,
                 number: true
             },
-            porcentaje_retencion_fondo_garantia:{
+            porcentaje_retencion_fondo_garantia: {
                 required: true,
                 maxlength: 6,
                 number: true

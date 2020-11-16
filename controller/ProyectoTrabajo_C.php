@@ -24,11 +24,11 @@ switch ($object->action) {
         echo (json_encode($result));
         break;
     case "i":
-        $result = $proyectoTrabajo->insert($object->nombre, $object->proyecto_id, $object->persona_contratista_id, $object->porcentaje_amortizacion_adelanto, $object->porcentaje_retencion_fondo_garantia);
+        $result = $proyectoTrabajo->insert($object->nombre, $object->proyecto_id, $object->persona_contratista_id, $object->porcentaje_amortizacion_adelanto, $object->porcentaje_retencion_fondo_garantia, $object->porcentaje_gastos_generales);
         echo (json_encode($result));
         break;
     case "u":
-        $result = $proyectoTrabajo->update($object->id, $object->nombre, $object->persona_contratista_id, $object->cantidad_adelanto);
+        $result = $proyectoTrabajo->update($object->id, $object->nombre, $object->persona_contratista_id, $object->cantidad_adelanto, $object->porcentaje_gastos_generales);
         echo (json_encode($result));
         break;
     case "d":
