@@ -9,7 +9,7 @@ class OrdenCompra
         $db = new DB();
         $result = $db->query("select oc.id, " .
             "p.nombre_1 as proveedor, " .
-            "_get_varchar_from_date(oc.fecha) as fecha, " .
+            "if(oc.fecha='0000-00-00', '', date_format(oc.fecha, '%d/%m/%Y')) as fecha, " .
             "oc.proforma_codigo, oc.codigo, " .
             "oc.used, " .
             "oc.can_delete, " .
