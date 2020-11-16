@@ -15,6 +15,10 @@ switch ($object->action) {
         $result = $pagoProveedor->list();
         echo (json_encode($result));
         break;
+    case "alert8Days":
+        $result = $pagoProveedor->aler8Days();
+        echo (json_encode($result));
+        break;
     case "get":
         $result = $pagoProveedor->get($object->id);
         echo (json_encode($result));

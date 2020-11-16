@@ -128,11 +128,39 @@ function showAlerts() {
                                 $("#notificationsList").append(html);
                             });
                         }
-                        if (count > 0) {
-                            $("#notificationsCount").html(count + " Notificaciones.");
-                            $("#flagNotification").append(flagNotification);
-                        }
                     }
+
+                    postJSON("PagoProveedor_C.php", { action: "alert8Days" }, function (dataAlertNew) {
+                        if (!validErrorResponse(dataAlertNew)) {
+                            listNew = JSON.parse(dataAlertNew);
+                            if (typeof listNew !== 'undefined') {
+                                $.map(listNew, function (object, index) {
+                                    count++;
+                                    var html = `<a href="#" class="kt-notification__item" onclick="changePage({tipo:'MENU',accion:'menu-pagoProveedor',url:'pago_proveedor/list.html'})">
+                                                    <div class="kt-notification__item-icon">
+                                                        <i class="fa fa-list-ol"></i>
+                                                    </div>
+                                                    <div class="kt-notification__item-details">
+                                                        <div class="kt-notification__item-title">
+                                                            El pago al proveedor <strong>(` + object.persona_proveedor + `)</strong>
+                                                            Para la guía de remisión <strong>` + object.guia_remision + `</strong>
+                                                            se vence en 8 días o menos.
+                                                        </div>
+                                                        <div class="kt-notification__item-time">
+                                                            Fecha de Pago: <strong>` + object.fecha_pago + `</strong>
+                                                        </div>
+                                                    </div>
+                                                </a>`;
+                                    $("#notificationsList").append(html);
+                                });
+                            }
+                            if (count > 0) {
+                                $("#notificationsCount").html(count + " Notificaciones.");
+                                $("#flagNotification").append(flagNotification);
+                            }
+                        }
+                    });
+
                 });
             });
 

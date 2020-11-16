@@ -10,6 +10,19 @@ class PagoProveedor
         return $result;
     }
 
+    function aler8Days()
+    {
+        $db = new DB();
+        $result = $db->query("select guia_remision, persona_proveedor, " .
+            "comprobante_pago_tipo_id, comprobante_pago_codigo, " .
+            "if(fecha_pago='0000-00-00', '', date_format(fecha_pago, '%d/%m/%Y')) as fecha_pago, " .
+            "if(fecha_emision='0000-00-00', '', date_format(fecha_emision, '%d/%m/%Y')) as fecha_emision, " .
+            "monto_total, moneda " .
+            "from pago_proveedor " .
+            "where adddate(curdate(), 8) >= fecha_pago");
+        return $result;
+    }
+
     function get($id)
     {
         $db = new DB();
