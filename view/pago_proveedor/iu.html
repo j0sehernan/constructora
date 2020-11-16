@@ -203,7 +203,7 @@
                         var html = createTrDetalle(object);
                         $("#tableDetalle tbody").append(html);
                     });
-                    if ($("#orden_compra_id option:selected").attr("data-incluye_igv") === "1") {
+                    if ($("#orden_compra_id option:selected").attr("data-incluye_igv") === "0") {
                         var igv = Number($("#igv").val());
                         montoTotal = Number(montoTotal) + Number(igv);
                     }
