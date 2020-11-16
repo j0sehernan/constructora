@@ -7,7 +7,7 @@
 </table>
 <script>
     function listProyectoTrabajoPartidaProducto() {
-        postJSON("ProyectoTrabajoPartidaProducto_C.php", { "action": "listByProyectoTrabajoPartida", proyecto_trabajo_partida_id: $("#proyecto_trabajo_partida_id_general").val() }, function (data) {
+        postJSON("ProyectoTrabajoPartidaProducto_C.php", { "action": "listByProyectoTrabajoPartidaGroup", proyecto_trabajo_partida_id: $("#proyecto_trabajo_partida_id_general").val() }, function (data) {
             if (!validErrorResponse(data)) {
                 destroyDataTableIfExists("tableRecursos");
                 $('#tableRecursos').DataTable({
@@ -16,8 +16,6 @@
                         { title: "Producto", data: "producto" },
                         { title: "Unidad de Medida", data: "unidad_medida" },
                         { title: "Cantidad", data: "cantidad" },
-                        { title: "Fecha de Ingreso", data: "fecha_ingreso" },
-                        { title: "Fecha de Vencimiento", data: "fecha_vencimiento" }
 
                         /*                         {
                                                     title: "Acciones", className: "td-actions", render: function (data, type, row, meta) {

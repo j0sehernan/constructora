@@ -11,8 +11,8 @@ $kardexMovimiento = new KardexMovimiento();
 $kardex = new Kardex();
 
 switch ($object->action) {
-    case "listByProyectoTrabajoPartida":
-        $result = $proyectoTrabajoPartidaProducto->listByProyectoTrabajoPartida($object->proyecto_trabajo_partida_id);
+    case "listByProyectoTrabajoPartidaGroup":
+        $result = $proyectoTrabajoPartidaProducto->listByProyectoTrabajoPartidaGroup($object->proyecto_trabajo_partida_id);
         echo (json_encode($result));
         break;
     case "i":

@@ -28,6 +28,15 @@ class Kardex
         return $result;
     }
 
+    function get($id)
+    {
+        $db = new DB();
+        $result = $db->query("select id, cantidad, del " .
+            "from kardex k " .
+            "where k.id = $id ");
+        return $result;
+    }
+
     function insert($idAlmacen, $idProducto, $idUnidadMedida, $cantidad, $fechaIngreso, $fechaVencimiento)
     {
         $db = new DB();

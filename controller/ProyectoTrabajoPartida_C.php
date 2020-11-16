@@ -4,6 +4,9 @@
 @include_once("../model/Proyecto.php");
 @include_once("../model/ProyectoTrabajoPartidaAvance.php");
 @include_once("../model/ProyectoTrabajo.php");
+@include_once("../model/ProyectoTrabajoPartidaProducto.php");
+@include_once("../model/Kardex.php");
+@include_once("../model/KardexMovimiento.php");
 
 $json = file_get_contents(_Configuration::$CONFIGURATION_QUERY_PARAMS);
 $object = json_decode($json);
@@ -11,6 +14,9 @@ $proyectoTrabajoPartida = new ProyectoTrabajoPartida();
 $proyecto = new Proyecto();
 $proyectoTrabajoPartidaAvance = new ProyectoTrabajoPartidaAvance();
 $proyectoTrabajo = new ProyectoTrabajo();
+$proyectoTrabajoPartidaProducto = new ProyectoTrabajoPartidaProducto();
+$kardex = new Kardex();
+$kardexMovimiento = new KardexMovimiento();
 
 if ($object->{'action'} == "listByProyectoTrabajo") {
     $result = $proyectoTrabajoPartida->listByProyectoTrabajo($object->{'proyecto_trabajo_id'});
@@ -122,6 +128,47 @@ if ($object->{'action'} == "listByProyectoTrabajo") {
     }
     echo (json_encode($result));
 } elseif ($object->{'action'} == "d") {
+    //Retornar productos a Kardex proyecto_trabajo
+    //1.Recorremos los productos de la partida
+    $listProductos = $proyectoTrabajoPartidaProducto->listByProyectoTrabajoPartida($object->id);
+    foreach ($listProductos as $rowProducto) {
+        $kardex_id = $rowProducto["kardex_id"];
+        $cantidad = $rowProducto["cantidad"];
+
+        $kardexToUpdate = $kardex->get($kardex_id)[0];
+        $cantidadToUpdate = $kardexToUpdate["cantidad"];
+        $cantidadNew = $cantidadToUpdate + $cantidad;
+        //2.Regresamos el producto a kardex
+        $resultKardexUpdate = $kardex->updateCantidad($kardex_id, $cantidadNew);
+        //3.Registramos en movimiento en kardex_movimiento
+        $kardexMovimientoLast = $kardexMovimiento->getLastMovimientoByKardexId($kardex_id)[0];
+
+        $kardexMovimiento->insert(
+            $kardex_id,
+            "I_PARTIDA",
+            $kardexMovimientoLast["almacen_id"],
+            $kardexMovimientoLast["producto_id"],
+            $kardexMovimientoLast["unidad_medida_id"],
+            $cantidadNew,
+            $kardexMovimientoLast["motivo"],
+            $kardexMovimientoLast["fecha_vencimiento"],
+            $kardexMovimientoLast["fecha_termino"],
+            $kardexMovimientoLast["precio"],
+            $kardexMovimientoLast["almacen_origen_id"],
+            $kardexMovimientoLast["proyecto_origen_id"],
+            $object->id,
+            $kardexMovimientoLast["orden_compra_id"],
+            $kardexMovimientoLast["comprobante_pago_tipo_id"],
+            $kardexMovimientoLast["comprobante_pago_codigo"],
+            getPersonaFullName(),
+            $kardexMovimientoLast["kardex_origen_id"],
+            $kardexMovimientoLast["guia_remision"],
+            $kardexMovimientoLast["guia_remision_pagada"],
+            $kardexMovimientoLast["cantidad_salida"],
+            $kardexMovimientoLast["proyecto_trabajo_partida_salida_id"]
+        );
+    }
+
     $result = $proyectoTrabajoPartida->delete($object->{'id'});
     if ($result) {
         $countByProyectoTrabajo = $proyectoTrabajoPartida->countByProyectoTrabajo($object->{'proyecto_trabajo_id'});
