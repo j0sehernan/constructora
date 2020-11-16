@@ -68,6 +68,12 @@
                 <input type="text" class="form-control form-control-sm" id="moneda" name="moneda" placeholder="Moneda" readonly>
             </div>
         </div>
+        <div class="col-sm-3">
+            <div class="form-group">
+                <label for="fecha_emision">Fecha de Emisión</label>
+                <input type="text" class="form-control form-control-sm form-control-date" id="fecha_emision" name="fecha_emision" placeholder="Fecha de Emisión" maxlength="10">
+            </div>
+        </div>
     </div>
     <div class="row" style="margin-bottom: 10px;">
         <div class="col-sm-12">
@@ -217,6 +223,7 @@
                 fillComprobantePagoTipo(dataResponse.comprobante_pago_tipo_id);
                 $("#comprobante_pago_codigo").val(dataResponse.comprobante_pago_codigo);
                 $("#fecha_pago").val(dataResponse.fecha_pago);
+                $("#fecha_emision").val(dataResponse.fecha_emision);
                 $("#monto_total").val(dataResponse.monto_total);
                 $("#pagado").prop("checked", dataResponse.pagado === "1" ? true : false);
                 listPagoProveedorDetalles();
@@ -242,6 +249,7 @@
                 $("#comprobante_pago_codigo").val(dataResponse.comprobante_pago_codigo);
                 $("#fecha_pago").val(dataResponse.fecha_pago);
                 $("#monto_total").val(dataResponse.monto_total);
+                $("#fecha_emision").val(dataResponse.fecha_emision);
                 $("#pagado").prop("checked", dataResponse.pagado === "1" ? true : false);
                 listPagoProveedorDetalles();
                 $("#orden_compra_id").attr("disabled", true);
@@ -250,6 +258,7 @@
                 $("#comprobante_pago_codigo").attr("disabled", true);
                 $("#fecha_pago").attr("disabled", true);
                 $("#pagado").attr("disabled", true);
+                $("#fecha_emision").attr("disabled", true);
             }
         });
     }
@@ -283,7 +292,8 @@
                 fecha_pago: $("#fecha_pago").val(),
                 pagado: $("#pagado").is(":checked"),
                 igv: $("#igv").val(),
-                moneda: $("#moneda").val()
+                moneda: $("#moneda").val(),
+                fecha_emision: $("#fecha_emision").val()
             }, function (data) {
                 if (!validErrorResponse(data)) {
                     closeLastModal();
@@ -303,7 +313,8 @@
                 comprobante_pago_tipo_id: $("#comprobante_pago_tipo_id").val(),
                 comprobante_pago_codigo: $("#comprobante_pago_codigo").val(),
                 fecha_pago: $("#fecha_pago").val(),
-                pagado: $("#pagado").is(":checked")
+                pagado: $("#pagado").is(":checked"),
+                fecha_emision: $("#fecha_emision").val()
             }, function (data) {
                 if (!validErrorResponse(data)) {
                     closeLastModal();

@@ -28,7 +28,7 @@ switch ($object->action) {
         $guiaRemision = $object->guia_remision;
         $montoTotal = 0;
         //1. Insertamos el Pago a Proveedor con monto total 0
-        $resultPagoProveedor = $pagoProveedor->insert($idOrdenCompra, $guiaRemision, $object->persona_proveedor, $object->comprobante_pago_tipo_id, $object->comprobante_pago_codigo, $object->fecha_pago, $montoTotal, $object->pagado, $object->igv, $object->moneda);
+        $resultPagoProveedor = $pagoProveedor->insert($idOrdenCompra, $guiaRemision, $object->persona_proveedor, $object->comprobante_pago_tipo_id, $object->comprobante_pago_codigo, $object->fecha_pago, $montoTotal, $object->pagado, $object->igv, $object->moneda, $object->fecha_emision);
 
         if ($resultPagoProveedor) {
             //2. Obtenemos el id de Pago a Proveeor
@@ -54,7 +54,7 @@ switch ($object->action) {
         echo (json_encode($resultPagoProveedor));
         break;
     case "u":
-        $result = $pagoProveedor->update($object->id, $object->comprobante_pago_tipo_id, $object->comprobante_pago_codigo, $object->fecha_pago, $object->pagado);
+        $result = $pagoProveedor->update($object->id, $object->comprobante_pago_tipo_id, $object->comprobante_pago_codigo, $object->fecha_pago, $object->pagado, $object->fecha_emision);
         echo (json_encode($result));
         break;
     case "uPagado":

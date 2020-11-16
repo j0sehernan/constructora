@@ -24,17 +24,17 @@ class PagoProveedor
         return $result;
     }
 
-    function insert($idOrdenCompra, $guiaRemision, $personaProveedor, $idComprobantePagoTipo, $comprobantePagoCodigo, $fechaPago, $montoTotal, $pagado, $igv, $moneda)
+    function insert($idOrdenCompra, $guiaRemision, $personaProveedor, $idComprobantePagoTipo, $comprobantePagoCodigo, $fechaPago, $montoTotal, $pagado, $igv, $moneda, $fecha_emision)
     {
         $db = new DB();
-        $result = $db->executeWithReturn("call pago_proveedor_i('$idOrdenCompra','$guiaRemision','$personaProveedor','$idComprobantePagoTipo','$comprobantePagoCodigo','$fechaPago','$montoTotal','$pagado','$igv','$moneda');");
+        $result = $db->executeWithReturn("call pago_proveedor_i('$idOrdenCompra','$guiaRemision','$personaProveedor','$idComprobantePagoTipo','$comprobantePagoCodigo','$fechaPago','$montoTotal','$pagado','$igv','$moneda','$fecha_emision');");
         return $result;
     }
 
-    function update($id, $idComprobantePagoTipo, $comprobantePagoCodigo, $fechaPago, $pagado)
+    function update($id, $idComprobantePagoTipo, $comprobantePagoCodigo, $fechaPago, $pagado, $fecha_emision)
     {
         $db = new DB();
-        $result = $db->execute("call pago_proveedor_u('$id','$idComprobantePagoTipo','$comprobantePagoCodigo','$fechaPago','$pagado');");
+        $result = $db->execute("call pago_proveedor_u('$id','$idComprobantePagoTipo','$comprobantePagoCodigo','$fechaPago','$pagado','$fecha_emision');");
         return $result;
     }
 
