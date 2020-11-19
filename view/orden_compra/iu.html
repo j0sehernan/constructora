@@ -98,6 +98,7 @@
                 </div>
                 <div class="row">
                     <div class="col only-options-right" style="margin-bottom: 10px;">
+                        <a id="btn-imprimir" style="display: none;" href="#" class="btn btn-icon btn btn-label btn-label-brand btn-bold btn-sm" data-toggle="tooltip" title="Imprimir" data-placement="top"><i class="fa fa-print"></i></a>
                         <span id="divOptionsOrdenCompraDetalle">
                             <a class="btn btn-icon btn btn-label btn-label-brand btn-bold btn-sm" data-toggle="tooltip" title="Actualizar" data-placement="top" onclick="listOrdenCompraDetalles();"><i class="flaticon-refresh"></i></a>
                             <a href="#" class="btn btn-icon btn btn-label btn-label-brand btn-bold btn-sm" data-toggle="tooltip" title="Agregar Detalle" data-placement="top" onclick="showOrdenCompraDetalleForm('i')"><i class="flaticon2-add-1"></i></a>
@@ -110,6 +111,71 @@
             </form>
         </div>
     </div>
+    <div style="display: none;">
+        <table id="print_table" width="100%" border="1" style="border-collapse: collapse;">
+            <thead>
+                <tr>
+                    <th>ITEM</th>
+                    <th>CANTIDAD</th>
+                    <th>UNIDAD</th>
+                    <th>DESCRIPCIÓN</th>
+                    <th>P. UNITARIO</th>
+                    <th>PRECIO TOTAL</th>
+                </tr>
+            </thead>
+            <tbody style="text-align: center;"></tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="6">Son:</td>
+                </tr>
+                <tr>
+                    <td colspan="2">Lugar de entrega</td>
+                    <td colspan="4"></td>
+                </tr>
+                <tr>
+                    <td colspan="2">Forma de Pago</td>
+                    <td colspan="4"></td>
+                </tr>
+                <tr>
+                    <td colspan="2">Fecha de OC</td>
+                    <td colspan="4"></td>
+                </tr>
+                <tr>
+                    <td colspan="2">Fecha de Atención</td>
+                    <td colspan="4"></td>
+                </tr>
+                <tr>
+                    <td colspan="6">Entregar la Factura física en el lugar de entrega del material, en caso de Factura Electrónica remitirla al correo: logistica@cadeza.com.pe. En ambos casos adjuntar la presente Orden de Compra y la Guía de Remisión debidamente sellada por el almacén receptor del material.</td>
+                </tr>
+                <tr>
+                    <td colspan="2">Emitida por:</td>
+                    <td colspan="2">Referencia Requerimientos:</td>
+                    <td colspan="2">Aprobada por:</td>
+                </tr>
+                <tr>
+                    <td colspan="2">Fecha:</td>
+                    <td colspan="2"></td>
+                    <td colspan="2">Fecha:</td>
+                </tr>
+                <tr>
+                    <td colspan="2" rowspan="3"></td>
+                    <td colspan="2" style="height: 21px;"></td>
+                    <td colspan="2" rowspan="3"></td>
+                </tr>
+                <tr>
+                    <td colspan="2">Referencia Cotización:</td>
+                </tr>
+                <tr>
+                    <td colspan="2" style="height: 21px;"></td>
+                </tr>
+                <tr>
+                    <td colspan="2">Logística:</td>
+                    <td colspan="2"></td>
+                    <td colspan="2">Gerencia General</td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
     <div class="kt-portlet kt-portlet--height-fluid">
         <div class="kt-portlet__body">
             <table id="tableDetalle" class="table table-hover table-bordered table-striped table-sm">
@@ -119,6 +185,59 @@
     </div>
 </div>
 <script>
+    $("#btn-imprimir").click(function () {
+        url_logo = window.location.href.replace("#", "").replace("admin.php", "");
+        title = `
+        <table width="100%" style="border: 1px solid;">
+            <thead>
+                <tr>
+                    <td rowspan="4" style="padding-right: 20px;"><img src="` + url_logo + `assets/media/logos/logo-deza-nuevo.jpg" style="height: 65px;"></td>
+                    <td style="width: 100%;">DEZA CONSTRUCCIONES S.A.C.</td>
+                </tr>
+                <tr>
+                    <td>RUC 20603214596</td>
+                </tr>
+                <tr>
+                    <td>Mz. D - Lt 14 - Interior 101 Urb. Las Hortencias de California</td>
+                </tr>
+                <tr>
+                    <td>Víctor Larco Herrera - Trujillo - La Libertad</td>
+                </tr>
+            </thead>
+        </table>
+        <div style="font-weight: bold; margin-bottom: 10px; margin-top: 10px; text-align: center;">ORDEN DE COMPRA</div>
+        `;
+        subTitle = `
+        <table width="100%" border="1" style="border-collapse: collapse;">
+            <thead>
+                <tr>
+                    <td>N°</td>
+                    <td>N°` + $("#codigo").val() + `</td>
+                </tr>
+                <tr>
+                    <td>SEÑORES</td>
+                    <td>PROYECTO:` + $("#persona_proveedor_id :selected").text() + `</td>
+                </tr>
+                <tr>
+                    <td>RUC</td>
+                    <td>` + $("#persona_proveedor_id :selected").attr("data-numero_documento_identidad") + `</td>
+                </tr>
+                <tr>
+                    <td>DIRECCIÓN</td>
+                    <td>` + $("#persona_proveedor_id :selected").attr("data-direccion") + `</td>
+                </tr>
+            </thead>
+        </table>
+        <div style="margin-top: 10px;">Agradecemos se sirvan atendernos lo siguiente:</div>
+        `;
+        body = `<table width="100%" border="1" style="border-collapse: collapse;">` + $("#print_table").html() + `</table>`;
+        w = window.open();
+        w.document.write(title + subTitle + body);
+        setTimeout(function () {
+            w.print();
+            w.close();
+        }, 1000);
+    });
     function changeMoneda() {
         if ($("#moneda").val() === "PEN") {
             $("#tipo_cambio").parent().parent().hide();
@@ -137,7 +256,7 @@
                 $("#persona_proveedor_id").html('<option value="">Seleccione Proveedor</option>');
                 var arrayAlmacenes = JSON.parse(data);
                 arrayAlmacenes.forEach(function (object, index) {
-                    $("#persona_proveedor_id").append('<option value="' + object.id + '">' + object.nombre_1 + '</option>');
+                    $("#persona_proveedor_id").append('<option value="' + object.id + '" data-numero_documento_identidad="' + object.numero_documento_identidad + '" data-direccion="' + object.direccion + '">' + object.nombre_1 + '</option>');
                 });
                 if (typeof idPersona !== 'undefined') {
                     $("#persona_proveedor_id").val(idPersona);
@@ -162,6 +281,7 @@
                 $("#incluye_igv").prop("checked", dataResponse.incluye_igv === "1" ? true : false);
                 changeMoneda();
                 listOrdenCompraDetalles();
+                $("#btn-imprimir").show();
             }
         });
     }
@@ -287,6 +407,49 @@
                     ]
                 });
                 sumTotals();
+
+                var list = JSON.parse(data);
+                list.forEach((row, index) => {
+                    $("#print_table tbody").append(`
+                    <tr>
+                        <td>`+ (index + 1) + `</td>
+                        <td>`+ row.cantidad + `</td>
+                        <td>`+ row.unidad_medida + `</td>
+                        <td>`+ row.producto + `</td>
+                        <td>`+ row.precio_unitario + `</td>
+                        <td>`+ row.sub_total + `</td>
+                    </tr>`);
+                });
+
+                for (var i = 0; i < 6; i++) {
+                    $("#print_table tbody").append(`
+                    <tr>
+                        <td>`+ (list.length + i + 1) + `</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>`);
+                }
+
+                $("#print_table tbody").append(`
+                    <tr>
+                        <td colspan="4" style="text-align: right;">Valor Venta</td>
+                        <td>`+ ($("#moneda").val() === "PEN" ? `S/` : `$`) + `</td>
+                        <td>`+ $("#total_sin_igv").val() + `</td>
+                    </tr>
+                    <tr>
+                        <td colspan="4" style="text-align: right;">IGV</td>
+                        <td>18.00%</td>
+                        <td>`+ $("#igv").val() + `</td>
+                    </tr>
+                    <tr>
+                        <td colspan="4" style="text-align: right;">Precio Total</td>
+                        <td>`+ ($("#moneda").val() === "PEN" ? `S/` : `$`) + `</td>
+                        <td>`+ $("#total").val() + `</td>
+                    </tr>
+                    `);
             }
         });
     }

@@ -97,7 +97,7 @@
 <script>
     $("#btn-imprimir").click(function () {
         url_logo = window.location.href.replace("#", "").replace("admin.php", "");
-        title = `<img src="` + url_logo + `assets/media/logos/logo-deza-nuevo.jpg" style="height: 40;position: absolute;"><h1 style="text-align: center;">HOJA DE REQUERIMIENTOS</h1>`;
+        title = `<img src="` + url_logo + `assets/media/logos/logo-deza-nuevo.jpg" style="height: 50;position: absolute;"><h2 style="text-align: center;">HOJA DE REQUERIMIENTOS</h2>`;
         subTitle = `
         <table width="100%">
             <thead>
@@ -249,12 +249,12 @@
                 list.forEach((row, index) => {
                     $("#print_table tbody").append(`
                     <tr>
-                        <th>`+ (index + 1) + `</th>
-                        <th>`+ row.cantidad + `</th>
-                        <th>`+ row.unidad_medida + `</th>
-                        <th>`+ row.producto + `</th>
-                        <th>`+ row.fecha_en_obra + `</th>
-                        <th></th>
+                        <td>`+ (index + 1) + `</td>
+                        <td>`+ row.cantidad + `</td>
+                        <td>`+ row.unidad_medida + `</td>
+                        <td>`+ row.producto + `</td>
+                        <td>`+ row.fecha_en_obra + `</td>
+                        <td></td>
                     </tr>`);
                 });
             }
