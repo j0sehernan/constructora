@@ -40,12 +40,12 @@ switch ($object->action) {
         if ($incluye_igv == true) {
             $incluye_igv = 1;
             $total = calcTotalsByOrdenCompra($object->id);
-            $total_sin_igv = $total / 1.18;
+            $total_sin_igv = round($total / 1.18, 2);
             $igv = $total - $total_sin_igv;
         } else {
             $incluye_igv = 0;
             $total_sin_igv = calcTotalsByOrdenCompra($object->id);
-            $igv = $total_sin_igv * 0.18;
+            $igv = round($total_sin_igv * 0.18, 2);
             $total = $total_sin_igv + $igv;
         }
         $result = $ordenCompra->update($object->id, $object->persona_proveedor_id, $object->fecha, $object->proforma_codigo, $object->codigo, $incluye_igv, $total_sin_igv, $igv, $total, $object->moneda, $object->tipo_cambio);

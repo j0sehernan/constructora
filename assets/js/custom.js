@@ -350,6 +350,10 @@ function validErrorResponse(data) {
     } else { return false };
 }
 
+Number.prototype.round = function (places) {
+    return +(Math.round(this + "e+" + places) + "e-" + places);
+}
+
 //BlockUI
 // override these in your code to change the default behavior and style 
 $.blockUI.defaults = {

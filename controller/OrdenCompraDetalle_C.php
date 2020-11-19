@@ -34,7 +34,7 @@ switch ($object->action) {
         if ($exists == false) {
             $cantidad = $object->cantidad;
             $precio_unitario = $object->precio_unitario;
-            $sub_total = $cantidad * $precio_unitario;
+            $sub_total = round($cantidad * $precio_unitario, 2);
             $result = $ordenCompraDetalle->insert($object->producto_id, $object->unidad_medida_id, $cantidad, $precio_unitario, $object->orden_compra_id, $sub_total);
         }
         echo (json_encode($result));
@@ -42,7 +42,7 @@ switch ($object->action) {
     case "u":
         $cantidad = $object->cantidad;
         $precio_unitario = $object->precio_unitario;
-        $sub_total = $cantidad * $precio_unitario;
+        $sub_total = round($cantidad * $precio_unitario, 2);
         $result = $ordenCompraDetalle->update($object->id, $object->producto_id, $object->unidad_medida_id, $cantidad, $precio_unitario, $sub_total);
         echo (json_encode($result));
         break;

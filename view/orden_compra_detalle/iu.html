@@ -32,7 +32,9 @@
 </form>
 <script>
     function calculateSubTotal() {
-        $("#sub_total").val($("#cantidad").val() * $("#precio_unitario").val());
+        var sub_total = Number($("#cantidad").val()) * Number($("#precio_unitario").val());
+        sub_total = sub_total.round(2);
+        $("#sub_total").val(sub_total.round(2));
     }
     function fillProducto(idProducto) {
         postJSON("Producto_C.php", { "action": "list" }, function (data) {
