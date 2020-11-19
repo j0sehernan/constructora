@@ -159,7 +159,7 @@
     </div>
     <div style="display: none;">
         <table id="print_table" width="100%" border="1" style="border-collapse: collapse;">
-            <thead>
+            <!-- <thead>
                 <tr>
                     <th>ITEM</th>
                     <th>CANTIDAD</th>
@@ -168,7 +168,7 @@
                     <th>P. UNITARIO</th>
                     <th>PRECIO TOTAL</th>
                 </tr>
-            </thead>
+            </thead> -->
             <tbody style="text-align: center;"></tbody>
             <tfoot>
                 <tr>
@@ -279,7 +279,18 @@
         dataFromTable = dataFromTable.replace("__FECHA_ATENCION__", $("#fecha_atencion").val());
         dataFromTable = dataFromTable.replace("__REFERENCIA_REQUERIMIENTO__", $("#referencia_requerimiento").val());
         dataFromTable = dataFromTable.replace("__REFERENCIA_COTIZACION__", $("#referencia_cotizacion").val());
-        body = `<table width="100%" border="1" style="border-collapse: collapse;">` + dataFromTable + `</table>`;
+        body = `<table width="100%" border="1" style="border-collapse: collapse;">
+                    
+                        <tr>
+                            <th>ITEM</th>
+                            <th>CANTIDAD</th>
+                            <th>UNIDAD</th>
+                            <th>DESCRIPCIÓN</th>
+                            <th>P. UNITARIO</th>
+                            <th>PRECIO TOTAL</th>
+                        </tr>
+                    
+        ` + dataFromTable + `</table>`;
         w = window.open();
         w.document.write(title + subTitle + body);
         setTimeout(function () {
