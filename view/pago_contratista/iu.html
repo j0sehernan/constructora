@@ -297,7 +297,7 @@
                     var retencionFondoGarantia = Number(valorVenta) * porcentaje_retencion_fondo_garantia;
                     var subTotal = Number(valorVenta) - Number(amortizacionAdelanto) - Number(retencionFondoGarantia);
                     var proyecto_trabajo_text = $("#proyecto_trabajo_id option:selected").text();
-                    if (proyecto_trabajo_text === "ESTRUCTURA" || proyecto_trabajo_text === "ARQUITECTURA" || proyecto_trabajo_text === "ADICIONALES") {
+                    if (proyecto_trabajo_text.toUpperCase().includes("ESTRUCTURA") || proyecto_trabajo_text.toUpperCase().includes("ARQUITECTURA") || proyecto_trabajo_text.toUpperCase().includes("ADICIONALES")) {
                         subTotal = subTotal + (subTotal * 0.04);
                     }
                     var igv = subTotal * 0.18;

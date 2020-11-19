@@ -37,7 +37,7 @@ if ($object->{'action'} == "list") {
     $subTotal = $valorVenta - $amortizacionAdelanto - $retencionFondoGarantia;
 
     $proyecto_trabajo_text = $object->proyecto_trabajo_text;
-    if ($proyecto_trabajo_text == "ESTRUCTURA" || $proyecto_trabajo_text == "ARQUITECTURA" || $proyecto_trabajo_text == "ADICIONALES") {
+    if (strpos(strtoupper($proyecto_trabajo_text), "ESTRUCTURA") !== false  || strpos(strtoupper($proyecto_trabajo_text), "ARQUITECTURA") !== false || strpos(strtoupper($proyecto_trabajo_text), "ADICIONALES") !== false) {
         $subTotal = $subTotal + ($subTotal * 0.04);
     }
 
