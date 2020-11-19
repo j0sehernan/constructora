@@ -40,7 +40,13 @@ class OrdenCompra
     {
         $db = new DB();
         $result = $db->query("select id,persona_proveedor_id,if(fecha='0000-00-00', '', date_format(fecha, '%d/%m/%Y')) as fecha," .
-            "proforma_codigo,codigo,moneda,tipo_cambio, incluye_igv " .
+            "proforma_codigo,codigo,moneda,tipo_cambio, incluye_igv, " .
+            "total_text, " .
+            "lugar_entrega, " .
+            "forma_pago, " .
+            "if(fecha_atencion='0000-00-00', '', date_format(fecha_atencion, '%d/%m/%Y')) as fecha_atencion, " .
+            "referencia_requerimiento, " .
+            "referencia_cotizacion " .
             "from orden_compra " .
             "where id = $id;");
         return $result;
@@ -60,7 +66,7 @@ class OrdenCompra
         return $result;
     }
 
-    function update($id, $persona_proveedor_id, $fecha, $proforma_codigo, $codigo, $incluye_igv, $total_sin_igv, $igv, $total, $moneda, $tipo_cambio)
+    function update($id, $persona_proveedor_id, $fecha, $proforma_codigo, $codigo, $incluye_igv, $total_sin_igv, $igv, $total, $moneda, $tipo_cambio, $total_text, $lugar_entrega, $forma_pago, $fecha_atencion, $referencia_requerimiento, $referencia_cotizacion)
     {
         $db = new DB();
         $result = $db->execute("update orden_compra " .
@@ -73,7 +79,13 @@ class OrdenCompra
             "igv = $igv," .
             "total = $total," .
             "moneda = '$moneda'," .
-            "tipo_cambio = $tipo_cambio " .
+            "tipo_cambio = $tipo_cambio, " .
+            "total_text = '$total_text', " .
+            "lugar_entrega = '$lugar_entrega', " .
+            "forma_pago = '$forma_pago', " .
+            "fecha_atencion = if('$fecha_atencion'='', null, str_to_date('$fecha_atencion', '%d/%m/%Y'))," .
+            "referencia_requerimiento = '$referencia_requerimiento', " .
+            "referencia_cotizacion = '$referencia_cotizacion' " .
             "where id = $id;");
         return $result;
     }

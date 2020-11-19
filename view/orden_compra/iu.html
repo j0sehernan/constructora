@@ -96,6 +96,52 @@
                         </div>
                     </div>
                 </div>
+                <div id="div_aditional_data_print" style="display: none;">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="total_text">Total (Texto)</label>
+                                <input type="text" class="form-control form-control-sm" id="total_text" name="total_text" placeholder="Total (Texto)" maxlength="500">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="lugar_entrega">Lugar de entrega</label>
+                                <input type="text" class="form-control form-control-sm" id="lugar_entrega" name="lugar_entrega" placeholder="Lugar de entrega" maxlength="500">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="forma_pago">Forma de Pago</label>
+                                <input type="text" class="form-control form-control-sm" id="forma_pago" name="forma_pago" placeholder="Forma de Pago" maxlength="200">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="fecha_atencion">Fecha de Atención</label>
+                                <input type="text" class="form-control form-control-sm form-control-date" id="fecha_atencion" name="fecha_atencion" placeholder="Fecha de Atención" maxlength="10">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="referencia_requerimiento">Referencia de Requerimiento</label>
+                                <input type="text" class="form-control form-control-sm" id="referencia_requerimiento" name="referencia_requerimiento" placeholder="Referencia de Requerimiento" maxlength="200">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="referencia_cotizacion">Referencia de Cotización</label>
+                                <input type="text" class="form-control form-control-sm" id="referencia_cotizacion" name="referencia_cotizacion" placeholder="Referencia de Cotización" maxlength="200">
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <div class="row">
                     <div class="col only-options-right" style="margin-bottom: 10px;">
                         <a id="btn-imprimir" style="display: none;" href="#" class="btn btn-icon btn btn-label btn-label-brand btn-bold btn-sm" data-toggle="tooltip" title="Imprimir" data-placement="top"><i class="fa fa-print"></i></a>
@@ -126,52 +172,45 @@
             <tbody style="text-align: center;"></tbody>
             <tfoot>
                 <tr>
-                    <td colspan="6">Son:</td>
+                    <td colspan="6">Son: __TOTAL_TEXT__</td>
                 </tr>
                 <tr>
                     <td colspan="2">Lugar de entrega</td>
-                    <td colspan="4"></td>
+                    <td colspan="4">__LUGAR_ENTREGA__</td>
                 </tr>
                 <tr>
                     <td colspan="2">Forma de Pago</td>
-                    <td colspan="4"></td>
+                    <td colspan="4">__FORMA_PAGO__</td>
                 </tr>
                 <tr>
                     <td colspan="2">Fecha de OC</td>
-                    <td colspan="4"></td>
+                    <td colspan="4">__FECHA_OC__</td>
                 </tr>
                 <tr>
                     <td colspan="2">Fecha de Atención</td>
-                    <td colspan="4"></td>
+                    <td colspan="4">__FECHA_ATENCION__</td>
                 </tr>
                 <tr>
                     <td colspan="6">Entregar la Factura física en el lugar de entrega del material, en caso de Factura Electrónica remitirla al correo: logistica@cadeza.com.pe. En ambos casos adjuntar la presente Orden de Compra y la Guía de Remisión debidamente sellada por el almacén receptor del material.</td>
                 </tr>
                 <tr>
-                    <td colspan="2">Emitida por:</td>
-                    <td colspan="2">Referencia Requerimientos:</td>
-                    <td colspan="2">Aprobada por:</td>
+                    <td colspan="2" style="border-bottom: transparent;">Emitida por:</td>
+                    <td colspan="2" rowspan="2" style="height: 63px; vertical-align: top;">Referencia Requerimientos: __REFERENCIA_REQUERIMIENTO__</td>
+                    <td colspan="2" style="border-bottom: transparent;">Aprobada por:</td>
                 </tr>
                 <tr>
-                    <td colspan="2">Fecha:</td>
+                    <td colspan="2" style="vertical-align: top; border-top: transparent; height: 41px;">Fecha: __FECHA_OC__</td>
+                    <td colspan="2" style="vertical-align: top; border-top: transparent; height: 41px;">Fecha: __FECHA_OC__</td>
+                </tr>
+                <tr>
                     <td colspan="2"></td>
-                    <td colspan="2">Fecha:</td>
-                </tr>
-                <tr>
-                    <td colspan="2" rowspan="3"></td>
-                    <td colspan="2" style="height: 21px;"></td>
-                    <td colspan="2" rowspan="3"></td>
-                </tr>
-                <tr>
-                    <td colspan="2">Referencia Cotización:</td>
-                </tr>
-                <tr>
-                    <td colspan="2" style="height: 21px;"></td>
-                </tr>
-                <tr>
-                    <td colspan="2">Logística:</td>
+                    <td colspan="2" style="height: 63px; vertical-align: top;">Referencia Cotización: __REFERENCIA_COTIZACION__</td>
                     <td colspan="2"></td>
-                    <td colspan="2">Gerencia General</td>
+                </tr>
+                <tr>
+                    <td colspan="2" style="text-align: center;">Logística</td>
+                    <td colspan="2"></td>
+                    <td colspan="2" style="text-align: center;">Gerencia General</td>
                 </tr>
             </tfoot>
         </table>
@@ -230,12 +269,22 @@
         </table>
         <div style="margin-top: 10px;">Agradecemos se sirvan atendernos lo siguiente:</div>
         `;
-        body = `<table width="100%" border="1" style="border-collapse: collapse;">` + $("#print_table").html() + `</table>`;
+        var dataFromTable = $("#print_table").html();
+        dataFromTable = dataFromTable.replace("__TOTAL_TEXT__", $("#total_text").val());
+        dataFromTable = dataFromTable.replace("__LUGAR_ENTREGA__", $("#lugar_entrega").val());
+        dataFromTable = dataFromTable.replace("__FORMA_PAGO__", $("#forma_pago").val());
+        dataFromTable = dataFromTable.replace("__FECHA_OC__", $("#fecha").val());
+        dataFromTable = dataFromTable.replace("__FECHA_OC__", $("#fecha").val());
+        dataFromTable = dataFromTable.replace("__FECHA_OC__", $("#fecha").val());
+        dataFromTable = dataFromTable.replace("__FECHA_ATENCION__", $("#fecha_atencion").val());
+        dataFromTable = dataFromTable.replace("__REFERENCIA_REQUERIMIENTO__", $("#referencia_requerimiento").val());
+        dataFromTable = dataFromTable.replace("__REFERENCIA_COTIZACION__", $("#referencia_cotizacion").val());
+        body = `<table width="100%" border="1" style="border-collapse: collapse;">` + dataFromTable + `</table>`;
         w = window.open();
         w.document.write(title + subTitle + body);
         setTimeout(function () {
-            w.print();
-            w.close();
+            /* w.print();
+            w.close(); */
         }, 1000);
     });
     function changeMoneda() {
@@ -277,11 +326,18 @@
                 $("#div_total").show();
                 $("#moneda").val(dataResponse.moneda);
                 $("#tipo_cambio").val(dataResponse.tipo_cambio);
+                $("#total_text").val(dataResponse.total_text);
+                $("#lugar_entrega").val(dataResponse.lugar_entrega);
+                $("#forma_pago").val(dataResponse.forma_pago);
+                $("#fecha_atencion").val(dataResponse.fecha_atencion);
+                $("#referencia_requerimiento").val(dataResponse.referencia_requerimiento);
+                $("#referencia_cotizacion").val(dataResponse.referencia_cotizacion);
                 $("#moneda").parent().parent().show();
                 $("#incluye_igv").prop("checked", dataResponse.incluye_igv === "1" ? true : false);
                 changeMoneda();
                 listOrdenCompraDetalles();
                 $("#btn-imprimir").show();
+                $("#div_aditional_data_print").show();
             }
         });
     }
