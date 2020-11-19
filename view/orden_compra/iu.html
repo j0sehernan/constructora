@@ -199,13 +199,13 @@
                     <td colspan="2" style="border-bottom: transparent;">Aprobada por:</td>
                 </tr>
                 <tr>
-                    <td colspan="2" style="vertical-align: top; border-top: transparent; height: 41px;">Fecha: __FECHA_OC__</td>
-                    <td colspan="2" style="vertical-align: top; border-top: transparent; height: 41px;">Fecha: __FECHA_OC__</td>
+                    <td colspan="2" style="vertical-align: top; border-top: transparent; border-bottom: transparent; height: 41px;">Fecha: __FECHA_OC__</td>
+                    <td colspan="2" style="vertical-align: top; border-top: transparent; border-bottom: transparent; height: 41px;">Fecha: __FECHA_OC__</td>
                 </tr>
                 <tr>
-                    <td colspan="2"></td>
+                    <td colspan="2" style="border-top: transparent;"></td>
                     <td colspan="2" style="height: 63px; vertical-align: top;">Referencia Cotización: __REFERENCIA_COTIZACION__</td>
-                    <td colspan="2"></td>
+                    <td colspan="2" style="border-top: transparent;"></td>
                 </tr>
                 <tr>
                     <td colspan="2" style="text-align: center;">Logística</td>
@@ -283,8 +283,8 @@
         w = window.open();
         w.document.write(title + subTitle + body);
         setTimeout(function () {
-            /* w.print();
-            w.close(); */
+            w.print();
+            w.close();
         }, 1000);
     });
     function changeMoneda() {
