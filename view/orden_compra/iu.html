@@ -128,18 +128,18 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-md-12">
                             <div class="form-group">
                                 <label for="referencia_requerimiento">Referencia de Requerimiento</label>
                                 <input type="text" class="form-control form-control-sm" id="referencia_requerimiento" name="referencia_requerimiento" placeholder="Referencia de Requerimiento" maxlength="200">
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <!-- <div class="col-md-6">
                             <div class="form-group">
                                 <label for="referencia_cotizacion">Referencia de Cotización</label>
                                 <input type="text" class="form-control form-control-sm" id="referencia_cotizacion" name="referencia_cotizacion" placeholder="Referencia de Cotización" maxlength="200">
                             </div>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
                 <div class="row">
@@ -251,11 +251,11 @@
             <thead>
                 <tr>
                     <td>N°</td>
-                    <td>N°` + $("#codigo").val() + `</td>
+                    <td>` + $("#codigo").val() + `</td>
                 </tr>
                 <tr>
                     <td>SEÑORES</td>
-                    <td>PROYECTO:` + $("#persona_proveedor_id :selected").text() + `</td>
+                    <td>` + $("#persona_proveedor_id :selected").text() + `</td>
                 </tr>
                 <tr>
                     <td>RUC</td>
@@ -267,7 +267,7 @@
                 </tr>
             </thead>
         </table>
-        <div style="margin-top: 10px;">Agradecemos se sirvan atendernos lo siguiente:</div>
+        <div style="margin-top: 10px;">Agradeceremos se sirvan atendernos lo siguiente:</div>
         `;
         var dataFromTable = $("#print_table").html();
         dataFromTable = dataFromTable.replace("__TOTAL_TEXT__", $("#total_text").val());
@@ -278,7 +278,7 @@
         dataFromTable = dataFromTable.replace("__FECHA_OC__", $("#fecha").val());
         dataFromTable = dataFromTable.replace("__FECHA_ATENCION__", $("#fecha_atencion").val());
         dataFromTable = dataFromTable.replace("__REFERENCIA_REQUERIMIENTO__", $("#referencia_requerimiento").val());
-        dataFromTable = dataFromTable.replace("__REFERENCIA_COTIZACION__", $("#referencia_cotizacion").val());
+        dataFromTable = dataFromTable.replace("__REFERENCIA_COTIZACION__", $("#proforma_codigo").val());
         body = `<table width="100%" border="1" style="border-collapse: collapse;">
                         <tr>
                             <th>ITEM</th>
@@ -498,7 +498,14 @@
                     </tr>`);
                 }
 
+                var precios_incluyen_igv_text = $("#incluye_igv").is(":checked") ? "Precios incluyen I.G.V." : "Precios no incluyen I.G.V.";
+
                 $("#print_table tbody").append(`
+                    <tr>
+                        <td colspan="4" style="text-align: right;">`+ precios_incluyen_igv_text + `</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
                     <tr>
                         <td colspan="4" style="text-align: right;">Valor Venta</td>
                         <td>`+ ($("#moneda").val() === "PEN" ? `S/` : `$`) + `</td>
