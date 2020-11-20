@@ -15,14 +15,14 @@
 <form id="form">
     <div class="kt-container kt-container--fluid kt-grid__item kt-grid__item--fluid">
         <div class="row">
-            <div class="col-sm-3">
+            <div class="col-sm-6">
                 <div class="form-group">
                     <label for="proyecto_id">Proyecto</label>
                     <select class="form-control form-control-sm form-control-autocomplete" id="proyecto_id" name="proyecto_id" onchange="fillProyectoTrabajo(); changeInputsReport();">
                     </select>
                 </div>
             </div>
-            <div class="col-sm-3">
+            <div class="col-sm-6">
                 <div class="form-group">
                     <label for="proyecto_trabajo_id">Trabajo</label>
                     <select class="form-control form-control-sm form-control-autocomplete" id="proyecto_trabajo_id" name="proyecto_trabajo_id" onchange="changeInputsReport();">
@@ -30,28 +30,37 @@
                     </select>
                 </div>
             </div>
-            <div class="col-sm-3">
+        </div>
+        <div class="row">
+            <div class="col-sm-4">
                 <div class="form-group">
                     <label for="fecha_inicio">Fecha de Inicio</label>
                     <input type="text" class="form-control form-control-sm form-control-date" id="fecha_inicio" name="fecha_inicio" placeholder="Fecha de Inicio" maxlength="10" onchange="changeInputsReport();">
                 </div>
             </div>
-            <div class="col-sm-3">
+            <div class="col-sm-4">
                 <div class="form-group">
                     <label for="fecha_termino">Fecha de Término</label>
                     <input type="text" class="form-control form-control-sm form-control-date" id="fecha_termino" name="fecha_termino" placeholder="Fecha de Término" maxlength="10" onchange="changeInputsReport();">
                 </div>
             </div>
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label for="valoracion_numero">Valoración N°</label>
+                    <input type="text" class="form-control form-control-sm" id="valoracion_numero" name="valoracion_numero" placeholder="Valoración N°" readonly>
+                </div>
+            </div>
         </div>
         <div id="divAlertImprimir" class="alert alert-warning" role="alert">
-            Para imprimir, primero debe generar el reporte.
+            Para Exportar, primero debe generar el reporte.
         </div>
         <div class="row" style="margin-bottom: 10px;">
             <div class="col-sm-12">
                 <div style="text-align: right;">
                     <input type="hidden" id="action" name="action" value="reportAvanceProyecto">
-                    <button type="button" id="btnImprimir" class="btn btn-outline-info btn-sm" style="display: none;"><i class="fa fa-print"></i> Imprimir</button>
-                    <button type="submit" id="btnGenerar" class="btn btn-success btn-sm"><i class="la la-save"></i> Generar</button>
+                    <button type="button" id="btn-export" class="btn btn-outline-info btn-sm" style="display: none;"><i class="fa fa-file-download"></i> Exportar</button>
+                    <!-- <button type="button" id="btnImprimir" class="btn btn-outline-info btn-sm" style="display: none;"><i class="fa fa-print"></i> Imprimir</button> -->
+                    <button type="submit" id="btnGenerar" class="btn btn-success btn-sm"><i class="fa fa-calculator"></i> Generar</button>
                 </div>
             </div>
         </div>
@@ -82,9 +91,100 @@
                 <tbody></tbody>
             </table>
         </div>
+        <div id="div_export" style="display: none;">
+            <table>
+                <tr>
+                    <td colspan="12" style="text-align: center;">VALORIZACIÓN N° __VALORIZACION_NUMERO__</td>
+                </tr>
+                <tr>
+                    <td colspan="12" style="text-align: center;">Trabajo de: __TRABAJO__</td>
+                </tr>
+            </table>
+            <table>
+                <tr>
+                    <td colspan="1">Proyecto:</td>
+                    <td colspan="7" style="padding-right: 10;">__PROYECTO__</td>
+                    <td colspan="4" rowspan="3" style="text-align: right;"><img src="http://deza.com.pe/assets/media/logos/logo-deza-nuevo.jpg" alt="" height="50"></td>
+                </tr>
+                <tr>
+                    <td colspan="1">Contratista:</td>
+                    <td colspan="7" style="padding-right: 10;">__CONTRATISTA__</td>
+                </tr>
+                <tr>
+                    <td colspan="1">Período:</td>
+                    <td colspan="7" style="padding-right: 10;">__PERIODO__</td>
+                </tr>
+            </table>
+            <table id="table_export" border="1">
+                <thead>
+                    <tr>
+                        <th rowspan="2" style="vertical-align: middle; text-align: center;">Código</th>
+                        <th rowspan="2" style="vertical-align: middle; text-align: center;">Partida</th>
+                        <th rowspan="2" style="vertical-align: middle; text-align: center;">UM</th>
+                        <th colspan="3" style="text-align: center;" rowspan="1">Plan</th>
+                        <th colspan="2" style="text-align: center;" rowspan="1">Avance</th>
+                        <th colspan="2" style="text-align: center;" rowspan="1">Acumulado</th>
+                        <th colspan="2" style="text-align: center;" rowspan="1">Por Ejecutar</th>
+                    </tr>
+                    <tr>
+                        <th style="text-align: center;">P.U.</th>
+                        <th style="text-align: center;">Cantidad</th>
+                        <th style="text-align: center;">Precio</th>
+                        <th style="text-align: center;">Cantidad</th>
+                        <th style="text-align: center;">Precio</th>
+                        <th style="text-align: center;">Cantidad</th>
+                        <th style="text-align: center;">Precio</th>
+                        <th style="text-align: center;">Cantidad</th>
+                        <th style="text-align: center;">Precio</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
     </div>
 </form>
 <script>
+    $("#btn-export").click(function () {
+        var tableExport = $("#div_export").html();
+        tableExport = tableExport.replace("__VALORIZACION_NUMERO__", $("#valoracion_numero").val());
+        tableExport = tableExport.replace("__TRABAJO__", $("#proyecto_trabajo_id :selected").text());
+        tableExport = tableExport.replace("__PROYECTO__", $("#proyecto_id :selected").text());
+        tableExport = tableExport.replace("__CONTRATISTA__", $("#proyecto_trabajo_id :selected").attr("data-contratista"));
+        tableExport = tableExport.replace("__PERIODO__", "Del " + $("#fecha_inicio").val() + " al " + $("#fecha_termino").val());
+
+        tableExport = tableExport.replace(/ /g, '%20');
+        exportTableToExcel(tableExport, 'REPORTE_AVANCE_PROYECTO');
+    });
+    function exportTableToExcel(tableHTML, filename = '') {
+        var downloadLink;
+        var dataType = 'application/vnd.ms-excel;';
+        /* var tableSelect = document.getElementById(tableID);
+        var tableHTML = tableSelect.outerHTML.replace(/ /g, '%20'); */
+
+        // Specify file name
+        filename = filename ? filename + '.xls' : 'excel_data.xls';
+
+        // Create download link element
+        downloadLink = document.createElement("a");
+
+        document.body.appendChild(downloadLink);
+
+        if (navigator.msSaveOrOpenBlob) {
+            var blob = new Blob(['\ufeff', tableHTML], {
+                type: dataType
+            });
+            navigator.msSaveOrOpenBlob(blob, filename);
+        } else {
+            // Create a link to the file
+            downloadLink.href = 'data:' + dataType + ', <html><head><meta charset="utf-8" /></head><body>' + tableHTML + '</body></html>';
+
+            // Setting the file name
+            downloadLink.download = filename;
+
+            //triggering the function
+            downloadLink.click();
+        }
+    }
     function fillProyecto(idProyecto, callback) {
         postJSON("Proyecto_C.php", { "action": "list" }, function (data) {
             if (!validErrorResponse(data)) {
@@ -107,7 +207,7 @@
                 $("#proyecto_trabajo_id").html('<option value="">Seleccione Trabajo</option>');
                 var arrayProyectoTrabajo = JSON.parse(data);
                 arrayProyectoTrabajo.forEach(function (object, index) {
-                    $("#proyecto_trabajo_id").append('<option value="' + object.id + '" data-cantidad_adelanto_restante="' + object.cantidad_adelanto_restante + '">' + object.nombre + '</option>');
+                    $("#proyecto_trabajo_id").append('<option value="' + object.id + '" data-cantidad_adelanto_restante="' + object.cantidad_adelanto_restante + '" data-contratista="' + object.contratista + '">' + object.nombre + '</option>');
                 });
                 if (typeof idProyectoTrabajo !== 'undefined') {
                     $("#proyecto_trabajo_id").val(idProyectoTrabajo);
@@ -150,6 +250,7 @@
     function report() {
         postJSONForm("Proyecto_C.php", "form", function (data) {
             destroyDataTableIfExists("table");
+            $("#table_export tbody").html("");
             $("#table tbody").html("");
             if (!validErrorResponse(data)) {
                 dataResponse = JSON.parse(data);
@@ -176,9 +277,36 @@
                         $("#table tbody").append(html);
                     });
                     $("#btnImprimir").show();
+                    $("#btn-export").show();
                     $("#divAlertImprimir").hide();
                 }
+
+                var list = JSON.parse(data);
+                list.forEach((row, index) => {
+                    $("#table_export tbody").append(`
+                    <tr>
+                        <td>`+ row.codigo + `</td>
+                        <td>`+ row.partida + `</td>
+                        <td>`+ row.unidad_medida + `</td>
+                        <td>`+ row.precio_unitario_plan + `</td>
+                        <td>`+ row.cantidad_plan + `</td>
+                        <td>`+ row.precio_plan + `</td>
+                        <td>`+ row.cantidad_avance + `</td>
+                        <td>`+ row.precio_avance + `</td>
+                        <td>`+ row.cantidad_acumulada + `</td>
+                        <td>`+ row.precio_acumulado + `</td>
+                        <td>`+ row.cantidad_por_ejecutar + `</td>
+                        <td>`+ row.precio_por_ejecutar + `</td>
+                    </tr>`);
+                });
+
                 $("#table").DataTable();
+
+                postJSON("ProyectoTrabajo_C.php", { action: "generateNextValoracionNumero", id: $("#proyecto_trabajo_id").val() }, function (dataValoracionNumero) {
+                    if (!validErrorResponse(dataValoracionNumero)) {
+                        $("#valoracion_numero").val(dataValoracionNumero);
+                    }
+                });
             }
         });
     }

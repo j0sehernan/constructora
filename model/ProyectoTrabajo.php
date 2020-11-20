@@ -37,7 +37,7 @@ class ProyectoTrabajo
     {
         $db = new DB();
         $result = $db->query("select nombre, persona_contratista_id, cantidad_adelanto, cantidad_adelanto_restante, " .
-            "porcentaje_amortizacion_adelanto, porcentaje_retencion_fondo_garantia, porcentaje_gastos_generales " .
+            "porcentaje_amortizacion_adelanto, porcentaje_retencion_fondo_garantia, porcentaje_gastos_generales, valoracion_numero " .
             "from proyecto_trabajo " .
             "where id = $id;");
         return $result;
@@ -73,6 +73,15 @@ class ProyectoTrabajo
             "cantidad_adelanto = '$cantidad_adelanto', " .
             "cantidad_adelanto_restante = '$cantidad_adelanto' - cantidad_adelanto_usado, " .
             "porcentaje_gastos_generales = '$porcentaje_gastos_generales' " .
+            "where id = $id;");
+        return $result;
+    }
+
+    function updateValoracionNumero($id, $valoracion_numero)
+    {
+        $db = new DB();
+        $result = $db->execute("update proyecto_trabajo " .
+            "set valoracion_numero = '$valoracion_numero' " .
             "where id = $id;");
         return $result;
     }
