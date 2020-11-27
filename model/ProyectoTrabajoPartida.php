@@ -45,10 +45,43 @@ class ProyectoTrabajoPartida
         return $result;
     }
 
-    function reportAvanceProyecto($idProyectoTrabajo)
+    function listParentsByProyectoTrabajo($proyecto_trabajo_id)
     {
         $db = new DB();
-        $result = $db->query("call proyecto_trabajo_partida_report_avance_proyecto('$idProyectoTrabajo');");
+        $result = $db->query("select ptp.id, ptp.codigo, ptp.nombre as partida, " .
+            "um.nombre as unidad_medida, " .
+            "ptp.precio_unitario_plan, " .
+            "ptp.cantidad_plan, ptp.precio_plan, " .
+            "ptp.proyecto_trabajo_partida_id " .
+            "from proyecto_trabajo_partida ptp " .
+            "left join unidad_medida um on ptp.unidad_medida_id = um.codigo " .
+            "where ptp.proyecto_trabajo_id = $proyecto_trabajo_id and ptp.proyecto_trabajo_partida_id is null " .
+            "order by ptp.codigo asc;");
+        return $result;
+    }
+
+    function listSonsByProyectoTrabajoPartida($proyecto_trabajo_partida_id)
+    {
+        $db = new DB();
+        $result = $db->query("select ptp.id, ptp.codigo, ptp.nombre as partida, " .
+            "um.nombre as unidad_medida, " .
+            "ptp.precio_unitario_plan, " .
+            "ptp.cantidad_plan, ptp.precio_plan, " .
+            "ptp.proyecto_trabajo_partida_id, " .
+            "ptp.proyecto_trabajo_id " .
+            "from proyecto_trabajo_partida ptp " .
+            "left join unidad_medida um on ptp.unidad_medida_id = um.codigo " .
+            "where ptp.proyecto_trabajo_partida_id = $proyecto_trabajo_partida_id " .
+            "order by ptp.codigo desc;");
+        return $result;
+    }
+
+    function sumProyectoTrabajoAndLikeCodigo($proyecto_trabajo_id, $codigo)
+    {
+        $db = new DB();
+        $result = $db->query("select ifnull(sum(ifnull(precio_plan, 0)), 0) as precio_plan " .
+            "from proyecto_trabajo_partida ptp " .
+            "where ptp.proyecto_trabajo_id = $proyecto_trabajo_id and ptp.codigo like '$codigo%';");
         return $result;
     }
 

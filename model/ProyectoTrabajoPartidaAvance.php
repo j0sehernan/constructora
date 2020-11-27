@@ -45,17 +45,48 @@ class ProyectoTrabajoPartidaAvance
         return $result;
     }
 
-    function reportAvanceProyecto($idProyectoTrabajoPartida, $fechaInicioAvance, $fechaTerminoAvance)
+    function sumByProyectoTrabajoAndLikeCodigo($proyecto_trabajo_id, $codigo, $fecha_inicio_avance, $fecha_termino_avance)
     {
         $db = new DB();
-        $result = $db->query("call proyecto_trabajo_partida_avance_report_avance_proyecto('$idProyectoTrabajoPartida','$fechaInicioAvance','$fechaTerminoAvance');");
+        $result = $db->query("select ifnull(sum(ifnull(precio_avance, 0)), 0) as precio_avance " .
+            //"ifnull(sum(ifnull(precio_avance, 0)), 0) as precio_avance " .
+            "from proyecto_trabajo_partida_avance ptpa " .
+            "inner join proyecto_trabajo_partida ptp on ptpa.proyecto_trabajo_partida_id = ptp.id " .
+            "where ptp.proyecto_trabajo_id = $proyecto_trabajo_id and ptp.codigo like '$codigo%' " .
+            "and (fecha_inicio_avance between str_to_date('$fecha_inicio_avance', '%d/%m/%Y') and str_to_date('$fecha_termino_avance', '%d/%m/%Y')) " .
+            "and (fecha_termino_avance between str_to_date('$fecha_inicio_avance', '%d/%m/%Y') and str_to_date('$fecha_termino_avance', '%d/%m/%Y'));");
         return $result;
     }
 
-    function reportAvanceProyectoAcumuladoAnterior($idProyectoTrabajoPartida, $fechaTerminoAvance)
+    function sumByProyectoTrabajoPartida($proyecto_trabajo_partida_id, $fecha_inicio_avance, $fecha_termino_avance)
     {
         $db = new DB();
-        $result = $db->query("call proyecto_trabajo_partida_avance_report_avance_proyecto_acu_ant('$idProyectoTrabajoPartida','$fechaTerminoAvance');");
+        $result = $db->query("select ifnull(sum(ifnull(cantidad_avance, 0)), 0) as cantidad_avance " .
+            "from proyecto_trabajo_partida_avance ptpa " .
+            "where ptpa.proyecto_trabajo_partida_id = $proyecto_trabajo_partida_id " .
+            "and (ptpa.fecha_inicio_avance between str_to_date('$fecha_inicio_avance', '%d/%m/%Y') and str_to_date('$fecha_termino_avance', '%d/%m/%Y')) " .
+            "and (ptpa.fecha_termino_avance between str_to_date('$fecha_inicio_avance', '%d/%m/%Y') and str_to_date('$fecha_termino_avance', '%d/%m/%Y'));");
+        return $result;
+    }
+
+    function sumByProyectoTrabajoAndLikeCodigoAcumuladoAnterior($proyecto_trabajo_id, $codigo, $fecha_termino_avance)
+    {
+        $db = new DB();
+        $result = $db->query("select ifnull(sum(ifnull(ptpa.precio_avance, 0)), 0) as precio_acumulado " .
+            "from proyecto_trabajo_partida_avance ptpa " .
+            "inner join proyecto_trabajo_partida ptp on ptpa.proyecto_trabajo_partida_id = ptp.id " .
+            "where ptp.proyecto_trabajo_id = $proyecto_trabajo_id and ptp.codigo like '$codigo%' " .
+            "and ptpa.fecha_termino_avance <= str_to_date('$fecha_termino_avance', '%d/%m/%Y');");
+        return $result;
+    }
+
+    function sumByProyectoTrabajoPartidaAcumuladoAnterior($proyecto_trabajo_partida_id, $fecha_termino_avance)
+    {
+        $db = new DB();
+        $result = $db->query("select ifnull(sum(ifnull(ptpa.cantidad_avance, 0)), 0) as cantidad_acumulada " .
+            "from proyecto_trabajo_partida_avance ptpa " .
+            "where ptpa.proyecto_trabajo_partida_id = $proyecto_trabajo_partida_id " .
+            "and ptpa.fecha_termino_avance <= str_to_date('$fecha_termino_avance', '%d/%m/%Y');");
         return $result;
     }
 

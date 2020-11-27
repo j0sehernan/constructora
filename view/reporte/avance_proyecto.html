@@ -47,7 +47,7 @@
             <div class="col-sm-4">
                 <div class="form-group">
                     <label for="valoracion_numero">Valoración N°</label>
-                    <input type="text" class="form-control form-control-sm" id="valoracion_numero" name="valoracion_numero" placeholder="Valoración N°" readonly>
+                    <input type="text" class="form-control form-control-sm" id="valoracion_numero" name="valoracion_numero" placeholder="Valoración N°">
                 </div>
             </div>
         </div>
@@ -283,9 +283,11 @@
 
                 var list = JSON.parse(data);
                 list.forEach((row, index) => {
+                    var comodin = "\u200C";
+                    //var colorTr = row.precio_unitario_plan === "" ? 'style="background-color: #0bddff;"' : '';<tr `+ colorTr + `>
                     $("#table_export tbody").append(`
                     <tr>
-                        <td>`+ row.codigo + `</td>
+                        <td>`+ comodin + row.codigo + `</td>
                         <td>`+ row.partida + `</td>
                         <td>`+ row.unidad_medida + `</td>
                         <td>`+ row.precio_unitario_plan + `</td>
@@ -302,11 +304,11 @@
 
                 $("#table").DataTable();
 
-                postJSON("ProyectoTrabajo_C.php", { action: "generateNextValoracionNumero", id: $("#proyecto_trabajo_id").val() }, function (dataValoracionNumero) {
+                /* postJSON("ProyectoTrabajo_C.php", { action: "generateNextValoracionNumero", id: $("#proyecto_trabajo_id").val() }, function (dataValoracionNumero) {
                     if (!validErrorResponse(dataValoracionNumero)) {
                         $("#valoracion_numero").val(dataValoracionNumero);
                     }
-                });
+                }); */
             }
         });
     }
