@@ -72,7 +72,7 @@ class ProyectoTrabajoPartida
             "from proyecto_trabajo_partida ptp " .
             "left join unidad_medida um on ptp.unidad_medida_id = um.codigo " .
             "where ptp.proyecto_trabajo_partida_id = $proyecto_trabajo_partida_id " .
-            "order by ptp.codigo desc;");
+            "order by ptp.codigo asc;");
         return $result;
     }
 
