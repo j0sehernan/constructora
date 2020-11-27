@@ -35,7 +35,7 @@ if ($object->{'action'} == "list") {
             $precio_plan = $sumProyectoTrabajoPartida["precio_plan"];
             $precio_avance = number_format($sumProyectoTrabajoPartidaAvanceByCodigo["precio_avance"], 2, '.', '');
             $precio_acumulado = number_format($sumProyectoTrabajoPartidaAvanceByCodigoAcumuladoAnterior["precio_acumulado"], 2, '.', '');
-            $precio_por_ejecutar = $precio_plan - $precio_acumulado;
+            $precio_por_ejecutar = number_format($precio_plan - $precio_acumulado, 2, '.', '');
 
             $objectReportPadre = array(
                 "id" => $objPartidaPadre["id"],
@@ -111,7 +111,7 @@ function recursividadHijos($resultReport, $idProyectoTrabajoPartidaPadre, $idPro
             $precio_plan = $sumProyectoTrabajoPartida["precio_plan"];
             $precio_avance = number_format($sumProyectoTrabajoPartidaAvanceByCodigo["precio_avance"], 2, '.', '');
             $precio_acumulado = number_format($sumProyectoTrabajoPartidaAvanceByCodigoAcumuladoAnterior["precio_acumulado"], 2, '.', '');
-            $precio_por_ejecutar = $precio_plan - $precio_acumulado;
+            $precio_por_ejecutar = number_format($precio_plan - $precio_acumulado, 2, '.', '');
 
             $cantidad_plan = $objPartidaHija["cantidad_plan"] == "0" ? "" : $objPartidaHija["cantidad_plan"];
             $cantidad_acumulada = $sumProyectoTrabajoPartidaAvanceAcumuladoAnterior["cantidad_acumulada"] == "0" ? "" : number_format($sumProyectoTrabajoPartidaAvanceAcumuladoAnterior["cantidad_acumulada"], 2, '.', '');
