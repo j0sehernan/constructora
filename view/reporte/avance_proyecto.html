@@ -284,7 +284,7 @@
                 var list = JSON.parse(data);
                 list.forEach((row, index) => {
                     var comodin = "\u200C";
-                    var colorTr = row.precio_unitario_plan === "" ? "style=\"background-color: #0bddff;\"" : "";
+                    var colorTr = row.precio_unitario_plan === "" ? "style=\"background-color: aqua;\"" : "";
                     $("#table_export tbody").append(`
                     <tr `+ colorTr + `>
                         <td>`+ comodin + row.codigo + `</td>
