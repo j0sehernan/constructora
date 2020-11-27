@@ -1,2 +1,2 @@
 # contructora
-Manage projects and cardex
+Manage projects and Kardex
