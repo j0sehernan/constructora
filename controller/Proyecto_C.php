@@ -1,12 +1,14 @@
 <?php
 @include_once("_Configuration.php");
 @include_once("../model/Proyecto.php");
+@include_once("../model/ProyectoTrabajo.php");
 @include_once("../model/ProyectoTrabajoPartida.php");
 @include_once("../model/ProyectoTrabajoPartidaAvance.php");
 
 $json = file_get_contents(_Configuration::$CONFIGURATION_QUERY_PARAMS);
 $object = json_decode($json);
 $proyecto = new Proyecto();
+$proyectoTrabajo = new ProyectoTrabajo();
 $proyectoTrabajoPartida = new ProyectoTrabajoPartida();
 $proyectoTrabajoPartidaAvance = new ProyectoTrabajoPartidaAvance();
 
@@ -22,6 +24,8 @@ if ($object->{'action'} == "list") {
     $total_precio_plan = 0;
     $total_precio_avance = 0;
     $total_precio_acumulado = 0;
+    $total_precio_acumulado_anterior = 0;
+    $total_precio_presupuesto_actual = 0;
     $total_precio_por_ejecutar = 0;
 
     if (count($listPartidasPadre) > 0) {
@@ -30,12 +34,14 @@ if ($object->{'action'} == "list") {
 
             $sumProyectoTrabajoPartida = $proyectoTrabajoPartida->sumProyectoTrabajoAndLikeCodigo($object->proyecto_trabajo_id, $objPartidaPadre["codigo"])[0];
             $sumProyectoTrabajoPartidaAvanceByCodigo = $proyectoTrabajoPartidaAvance->sumByProyectoTrabajoAndLikeCodigo($object->proyecto_trabajo_id, $objPartidaPadre["codigo"], $object->fecha_inicio, $object->fecha_termino)[0];
-            $sumProyectoTrabajoPartidaAvanceByCodigoAcumuladoAnterior = $proyectoTrabajoPartidaAvance->sumByProyectoTrabajoAndLikeCodigoAcumuladoAnterior($object->proyecto_trabajo_id, $objPartidaPadre["codigo"], $object->fecha_termino)[0];
+            $sumProyectoTrabajoPartidaAvanceByCodigoAcumulado = $proyectoTrabajoPartidaAvance->sumByProyectoTrabajoAndLikeCodigoAcumulado($object->proyecto_trabajo_id, $objPartidaPadre["codigo"], $object->fecha_termino)[0];
 
             $precio_plan = $sumProyectoTrabajoPartida["precio_plan"];
             $precio_avance = number_format($sumProyectoTrabajoPartidaAvanceByCodigo["precio_avance"], 2, '.', '');
-            $precio_acumulado = number_format($sumProyectoTrabajoPartidaAvanceByCodigoAcumuladoAnterior["precio_acumulado"], 2, '.', '');
-            $precio_por_ejecutar = number_format($precio_plan - $precio_acumulado, 2, '.', '');
+            $precio_acumulado = number_format($sumProyectoTrabajoPartidaAvanceByCodigoAcumulado["precio_acumulado"], 2, '.', '');
+            $precio_acumulado_anterior = number_format(($precio_acumulado - $precio_avance), 2, '.', '');
+            $precio_presupuesto_actual = $precio_plan >= $precio_acumulado ? $precio_plan  : $precio_acumulado;
+            $precio_por_ejecutar = number_format($precio_presupuesto_actual - $precio_acumulado, 2, '.', '');
 
             $objectReportPadre = array(
                 "id" => $objPartidaPadre["id"],
@@ -45,6 +51,10 @@ if ($object->{'action'} == "list") {
                 "precio_unitario_plan" => "",
                 "cantidad_plan" => "",
                 "precio_plan" => $precio_plan,
+                "precio_presupuesto_actual" => $precio_presupuesto_actual,
+                "cantidad_presupuesto_actual" => "",
+                "precio_acumulado_anterior" => $precio_acumulado_anterior,
+                "cantidad_acumulada_anterior" => "",
                 "precio_avance" => $precio_avance,
                 "cantidad_avance" => "",
                 "cantidad_acumulada" => "",
@@ -61,26 +71,149 @@ if ($object->{'action'} == "list") {
             $total_precio_plan += $precio_plan;
             $total_precio_avance += $precio_avance;
             $total_precio_acumulado += $precio_acumulado;
+            $total_precio_acumulado_anterior += $precio_acumulado_anterior;
+            $total_precio_presupuesto_actual += $precio_presupuesto_actual;
             $total_precio_por_ejecutar += $precio_por_ejecutar;
         }
 
-        $objectReportTotal = array(
-            "id" => "0",
-            "codigo" => "TOTAL",
-            "partida" => "AVANCE PROYECTO",
-            "unidad_medida" => "",
-            "precio_unitario_plan" => "",
-            "cantidad_plan" => "",
-            "precio_plan" => number_format($total_precio_plan, 2, '.', ''),
-            "precio_avance" => number_format($total_precio_avance, 2, '.', ''),
-            "cantidad_avance" => "",
-            "cantidad_acumulada" => "",
-            "precio_acumulado" => number_format($total_precio_acumulado, 2, '.', ''),
-            "cantidad_por_ejecutar" => "",
-            "precio_por_ejecutar" => number_format($total_precio_por_ejecutar, 2, '.', ''),
-            "proyecto_trabajo_partida_id" => ""
+        $resultReport = addRowToReport(
+            $resultReport,
+            "(1)",
+            "Valor Venta",
+            "",
+            number_format($total_precio_plan, 2, '.', ''),
+            number_format($total_precio_presupuesto_actual, 2, '.', ''),
+            number_format($total_precio_acumulado_anterior, 2, '.', ''),
+            number_format($total_precio_avance, 2, '.', ''),
+            number_format($total_precio_acumulado, 2, '.', ''),
+            number_format($total_precio_por_ejecutar, 2, '.', '')
         );
-        array_push($resultReport, $objectReportTotal);
+
+        $porcentaje_amortizacion_adelanto = $proyectoTrabajo->get($object->proyecto_trabajo_id)[0]["porcentaje_amortizacion_adelanto"];
+        $_2_total_precio_acumulado_anterior = (float)$porcentaje_amortizacion_adelanto / 100 * (float)$total_precio_acumulado_anterior * -1;
+        $_2_total_precio_avance = (float)$porcentaje_amortizacion_adelanto / 100 * (float)$total_precio_avance * -1;
+        $_2_total_precio_acumulado = (float)$porcentaje_amortizacion_adelanto / 100 * (float)$total_precio_acumulado * -1;
+
+        $resultReport = addRowToReport(
+            $resultReport,
+            "(2)",
+            "Amortización de Adelanto",
+            $porcentaje_amortizacion_adelanto . " %",
+            "",
+            "",
+            number_format($_2_total_precio_acumulado_anterior, 2, '.', ''),
+            number_format($_2_total_precio_avance, 2, '.', ''),
+            number_format($_2_total_precio_acumulado, 2, '.', ''),
+            ""
+        );
+
+        $porcentaje_retencion_fondo_garantia = $proyectoTrabajo->get($object->proyecto_trabajo_id)[0]["porcentaje_retencion_fondo_garantia"];
+        $_3_total_precio_acumulado_anterior = (float)$porcentaje_retencion_fondo_garantia / 100 * (float)$total_precio_acumulado_anterior * -1;
+        $_3_total_precio_avance = (float)$porcentaje_retencion_fondo_garantia / 100 * (float)$total_precio_avance * -1;
+        $_3_total_precio_acumulado = (float)$porcentaje_retencion_fondo_garantia / 100 * (float)$total_precio_acumulado * -1;
+
+        $resultReport = addRowToReport(
+            $resultReport,
+            "(3)",
+            "Retención Fondo de Garantía",
+            $porcentaje_retencion_fondo_garantia . " %",
+            "",
+            "",
+            number_format($_3_total_precio_acumulado_anterior, 2, '.', ''),
+            number_format($_3_total_precio_avance, 2, '.', ''),
+            number_format($_3_total_precio_acumulado, 2, '.', ''),
+            ""
+        );
+
+        $porcentaje_retencion_fondo_garantia = $proyectoTrabajo->get($object->proyecto_trabajo_id)[0]["porcentaje_retencion_fondo_garantia"];
+        $_4_total_precio_acumulado_anterior = (float)$total_precio_acumulado_anterior + (float)$_2_total_precio_acumulado_anterior + (float)$_3_total_precio_acumulado_anterior;
+        $_4_total_precio_avance = (float)$total_precio_avance + (float)$_2_total_precio_avance + (float)$_3_total_precio_avance;
+        $_4_total_precio_acumulado = (float)$total_precio_acumulado + (float)$_2_total_precio_acumulado + (float)$_3_total_precio_acumulado;
+
+        $resultReport = addRowToReport(
+            $resultReport,
+            "(4)",
+            "Sub Total (1) + (2) + (3)",
+            "",
+            number_format($total_precio_plan, 2, '.', ''),
+            number_format($total_precio_presupuesto_actual, 2, '.', ''),
+            number_format($_4_total_precio_acumulado_anterior, 2, '.', ''),
+            number_format($_4_total_precio_avance, 2, '.', ''),
+            number_format($_4_total_precio_acumulado, 2, '.', ''),
+            ""
+        );
+
+        $_5_total_precio_plan = 0.18 * (float)$total_precio_plan;
+        $_5_total_precio_presupuesto_actual = 0.18 * (float)$total_precio_presupuesto_actual;
+        $_5_total_precio_acumulado_anterior = 0.18 * (float)$_4_total_precio_acumulado_anterior;
+        $_5_total_precio_avance = 0.18 * (float)$_4_total_precio_avance;
+        $_5_total_precio_acumulado = 0.18 * (float)$_4_total_precio_acumulado;
+
+        $resultReport = addRowToReport(
+            $resultReport,
+            "(5)",
+            "I.G.V.",
+            "18.00 %",
+            number_format($_5_total_precio_plan, 2, '.', ''),
+            number_format($_5_total_precio_presupuesto_actual, 2, '.', ''),
+            number_format($_5_total_precio_acumulado_anterior, 2, '.', ''),
+            number_format($_5_total_precio_avance, 2, '.', ''),
+            number_format($_5_total_precio_acumulado, 2, '.', ''),
+            ""
+        );
+
+        $_6_total_precio_plan = (float)$total_precio_plan + (float)$_5_total_precio_plan;
+        $_6_total_precio_presupuesto_actual = (float)$total_precio_presupuesto_actual + (float)$_5_total_precio_presupuesto_actual;
+        $_6_total_precio_acumulado_anterior = (float)$_4_total_precio_acumulado_anterior + (float)$_5_total_precio_acumulado_anterior;
+        $_6_total_precio_avance = (float)$_4_total_precio_avance + (float)$_5_total_precio_avance;
+        $_6_total_precio_acumulado = (float)$_4_total_precio_acumulado + (float)$_5_total_precio_acumulado;
+
+        $resultReport = addRowToReport(
+            $resultReport,
+            "(6)",
+            "Total (4) + (5)",
+            "",
+            number_format($_6_total_precio_plan, 2, '.', ''),
+            number_format($_6_total_precio_presupuesto_actual, 2, '.', ''),
+            number_format($_6_total_precio_acumulado_anterior, 2, '.', ''),
+            number_format($_6_total_precio_avance, 2, '.', ''),
+            number_format($_6_total_precio_acumulado, 2, '.', ''),
+            ""
+        );
+
+        $_7_total_precio_acumulado_anterior = 0.12 * (float)$_6_total_precio_acumulado_anterior * -1;
+        $_7_total_precio_avance = 0.12 * (float)$_6_total_precio_avance * -1;
+        $_7_total_precio_acumulado = 0.12 * (float)$_6_total_precio_acumulado * -1;
+
+        $resultReport = addRowToReport(
+            $resultReport,
+            "(7)",
+            "Detracción",
+            "12.00 %",
+            "",
+            "",
+            number_format($_7_total_precio_acumulado_anterior, 2, '.', ''),
+            number_format($_7_total_precio_avance, 2, '.', ''),
+            number_format($_7_total_precio_acumulado, 2, '.', ''),
+            ""
+        );
+
+        $_8_total_precio_acumulado_anterior = (float)$_6_total_precio_acumulado_anterior + (float)$_7_total_precio_acumulado_anterior;
+        $_8_total_precio_avance = (float)$_6_total_precio_avance + (float)$_7_total_precio_avance;
+        $_8_total_precio_acumulado = (float)$_6_total_precio_acumulado + (float)$_7_total_precio_acumulado;
+
+        $resultReport = addRowToReport(
+            $resultReport,
+            "(8)",
+            "Neto a Pagar (6) + (7)",
+            "",
+            "",
+            "",
+            number_format($_8_total_precio_acumulado_anterior, 2, '.', ''),
+            number_format($_8_total_precio_avance, 2, '.', ''),
+            number_format($_8_total_precio_acumulado, 2, '.', ''),
+            ""
+        );
     }
     echo (json_encode($resultReport));
 } elseif ($object->{'action'} == "i") {
@@ -94,6 +227,34 @@ if ($object->{'action'} == "list") {
     echo (json_encode($result));
 }
 
+function addRowToReport($resultReport, $codigo, $partida, $unidad_medida, $total_precio_plan, $precio_presupuesto_actual, $precio_acumulado_anterior, $precio_avance, $precio_acumulado, $precio_por_ejecutar)
+{
+    $objectReportTotal = array(
+        "id" => "TOTALES",
+        "codigo" => $codigo,
+        "partida" => $partida,
+        "unidad_medida" => $unidad_medida,
+        "precio_unitario_plan" => "",
+        "cantidad_plan" => "",
+        "precio_plan" => $total_precio_plan,
+        "precio_presupuesto_actual" => $precio_presupuesto_actual,
+        "cantidad_presupuesto_actual" => "",
+        "precio_acumulado_anterior" => $precio_acumulado_anterior,
+        "cantidad_acumulada_anterior" => "",
+        "precio_avance" => $precio_avance,
+        "cantidad_avance" => "",
+        "cantidad_acumulada" => "",
+        "precio_acumulado" => $precio_acumulado,
+        "cantidad_por_ejecutar" => "",
+        "precio_por_ejecutar" => $precio_por_ejecutar,
+        "proyecto_trabajo_partida_id" => ""
+    );
+
+    array_push($resultReport, $objectReportTotal);
+
+    return $resultReport;
+}
+
 function recursividadHijos($resultReport, $idProyectoTrabajoPartidaPadre, $idProyectoTrabajoPartida, $fecha_inicio, $fecha_termino)
 {
     $proyectoTrabajoPartida = new ProyectoTrabajoPartida();
@@ -105,16 +266,21 @@ function recursividadHijos($resultReport, $idProyectoTrabajoPartidaPadre, $idPro
             $sumProyectoTrabajoPartida = $proyectoTrabajoPartida->sumProyectoTrabajoAndLikeCodigo($objPartidaHija["proyecto_trabajo_id"], $objPartidaHija["codigo"])[0];
             $sumProyectoTrabajoPartidaAvanceByCodigo = $proyectoTrabajoPartidaAvance->sumByProyectoTrabajoAndLikeCodigo($objPartidaHija["proyecto_trabajo_id"], $objPartidaHija["codigo"], $fecha_inicio, $fecha_termino)[0];
             $sumProyectoTrabajoPartidaAvance = $proyectoTrabajoPartidaAvance->sumByProyectoTrabajoPartida($objPartidaHija["id"], $fecha_inicio, $fecha_termino)[0];
-            $sumProyectoTrabajoPartidaAvanceByCodigoAcumuladoAnterior = $proyectoTrabajoPartidaAvance->sumByProyectoTrabajoAndLikeCodigoAcumuladoAnterior($objPartidaHija["proyecto_trabajo_id"], $objPartidaHija["codigo"], $fecha_termino)[0];
-            $sumProyectoTrabajoPartidaAvanceAcumuladoAnterior = $proyectoTrabajoPartidaAvance->sumByProyectoTrabajoPartidaAcumuladoAnterior($objPartidaHija["id"], $fecha_termino)[0];
+            $sumProyectoTrabajoPartidaAvanceByCodigoAcumulado = $proyectoTrabajoPartidaAvance->sumByProyectoTrabajoAndLikeCodigoAcumulado($objPartidaHija["proyecto_trabajo_id"], $objPartidaHija["codigo"], $fecha_termino)[0];
+            $sumProyectoTrabajoPartidaAvanceAcumulado = $proyectoTrabajoPartidaAvance->sumByProyectoTrabajoPartidaAcumulado($objPartidaHija["id"], $fecha_termino)[0];
 
             $precio_plan = $sumProyectoTrabajoPartida["precio_plan"];
             $precio_avance = number_format($sumProyectoTrabajoPartidaAvanceByCodigo["precio_avance"], 2, '.', '');
-            $precio_acumulado = number_format($sumProyectoTrabajoPartidaAvanceByCodigoAcumuladoAnterior["precio_acumulado"], 2, '.', '');
-            $precio_por_ejecutar = number_format($precio_plan - $precio_acumulado, 2, '.', '');
+            $precio_acumulado = number_format($sumProyectoTrabajoPartidaAvanceByCodigoAcumulado["precio_acumulado"], 2, '.', '');
+            $precio_acumulado_anterior = number_format(($precio_acumulado - $precio_avance), 2, '.', '');
+            $precio_presupuesto_actual = $precio_plan >= $precio_acumulado ? $precio_plan : $precio_acumulado;
+            $precio_por_ejecutar = number_format($precio_presupuesto_actual - $precio_acumulado, 2, '.', '');
 
             $cantidad_plan = $objPartidaHija["cantidad_plan"] == "0" ? "" : $objPartidaHija["cantidad_plan"];
-            $cantidad_acumulada = $sumProyectoTrabajoPartidaAvanceAcumuladoAnterior["cantidad_acumulada"] == "0" ? "" : number_format($sumProyectoTrabajoPartidaAvanceAcumuladoAnterior["cantidad_acumulada"], 2, '.', '');
+            $cantidad_avance = $sumProyectoTrabajoPartidaAvance["cantidad_avance"] == "0" ? "" : number_format($sumProyectoTrabajoPartidaAvance["cantidad_avance"], 2, '.', '');
+            $cantidad_acumulada = $sumProyectoTrabajoPartidaAvanceAcumulado["cantidad_acumulada"] == "0" ? "" : number_format($sumProyectoTrabajoPartidaAvanceAcumulado["cantidad_acumulada"], 2, '.', '');
+            $cantidad_acumulada_anterior = number_format((($cantidad_acumulada === "" ? 0 : $cantidad_acumulada) - ($cantidad_avance === "" ? 0 : $cantidad_avance)), 2, '.', '');
+            $cantidad_presupuesto_actual = $cantidad_plan >= $cantidad_acumulada ? $cantidad_plan : $cantidad_acumulada;
             $cantidad_por_ejecutar = $cantidad_plan == "" || $cantidad_acumulada == "" ? "" : $cantidad_plan - $cantidad_acumulada;
 
             $objectReportHijo = array(
@@ -125,8 +291,12 @@ function recursividadHijos($resultReport, $idProyectoTrabajoPartidaPadre, $idPro
                 "precio_unitario_plan" => $objPartidaHija["precio_unitario_plan"] == null ? "" : $objPartidaHija["precio_unitario_plan"],
                 "cantidad_plan" => $cantidad_plan,
                 "precio_plan" => $precio_plan,
+                "precio_presupuesto_actual" => $precio_presupuesto_actual,
+                "cantidad_presupuesto_actual" => $cantidad_presupuesto_actual,
+                "precio_acumulado_anterior" => $precio_acumulado_anterior,
+                "cantidad_acumulada_anterior" => $cantidad_acumulada_anterior,
                 "precio_avance" => $precio_avance,
-                "cantidad_avance" => $sumProyectoTrabajoPartidaAvance["cantidad_avance"] == "0" ? "" : number_format($sumProyectoTrabajoPartidaAvance["cantidad_avance"], 2, '.', ''),
+                "cantidad_avance" => $cantidad_avance,
                 "cantidad_acumulada" => $cantidad_acumulada,
                 "precio_acumulado" => $precio_acumulado,
                 "cantidad_por_ejecutar" => $cantidad_por_ejecutar,

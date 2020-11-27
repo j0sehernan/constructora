@@ -60,7 +60,6 @@ class ProyectoTrabajoPartida
         return $result;
     }
 
-    //This is a normal test change by error
     function listSonsByProyectoTrabajoPartida($proyecto_trabajo_partida_id)
     {
         $db = new DB();

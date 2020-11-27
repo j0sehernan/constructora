@@ -68,24 +68,34 @@
             <table id="table" class="table table-hover table-bordered table-striped table-sm">
                 <thead class="thead-dark">
                     <tr>
-                        <th rowspan="2" style="vertical-align: middle; text-align: center;">Código</th>
-                        <th rowspan="2" style="vertical-align: middle; text-align: center;">Partida</th>
-                        <th rowspan="2" style="vertical-align: middle; text-align: center;">UM</th>
-                        <th colspan="3" style="text-align: center;">Plan</th>
-                        <th colspan="2" style="text-align: center;">Avance</th>
-                        <th colspan="2" style="text-align: center;">Acumulado</th>
-                        <th colspan="2" style="text-align: center;">Por Ejecutar</th>
+                        <th rowspan="3" style="vertical-align: middle; text-align: center;">Código</th>
+                        <th rowspan="3" style="vertical-align: middle; text-align: center;">Partida</th>
+                        <th rowspan="3" style="vertical-align: middle; text-align: center;">UM</th>
+                        <th rowspan="3" style="vertical-align: middle; text-align: center;">P.U.</th>
+                        <th colspan="4" style="text-align: center;" rowspan="1">Presupuesto de Obra</th>
+                        <th colspan="8" style="text-align: center;" rowspan="1">Control de Avances</th>
                     </tr>
                     <tr>
-                        <th style="text-align: center;">P.U.</th>
+                        <th colspan="2" style="text-align: center;" rowspan="1">Original</th>
+                        <th colspan="2" style="text-align: center;" rowspan="1">Actual</th>
+                        <th colspan="2" style="text-align: center;" rowspan="1">Acumulado Anterior</th>
+                        <th colspan="2" style="text-align: center;" rowspan="1">Presente Valorización</th>
+                        <th colspan="2" style="text-align: center;" rowspan="1">Acumulado Actual</th>
+                        <th colspan="2" style="text-align: center;" rowspan="1">Saldo Por Ejecutar</th>
+                    </tr>
+                    <tr>
                         <th style="text-align: center;">Cantidad</th>
-                        <th style="text-align: center;">Precio</th>
-                        <th style="text-align: center;">Cantidad </th>
-                        <th style="text-align: center;">Precio</th>
+                        <th style="text-align: center;">S/</th>
                         <th style="text-align: center;">Cantidad</th>
-                        <th style="text-align: center;">Precio</th>
+                        <th style="text-align: center;">S/</th>
                         <th style="text-align: center;">Cantidad</th>
-                        <th style="text-align: center;">Precio</th>
+                        <th style="text-align: center;">S/</th>
+                        <th style="text-align: center;">Cantidad</th>
+                        <th style="text-align: center;">S/</th>
+                        <th style="text-align: center;">Cantidad</th>
+                        <th style="text-align: center;">S/</th>
+                        <th style="text-align: center;">Cantidad</th>
+                        <th style="text-align: center;">S/</th>
                     </tr>
                 </thead>
                 <tbody></tbody>
@@ -94,48 +104,57 @@
         <div id="div_export" style="display: none;">
             <table>
                 <tr>
-                    <td colspan="12" style="text-align: center;">VALORIZACIÓN N° __VALORIZACION_NUMERO__</td>
+                    <td colspan="16" style="text-align: center;"><img style="float: left;" src="http://deza.com.pe/assets/media/logos/logo-deza-nuevo.jpg" alt="" height="40">VALORIZACIÓN N° __VALORIZACION_NUMERO__</td>
                 </tr>
                 <tr>
-                    <td colspan="12" style="text-align: center;">Trabajo de: __TRABAJO__</td>
+                    <td colspan="16" style="text-align: center;">Trabajo de: __TRABAJO__</td>
                 </tr>
             </table>
             <table>
                 <tr>
                     <td colspan="1">Proyecto:</td>
-                    <td colspan="9" style="text-align: left; padding-right: 10;">__PROYECTO__</td>
-                    <td colspan="2" rowspan="3" style="text-align: right;"><img src="http://deza.com.pe/assets/media/logos/logo-deza-nuevo.jpg" alt="" height="50"></td>
+                    <td colspan="13" style="text-align: left; padding-right: 10;">__PROYECTO__</td>
+                    <td style="text-align: right;">Periodo del:</td>
+                    <td style="text-align: right;">__PERIODO_INICIO__</td>
                 </tr>
                 <tr>
                     <td colspan="1">Contratista:</td>
-                    <td colspan="9" style="text-align: left; padding-right: 10;">__CONTRATISTA__</td>
-                </tr>
-                <tr>
-                    <td colspan="1">Período:</td>
-                    <td colspan="9" style="text-align: left; padding-right: 10;">__PERIODO__</td>
+                    <td colspan="13" style="text-align: left; padding-right: 10;">__CONTRATISTA__</td>
+                    <td style="text-align: right;">Al:</td>
+                    <td style="text-align: right;">__PERIODO_TERMINO__</td>
                 </tr>
             </table>
             <table id="table_export" border="1">
                 <thead>
                     <tr>
-                        <th rowspan="2" style="vertical-align: middle; text-align: center;">Código</th>
-                        <th rowspan="2" style="vertical-align: middle; text-align: center;">Partida</th>
-                        <th rowspan="2" style="vertical-align: middle; text-align: center;">UM</th>
-                        <th colspan="3" style="text-align: center;" rowspan="1">Plan</th>
-                        <th colspan="2" style="text-align: center;" rowspan="1">Avance</th>
-                        <th colspan="2" style="text-align: center;" rowspan="1">Acumulado</th>
-                        <th colspan="2" style="text-align: center;" rowspan="1">Por Ejecutar</th>
+                        <th rowspan="3" style="vertical-align: middle; text-align: center;">Código</th>
+                        <th rowspan="3" style="vertical-align: middle; text-align: center;">Partida</th>
+                        <th rowspan="3" style="vertical-align: middle; text-align: center;">UM</th>
+                        <th rowspan="3" style="vertical-align: middle; text-align: center;">P.U.</th>
+                        <th colspan="4" style="text-align: center;" rowspan="1">Presupuesto de Obra</th>
+                        <th colspan="8" style="text-align: center;" rowspan="1">Control de Avances</th>
                     </tr>
                     <tr>
-                        <th style="text-align: center;">P.U.</th>
+                        <th colspan="2" style="text-align: center;" rowspan="1">Original</th>
+                        <th colspan="2" style="text-align: center;" rowspan="1">Actual</th>
+                        <th colspan="2" style="text-align: center;" rowspan="1">Acumulado Anterior</th>
+                        <th colspan="2" style="text-align: center;" rowspan="1">Presente Valorización</th>
+                        <th colspan="2" style="text-align: center;" rowspan="1">Acumulado Actual</th>
+                        <th colspan="2" style="text-align: center;" rowspan="1">Saldo Por Ejecutar</th>
+                    </tr>
+                    <tr>
                         <th style="text-align: center;">Cantidad</th>
-                        <th style="text-align: center;">Precio</th>
+                        <th style="text-align: center;">S/</th>
                         <th style="text-align: center;">Cantidad</th>
-                        <th style="text-align: center;">Precio</th>
+                        <th style="text-align: center;">S/</th>
                         <th style="text-align: center;">Cantidad</th>
-                        <th style="text-align: center;">Precio</th>
+                        <th style="text-align: center;">S/</th>
                         <th style="text-align: center;">Cantidad</th>
-                        <th style="text-align: center;">Precio</th>
+                        <th style="text-align: center;">S/</th>
+                        <th style="text-align: center;">Cantidad</th>
+                        <th style="text-align: center;">S/</th>
+                        <th style="text-align: center;">Cantidad</th>
+                        <th style="text-align: center;">S/</th>
                     </tr>
                 </thead>
                 <tbody></tbody>
@@ -150,7 +169,8 @@
         tableExport = tableExport.replace("__TRABAJO__", $("#proyecto_trabajo_id :selected").text());
         tableExport = tableExport.replace("__PROYECTO__", $("#proyecto_id :selected").text());
         tableExport = tableExport.replace("__CONTRATISTA__", $("#proyecto_trabajo_id :selected").attr("data-contratista"));
-        tableExport = tableExport.replace("__PERIODO__", "Del " + $("#fecha_inicio").val() + " al " + $("#fecha_termino").val());
+        tableExport = tableExport.replace("__PERIODO_INICIO__", $("#fecha_inicio").val());
+        tableExport = tableExport.replace("__PERIODO_TERMINO__", $("#fecha_termino").val());
 
         tableExport = tableExport.replace(/ /g, '%20');
         exportTableToExcel(tableExport, 'REPORTE_AVANCE_PROYECTO');
@@ -266,6 +286,10 @@
                                 <td>`+ object.precio_unitario_plan + `</td>
                                 <td>`+ object.cantidad_plan + `</td>
                                 <td>`+ object.precio_plan + `</td>
+                                <td>`+ object.cantidad_presupuesto_actual + `</td>
+                                <td>`+ object.precio_presupuesto_actual + `</td>
+                                <td>`+ object.cantidad_acumulada_anterior + `</td>
+                                <td>`+ object.precio_acumulado_anterior + `</td>
                                 <td>`+ object.cantidad_avance + `</td>
                                 <td>`+ object.precio_avance + `</td>
                                 <td>`+ object.cantidad_acumulada + `</td>
@@ -285,6 +309,7 @@
                 list.forEach((row, index) => {
                     var comodin = "\u200C";
                     var colorTr = row.precio_unitario_plan === "" ? "style=\"background-color: aqua;\"" : "";
+                    colorTr = row.id === "TOTALES" ? "style=\"background-color: transparent;\"" : colorTr;
                     $("#table_export tbody").append(`
                     <tr `+ colorTr + `>
                         <td>`+ comodin + row.codigo + `</td>
@@ -293,6 +318,10 @@
                         <td>`+ row.precio_unitario_plan + `</td>
                         <td>`+ row.cantidad_plan + `</td>
                         <td>`+ row.precio_plan + `</td>
+                        <td>`+ row.cantidad_presupuesto_actual + `</td>
+                        <td>`+ row.precio_presupuesto_actual + `</td>
+                        <td>`+ row.cantidad_acumulada_anterior + `</td>
+                        <td>`+ row.precio_acumulado_anterior + `</td>
                         <td>`+ row.cantidad_avance + `</td>
                         <td>`+ row.precio_avance + `</td>
                         <td>`+ row.cantidad_acumulada + `</td>

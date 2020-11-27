@@ -69,7 +69,7 @@ class ProyectoTrabajoPartidaAvance
         return $result;
     }
 
-    function sumByProyectoTrabajoAndLikeCodigoAcumuladoAnterior($proyecto_trabajo_id, $codigo, $fecha_termino_avance)
+    function sumByProyectoTrabajoAndLikeCodigoAcumulado($proyecto_trabajo_id, $codigo, $fecha_termino_avance)
     {
         $db = new DB();
         $result = $db->query("select ifnull(sum(ifnull(ptpa.precio_avance, 0)), 0) as precio_acumulado " .
@@ -80,7 +80,7 @@ class ProyectoTrabajoPartidaAvance
         return $result;
     }
 
-    function sumByProyectoTrabajoPartidaAcumuladoAnterior($proyecto_trabajo_partida_id, $fecha_termino_avance)
+    function sumByProyectoTrabajoPartidaAcumulado($proyecto_trabajo_partida_id, $fecha_termino_avance)
     {
         $db = new DB();
         $result = $db->query("select ifnull(sum(ifnull(ptpa.cantidad_avance, 0)), 0) as cantidad_acumulada " .
