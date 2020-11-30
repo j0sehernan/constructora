@@ -14,14 +14,14 @@
 </div>
 <form id="form">
     <div class="kt-container kt-container--fluid kt-grid__item kt-grid__item--fluid">
-        <div id="divAlertImprimir" class="alert alert-warning" role="alert">
+        <div id="divAlertExport" class="alert alert-warning" role="alert">
             Para imprimir, primero debe generar el reporte.
         </div>
         <div class="row" style="margin-bottom: 10px;">
             <div class="col-sm-12">
                 <div style="text-align: right;">
                     <input type="hidden" id="action" name="action" value="report">
-                    <button type="button" id="btnImprimir" class="btn btn-outline-info btn-sm" style="display: none;"><i class="fa fa-print"></i> Imprimir</button>
+                    <button type="button" id="btn-export" class="btn btn-outline-info btn-sm" style="display: none;"><i class="fa fa-print"></i> Imprimir</button>
                     <button type="submit" id="btnGenerar" class="btn btn-success btn-sm"><i class="la la-save"></i> Generar</button>
                 </div>
             </div>
@@ -37,6 +37,31 @@
                         <th style="text-align: center;">Acumulado Pagado</th>
                         <th style="text-align: center;">Saldo por Pagar</th>
                         <th style="text-align: center;">Inmuebles</th>
+                        <th style="text-align: center;">Monto Financiado</th>
+                        <th style="text-align: center;">Tipo de Venta</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+        <div id="div_export" style="display: none;">
+            <table>
+                <tr>
+                    <td colspan="9" style="text-align: center;">REPORTE DE VENTAS</td>
+                </tr>
+            </table>
+            <table id="table_export" border="1">
+                <thead>
+                    <tr>
+                        <th style="text-align: center;">Proyecto</th>
+                        <th style="text-align: center;">Cliente</th>
+                        <th style="text-align: center;">Moneda </th>
+                        <th style="text-align: center;">Total a Pagar</th>
+                        <th style="text-align: center;">Acumulado Pagado</th>
+                        <th style="text-align: center;">Saldo por Pagar</th>
+                        <th style="text-align: center;">Inmuebles</th>
+                        <th style="text-align: center;">Monto Financiado</th>
+                        <th style="text-align: center;">Tipo de Venta</th>
                     </tr>
                 </thead>
                 <tbody></tbody>
@@ -45,6 +70,19 @@
     </div>
 </form>
 <script>
+    $("#btn-export").click(function () {
+        destroyDataTableIfExists("table");
+        var tbody = $("#table tbody").html();
+        $("#table_export tbody").html(tbody);
+        $("#table").DataTable();
+        var tableExport = $("#div_export").html();
+        tableExport = tableExport.replace(/ /g, '%20');
+        exportHTMLToExcel(tableExport, 'REPORTE_VENTAS');
+    });
+    function changeInputsReport() {
+        $("#btn-export").hide();
+        $("#divAlertExport").show();
+    }
     $("#form").validate({
         rules: {
         },
@@ -79,29 +117,19 @@
                                 <td>`+ object.acumulado_pagado + `</td>
                                 <td>`+ object.saldo_por_pagar + `</td>
                                 <td>`+ detalle + `</td>
+                                <td>`+ object.monto_financiado + `</td>
+                                <td>`+ object.tipo_venta + `</td>
                             </tr>
                             `;
                         $("#table tbody").append(html);
                     });
 
-                    $("#btnImprimir").show();
-                    $("#divAlertImprimir").hide();
+                    $("#btn-export").show();
+                    $("#divAlertExport").hide();
                 }
                 $("#table").DataTable();
             }
         });
-    }
-    $("#btnImprimir").click(function () {
-        title = `<h1 style="text-align: center;">REPORTE DE VENTAS</h1>`;
-        body = `<table width="100%" border="1" style="border-collapse: collapse;">` + $("#table").html() + `</table>`;
-        w = window.open();
-        w.document.write(title + body);
-        w.print();
-        w.close();
-    });
-    function changeInputsReport() {
-        $("#btnImprimir").hide();
-        $("#divAlertImprimir").show();
     }
     startDatePicker();
 </script>

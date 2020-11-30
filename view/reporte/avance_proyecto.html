@@ -173,38 +173,8 @@
         tableExport = tableExport.replace("__PERIODO_TERMINO__", $("#fecha_termino").val());
 
         tableExport = tableExport.replace(/ /g, '%20');
-        exportTableToExcel(tableExport, 'REPORTE_AVANCE_PROYECTO');
+        exportHTMLToExcel(tableExport, 'REPORTE_AVANCE_PROYECTO');
     });
-    function exportTableToExcel(tableHTML, filename = '') {
-        var downloadLink;
-        var dataType = 'application/vnd.ms-excel;';
-        /* var tableSelect = document.getElementById(tableID);
-        var tableHTML = tableSelect.outerHTML.replace(/ /g, '%20'); */
-
-        // Specify file name
-        filename = filename ? filename + '.xls' : 'excel_data.xls';
-
-        // Create download link element
-        downloadLink = document.createElement("a");
-
-        document.body.appendChild(downloadLink);
-
-        if (navigator.msSaveOrOpenBlob) {
-            var blob = new Blob(['\ufeff', tableHTML], {
-                type: dataType
-            });
-            navigator.msSaveOrOpenBlob(blob, filename);
-        } else {
-            // Create a link to the file
-            downloadLink.href = 'data:' + dataType + ', <html><head><meta charset="utf-8" /></head><body>' + tableHTML + '</body></html>';
-
-            // Setting the file name
-            downloadLink.download = filename;
-
-            //triggering the function
-            downloadLink.click();
-        }
-    }
     function fillProyecto(idProyecto, callback) {
         postJSON("Proyecto_C.php", { "action": "list" }, function (data) {
             if (!validErrorResponse(data)) {
