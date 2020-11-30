@@ -37,11 +37,11 @@ if ($object->{'action'} == "list") {
             $sumProyectoTrabajoPartidaAvanceByCodigoAcumulado = $proyectoTrabajoPartidaAvance->sumByProyectoTrabajoAndLikeCodigoAcumulado($object->proyecto_trabajo_id, $objPartidaPadre["codigo"], $object->fecha_termino)[0];
 
             $precio_plan = $sumProyectoTrabajoPartida["precio_plan"];
-            $precio_avance = number_format($sumProyectoTrabajoPartidaAvanceByCodigo["precio_avance"], 2, '.', '');
-            $precio_acumulado = number_format($sumProyectoTrabajoPartidaAvanceByCodigoAcumulado["precio_acumulado"], 2, '.', '');
-            $precio_acumulado_anterior = number_format(($precio_acumulado - $precio_avance), 2, '.', '');
+            $precio_avance = number_format($sumProyectoTrabajoPartidaAvanceByCodigo["precio_avance"], 2, '.', ',');
+            $precio_acumulado = number_format($sumProyectoTrabajoPartidaAvanceByCodigoAcumulado["precio_acumulado"], 2, '.', ',');
+            $precio_acumulado_anterior = number_format(($precio_acumulado - $precio_avance), 2, '.', ',');
             $precio_presupuesto_actual = $precio_plan >= $precio_acumulado ? $precio_plan  : $precio_acumulado;
-            $precio_por_ejecutar = number_format($precio_presupuesto_actual - $precio_acumulado, 2, '.', '');
+            $precio_por_ejecutar = number_format($precio_presupuesto_actual - $precio_acumulado, 2, '.', ',');
 
             $objectReportPadre = array(
                 "id" => $objPartidaPadre["id"],
@@ -81,12 +81,12 @@ if ($object->{'action'} == "list") {
             "(1)",
             "Valor Venta",
             "",
-            number_format($total_precio_plan, 2, '.', ''),
-            number_format($total_precio_presupuesto_actual, 2, '.', ''),
-            number_format($total_precio_acumulado_anterior, 2, '.', ''),
-            number_format($total_precio_avance, 2, '.', ''),
-            number_format($total_precio_acumulado, 2, '.', ''),
-            number_format($total_precio_por_ejecutar, 2, '.', '')
+            number_format($total_precio_plan, 2, '.', ','),
+            number_format($total_precio_presupuesto_actual, 2, '.', ','),
+            number_format($total_precio_acumulado_anterior, 2, '.', ','),
+            number_format($total_precio_avance, 2, '.', ','),
+            number_format($total_precio_acumulado, 2, '.', ','),
+            number_format($total_precio_por_ejecutar, 2, '.', ',')
         );
 
         $porcentaje_amortizacion_adelanto = $proyectoTrabajo->get($object->proyecto_trabajo_id)[0]["porcentaje_amortizacion_adelanto"];
@@ -101,9 +101,9 @@ if ($object->{'action'} == "list") {
             $porcentaje_amortizacion_adelanto . " %",
             "",
             "",
-            number_format($_2_total_precio_acumulado_anterior, 2, '.', ''),
-            number_format($_2_total_precio_avance, 2, '.', ''),
-            number_format($_2_total_precio_acumulado, 2, '.', ''),
+            number_format($_2_total_precio_acumulado_anterior, 2, '.', ','),
+            number_format($_2_total_precio_avance, 2, '.', ','),
+            number_format($_2_total_precio_acumulado, 2, '.', ','),
             ""
         );
 
@@ -119,9 +119,9 @@ if ($object->{'action'} == "list") {
             $porcentaje_retencion_fondo_garantia . " %",
             "",
             "",
-            number_format($_3_total_precio_acumulado_anterior, 2, '.', ''),
-            number_format($_3_total_precio_avance, 2, '.', ''),
-            number_format($_3_total_precio_acumulado, 2, '.', ''),
+            number_format($_3_total_precio_acumulado_anterior, 2, '.', ','),
+            number_format($_3_total_precio_avance, 2, '.', ','),
+            number_format($_3_total_precio_acumulado, 2, '.', ','),
             ""
         );
 
@@ -135,11 +135,11 @@ if ($object->{'action'} == "list") {
             "(4)",
             "Sub Total (1) + (2) + (3)",
             "",
-            number_format($total_precio_plan, 2, '.', ''),
-            number_format($total_precio_presupuesto_actual, 2, '.', ''),
-            number_format($_4_total_precio_acumulado_anterior, 2, '.', ''),
-            number_format($_4_total_precio_avance, 2, '.', ''),
-            number_format($_4_total_precio_acumulado, 2, '.', ''),
+            number_format($total_precio_plan, 2, '.', ','),
+            number_format($total_precio_presupuesto_actual, 2, '.', ','),
+            number_format($_4_total_precio_acumulado_anterior, 2, '.', ','),
+            number_format($_4_total_precio_avance, 2, '.', ','),
+            number_format($_4_total_precio_acumulado, 2, '.', ','),
             ""
         );
 
@@ -154,11 +154,11 @@ if ($object->{'action'} == "list") {
             "(5)",
             "I.G.V.",
             "18.00 %",
-            number_format($_5_total_precio_plan, 2, '.', ''),
-            number_format($_5_total_precio_presupuesto_actual, 2, '.', ''),
-            number_format($_5_total_precio_acumulado_anterior, 2, '.', ''),
-            number_format($_5_total_precio_avance, 2, '.', ''),
-            number_format($_5_total_precio_acumulado, 2, '.', ''),
+            number_format($_5_total_precio_plan, 2, '.', ','),
+            number_format($_5_total_precio_presupuesto_actual, 2, '.', ','),
+            number_format($_5_total_precio_acumulado_anterior, 2, '.', ','),
+            number_format($_5_total_precio_avance, 2, '.', ','),
+            number_format($_5_total_precio_acumulado, 2, '.', ','),
             ""
         );
 
@@ -173,11 +173,11 @@ if ($object->{'action'} == "list") {
             "(6)",
             "Total (4) + (5)",
             "",
-            number_format($_6_total_precio_plan, 2, '.', ''),
-            number_format($_6_total_precio_presupuesto_actual, 2, '.', ''),
-            number_format($_6_total_precio_acumulado_anterior, 2, '.', ''),
-            number_format($_6_total_precio_avance, 2, '.', ''),
-            number_format($_6_total_precio_acumulado, 2, '.', ''),
+            number_format($_6_total_precio_plan, 2, '.', ','),
+            number_format($_6_total_precio_presupuesto_actual, 2, '.', ','),
+            number_format($_6_total_precio_acumulado_anterior, 2, '.', ','),
+            number_format($_6_total_precio_avance, 2, '.', ','),
+            number_format($_6_total_precio_acumulado, 2, '.', ','),
             ""
         );
 
@@ -192,9 +192,9 @@ if ($object->{'action'} == "list") {
             "12.00 %",
             "",
             "",
-            number_format($_7_total_precio_acumulado_anterior, 2, '.', ''),
-            number_format($_7_total_precio_avance, 2, '.', ''),
-            number_format($_7_total_precio_acumulado, 2, '.', ''),
+            number_format($_7_total_precio_acumulado_anterior, 2, '.', ','),
+            number_format($_7_total_precio_avance, 2, '.', ','),
+            number_format($_7_total_precio_acumulado, 2, '.', ','),
             ""
         );
 
@@ -209,9 +209,9 @@ if ($object->{'action'} == "list") {
             "",
             "",
             "",
-            number_format($_8_total_precio_acumulado_anterior, 2, '.', ''),
-            number_format($_8_total_precio_avance, 2, '.', ''),
-            number_format($_8_total_precio_acumulado, 2, '.', ''),
+            number_format($_8_total_precio_acumulado_anterior, 2, '.', ','),
+            number_format($_8_total_precio_avance, 2, '.', ','),
+            number_format($_8_total_precio_acumulado, 2, '.', ','),
             ""
         );
     }
@@ -270,16 +270,16 @@ function recursividadHijos($resultReport, $idProyectoTrabajoPartidaPadre, $idPro
             $sumProyectoTrabajoPartidaAvanceAcumulado = $proyectoTrabajoPartidaAvance->sumByProyectoTrabajoPartidaAcumulado($objPartidaHija["id"], $fecha_termino)[0];
 
             $precio_plan = $sumProyectoTrabajoPartida["precio_plan"];
-            $precio_avance = number_format($sumProyectoTrabajoPartidaAvanceByCodigo["precio_avance"], 2, '.', '');
-            $precio_acumulado = number_format($sumProyectoTrabajoPartidaAvanceByCodigoAcumulado["precio_acumulado"], 2, '.', '');
-            $precio_acumulado_anterior = number_format(($precio_acumulado - $precio_avance), 2, '.', '');
+            $precio_avance = number_format($sumProyectoTrabajoPartidaAvanceByCodigo["precio_avance"], 2, '.', ',');
+            $precio_acumulado = number_format($sumProyectoTrabajoPartidaAvanceByCodigoAcumulado["precio_acumulado"], 2, '.', ',');
+            $precio_acumulado_anterior = number_format(($precio_acumulado - $precio_avance), 2, '.', ',');
             $precio_presupuesto_actual = $precio_plan >= $precio_acumulado ? $precio_plan : $precio_acumulado;
-            $precio_por_ejecutar = number_format($precio_presupuesto_actual - $precio_acumulado, 2, '.', '');
+            $precio_por_ejecutar = number_format($precio_presupuesto_actual - $precio_acumulado, 2, '.', ',');
 
             $cantidad_plan = $objPartidaHija["cantidad_plan"] == "0" ? "" : $objPartidaHija["cantidad_plan"];
-            $cantidad_avance = $sumProyectoTrabajoPartidaAvance["cantidad_avance"] == "0" ? "" : number_format($sumProyectoTrabajoPartidaAvance["cantidad_avance"], 2, '.', '');
-            $cantidad_acumulada = $sumProyectoTrabajoPartidaAvanceAcumulado["cantidad_acumulada"] == "0" ? "" : number_format($sumProyectoTrabajoPartidaAvanceAcumulado["cantidad_acumulada"], 2, '.', '');
-            $cantidad_acumulada_anterior = number_format((($cantidad_acumulada === "" ? 0 : $cantidad_acumulada) - ($cantidad_avance === "" ? 0 : $cantidad_avance)), 2, '.', '');
+            $cantidad_avance = $sumProyectoTrabajoPartidaAvance["cantidad_avance"] == "0" ? "" : number_format($sumProyectoTrabajoPartidaAvance["cantidad_avance"], 2, '.', ',');
+            $cantidad_acumulada = $sumProyectoTrabajoPartidaAvanceAcumulado["cantidad_acumulada"] == "0" ? "" : number_format($sumProyectoTrabajoPartidaAvanceAcumulado["cantidad_acumulada"], 2, '.', ',');
+            $cantidad_acumulada_anterior = number_format((($cantidad_acumulada === "" ? 0 : $cantidad_acumulada) - ($cantidad_avance === "" ? 0 : $cantidad_avance)), 2, '.', ',');
             $cantidad_presupuesto_actual = $cantidad_plan >= $cantidad_acumulada ? $cantidad_plan : $cantidad_acumulada;
             $cantidad_por_ejecutar = $cantidad_plan == "" || $cantidad_acumulada == "" ? "" : $cantidad_plan - $cantidad_acumulada;
 
