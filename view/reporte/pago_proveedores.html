@@ -15,6 +15,24 @@
 <form id="form">
     <div class="kt-container kt-container--fluid kt-grid__item kt-grid__item--fluid">
         <div class="row">
+            <div class="col-sm-9">
+                <div class="form-group">
+                    <label for="persona_proveedor_id">Proveedor</label>
+                    <select class="form-control form-control-sm form-control-autocomplete" id="persona_proveedor_id" name="persona_proveedor_id">
+                    </select>
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="form-group">
+                    <label for="pagado">Pagado</label>
+                    <select class="form-control form-control-sm form-control-autocomplete" id="pagado" name="pagado">
+                        <option value="SI">SI</option>
+                        <option value="NO">NO</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="row">
             <div class="col-sm-6">
                 <div class="form-group">
                     <label for="fecha_pago_inicio">Desde</label>
@@ -62,6 +80,9 @@
 <script>
     $("#form").validate({
         rules: {
+            persona_proveedor_id: {
+                required: true
+            },
             fecha_pago_inicio: {
                 required: true,
                 maxlength: 10,
@@ -83,6 +104,25 @@
             report();
         }
     });
+    function fillPersonaByPersonaTipo(idPersona) {
+        postJSON("PersonaRol_C.php", {
+            action: "listByPersonaTipoAndRolNombre",
+            persona_tipo_id: "J",
+            rol_nombre: "PROVEEDOR",
+        }, function (data) {
+            if (!validErrorResponse(data)) {
+                $("#persona_proveedor_id").html('<option value="">Seleccione Proveedor</option>');
+                var arrayAlmacenes = JSON.parse(data);
+                arrayAlmacenes.forEach(function (object, index) {
+                    $("#persona_proveedor_id").append('<option value="' + object.id + '" data-numero_documento_identidad="' + object.numero_documento_identidad + '" data-direccion="' + object.direccion + '">' + object.nombre_1 + '</option>');
+                });
+                if (typeof idPersona !== 'undefined') {
+                    $("#persona_proveedor_id").val(idPersona);
+                }
+                startSelect2ById("persona_proveedor_id");
+            }
+        });
+    }
     function report() {
         postJSONForm("PagoProveedor_C.php", "form", function (data) {
             destroyDataTableIfExists("table");
@@ -125,5 +165,6 @@
         $("#btnImprimir").hide();
         $("#divAlertImprimir").show();
     }
+    fillPersonaByPersonaTipo();
     startDatePicker();
 </script>

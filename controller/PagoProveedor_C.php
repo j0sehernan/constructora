@@ -24,7 +24,7 @@ switch ($object->action) {
         echo (json_encode($result));
         break;
     case "reportByFechaPagoInicioTermino":
-        $result = $pagoProveedor->reportByFechaPagoInicioTermino($object->fecha_pago_inicio, $object->fecha_pago_termino);
+        $result = $pagoProveedor->reportByFechaPagoInicioTermino($object->fecha_pago_inicio, $object->fecha_pago_termino, $object->persona_proveedor_id);
         echo (json_encode($result));
         break;
     case "i":

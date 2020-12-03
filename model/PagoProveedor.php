@@ -30,10 +30,18 @@ class PagoProveedor
         return $result;
     }
 
-    function reportByFechaPagoInicioTermino($fechaPagoInicio, $fechaPagoTermino)
+    function reportByFechaPagoInicioTermino($fecha_pago_inicio, $fecha_pago_termino, $persona_proveedor_id)
     {
         $db = new DB();
-        $result = $db->query("call pago_proveedor_report_by_fecha_pago_inicio_termino('$fechaPagoInicio','$fechaPagoTermino');");
+        $result = $db->query("select pp.id, oc.codigo as orden_compra, pp.guia_remision, pp.persona_proveedor, " .
+            "cpt.nombre as comprobante_pago_tipo, comprobante_pago_codigo, " .
+            "if(fecha_pago='0000-00-00', '', date_format(fecha_pago, '%d/%m/%Y')) as fecha_pago, " .
+            "monto_total, " .
+            "pagado " .
+            "from pago_proveedor pp " .
+            "inner join orden_compra oc on pp.orden_compra_id = oc.id " .
+            "inner join comprobante_pago_tipo cpt on pp.comprobante_pago_tipo_id = cpt.codigo " .
+            "where pp.fecha_pago between if('$fecha_pago_inicio'='', null, str_to_date('$fecha_pago_inicio', '%d/%m/%Y')) and if('$fecha_pago_termino'='', null, str_to_date('$fecha_pago_termino', '%d/%m/%Y')) ");
         return $result;
     }
 
