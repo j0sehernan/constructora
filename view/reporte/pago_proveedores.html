@@ -69,6 +69,7 @@
                         <th style="text-align: center;">Código Com.</th>
                         <th style="text-align: center;">Fecha de Pago</th>
                         <th style="text-align: center;">Fecha de Emisión</th>
+                        <th style="text-align: center;">Moneda</th>
                         <th style="text-align: center;">Monto Total</th>
                         <th style="text-align: center;">Pagado</th>
                     </tr>
@@ -142,6 +143,7 @@
                                 <td>`+ object.comprobante_pago_codigo + `</td>
                                 <td>`+ object.fecha_pago + `</td>
                                 <td>`+ object.fecha_emision + `</td>
+                                <td>`+ object.moneda + `</td>
                                 <td>`+ object.monto_total + `</td>
                                 <td>`+ (object.pagado === "1" ? `SI` : `NO`) + `</td>
                             </tr>

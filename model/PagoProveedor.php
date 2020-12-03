@@ -35,10 +35,11 @@ class PagoProveedor
         $db = new DB();
         $result = $db->query("select pp.id, oc.codigo as orden_compra, pp.guia_remision, pp.persona_proveedor, " .
             "cpt.nombre as comprobante_pago_tipo, comprobante_pago_codigo, " .
-            "if(fecha_pago='0000-00-00', '', date_format(fecha_pago, '%d/%m/%Y')) as fecha_pago, " .
-            "if(fecha_emision='0000-00-00', '', date_format(fecha_emision, '%d/%m/%Y')) as fecha_emision, " .
-            "monto_total, " .
-            "pagado " .
+            "if(pp.fecha_pago='0000-00-00', '', date_format(pp.fecha_pago, '%d/%m/%Y')) as fecha_pago, " .
+            "if(pp.fecha_emision='0000-00-00', '', date_format(pp.fecha_emision, '%d/%m/%Y')) as fecha_emision, " .
+            "pp.monto_total, " .
+            "pp.pagado, " .
+            "pp.moneda " .
             "from pago_proveedor pp " .
             "inner join orden_compra oc on pp.orden_compra_id = oc.id and oc.persona_proveedor_id = $persona_proveedor_id " .
             "inner join comprobante_pago_tipo cpt on pp.comprobante_pago_tipo_id = cpt.codigo " .
