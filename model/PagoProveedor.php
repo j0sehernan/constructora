@@ -39,7 +39,7 @@ class PagoProveedor
             "monto_total, " .
             "pagado " .
             "from pago_proveedor pp " .
-            "inner join orden_compra oc on pp.orden_compra_id = oc.id " .
+            "inner join orden_compra oc on pp.orden_compra_id = oc.id and oc.persona_proveedor_id = $persona_proveedor_id " .
             "inner join comprobante_pago_tipo cpt on pp.comprobante_pago_tipo_id = cpt.codigo " .
             "where pp.fecha_pago between if('$fecha_pago_inicio'='', null, str_to_date('$fecha_pago_inicio', '%d/%m/%Y')) and if('$fecha_pago_termino'='', null, str_to_date('$fecha_pago_termino', '%d/%m/%Y')) ");
         return $result;
