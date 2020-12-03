@@ -25,6 +25,29 @@ switch ($object->action) {
         break;
     case "reportByFechaPagoInicioTermino":
         $result = $pagoProveedor->reportByFechaPagoInicioTermino($object->fecha_pago_inicio, $object->fecha_pago_termino, $object->persona_proveedor_id, $object->pagado);
+
+        $total_monto_total = 0;
+
+        foreach ($result as $row => $object) {
+            $total_monto_total += $object["monto_total"];
+        }
+
+        $objectReport = array(
+            "id" => "",
+            "orden_compra" => "TOTAL",
+            "guia_remision" => "",
+            "persona_proveedor" => "",
+            "comprobante_pago_tipo" => "",
+            "comprobante_pago_codigo" => "",
+            "fecha_pago" => "",
+            "fecha_emision" => "",
+            "monto_total" => number_format($total_monto_total, 2, '.', ','),
+            "pagado" => "",
+            "moneda" => ""
+        );
+
+        array_push($result, $objectReport);
+
         echo (json_encode($result));
         break;
     case "i":
