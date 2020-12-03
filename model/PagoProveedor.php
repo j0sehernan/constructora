@@ -30,7 +30,7 @@ class PagoProveedor
         return $result;
     }
 
-    function reportByFechaPagoInicioTermino($fecha_pago_inicio, $fecha_pago_termino, $persona_proveedor_id)
+    function reportByFechaPagoInicioTermino($fecha_pago_inicio, $fecha_pago_termino, $persona_proveedor_id, $pagado)
     {
         $db = new DB();
         $result = $db->query("select pp.id, oc.codigo as orden_compra, pp.guia_remision, pp.persona_proveedor, " .
@@ -41,7 +41,8 @@ class PagoProveedor
             "from pago_proveedor pp " .
             "inner join orden_compra oc on pp.orden_compra_id = oc.id and oc.persona_proveedor_id = $persona_proveedor_id " .
             "inner join comprobante_pago_tipo cpt on pp.comprobante_pago_tipo_id = cpt.codigo " .
-            "where pp.fecha_pago between if('$fecha_pago_inicio'='', null, str_to_date('$fecha_pago_inicio', '%d/%m/%Y')) and if('$fecha_pago_termino'='', null, str_to_date('$fecha_pago_termino', '%d/%m/%Y')) ");
+            "where pp.fecha_pago between if('$fecha_pago_inicio'='', null, str_to_date('$fecha_pago_inicio', '%d/%m/%Y')) and if('$fecha_pago_termino'='', null, str_to_date('$fecha_pago_termino', '%d/%m/%Y')) " .
+            "and pagado = $pagado");
         return $result;
     }
 
