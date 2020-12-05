@@ -52,10 +52,21 @@ class OrdenCompra
         return $result;
     }
 
-    function reportByFechaInicioAndFechaTermino($fechaInicio, $fechaTermino)
+    function reportByFechaInicioAndFechaTermino($fecha_inicio, $fecha_termino, $persona_proveedor_id)
     {
         $db = new DB();
-        $result = $db->query("call orden_compra_report_by_fecha_inicio_termino('$fechaInicio','$fechaTermino');");
+        $result = $db->query("select oc.id, " .
+            "p.nombre_1 as proveedor, " .
+            "_get_varchar_from_date(oc.fecha) as fecha, " .
+            "oc.proforma_codigo, oc.codigo, " .
+            "oc.used, " .
+            "oc.can_delete, " .
+            "oc.moneda, " .
+            "oc.total " .
+            "from orden_compra oc " .
+            "inner join persona p on oc.persona_proveedor_id = p.id " .
+            "where oc.fecha between if('$fecha_inicio'='', null, str_to_date('$fecha_inicio', '%d/%m/%Y')) and if('$fecha_termino'='', null, str_to_date('$fecha_termino', '%d/%m/%Y')) " .
+            "and oc.persona_proveedor_id = $persona_proveedor_id;");
         return $result;
     }
 

@@ -25,7 +25,28 @@ switch ($object->action) {
         echo (json_encode($result));
         break;
     case "reportByFechaInicioAndFechaTermino":
-        $result = $ordenCompra->reportByFechaInicioAndFechaTermino($object->fecha_inicio, $object->fecha_termino);
+        $result = $ordenCompra->reportByFechaInicioAndFechaTermino($object->fecha_inicio, $object->fecha_termino, $object->persona_proveedor_id);
+
+        $total_monto_total = 0;
+
+        foreach ($result as $row => $object) {
+            $total_monto_total += $object["total"];
+        }
+
+        $objectReport = array(
+            "id" => "",
+            "proveedor" => "",
+            "fecha" => "",
+            "proforma_codigo" => "",
+            "codigo" => "TOTAL",
+            "used" => "",
+            "can_delete" => "",
+            "moneda" => "",
+            "total" => number_format($total_monto_total, 2, '.', ',')
+        );
+
+        array_push($result, $objectReport);
+
         echo (json_encode($result));
         break;
     case "i":
