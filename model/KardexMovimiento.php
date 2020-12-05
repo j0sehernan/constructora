@@ -36,10 +36,43 @@ class KardexMovimiento
         return $result;
     }
 
-    function reportByAlmacenAndFechaInicioAndFechaTermino($idAlmacen, $fechaInicio, $fechaTermino)
+    function reportByAlmacenAndFechaInicioAndFechaTermino($almacen_id, $fecha_inicio, $fecha_termino)
     {
         $db = new DB();
-        $result = $db->query("call kardex_movimiento_report_by_almacen('$idAlmacen','$fechaInicio','$fechaTermino');");
+        $result = $db->query("select km.tipo_movimiento, " .
+            "p.nombre as producto, " .
+            "um.nombre as unidad_medida, " .
+            "cantidad, " .
+            "if(fecha_movimiento='0000-00-00', '', date_format(fecha_movimiento, '%d/%m/%Y')) as fecha_movimiento, " .
+            //"if(fecha_vencimiento='0000-00-00', '', date_format(fecha_vencimiento, '%d/%m/%Y')) as fecha_vencimiento, " .
+            //"if(fecha_termino='0000-00-00', '', date_format(fecha_termino, '%d/%m/%Y')) as fecha_termino, " .
+            "precio, " .
+            "ao.nombre as almacen_origen, " .
+            "pro.nombre as proyecto, " .
+            "ptp.nombre as proyecto_trabajo_partida, " .
+            "oc.codigo as orden_compra, " .
+            "cpt.nombre as comprobante_pago_tipo, " .
+            "ifnull(comprobante_pago_codigo, '') as comprobante_pago_codigo, " .
+            "per_reg_aud, " .
+            "fec_reg_aud, " .
+            "ifnull(guia_remision, '') as guia_remision, " .
+            "if(guia_remision_pagada = 1, 'SI', 'NO') as guia_remision_pagada, " .
+            "ifnull(cantidad_salida, 0), " .
+            "ifnull(ptps.nombre, '') as proyecto_trabajo_partida_salida, " .
+            "ifnull(pc_s.nombre_1, '') as contratista_salida " .
+            "from kardex_movimiento km " .
+            "inner join producto p on km.producto_id = p.id " .
+            "inner join unidad_medida um on km.unidad_medida_id = um.codigo " .
+            "left join almacen ao on km.almacen_origen_id = ao.id " .
+            "left join proyecto pro on km.proyecto_origen_id = pro.id " .
+            "left join proyecto_trabajo_partida ptp on km.proyecto_trabajo_partida_origen_id = ptp.id " .
+            "left join orden_compra oc on km.orden_compra_id = oc.id " .
+            "left join comprobante_pago_tipo cpt on km.comprobante_pago_tipo_id = cpt.codigo " .
+            "left join proyecto_trabajo_partida ptps on km.proyecto_trabajo_partida_salida_id = ptps.id " .
+            "left join proyecto_trabajo pt_s on ptps.proyecto_trabajo_id = pt_s.id " .
+            "left join persona pc_s on pt_s.persona_contratista_id = pc_s.id " .
+            "where km.almacen_id = $almacen_id " .
+            "and (km.fecha_movimiento between if('$fecha_inicio'='', null, str_to_date('$fecha_inicio', '%d/%m/%Y')) and if('$fecha_termino'='', null, str_to_date('$fecha_termino', '%d/%m/%Y')));");
         return $result;
     }
 

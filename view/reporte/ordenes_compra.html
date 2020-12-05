@@ -36,7 +36,7 @@
             </div>
         </div>
         <div id="divAlertImprimir" class="alert alert-warning" role="alert">
-            Para imprimir, primero debe generar el reporte.
+            Para exportar, primero debe generar el reporte.
         </div>
         <div class="row" style="margin-bottom: 10px;">
             <div class="col-sm-12">
@@ -168,14 +168,14 @@
             }
         });
     }
-    $("#btnImprimir").click(function () {
+    /* $("#btnImprimir").click(function () {
         title = `<h1 style="text-align: center;">REPORTE DE ORDENES DE COMPRA</h1>`;
         body = `<table width="100%" border="1" style="border-collapse: collapse;">` + $("#table").html() + `</table>`;
         w = window.open();
         w.document.write(title + body);
         w.print();
         w.close();
-    });
+    }); */
     function changeInputsReport() {
         $("#btn-export").hide();
         $("#divAlertImprimir").show();
