@@ -62,7 +62,7 @@ class OrdenCompra
             "oc.used, " .
             "oc.can_delete, " .
             "oc.moneda, " .
-            "oc.total " .
+            "ifnull(oc.total, 0.00) as total " .
             "from orden_compra oc " .
             "inner join persona p on oc.persona_proveedor_id = p.id " .
             "where oc.fecha between if('$fecha_inicio'='', null, str_to_date('$fecha_inicio', '%d/%m/%Y')) and if('$fecha_termino'='', null, str_to_date('$fecha_termino', '%d/%m/%Y')) " .
