@@ -117,6 +117,7 @@
 										<li class="kt-menu__item -menu-" id="menu-avanceProyecto"><a class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Avance de Proyecto</span></a></li>
 										<li class="kt-menu__item -menu-" id="menu-ventas"><a class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Ventas</span></a></li>
 										<li class="kt-menu__item -menu-" id="menu-pagoProveedores"><a class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Pago a Proveedores</span></a></li>
+										<li class="kt-menu__item -menu-" id="menu-reportPagoContratista"><a class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Pago a Contratistas</span></a></li>
 										<li class="kt-menu__item -menu-" id="menu-reportOrdenesCompra"><a class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Ordenes de Compra</span></a></li>
 										<li class="kt-menu__item -menu-" id="menu-reportMovimientosAlmacen"><a class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Movimientos de Almacen</span></a></li>
 									</ul>
