@@ -29,9 +29,9 @@ switch ($object->action) {
 
         $total_monto_total = 0;
 
-        foreach ($result as $row => $object) {
-            $total_monto_total += $object["total"];
-            $object["total"] = number_format($object["total"], 2, '.', ',');
+        for ($i = 0; $i < count($result); $i++) {
+            $total_monto_total += $result[$i]["total"];
+            $result[$i]["total"] = number_format($result[$i]["total"], 2, '.', ',');
         }
 
         $objectReport = array(
