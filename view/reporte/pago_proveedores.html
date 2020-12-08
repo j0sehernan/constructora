@@ -147,7 +147,7 @@
             rol_nombre: "PROVEEDOR",
         }, function (data) {
             if (!validErrorResponse(data)) {
-                $("#persona_proveedor_id").html('<option value="">Seleccione Proveedor</option>');
+                $("#persona_proveedor_id").html('<option value="TODOS">TODOS</option>');
                 var arrayAlmacenes = JSON.parse(data);
                 arrayAlmacenes.forEach(function (object, index) {
                     $("#persona_proveedor_id").append('<option value="' + object.id + '" data-numero_documento_identidad="' + object.numero_documento_identidad + '" data-direccion="' + object.direccion + '">' + object.nombre_1 + '</option>');

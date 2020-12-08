@@ -33,7 +33,8 @@ class PagoProveedor
     function reportByFechaPagoInicioTermino($fecha_pago_inicio, $fecha_pago_termino, $persona_proveedor_id, $pagado)
     {
         $db = new DB();
-        $result = $db->query("select pp.id, oc.codigo as orden_compra, pp.guia_remision, pp.persona_proveedor, " .
+
+        $query = "select pp.id, oc.codigo as orden_compra, pp.guia_remision, pp.persona_proveedor, " .
             "cpt.nombre as comprobante_pago_tipo, comprobante_pago_codigo, " .
             "if(pp.fecha_pago='0000-00-00', '', date_format(pp.fecha_pago, '%d/%m/%Y')) as fecha_pago, " .
             "if(pp.fecha_emision='0000-00-00', '', date_format(pp.fecha_emision, '%d/%m/%Y')) as fecha_emision, " .
@@ -41,10 +42,17 @@ class PagoProveedor
             "pp.pagado, " .
             "pp.moneda " .
             "from pago_proveedor pp " .
-            "inner join orden_compra oc on pp.orden_compra_id = oc.id and oc.persona_proveedor_id = $persona_proveedor_id " .
+            "inner join orden_compra oc on pp.orden_compra_id = oc.id " .
             "inner join comprobante_pago_tipo cpt on pp.comprobante_pago_tipo_id = cpt.codigo " .
             "where pp.fecha_pago between if('$fecha_pago_inicio'='', null, str_to_date('$fecha_pago_inicio', '%d/%m/%Y')) and if('$fecha_pago_termino'='', null, str_to_date('$fecha_pago_termino', '%d/%m/%Y')) " .
-            "and pagado = $pagado");
+            "and pagado = $pagado ";
+
+        if ($persona_proveedor_id !== "TODOS") {
+            $query .= "and oc.persona_proveedor_id = $persona_proveedor_id;";
+        }
+
+        $result = $db->query($query);
+
         return $result;
     }
 
