@@ -32,7 +32,7 @@ if ($object->{'action'} == "listByProyectoTrabajo") {
     $count = $count[0]['cantidad'];
     if ($count == 0) {
         $idProyectoTrabajoPartida = $object->{'proyecto_trabajo_partida_id'};
-        $result = $proyectoTrabajoPartida->insert($object->{'codigo'}, $object->{'nombre'}, $object->{'unidad_medida_id'}, $object->{'precio_unitario_plan'}, $object->{'cantidad_plan'}, $object->{'precio_plan'}, $object->{'fecha_inicio_plan'}, $object->{'fecha_termino_plan'}, $object->{'proyecto_trabajo_id'}, $idProyectoTrabajoPartida);
+        $result = $proyectoTrabajoPartida->insert($object->{'codigo'}, $object->{'nombre'}, $object->{'unidad_medida_id'}, $object->{'precio_unitario_plan'}, $object->{'cantidad_plan'}, $object->{'precio_plan'}, $object->cantidad_actual, $object->precio_actual, $object->{'fecha_inicio_plan'}, $object->{'fecha_termino_plan'}, $object->{'proyecto_trabajo_id'}, $idProyectoTrabajoPartida);
         if ($result) {
             $canDeleteTrabajo = $proyectoTrabajo->getCanDelete($object->proyecto_trabajo_id);
             $canDeleteTrabajo = $canDeleteTrabajo[0]["can_delete"];
@@ -89,7 +89,7 @@ if ($object->{'action'} == "listByProyectoTrabajo") {
     $count = $proyectoTrabajoPartida->countByIdAndProyectoTrabajoAndCodigo($object->{'id'}, $object->{'proyecto_trabajo_id'}, $object->{'codigo'});
     $count = $count[0]['cantidad'];
     if ($count == 0) {
-        $result = $proyectoTrabajoPartida->update($object->{'id'}, $object->{'codigo'}, $object->{'nombre'}, $object->{'unidad_medida_id'}, $object->{'precio_unitario_plan'}, $object->{'cantidad_plan'}, $object->{'precio_plan'}, $object->{'fecha_inicio_plan'}, $object->{'fecha_termino_plan'});
+        $result = $proyectoTrabajoPartida->update($object->{'id'}, $object->{'codigo'}, $object->{'nombre'}, $object->{'unidad_medida_id'}, $object->{'precio_unitario_plan'}, $object->{'cantidad_plan'}, $object->{'precio_plan'}, $object->cantidad_actual, $object->precio_actual, $object->{'fecha_inicio_plan'}, $object->{'fecha_termino_plan'});
         if ($result) {
             $resultProyectoTrabajo = $proyectoTrabajo->generateCantidadAdelanto($object->proyecto_trabajo_id);
 

@@ -4,8 +4,7 @@
         <div class="col-sm-4">
             <div class="form-group">
                 <label for="codigo">Código</label>
-                <input type="text" class="form-control form-control-sm" id="codigo" name="codigo" placeholder="Código"
-                    maxlength="100">
+                <input type="text" class="form-control form-control-sm" id="codigo" name="codigo" placeholder="Código" maxlength="100">
             </div>
         </div>
         <div class="col-sm-8">
@@ -19,31 +18,26 @@
         <div class="col-sm-3">
             <div class="form-group">
                 <label for="unidad_medida_id">Unidad de Medida</label>
-                <select class="form-control form-control-sm form-control-autocomplete" id="unidad_medida_id"
-                    name="unidad_medida_id">
+                <select class="form-control form-control-sm form-control-autocomplete" id="unidad_medida_id" name="unidad_medida_id">
                 </select>
             </div>
         </div>
         <div class="col-sm-3">
             <div class="form-group">
                 <label for="precio_unitario_plan">Precio Unitario Plan</label>
-                <input type="text" class="form-control form-control-sm form-control-decimal" id="precio_unitario_plan"
-                    name="precio_unitario_plan" placeholder="Precio Unitario Plan" maxlength="21"
-                    onchange="changeGenerateValues();">
+                <input type="text" class="form-control form-control-sm form-control-decimal" id="precio_unitario_plan" name="precio_unitario_plan" placeholder="Precio Unitario Plan" maxlength="21" onchange="changeGenerateValues();">
             </div>
         </div>
         <div class="col-sm-3">
             <div class="form-group">
-                <label for="cantidad_plan">Cantidad Plan</label>
-                <input type="text" class="form-control form-control-sm form-control-decimal" id="cantidad_plan"
-                    name="cantidad_plan" placeholder="Cantidad Plan" maxlength="21" onchange="changeGenerateValues();">
+                <label for="cantidad_plan">Cantidad Original</label>
+                <input type="text" class="form-control form-control-sm form-control-decimal" id="cantidad_plan" name="cantidad_plan" placeholder="Cantidad Plan" maxlength="21" onchange="changeGenerateValues();">
             </div>
         </div>
         <div class="col-sm-3">
             <div class="form-group">
-                <label for="precio_plan">Precio Plan</label>
-                <input type="text" class="form-control form-control-sm form-control-decimal" id="precio_plan"
-                    name="precio_plan" placeholder="Precio Plan" maxlength="21" readonly>
+                <label for="precio_plan">Precio Original</label>
+                <input type="text" class="form-control form-control-sm form-control-decimal" id="precio_plan" name="precio_plan" placeholder="Precio Plan" maxlength="21" readonly>
                 <input type="hidden" id="precio_plan_anterior" name="precio_plan_anterior">
             </div>
         </div>
@@ -52,29 +46,40 @@
         <div class="col-sm-3">
             <div class="form-group">
                 <label for="fecha_inicio_plan">Fecha Inicio Plan</label>
-                <input type="text" class="form-control form-control-sm form-control-date" id="fecha_inicio_plan"
-                    name="fecha_inicio_plan" placeholder="Fecha Inicio Plan" maxlength="10">
+                <input type="text" class="form-control form-control-sm form-control-date" id="fecha_inicio_plan" name="fecha_inicio_plan" placeholder="Fecha Inicio Plan" maxlength="10">
             </div>
         </div>
         <div class="col-sm-3">
             <div class="form-group">
                 <label for="fecha_termino_plan">Fecha Término Plan</label>
-                <input type="text" class="form-control form-control-sm form-control-date" id="fecha_termino_plan"
-                    name="fecha_termino_plan" placeholder="Fecha Término Plan" maxlength="10">
+                <input type="text" class="form-control form-control-sm form-control-date" id="fecha_termino_plan" name="fecha_termino_plan" placeholder="Fecha Término Plan" maxlength="10">
             </div>
         </div>
         <div class="col-sm-3">
             <div class="form-group">
+                <label for="cantidad_actual">Cantidad Actual</label>
+                <input type="text" class="form-control form-control-sm form-control-decimal" id="cantidad_actual" name="cantidad_actual" placeholder="Cantidad Actual" maxlength="21" onchange="changeGenerateValuesActual();">
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <div class="form-group">
+                <label for="precio_actual">Precio Actual</label>
+                <input type="text" class="form-control form-control-sm form-control-decimal" id="precio_actual" name="precio_actual" placeholder="Precio Actual" maxlength="21" readonly>
+                <input type="hidden" id="precio_plan_anterior" name="precio_plan_anterior">
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-3">
+            <div class="form-group">
                 <label for="fecha_inicio_real">Fecha Inicio Real</label>
-                <input type="text" class="form-control form-control-sm form-control-date" id="fecha_inicio_real"
-                    name="fecha_inicio_real" placeholder="Fecha Inicio Real" maxlength="10" disabled>
+                <input type="text" class="form-control form-control-sm form-control-date" id="fecha_inicio_real" name="fecha_inicio_real" placeholder="Fecha Inicio Real" maxlength="10" disabled>
             </div>
         </div>
         <div class="col-sm-3">
             <div class="form-group">
                 <label for="fecha_termino_real">Fecha Término Real</label>
-                <input type="text" class="form-control form-control-sm form-control-date" id="fecha_termino_real"
-                    name="fecha_termino_real" placeholder="Fecha Término Real" maxlength="10" disabled>
+                <input type="text" class="form-control form-control-sm form-control-date" id="fecha_termino_real" name="fecha_termino_real" placeholder="Fecha Término Real" maxlength="10" disabled>
             </div>
         </div>
     </div>
@@ -117,6 +122,15 @@
         }
         $("#precio_plan").val(precioPlan);
     }
+    function changeGenerateValuesActual() {
+        var precioUnitarioPlan = $("#precio_unitario_plan").val();
+        var cantidadActual = $("#cantidad_actual").val();
+        var precioActual = Number(precioUnitarioPlan) * Number(cantidadActual);
+        if (isNaN(precioActual) || precioActual == null || (precioUnitarioPlan == "" && cantidadActual == "")) {
+            precioActual = "";
+        }
+        $("#precio_actual").val(precioActual);
+    }
     function getProyectoTrabajoPartida() {
         postJSON("ProyectoTrabajoPartida_C.php", { action: "get", id: $("#formProyectoTrabajoPartida #id").val() }, function (data) {
             if (!validErrorResponse(data)) {
@@ -127,6 +141,8 @@
                 $("#formProyectoTrabajoPartida #precio_unitario_plan").val(dataResponse.precio_unitario_plan);
                 $("#formProyectoTrabajoPartida #cantidad_plan").val(dataResponse.cantidad_plan);
                 $("#formProyectoTrabajoPartida #precio_plan").val(dataResponse.precio_plan);
+                $("#formProyectoTrabajoPartida #cantidad_actual").val(dataResponse.cantidad_actual);
+                $("#formProyectoTrabajoPartida #precio_actual").val(dataResponse.precio_actual);
                 $("#formProyectoTrabajoPartida #cantidad_real_acumulada").val(dataResponse.cantidad_real_acumulada);
                 $("#formProyectoTrabajoPartida #precio_real_acumulado").val(dataResponse.precio_real_acumulado);
                 $("#formProyectoTrabajoPartida #precio_plan_anterior").val(dataResponse.precio_plan);
@@ -166,6 +182,14 @@
                 min: 0.1
             },
             cantidad_plan: {
+                required: function () {
+                    return $("#unidad_medida_id").val() != "" || $("#precio_unitario_plan").val() != "" ? true : false;
+                },
+                maxlength: 21,
+                number: true,
+                min: 0.0
+            },
+            cantidad_actual: {
                 required: function () {
                     return $("#unidad_medida_id").val() != "" || $("#precio_unitario_plan").val() != "" ? true : false;
                 },

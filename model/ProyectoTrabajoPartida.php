@@ -88,7 +88,17 @@ class ProyectoTrabajoPartida
     function get($id)
     {
         $db = new DB();
-        $result = $db->query("call proyecto_trabajo_partida_get('$id');");
+        $result = $db->query("select codigo, nombre, unidad_medida_id, precio_unitario_plan, " .
+            "cantidad_plan, precio_plan, " .
+            "cantidad_actual, precio_actual, " .
+            "cantidad_real_acumulada, precio_real_acumulado, " .
+            "if(fecha_inicio_plan='0000-00-00', '', date_format(fecha_inicio_plan, '%d/%m/%Y')) as fecha_inicio_plan, " .
+            "if(fecha_termino_plan='0000-00-00', '', date_format(fecha_termino_plan, '%d/%m/%Y')) as fecha_termino_plan, " .
+            "if(fecha_inicio_real='0000-00-00', '', date_format(fecha_inicio_real, '%d/%m/%Y')) as fecha_inicio_real, " .
+            "if(fecha_termino_real='0000-00-00', '', date_format(fecha_termino_real, '%d/%m/%Y')) as fecha_termino_real, " .
+            "can_delete " .
+            "from proyecto_trabajo_partida " .
+            "where id = $id;");
         return $result;
     }
 
@@ -106,19 +116,19 @@ class ProyectoTrabajoPartida
         return $result;
     }
 
-    function insert($codigo, $nombre, $idUnidadMedida, $precioUnitarioPlan, $cantidadPlan, $precioPlan, $fechaInicioPlan, $fechaTerminoPlan, $idProyectoTrabajo, $idProyectoTrabajoPartida)
+    function insert($codigo, $nombre, $idUnidadMedida, $precioUnitarioPlan, $cantidadPlan, $precioPlan, $cantidad_actual, $precio_actual, $fechaInicioPlan, $fechaTerminoPlan, $idProyectoTrabajo, $idProyectoTrabajoPartida)
     {
         $db = new DB();
         $nombre = str_replace("'", "\'", $nombre);
-        $result = $db->executeWithReturn("call proyecto_trabajo_partida_i('$codigo','$nombre','$idUnidadMedida','$precioUnitarioPlan','$cantidadPlan','$precioPlan','$fechaInicioPlan','$fechaTerminoPlan','$idProyectoTrabajo','$idProyectoTrabajoPartida');");
+        $result = $db->executeWithReturn("call proyecto_trabajo_partida_i('$codigo','$nombre','$idUnidadMedida','$precioUnitarioPlan','$cantidadPlan','$precioPlan','$cantidad_actual','$precio_actual','$fechaInicioPlan','$fechaTerminoPlan','$idProyectoTrabajo','$idProyectoTrabajoPartida');");
         return $result;
     }
 
-    function update($id, $codigo, $nombre, $idUnidadMedida, $precioUnitarioPlan, $cantidadPlan, $precioPlan, $fechaInicioPlan, $fechaTerminoPlan)
+    function update($id, $codigo, $nombre, $idUnidadMedida, $precioUnitarioPlan, $cantidadPlan, $precioPlan, $cantidad_actual, $precio_actual, $fechaInicioPlan, $fechaTerminoPlan)
     {
         $db = new DB();
         $nombre = str_replace("'", "\'", $nombre);
-        $result = $db->executeWithReturn("call proyecto_trabajo_partida_u('$id','$codigo','$nombre','$idUnidadMedida','$precioUnitarioPlan','$cantidadPlan','$precioPlan','$fechaInicioPlan','$fechaTerminoPlan');");
+        $result = $db->executeWithReturn("call proyecto_trabajo_partida_u('$id','$codigo','$nombre','$idUnidadMedida','$precioUnitarioPlan','$cantidadPlan','$precioPlan','$cantidad_actual','$precio_actual','$fechaInicioPlan','$fechaTerminoPlan');");
         return $result;
     }
 
