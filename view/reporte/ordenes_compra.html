@@ -42,7 +42,7 @@
             <div class="col-sm-12">
                 <div style="text-align: right;">
                     <input type="hidden" id="action" name="action" value="reportByFechaInicioAndFechaTermino">
-                    <button type="button" id="btn-export" class="btn btn-outline-info btn-sm" style="display: none;"><i class="fa fa-print"></i> Imprimir</button>
+                    <button type="button" id="btn-export" class="btn btn-outline-info btn-sm" style="display: none;"><i class="fa fa-print"></i> Exportar</button>
                     <!-- <button type="button" id="btnImprimir" class="btn btn-outline-info btn-sm" style="display: none;"><i class="fa fa-print"></i> Imprimir</button> -->
                     <button type="submit" id="btnGenerar" class="btn btn-success btn-sm"><i class="la la-save"></i> Generar</button>
                 </div>
@@ -156,7 +156,7 @@
             rol_nombre: "PROVEEDOR",
         }, function (data) {
             if (!validErrorResponse(data)) {
-                $("#persona_proveedor_id").html('<option value="">Seleccione Proveedor</option>');
+                $("#persona_proveedor_id").html('<option value="TODOS">TODOS</option>');
                 var arrayAlmacenes = JSON.parse(data);
                 arrayAlmacenes.forEach(function (object, index) {
                     $("#persona_proveedor_id").append('<option value="' + object.id + '" data-numero_documento_identidad="' + object.numero_documento_identidad + '" data-direccion="' + object.direccion + '">' + object.nombre_1 + '</option>');

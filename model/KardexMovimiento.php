@@ -36,7 +36,7 @@ class KardexMovimiento
         return $result;
     }
 
-    function reportByAlmacenAndFechaInicioAndFechaTermino($almacen_id, $fecha_inicio, $fecha_termino)
+    function reportByAlmacenAndFechaInicioAndFechaTermino($almacen_id, $producto_id, $fecha_inicio, $fecha_termino)
     {
         $db = new DB();
         $result = $db->query("select km.tipo_movimiento, " .
@@ -71,7 +71,7 @@ class KardexMovimiento
             "left join proyecto_trabajo_partida ptps on km.proyecto_trabajo_partida_salida_id = ptps.id " .
             "left join proyecto_trabajo pt_s on ptps.proyecto_trabajo_id = pt_s.id " .
             "left join persona pc_s on pt_s.persona_contratista_id = pc_s.id " .
-            "where km.almacen_id = $almacen_id " .
+            "where km.almacen_id = $almacen_id and km.producto_id = $producto_id " .
             "and (km.fecha_movimiento between if('$fecha_inicio'='', null, str_to_date('$fecha_inicio', '%d/%m/%Y')) and if('$fecha_termino'='', null, str_to_date('$fecha_termino', '%d/%m/%Y')));");
         return $result;
     }

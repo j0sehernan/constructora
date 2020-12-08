@@ -55,7 +55,8 @@ class OrdenCompra
     function reportByFechaInicioAndFechaTermino($fecha_inicio, $fecha_termino, $persona_proveedor_id)
     {
         $db = new DB();
-        $result = $db->query("select oc.id, " .
+
+        $query = "select oc.id, " .
             "p.nombre_1 as proveedor, " .
             "if(oc.fecha='0000-00-00', '', date_format(oc.fecha, '%d/%m/%Y')) as fecha, " .
             "oc.proforma_codigo, oc.codigo, " .
@@ -65,8 +66,14 @@ class OrdenCompra
             "ifnull(oc.total, 0.00) as total " .
             "from orden_compra oc " .
             "inner join persona p on oc.persona_proveedor_id = p.id " .
-            "where oc.fecha between if('$fecha_inicio'='', null, str_to_date('$fecha_inicio', '%d/%m/%Y')) and if('$fecha_termino'='', null, str_to_date('$fecha_termino', '%d/%m/%Y')) " .
-            "and oc.persona_proveedor_id = $persona_proveedor_id;");
+            "where oc.fecha between if('$fecha_inicio'='', null, str_to_date('$fecha_inicio', '%d/%m/%Y')) and if('$fecha_termino'='', null, str_to_date('$fecha_termino', '%d/%m/%Y')) ";
+
+        if ($persona_proveedor_id !== "TODOS") {
+            $query .= "and oc.persona_proveedor_id = $persona_proveedor_id;";
+        }
+
+        $result = $db->query($query);
+
         return $result;
     }
 
