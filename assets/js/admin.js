@@ -143,7 +143,7 @@ function showAlerts() {
                                                     <div class="kt-notification__item-details">
                                                         <div class="kt-notification__item-title">
                                                             El pago al proveedor <strong>(` + object.persona_proveedor + `)</strong>
-                                                            Para la guía de remisión <strong>` + object.guia_remision + `</strong>
+                                                            Para el comprobante <strong>` + object.comprobante_pago_codigo + `</strong>
                                                             se vence en 8 días o menos.
                                                         </div>
                                                         <div class="kt-notification__item-time">

@@ -19,7 +19,7 @@ class PagoProveedor
             "if(fecha_emision='0000-00-00', '', date_format(fecha_emision, '%d/%m/%Y')) as fecha_emision, " .
             "monto_total, moneda " .
             "from pago_proveedor " .
-            "where adddate(curdate(), 8) >= fecha_pago");
+            "where adddate(curdate(), 8) >= fecha_pago and pagado = 0; ");
         return $result;
     }
 
