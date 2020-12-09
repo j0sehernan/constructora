@@ -15,10 +15,35 @@ class ProyectoVenta
             "ifnull(pe.apellido_materno, '') " .
             ") as cliente, " .
             "v.moneda, v.total_a_pagar as total_a_pagar, v.acumulado_pagado as acumulado_pagado, v.saldo_por_pagar as saldo_por_pagar, " .
-            "ifnull(v.monto_financiado, 0) as monto_financiado, ifnull(v.tipo_venta, '') as tipo_venta ".
+            "ifnull(v.monto_financiado, 0) as monto_financiado, ifnull(v.tipo_venta, '') as tipo_venta " .
             "from proyecto_venta v " .
             "inner join proyecto pr on v.proyecto_id = pr.id " .
             "inner join persona pe on v.persona_cliente_id = pe.id;");
+        return $result;
+    }
+
+    function listByProyecto($proyecto_id)
+    {
+        $db = new DB();
+
+        $query = "select v.id, pr.nombre as proyecto, " .
+            "concat( " .
+            "ifnull(pe.nombre_1, ''), ' ', " .
+            "ifnull(pe.nombre_2, ''), ' ', " .
+            "ifnull(pe.apellido_paterno, ''), ' ', " .
+            "ifnull(pe.apellido_materno, '') " .
+            ") as cliente, " .
+            "v.moneda, v.total_a_pagar as total_a_pagar, v.acumulado_pagado as acumulado_pagado, v.saldo_por_pagar as saldo_por_pagar, " .
+            "ifnull(v.monto_financiado, 0) as monto_financiado, ifnull(v.tipo_venta, '') as tipo_venta " .
+            "from proyecto_venta v " .
+            "inner join proyecto pr on v.proyecto_id = pr.id " .
+            "inner join persona pe on v.persona_cliente_id = pe.id ";
+
+        if ($proyecto_id !== "TODOS") {
+            $query .= "where v.proyecto_id = $proyecto_id;";
+        }
+
+        $result = $db->query($query);
         return $result;
     }
 

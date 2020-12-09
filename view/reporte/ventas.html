@@ -14,6 +14,15 @@
 </div>
 <form id="form">
     <div class="kt-container kt-container--fluid kt-grid__item kt-grid__item--fluid">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="form-group">
+                    <label for="proyecto_id">Proyecto</label>
+                    <select class="form-control form-control-sm form-control-autocomplete" id="proyecto_id" name="proyecto_id" onchange="fillProyectoTrabajo(); changeInputsReport();">
+                    </select>
+                </div>
+            </div>
+        </div>
         <div id="divAlertExport" class="alert alert-warning" role="alert">
             Para exportar, primero debe generar el reporte.
         </div>
@@ -70,6 +79,22 @@
     </div>
 </form>
 <script>
+    function fillProyecto(idProyecto, callback) {
+        postJSON("Proyecto_C.php", { "action": "list" }, function (data) {
+            if (!validErrorResponse(data)) {
+                $("#proyecto_id").html('<option value="TODOS">TODOS</option>');
+                var arrayProyectos = JSON.parse(data);
+                arrayProyectos.forEach(function (object, index) {
+                    $("#proyecto_id").append('<option value="' + object.id + '">' + object.nombre + '</option>');
+                });
+                if (typeof idProyecto !== 'undefined') {
+                    $("#proyecto_id").val(idProyecto);
+                }
+                startSelect2ById("proyecto_id");
+                if (typeof callback !== 'undefined') callback();
+            }
+        });
+    }
     $("#btn-export").click(function () {
         destroyDataTableIfExists("table");
         var tbody = $("#table tbody").html();
@@ -91,7 +116,7 @@
         }
     });
     function report() {
-        postJSON("ProyectoVenta_C.php", { "action": "report_by_proyecto_venta" }, function (data) {
+        postJSON("ProyectoVenta_C.php", { "action": "report_by_proyecto_venta", proyecto_id: $("#proyecto_id").val() }, function (data) {
             destroyDataTableIfExists("table");
             $("#table tbody").html("");
             if (!validErrorResponse(data)) {
@@ -131,5 +156,6 @@
             }
         });
     }
+    fillProyecto();
     startDatePicker();
 </script>

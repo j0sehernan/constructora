@@ -14,7 +14,7 @@ switch ($object->action) {
         echo (json_encode($result));
         break;
     case "report_by_proyecto_venta":
-        $result = $proyectoVenta->list();
+        $result = $proyectoVenta->listByProyecto($object->proyecto_id);
 
         $total_total_a_pagar = 0;
         $total_acumulado_a_pagar = 0;
