@@ -4,6 +4,7 @@
 @include_once("../model/ProyectoTrabajo.php");
 @include_once("../model/ProyectoTrabajoPartida.php");
 @include_once("../model/ProyectoTrabajoPartidaAvance.php");
+@include_once("../model/PagoContratista.php");
 
 $json = file_get_contents(_Configuration::$CONFIGURATION_QUERY_PARAMS);
 $object = json_decode($json);
@@ -11,6 +12,7 @@ $proyecto = new Proyecto();
 $proyectoTrabajo = new ProyectoTrabajo();
 $proyectoTrabajoPartida = new ProyectoTrabajoPartida();
 $proyectoTrabajoPartidaAvance = new ProyectoTrabajoPartidaAvance();
+$pagoContratista = new PagoContratista();
 
 if ($object->{'action'} == "list") {
     $result = $proyecto->list();
@@ -240,20 +242,41 @@ if ($object->{'action'} == "list") {
             ""
         );
 
-        $_8_total_precio_acumulado_anterior = (float)$_6_total_precio_acumulado_anterior + (float)$_7_total_precio_acumulado_anterior;
-        $_8_total_precio_avance = (float)$_6_total_precio_avance + (float)$_7_total_precio_avance;
-        $_8_total_precio_acumulado = (float)$_6_total_precio_acumulado + (float)$_7_total_precio_acumulado;
+        $cantidad_adelanto = $proyectoTrabajo->get($object->proyecto_trabajo_id)[0]["cantidad_adelanto"];
+        $descuento_adelanto_actual = $pagoContratista->sumActualPeriodByProyectoTrabajo($object->proyecto_trabajo_id, $object->fecha_inicio, $object->fecha_termino)[0]["descuento_adelanto_actual"];
+        $descuento_adelanto_acumulado = $pagoContratista->sumAcumuladoByProyectoTrabajo($object->proyecto_trabajo_id, $object->fecha_termino)[0]["descuento_adelanto_acumulado"];
+        $_8_total_precio_acumulado_anterior = (float)$descuento_adelanto_acumulado - (float)$descuento_adelanto_actual * -1;
+        $_8_total_precio_avance = (float)$descuento_adelanto_actual * -1;
+        $_8_total_precio_acumulado = (float)$descuento_adelanto_acumulado * -1;
+        $descuento_por_ejecutar = (float)$cantidad_adelanto - (float)$descuento_adelanto_acumulado;
 
         $resultReport = addRowToReport(
             $resultReport,
             "(8)",
-            "Neto a Pagar (6) + (7)",
+            "Descuento por adelanto",
             "",
-            "",
+            number_format($cantidad_adelanto, 2, '.', ','),
             "",
             number_format($_8_total_precio_acumulado_anterior, 2, '.', ','),
             number_format($_8_total_precio_avance, 2, '.', ','),
             number_format($_8_total_precio_acumulado, 2, '.', ','),
+            number_format($descuento_por_ejecutar, 2, '.', ',')
+        );
+
+        $_9_total_precio_acumulado_anterior = (float)$_6_total_precio_acumulado_anterior + (float)$_7_total_precio_acumulado_anterior + (float)$_8_total_precio_acumulado_anterior;
+        $_9_total_precio_avance = (float)$_6_total_precio_avance + (float)$_7_total_precio_avance + (float)$_8_total_precio_avance;
+        $_9_total_precio_acumulado = (float)$_6_total_precio_acumulado + (float)$_7_total_precio_acumulado + (float)$_8_total_precio_acumulado;
+
+        $resultReport = addRowToReport(
+            $resultReport,
+            "(9)",
+            "Neto a Pagar (6) + (7) + (8)",
+            "",
+            "",
+            "",
+            number_format($_9_total_precio_acumulado_anterior, 2, '.', ','),
+            number_format($_9_total_precio_avance, 2, '.', ','),
+            number_format($_9_total_precio_acumulado, 2, '.', ','),
             ""
         );
     }

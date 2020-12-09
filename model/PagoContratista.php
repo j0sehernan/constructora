@@ -36,6 +36,27 @@ class PagoContratista
         return $result;
     }
 
+    function sumActualPeriodByProyectoTrabajo($proyecto_trabajo_id, $fecha_inicio, $fecha_termino)
+    {
+        $db = new DB();
+        $result = $db->query("select ifnull(sum(ifnull(descuento_adelanto, 0)), 0) as descuento_adelanto_actual " .
+            "from pago_contratista pc " .
+            "where proyecto_trabajo_id = $proyecto_trabajo_id " .
+            "and (fecha_inicio between str_to_date('$fecha_inicio', '%d/%m/%Y') and str_to_date('$fecha_termino', '%d/%m/%Y')) " .
+            "and (fecha_termino between str_to_date('$fecha_inicio', '%d/%m/%Y') and str_to_date('$fecha_termino', '%d/%m/%Y'));");
+        return $result;
+    }
+
+    function sumAcumuladoByProyectoTrabajo($proyecto_trabajo_id, $fecha_termino)
+    {
+        $db = new DB();
+        $result = $db->query("select ifnull(sum(ifnull(descuento_adelanto, 0)), 0) as descuento_adelanto_acumulado " .
+            "from pago_contratista pc " .
+            "where proyecto_trabajo_id = $proyecto_trabajo_id " .
+            "and fecha_termino <= str_to_date('$fecha_termino', '%d/%m/%Y');");
+        return $result;
+    }
+
     function countByProyectoTrabajo($idProyectoTrabajo)
     {
         $db = new DB();
