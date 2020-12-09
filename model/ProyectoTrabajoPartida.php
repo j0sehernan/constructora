@@ -3,10 +3,27 @@
 
 class ProyectoTrabajoPartida
 {
-    function listByProyectoTrabajo($idProyectoTrabajo)
+    function listByProyectoTrabajo($proyecto_trabajo_id)
     {
         $db = new DB();
-        $result = $db->query("call proyecto_trabajo_partida_list_by_proyecto_trabajo('$idProyectoTrabajo');");
+        $result = $db->query("select ptp.id, ptp.codigo, ptp.nombre, ptp.unidad_medida_id, um.nombre as unidad_medida, " .
+            "ptp.precio_unitario_plan, " .
+            "ptp.cantidad_plan, ptp.precio_plan, " .
+            "ptp.cantidad_actual, ptp.precio_actual, " .
+            "ptp.cantidad_real_acumulada, ptp.precio_real_acumulado, " .
+            "ptp.cantidad_por_ejecutar, ptp.precio_por_ejecutar, " .
+            "ptp.proyecto_trabajo_partida_id, " .
+            "ifnull(if(ptp.fecha_inicio_plan='0000-00-00', '', date_format(ptp.fecha_inicio_plan, '%d/%m/%Y')), '') as fecha_inicio_plan, " .
+            "ifnull(if(ptp.fecha_termino_plan='0000-00-00', '', date_format(ptp.fecha_termino_plan, '%d/%m/%Y')), '') as fecha_termino_plan, " .
+            "ifnull(if(ptp.fecha_inicio_real='0000-00-00', '', date_format(ptp.fecha_inicio_real, '%d/%m/%Y')), '') as fecha_inicio_real, " .
+            "ifnull(if(ptp.fecha_termino_real='0000-00-00', '', date_format(ptp.fecha_termino_real, '%d/%m/%Y')), '') as fecha_termino_real, " .
+            "ptp_padre.codigo as codigo_padre, " .
+            "ptp.can_delete as can_delete " .
+            "from proyecto_trabajo_partida ptp " .
+            "left join proyecto_trabajo_partida ptp_padre on ptp.proyecto_trabajo_partida_id = ptp_padre.id " .
+            "left join unidad_medida um on ptp.unidad_medida_id = um.codigo " .
+            "where ptp.proyecto_trabajo_id = '$proyecto_trabajo_id' " .
+            "order by ptp.codigo asc;");
         return $result;
     }
 
@@ -67,6 +84,7 @@ class ProyectoTrabajoPartida
             "um.nombre as unidad_medida, " .
             "ptp.precio_unitario_plan, " .
             "ptp.cantidad_plan, ptp.precio_plan, " .
+            "ifnull(ptp.cantidad_actual, 0) as cantidad_actual, ifnull(ptp.precio_actual, 0) as precio_actual, " .
             "ptp.proyecto_trabajo_partida_id, " .
             "ptp.proyecto_trabajo_id " .
             "from proyecto_trabajo_partida ptp " .
@@ -79,7 +97,8 @@ class ProyectoTrabajoPartida
     function sumProyectoTrabajoAndLikeCodigo($proyecto_trabajo_id, $codigo)
     {
         $db = new DB();
-        $result = $db->query("select ifnull(sum(ifnull(precio_plan, 0)), 0) as precio_plan " .
+        $result = $db->query("select ifnull(sum(ifnull(precio_plan, 0)), 0) as precio_plan, " .
+            "ifnull(sum(ifnull(precio_actual, 0)), 0) as precio_actual " .
             "from proyecto_trabajo_partida ptp " .
             "where ptp.proyecto_trabajo_id = $proyecto_trabajo_id and ptp.codigo like '$codigo%';");
         return $result;

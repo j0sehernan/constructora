@@ -239,6 +239,14 @@
                 if (Number(precioPlan) != 0) {
                     precioPlan = Number(precioPlan).toFixed(2);
                 }
+                var cantidad_actual = $("#formProyectoTrabajoPartida #cantidad_actual").val();
+                if (Number(cantidad_actual) != 0) {
+                    cantidad_actual = Number(cantidad_actual).toFixed(2);
+                }
+                var precio_actual = $("#formProyectoTrabajoPartida #precio_actual").val();
+                if (Number(precio_actual) != 0) {
+                    precio_actual = Number(precio_actual).toFixed(2);
+                }
                 var cantidadRealAcumulada = $("#formProyectoTrabajoPartida #cantidad_real_acumulada").val();
                 var precioRealAcumulado = $("#formProyectoTrabajoPartida #precio_real_acumulado").val();
                 var precioPlanAnterior = $("#formProyectoTrabajoPartida #precio_plan_anterior").val();
@@ -250,7 +258,7 @@
                 var fechaTerminoReal = $("#fecha_termino_real").val();
                 var html = "";
                 if (action === "i") {
-                    html = createRowPartidaHTML(dataResponse.id, codigo, nombre, unidadMedida, precioUnitarioPlan, cantidadPlan, precioPlan, "", "", "", "", idPadre, codigoPadre, true, fechaInicioPlan, fechaTerminoPlan, fechaInicioReal, fechaTerminoReal);
+                    html = createRowPartidaHTML(dataResponse.id, codigo, nombre, unidadMedida, precioUnitarioPlan, cantidadPlan, precioPlan, cantidad_actual, precio_actual, "", "", "", "", idPadre, codigoPadre, true, fechaInicioPlan, fechaTerminoPlan, fechaInicioReal, fechaTerminoReal);
                     if (dataResponse.can_delete_trabajo === false) {
                         $("#proyecto_trabajo_id_general option:selected").attr("data-can_delete", "0");
                         changeProyectoTrabajo();
@@ -268,7 +276,7 @@
                 } else if (action === "u") {
                     var id = $("#formProyectoTrabajoPartida #id").val();
                     var canDelete = $("#formProyectoTrabajoPartida #can_delete").val();
-                    html = createRowPartidaHTML(id, codigo, nombre, unidadMedida, precioUnitarioPlan, cantidadPlan, precioPlan, cantidadRealAcumulada, precioRealAcumulado, dataResponse.cantidad_por_ejecutar, dataResponse.precio_por_ejecutar, idPadre, codigoPadre, canDelete, fechaInicioPlan, fechaTerminoPlan, fechaInicioReal, fechaTerminoReal);
+                    html = createRowPartidaHTML(id, codigo, nombre, unidadMedida, precioUnitarioPlan, cantidadPlan, precioPlan, cantidad_actual, precio_actual, cantidadRealAcumulada, precioRealAcumulado, dataResponse.cantidad_por_ejecutar, dataResponse.precio_por_ejecutar, idPadre, codigoPadre, canDelete, fechaInicioPlan, fechaTerminoPlan, fechaInicioReal, fechaTerminoReal);
                     var element = $("#tr_partida_" + id);
                     element.after(html);
                     element.remove();

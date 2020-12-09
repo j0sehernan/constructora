@@ -107,15 +107,18 @@
                         <th rowspan="2">Código</th>
                         <th rowspan="2">Partida</th>
                         <th rowspan="2" data-toggle="tooltip" title="Unidad de Medida" data-placement="top">UM</th>
-                        <th colspan="5">Plan</th>
+                        <th rowspan="2" data-toggle="tooltip" title="Precio Unitario Plan" data-placement="top">P.Uni.</th>
+                        <th colspan="6">Plan</th>
                         <th colspan="4">Real</th>
                         <th colspan="2">Por Ejecutar</th>
                         <th rowspan="2" style="width: 100px;">Acciones</th>
                     </tr>
                     <tr>
-                        <th data-toggle="tooltip" title="Precio Unitario Plan" data-placement="top">P.Uni.</th>
-                        <th data-toggle="tooltip" title="Cantidad Plan" data-placement="top">Can.</th>
-                        <th data-toggle="tooltip" title="Precio Plan" data-placement="top">Pre.</th>
+                        <!-- <th data-toggle="tooltip" title="Precio Unitario Plan" data-placement="top">P.Uni.</th> -->
+                        <th data-toggle="tooltip" title="Cantidad Original" data-placement="top">Can.</th>
+                        <th data-toggle="tooltip" title="Precio Origianl" data-placement="top">Pre.</th>
+                        <th data-toggle="tooltip" title="Cantidad Actual" data-placement="top">Can.</th>
+                        <th data-toggle="tooltip" title="Precio Actual" data-placement="top">Pre.</th>
                         <th data-toggle="tooltip" title="Fecha Inicio Plan" data-placement="top">Ini.</th>
                         <th data-toggle="tooltip" title="Fecha Término Plan" data-placement="top">Tér.</th>
                         <th data-toggle="tooltip" title="Cantidad Real Acumulada" data-placement="top">Can.</th>
@@ -287,7 +290,7 @@
             if (!validErrorResponse(data)) {
                 var arrayPartidas = JSON.parse(data);
                 arrayPartidas.forEach(function (object, index) {
-                    var html = createRowPartidaHTML(object.id, object.codigo, object.nombre, object.unidad_medida, object.precio_unitario_plan, object.cantidad_plan, object.precio_plan, object.cantidad_real_acumulada, object.precio_real_acumulado, object.cantidad_por_ejecutar, object.precio_por_ejecutar, object.proyecto_trabajo_partida_id, object.codigo_padre, object.can_delete, object.fecha_inicio_plan, object.fecha_termino_plan, object.fecha_inicio_real, object.fecha_termino_real);
+                    var html = createRowPartidaHTML(object.id, object.codigo, object.nombre, object.unidad_medida, object.precio_unitario_plan, object.cantidad_plan, object.precio_plan, object.cantidad_actual, object.precio_actual, object.cantidad_real_acumulada, object.precio_real_acumulado, object.cantidad_por_ejecutar, object.precio_por_ejecutar, object.proyecto_trabajo_partida_id, object.codigo_padre, object.can_delete, object.fecha_inicio_plan, object.fecha_termino_plan, object.fecha_inicio_real, object.fecha_termino_real);
                     $("#tableProyectoTrabajoPartidas tbody").append(html);
                 });
                 $('#tableProyectoTrabajoPartidas').DataTable();
@@ -295,7 +298,7 @@
             }
         });
     }
-    function createRowPartidaHTML(id, codigo, nombre, unidadMedida, precioUnitarioPlan, cantidadPlan, precioPlan, cantidadRealAcumulada, precioRealAcumulado, cantidadPorEjecutar, precioPorEjecutar, idPadre, codigoPadre, canDelete, fechaInicioPlan, fechaTerminoPlan, fechaInicioReal, fechaTerminoReal) {
+    function createRowPartidaHTML(id, codigo, nombre, unidadMedida, precioUnitarioPlan, cantidadPlan, precioPlan, cantidad_actual, precio_actual, cantidadRealAcumulada, precioRealAcumulado, cantidadPorEjecutar, precioPorEjecutar, idPadre, codigoPadre, canDelete, fechaInicioPlan, fechaTerminoPlan, fechaInicioReal, fechaTerminoReal) {
         var idProyecto = $("#proyecto_id_general").val();
         var html =
             '<tr id="tr_partida_' + id + '" class="tr_padre_' + idPadre + '" onmouseover="showActions(this);" onmouseleave="hideActions(this);">' +
@@ -305,6 +308,8 @@
             '<td style="font-size: 11px;">' + (precioUnitarioPlan == null ? '' : precioUnitarioPlan) + '</td>' +
             '<td style="font-size: 11px;">' + (cantidadPlan == null ? '' : cantidadPlan) + '</td>' +
             '<td style="font-size: 11px;">' + (precioPlan == null ? '' : precioPlan) + '</td>' +
+            '<td style="font-size: 11px;">' + (cantidad_actual == null ? '' : cantidad_actual) + '</td>' +
+            '<td style="font-size: 11px;">' + (precio_actual == null ? '' : precio_actual) + '</td>' +
             '<td style="font-size: 8px;">' + fechaInicioPlan + '</td>' +
             '<td style="font-size: 8px;">' + fechaTerminoPlan + '</td>' +
             '<td style="font-size: 11px;" class="cantidad_real_acumulada">' + (cantidadRealAcumulada == null ? '' : cantidadRealAcumulada) + '</td>' +
