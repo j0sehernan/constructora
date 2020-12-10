@@ -106,7 +106,7 @@
         }
     });
     function report() {
-        postJSON("ProyectoRequerimiento_C.php", { "action": "list", proyecto_id: $("#proyecto_id").val() }, function (data) {
+        postJSON("ProyectoRequerimiento_C.php", { "action": "listByProyecto", proyecto_id: $("#proyecto_id").val() }, function (data) {
             destroyDataTableIfExists("table");
             $("#table tbody").html("");
             if (!validErrorResponse(data)) {
