@@ -67,7 +67,7 @@ switch ($object->action) {
             foreach ($resultKardexMovimiento as $objectKardexMovimiento) {
                 $precio = $objectKardexMovimiento["precio"];
                 $cantidad = $objectKardexMovimiento["cantidad"];
-                $subTotal = $precio * $cantidad;
+                $subTotal = round($precio * $cantidad, 2);
                 $montoTotal += $subTotal;
                 $pagoProveedorDetalle->insert($idPagoProveedor, $objectKardexMovimiento["producto_id"], $objectKardexMovimiento["unidad_medida_id"], $precio, $cantidad, $subTotal);
                 //5.Actualizamos el Movimiento del Kardex
