@@ -18,7 +18,7 @@
             <div class="col-sm-12">
                 <div class="form-group">
                     <label for="proyecto_id">Proyecto</label>
-                    <select class="form-control form-control-sm form-control-autocomplete" id="proyecto_id" name="proyecto_id" onchange="fillProyectoTrabajo(); changeInputsReport();">
+                    <select class="form-control form-control-sm form-control-autocomplete" id="proyecto_id" name="proyecto_id" onchange="changeInputsReport();">
                     </select>
                 </div>
             </div>
@@ -40,14 +40,9 @@
                 <thead class="thead-dark">
                     <tr>
                         <th style="text-align: center;">Proyecto</th>
-                        <th style="text-align: center;">Cliente</th>
-                        <th style="text-align: center;">Moneda </th>
-                        <th style="text-align: center;">Total a Pagar</th>
-                        <th style="text-align: center;">Acumulado Pagado</th>
-                        <th style="text-align: center;">Saldo por Pagar</th>
-                        <th style="text-align: center;">Inmuebles</th>
-                        <th style="text-align: center;">Monto Financiado</th>
-                        <th style="text-align: center;">Tipo de Venta</th>
+                        <th style="text-align: center;">Código</th>
+                        <th style="text-align: center;">Fecha de Pedido</th>
+                        <th style="text-align: center;">Usuario</th>
                     </tr>
                 </thead>
                 <tbody></tbody>
@@ -56,21 +51,16 @@
         <div id="div_export" style="display: none;">
             <table>
                 <tr>
-                    <td colspan="9" style="text-align: center;">REPORTE DE VENTAS</td>
+                    <td colspan="4" style="text-align: center;">REPORTE DE REQUERIMIENTOS</td>
                 </tr>
             </table>
             <table id="table_export" border="1">
                 <thead>
                     <tr>
                         <th style="text-align: center;">Proyecto</th>
-                        <th style="text-align: center;">Cliente</th>
-                        <th style="text-align: center;">Moneda </th>
-                        <th style="text-align: center;">Total a Pagar</th>
-                        <th style="text-align: center;">Acumulado Pagado</th>
-                        <th style="text-align: center;">Saldo por Pagar</th>
-                        <th style="text-align: center;">Inmuebles</th>
-                        <th style="text-align: center;">Monto Financiado</th>
-                        <th style="text-align: center;">Tipo de Venta</th>
+                        <th style="text-align: center;">Código</th>
+                        <th style="text-align: center;">Fecha de Pedido</th>
+                        <th style="text-align: center;">Usuario</th>
                     </tr>
                 </thead>
                 <tbody></tbody>
@@ -116,7 +106,7 @@
         }
     });
     function report() {
-        postJSON("ProyectoVenta_C.php", { "action": "report_by_proyecto_venta", proyecto_id: $("#proyecto_id").val() }, function (data) {
+        postJSON("ProyectoRequerimiento_C.php", { "action": "list", proyecto_id: $("#proyecto_id").val() }, function (data) {
             destroyDataTableIfExists("table");
             $("#table tbody").html("");
             if (!validErrorResponse(data)) {
@@ -124,26 +114,13 @@
                 if (dataResponse.length > 0) {
 
                     $.map(dataResponse, function (object, index) {
-                        var detalle = "";
-
-                        $.map(object.detalle, function (objectDetalle, indexDetalle) {
-                            detalle += objectDetalle.codigo + ","
-                        });
-
-                        detalle = detalle.substring(0, detalle.length - 1);
-
                         var html =
                             `
                             <tr>
                                 <td>`+ object.proyecto + `</td>
-                                <td>`+ object.cliente + `</td>
-                                <td>`+ object.moneda + `</td>
-                                <td>`+ object.total_a_pagar + `</td>
-                                <td>`+ object.acumulado_pagado + `</td>
-                                <td>`+ object.saldo_por_pagar + `</td>
-                                <td>`+ detalle + `</td>
-                                <td>`+ object.monto_financiado + `</td>
-                                <td>`+ object.tipo_venta + `</td>
+                                <td>`+ object.codigo + `</td>
+                                <td>`+ object.fecha_pedido + `</td>
+                                <td>`+ object.per_reg_aud + `</td>
                             </tr>
                             `;
                         $("#table tbody").append(html);

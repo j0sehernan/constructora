@@ -11,6 +11,20 @@ class ProyectoRequerimiento
         return $result;
     }
 
+    function listByProyecto($proyecto_id)
+    {
+        $db = new DB();
+        $result = $db->query("select pr.id, pr.proyecto_id, p.nombre as proyecto, " .
+            "pr.codigo, _get_varchar_from_date(pr.fecha_pedido) as fecha_pedido, " .
+            "per_reg_aud, " .
+            "alert_new_checked " .
+            "from proyecto_requerimiento pr " .
+            "inner join proyecto p on pr.proyecto_id = p.id " .
+            "where pr.proyecto_id = $proyecto_id " .
+            "order by pr.id desc;");
+        return $result;
+    }
+
     function get($id)
     {
         $db = new DB();

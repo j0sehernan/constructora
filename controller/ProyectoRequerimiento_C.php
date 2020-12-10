@@ -9,6 +9,9 @@ $proyectoRequerimiento = new ProyectoRequerimiento();
 if ($object->{'action'} == "list") {
     $result = $proyectoRequerimiento->list();
     echo (json_encode($result));
+} elseif ($object->{'action'} == "listByProyecto") {
+    $result = $proyectoRequerimiento->listByProyecto($object->proyecto_id);
+    echo (json_encode($result));
 } elseif ($object->{'action'} == "get") {
     $result = $proyectoRequerimiento->get($object->id);
     echo (json_encode($result));
