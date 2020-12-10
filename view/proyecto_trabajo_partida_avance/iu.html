@@ -14,7 +14,7 @@
     </div>
     <div class="form-group">
         <label for="cantidad_avance">Cantidad Avance</label>
-        <input type="text" class="form-control form-control-sm form-control-decimal" id="cantidad_avance" name="cantidad_avance" placeholder="Cantidad Avance" maxlength="10" onchange="changeGenerateValues();">
+        <input type="text" class="form-control form-control-sm" id="cantidad_avance" name="cantidad_avance" placeholder="Cantidad Avance" maxlength="10" onchange="changeGenerateValues();">
     </div>
     <div class="form-group">
         <label for="precio_avance">Precio Avance</label>
@@ -79,14 +79,12 @@
             cantidad_avance: {
                 required: true,
                 number: true,
-                maxlength: 21,
-                min: 0.001
+                maxlength: 21
             },
             precio_avance: {
                 required: true,
                 number: true,
-                maxlength: 21,
-                min: 0.001
+                maxlength: 21
             }
         },
         submitHandler: function (form) {
@@ -126,5 +124,19 @@
         });
     }
     startDatePicker();
-    startDecimalNumbers(17, 3);
+    /* startDecimalNumbers(17, 3); */
+    /* $("#cantidad_avance").inputmask({
+        alias: "numeric",
+        digits: "2",
+        rightAlign: false,
+        integerDigits: 5,
+        digitsOptional: true,
+        allowPlus: true,
+        allowMinus: true,
+        placeholder: "0",
+        min: -1000,
+        max: 1000,
+        numericInput: true
+        "mask": "9{1," + 17 + "}[.9{1," + 3 + "}]" 
+    }); */
 </script>
