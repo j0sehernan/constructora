@@ -120,6 +120,7 @@
 										<li class="kt-menu__item -menu-" id="menu-reportPagoContratista"><a class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Pago a Contratistas</span></a></li>
 										<li class="kt-menu__item -menu-" id="menu-reportOrdenesCompra"><a class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Ordenes de Compra</span></a></li>
 										<li class="kt-menu__item -menu-" id="menu-reportMovimientosAlmacen"><a class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Movimientos de Almacen</span></a></li>
+										<li class="kt-menu__item -menu-" id="menu-reportRequerimiento"><a class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Requerimientos</span></a></li>
 									</ul>
 								</div>
 							</li>
