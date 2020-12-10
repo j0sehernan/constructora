@@ -16,7 +16,7 @@ class ProyectoRequerimiento
         $db = new DB();
 
         $query = "select pr.id, pr.proyecto_id, p.nombre as proyecto, " .
-            "pr.codigo, _get_varchar_from_date(pr.fecha_pedido) as fecha_pedido, " .
+            "pr.codigo, if(pr.fecha_pedido='0000-00-00', '', date_format(pr.fecha_pedido, '%d/%m/%Y')) as fecha_pedido, " .
             "per_reg_aud, " .
             "alert_new_checked " .
             "from proyecto_requerimiento pr " .
