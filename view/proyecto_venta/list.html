@@ -28,7 +28,7 @@
 </div>
 <script>
     function listVenta() {
-        postJSON("ProyectoVenta_C.php", { "action": "report_by_proyecto_venta" }, function (data) {
+        postJSON("ProyectoVenta_C.php", { "action": "report_by_proyecto_venta", proyecto_id: "TODOS" }, function (data) {
             if (!validErrorResponse(data)) {
                 destroyDataTableIfExists("table");
                 $('#table').DataTable({
