@@ -40,10 +40,12 @@ class ProyectoRequerimiento
         return $result;
     }
 
-    function generateNextCodigo()
+    function generateNextCodigo($proyecto_id)
     {
         $db = new DB();
-        $result = $db->query("call proyecto_requerimiento_generate_next_codigo();");
+        $result = $db->query("select CONCAT('RQ-', lpad(ifnull(max(replace(codigo, 'RQ-', '')), 0) + 1, 6, 0)) as next_codigo " .
+            "from proyecto_requerimiento " .
+            "where proyecto_id = $proyecto_id;");
         return $result;
     }
 

@@ -95,6 +95,13 @@
     </table>
 </div>
 <script>
+    $("#proyecto_id").change(function () {
+        if ($("#proyecto_id").val() !== "") {
+            generateNextCodigo();
+        } else {
+            $("#codigo").val("");
+        }
+    });
     $("#btn-imprimir").click(function () {
         url_logo = window.location.href.replace("#", "").replace("admin.php", "");
         title = `<img src="` + url_logo + `assets/media/logos/logo-deza-nuevo.jpg" style="height: 50;position: absolute;"><h2 style="text-align: center;">HOJA DE REQUERIMIENTOS</h2>`;
@@ -139,7 +146,7 @@
         });
     }
     function generateNextCodigo() {
-        postJSON("ProyectoRequerimiento_C.php", { action: "generateNextCodigo" }, function (data) {
+        postJSON("ProyectoRequerimiento_C.php", { action: "generateNextCodigo", proyecto_id: $("#proyecto_id").val() }, function (data) {
             if (!validErrorResponse(data)) {
                 dataResponse = JSON.parse(data)[0];
                 $("#codigo").val(dataResponse.next_codigo);
@@ -201,6 +208,7 @@
                     $("#form #action").val("u");
                     $("#divOptions").show();
                     listProyectoRequerimientoDetalle();
+                    getProyectoRequerimiento();
                 }
             }
         });
