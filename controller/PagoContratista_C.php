@@ -13,8 +13,8 @@ $proyectoTrabajo = new ProyectoTrabajo();
 if ($object->{'action'} == "list") {
     $result = $pagoContratista->list();
     echo (json_encode($result));
-} elseif ($object->{'action'} == "listByProyectoAndPeriod") {
-    $result = $pagoContratista->listByProyectoAndContratistaAndPeriod($object->proyecto_id, $object->persona_contratista_id, $object->fecha_inicio, $object->fecha_termino);
+} elseif ($object->{'action'} == "listByProyectoAndTrabajoAndPeriod") {
+    $result = $pagoContratista->listByProyectoAndTrabajoAndPeriod($object->proyecto_id, $object->proyecto_trabajo_id, $object->fecha_inicio, $object->fecha_termino);
     echo (json_encode($result));
 } elseif ($object->{'action'} == "get") {
     $result = $pagoContratista->get($object->id);

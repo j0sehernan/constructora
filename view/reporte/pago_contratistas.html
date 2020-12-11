@@ -18,14 +18,15 @@
             <div class="col-sm-6">
                 <div class="form-group">
                     <label for="proyecto_id">Proyecto</label>
-                    <select class="form-control form-control-sm form-control-autocomplete" id="proyecto_id" name="proyecto_id" onchange="changeInputsReport();">
+                    <select class="form-control form-control-sm form-control-autocomplete" id="proyecto_id" name="proyecto_id" onchange="fillProyectoTrabajo(); changeInputsReport();">
                     </select>
                 </div>
             </div>
             <div class="col-sm-6">
                 <div class="form-group">
-                    <label for="persona_contratista_id">Contratista</label>
-                    <select class="form-control form-control-sm form-control-autocomplete" id="persona_contratista_id" name="persona_contratista_id">
+                    <label for="proyecto_trabajo_id">Trabajo</label>
+                    <select class="form-control form-control-sm form-control-autocomplete" id="proyecto_trabajo_id" name="proyecto_trabajo_id" onchange="changeInputsReport();">
+                        <option value="">Seleccione Trabajo</option>
                     </select>
                 </div>
             </div>
@@ -50,7 +51,7 @@
         <div class="row" style="margin-bottom: 10px;">
             <div class="col-sm-12">
                 <div style="text-align: right;">
-                    <input type="hidden" id="action" name="action" value="listByProyectoAndPeriod">
+                    <input type="hidden" id="action" name="action" value="listByProyectoAndTrabajoAndPeriod">
                     <button type="button" id="btn-export" class="btn btn-outline-info btn-sm" style="display: none;"><i class="fa fa-print"></i> Exportar</button>
                     <!-- <button type="button" id="btnImprimir" class="btn btn-outline-info btn-sm" style="display: none;"><i class="fa fa-print"></i> Imprimir</button> -->
                     <button type="submit" id="btnGenerar" class="btn btn-success btn-sm"><i class="la la-save"></i> Generar</button>
@@ -82,7 +83,24 @@
         <div id="div_export" style="display: none;">
             <table>
                 <tr>
-                    <td colspan="13" style="text-align: center;">REPORTE DE PAGO A CONTRATISTA</td>
+                    <td colspan="13" style="text-align: center;"><img style="float: left;" src="http://deza.com.pe/assets/media/logos/logo-deza-nuevo.jpg" alt="" height="40">REPORTE DE PAGO A CONTRATISTA</td>
+                </tr>
+                <tr>
+                    <td colspan="13" style="text-align: center;">Trabajo de: __TRABAJO__</td>
+                </tr>
+            </table>
+            <table>
+                <tr>
+                    <td colspan="1">Proyecto:</td>
+                    <td colspan="10" style="text-align: left; padding-right: 10;">__PROYECTO__</td>
+                    <td style="text-align: right;">Periodo del:</td>
+                    <td style="text-align: right;">__PERIODO_INICIO__</td>
+                </tr>
+                <tr>
+                    <td colspan="1">Contratista:</td>
+                    <td colspan="10" style="text-align: left; padding-right: 10;">__CONTRATISTA__</td>
+                    <td style="text-align: right;">Al:</td>
+                    <td style="text-align: right;">__PERIODO_TERMINO__</td>
                 </tr>
             </table>
             <table id="table_export" border="1">
@@ -115,18 +133,23 @@
         $("#table_export tbody").html(tbody);
         $("#table").DataTable();
         var tableExport = $("#div_export").html();
+        tableExport = tableExport.replace("__TRABAJO__", $("#proyecto_trabajo_id :selected").text());
+        tableExport = tableExport.replace("__PROYECTO__", $("#proyecto_id :selected").text());
+        tableExport = tableExport.replace("__CONTRATISTA__", $("#proyecto_trabajo_id :selected").attr("data-contratista"));
+        tableExport = tableExport.replace("__PERIODO_INICIO__", $("#fecha_inicio").val());
+        tableExport = tableExport.replace("__PERIODO_TERMINO__", $("#fecha_termino").val());
         tableExport = tableExport.replace(/ /g, '%20');
         exportHTMLToExcel(tableExport, 'REPORTE_PAGO_CONTRATISTAS');
     });
     $("#form").validate({
         rules: {
-            persona_proveedor_id: {
+            proyecto_trabajo_id: {
                 required: true
             },
             proyecto_id: {
                 required: true
             },
-            fecha_pago_inicio: {
+            fecha_inicio: {
                 required: true,
                 maxlength: 10,
                 dateITA: true,
@@ -134,7 +157,7 @@
                     return $("#fecha_pago_termino").val();
                 }
             },
-            fecha_pago_termino: {
+            fecha_termino: {
                 required: true,
                 maxlength: 10,
                 dateITA: true,
@@ -147,29 +170,25 @@
             report();
         }
     });
-    function fillPersonaByPersonaTipo(idPersona) {
-        postJSON("PersonaRol_C.php", {
-            action: "listByPersonaTipoAndRolNombre",
-            persona_tipo_id: "J",
-            rol_nombre: "CONTRATISTA",
-        }, function (data) {
+    function fillProyectoTrabajo(idProyectoTrabajo) {
+        postJSON("ProyectoTrabajo_C.php", { "action": "listByProyecto", proyecto_id: $("#proyecto_id").val() }, function (data) {
             if (!validErrorResponse(data)) {
-                $("#persona_contratista_id").html('<option value="TODOS">TODOS</option>');
-                var arrayAlmacenes = JSON.parse(data);
-                arrayAlmacenes.forEach(function (object, index) {
-                    $("#persona_contratista_id").append('<option value="' + object.id + '" data-numero_documento_identidad="' + object.numero_documento_identidad + '" data-direccion="' + object.direccion + '">' + object.nombre_1 + '</option>');
+                $("#proyecto_trabajo_id").html('<option value="">Seleccione Trabajo</option>');
+                var arrayProyectoTrabajo = JSON.parse(data);
+                arrayProyectoTrabajo.forEach(function (object, index) {
+                    $("#proyecto_trabajo_id").append('<option value="' + object.id + '" data-cantidad_adelanto_restante="' + object.cantidad_adelanto_restante + '" data-contratista="' + object.contratista + '">' + object.nombre + '</option>');
                 });
-                if (typeof idPersona !== 'undefined') {
-                    $("#persona_contratista_id").val(idPersona);
+                if (typeof idProyectoTrabajo !== 'undefined') {
+                    $("#proyecto_trabajo_id").val(idProyectoTrabajo);
                 }
-                startSelect2ById("persona_contratista_id");
+                startSelect2ById("proyecto_trabajo_id");
             }
         });
     }
     function fillProyecto(idProyecto, callback) {
         postJSON("Proyecto_C.php", { "action": "list" }, function (data) {
             if (!validErrorResponse(data)) {
-                $("#proyecto_id").html('<option value="TODOS">TODOS</option>');
+                $("#proyecto_id").html('<option value="">Seleccione Proyecto</option>');
                 var arrayProyectos = JSON.parse(data);
                 arrayProyectos.forEach(function (object, index) {
                     $("#proyecto_id").append('<option value="' + object.id + '">' + object.nombre + '</option>');
@@ -189,23 +208,24 @@
             if (!validErrorResponse(data)) {
                 dataResponse = JSON.parse(data);
                 if (dataResponse.length > 0) {
+                    var comodin = "\u200C";
                     $.map(dataResponse, function (object, index) {
                         var html =
                             `
                             <tr>
                                 <td>`+ object.fecha_inicio + `</td>
                                 <td>`+ object.fecha_termino + `</td>
-                                <td>`+ object.valor_venta + `</td>
-                                <td>`+ object.amortizacion_adelanto + `</td>
-                                <td>`+ object.retencion_fondo_garantia + `</td>
-                                <td>`+ object.sub_total + `</td>
-                                <td>`+ object.igv + `</td>
-                                <td>`+ object.total + `</td>
-                                <td>`+ object.detraccion + `</td>
-                                <td>`+ object.descuento_adelanto + `</td>
-                                <td>`+ object.neto_pagar + `</td>
-                                <td>`+ object.comprobante_pago_codigo + `</td>
-                                <td>`+ object.fecha_pago + `</td>
+                                <td>`+ comodin + object.valor_venta + `</td>
+                                <td>`+ comodin + object.amortizacion_adelanto + `</td>
+                                <td>`+ comodin + object.retencion_fondo_garantia + `</td>
+                                <td>`+ comodin + object.sub_total + `</td>
+                                <td>`+ comodin + object.igv + `</td>
+                                <td>`+ comodin + object.total + `</td>
+                                <td>`+ comodin + object.detraccion + `</td>
+                                <td>`+ comodin + object.descuento_adelanto + `</td>
+                                <td>`+ comodin + object.neto_pagar + `</td>
+                                <td>`+ comodin + object.comprobante_pago_codigo + `</td>
+                                <td>`+ comodin + object.fecha_pago + `</td>
                             </tr>
                             `;
 

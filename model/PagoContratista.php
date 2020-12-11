@@ -10,7 +10,7 @@ class PagoContratista
         return $result;
     }
 
-    function listByProyectoAndContratistaAndPeriod($proyecto_id, $persona_contratista_id, $fecha_inicio, $fecha_termino)
+    function listByProyectoAndTrabajoAndPeriod($proyecto_id, $proyecto_trabajo_id, $fecha_inicio, $fecha_termino)
     {
         $db = new DB();
 
@@ -34,15 +34,9 @@ class PagoContratista
             "if(fecha_pago='0000-00-00', '', date_format(fecha_pago, '%d/%m/%Y')) as fecha_pago " .
             "from pago_contratista " .
             "where (fecha_inicio between str_to_date('$fecha_inicio', '%d/%m/%Y') and str_to_date('$fecha_termino', '%d/%m/%Y')) " .
-            "and (fecha_termino between str_to_date('$fecha_inicio', '%d/%m/%Y') and str_to_date('$fecha_termino', '%d/%m/%Y'))";
-
-        if ($proyecto_id !== "TODOS") {
-            $query .= "and proyecto_id = $proyecto_id ";
-        }
-
-        if ($persona_contratista_id !== "TODOS") {
-            $query .= "and persona_contratista_id = $persona_contratista_id ";
-        }
+            "and (fecha_termino between str_to_date('$fecha_inicio', '%d/%m/%Y') and str_to_date('$fecha_termino', '%d/%m/%Y')) " .
+            "and proyecto_id = $proyecto_id " .
+            "and proyecto_trabajo_id = $proyecto_trabajo_id;";
 
         $result = $db->query($query);
 
