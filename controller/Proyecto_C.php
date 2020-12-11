@@ -335,7 +335,7 @@ function recursividadHijos($resultReport, $idProyectoTrabajoPartidaPadre, $idPro
             $sumProyectoTrabajoPartidaAvanceAcumulado = $proyectoTrabajoPartidaAvance->sumByProyectoTrabajoPartidaAcumulado($objPartidaHija["id"], $fecha_termino)[0];
 
             $precio_plan = $sumProyectoTrabajoPartida["precio_plan"];
-            $precio_avance = number_format($sumProyectoTrabajoPartidaAvanceByCodigo["precio_avance"], 2, '.', '');
+            $precio_avance = $sumProyectoTrabajoPartidaAvanceByCodigo["precio_avance"];
             $precio_acumulado = $sumProyectoTrabajoPartidaAvanceByCodigoAcumulado["precio_acumulado"];
             $precio_acumulado_anterior = number_format(($sumProyectoTrabajoPartidaAvanceByCodigoAcumulado["precio_acumulado"] - $sumProyectoTrabajoPartidaAvanceByCodigo["precio_avance"]), 2, '.', '');
             //$precio_presupuesto_actual = $precio_plan >= $precio_acumulado ? $precio_plan : $precio_acumulado;
@@ -362,7 +362,7 @@ function recursividadHijos($resultReport, $idProyectoTrabajoPartidaPadre, $idPro
                 "cantidad_presupuesto_actual" => $cantidad_presupuesto_actual,
                 "precio_acumulado_anterior" => $precio_acumulado_anterior,
                 "cantidad_acumulada_anterior" => $cantidad_acumulada_anterior,
-                "precio_avance" => $precio_avance,
+                "precio_avance" => number_format($precio_avance, 2, '.', ','),
                 "cantidad_avance" => number_format($cantidad_avance, 2, '.', ','),
                 "cantidad_acumulada" => number_format($cantidad_acumulada, 2, '.', ','),
                 "precio_acumulado" => number_format($precio_acumulado, 2, '.', ','),
