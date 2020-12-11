@@ -15,19 +15,17 @@
 <form id="form">
     <div class="kt-container kt-container--fluid kt-grid__item kt-grid__item--fluid">
         <div class="row">
-            <div class="col-sm-9">
+            <div class="col-sm-6">
                 <div class="form-group">
-                    <label for="persona_proveedor_id">Contratista</label>
-                    <select class="form-control form-control-sm form-control-autocomplete" id="persona_proveedor_id" name="persona_proveedor_id">
+                    <label for="proyecto_id">Proyecto</label>
+                    <select class="form-control form-control-sm form-control-autocomplete" id="proyecto_id" name="proyecto_id" onchange="changeInputsReport();">
                     </select>
                 </div>
             </div>
-            <div class="col-sm-3">
+            <div class="col-sm-6">
                 <div class="form-group">
-                    <label for="pagado">Pagado</label>
-                    <select class="form-control form-control-sm form-control-autocomplete" id="pagado" name="pagado">
-                        <option value="1">SI</option>
-                        <option value="0">NO</option>
+                    <label for="persona_contratista_id">Contratista</label>
+                    <select class="form-control form-control-sm form-control-autocomplete" id="persona_contratista_id" name="persona_contratista_id">
                     </select>
                 </div>
             </div>
@@ -35,14 +33,14 @@
         <div class="row">
             <div class="col-sm-6">
                 <div class="form-group">
-                    <label for="fecha_pago_inicio">Desde</label>
-                    <input type="text" class="form-control form-control-sm form-control-date" id="fecha_pago_inicio" name="fecha_pago_inicio" placeholder="Fecha de Inicio" maxlength="10" onchange="changeInputsReport();">
+                    <label for="fecha_inicio">Desde</label>
+                    <input type="text" class="form-control form-control-sm form-control-date" id="fecha_inicio" name="fecha_inicio" placeholder="Fecha de Inicio" maxlength="10" onchange="changeInputsReport();">
                 </div>
             </div>
             <div class="col-sm-6">
                 <div class="form-group">
-                    <label for="fecha_pago_termino">Hasta</label>
-                    <input type="text" class="form-control form-control-sm form-control-date" id="fecha_pago_termino" name="fecha_pago_termino" placeholder="Fecha de Término" maxlength="10" onchange="changeInputsReport();">
+                    <label for="fecha_termino">Hasta</label>
+                    <input type="text" class="form-control form-control-sm form-control-date" id="fecha_termino" name="fecha_termino" placeholder="Fecha de Término" maxlength="10" onchange="changeInputsReport();">
                 </div>
             </div>
         </div>
@@ -52,7 +50,7 @@
         <div class="row" style="margin-bottom: 10px;">
             <div class="col-sm-12">
                 <div style="text-align: right;">
-                    <input type="hidden" id="action" name="action" value="reportByFechaPagoInicioTermino">
+                    <input type="hidden" id="action" name="action" value="listByProyectoAndPeriod">
                     <button type="button" id="btn-export" class="btn btn-outline-info btn-sm" style="display: none;"><i class="fa fa-print"></i> Exportar</button>
                     <!-- <button type="button" id="btnImprimir" class="btn btn-outline-info btn-sm" style="display: none;"><i class="fa fa-print"></i> Imprimir</button> -->
                     <button type="submit" id="btnGenerar" class="btn btn-success btn-sm"><i class="la la-save"></i> Generar</button>
@@ -63,16 +61,19 @@
             <table id="table" class="table table-hover table-bordered table-striped table-sm">
                 <thead class="thead-dark">
                     <tr>
-                        <th style="text-align: center;">OC</th>
-                        <th style="text-align: center;">Guía de Remisión</th>
-                        <th style="text-align: center;">Proveedor </th>
-                        <th style="text-align: center;">T.Com.</th>
-                        <th style="text-align: center;">Código Com.</th>
+                        <th style="text-align: center;">Inicio</th>
+                        <th style="text-align: center;">Término</th>
+                        <th style="text-align: center;">Valor Venta</th>
+                        <th style="text-align: center;">Amortización de Adelanto</th>
+                        <th style="text-align: center;">Retencion de Fondo de Garantía</th>
+                        <th style="text-align: center;">Sub Total</th>
+                        <th style="text-align: center;">IGV</th>
+                        <th style="text-align: center;">Total</th>
+                        <th style="text-align: center;">Detracción</th>
+                        <th style="text-align: center;">Descuento por Adelanto</th>
+                        <th style="text-align: center;">Neto a Pagar</th>
+                        <th style="text-align: center;">Factura</th>
                         <th style="text-align: center;">Fecha de Pago</th>
-                        <th style="text-align: center;">Fecha de Emisión</th>
-                        <th style="text-align: center;">Moneda</th>
-                        <th style="text-align: center;">Monto Total</th>
-                        <th style="text-align: center;">Pagado</th>
                     </tr>
                 </thead>
                 <tbody></tbody>
@@ -81,22 +82,25 @@
         <div id="div_export" style="display: none;">
             <table>
                 <tr>
-                    <td colspan="10" style="text-align: center;">REPORTE DE PAGO A CONTRATISTA</td>
+                    <td colspan="13" style="text-align: center;">REPORTE DE PAGO A CONTRATISTA</td>
                 </tr>
             </table>
             <table id="table_export" border="1">
                 <thead>
                     <tr>
-                        <th style="text-align: center;">OC</th>
-                        <th style="text-align: center;">Guía de Remisión</th>
-                        <th style="text-align: center;">Proveedor </th>
-                        <th style="text-align: center;">T.Com.</th>
-                        <th style="text-align: center;">Código Com.</th>
+                        <th style="text-align: center;">Inicio</th>
+                        <th style="text-align: center;">Término</th>
+                        <th style="text-align: center;">Valor Venta</th>
+                        <th style="text-align: center;">Amortización de Adelanto</th>
+                        <th style="text-align: center;">Retencion de Fondo de Garantía</th>
+                        <th style="text-align: center;">Sub Total</th>
+                        <th style="text-align: center;">IGV</th>
+                        <th style="text-align: center;">Total</th>
+                        <th style="text-align: center;">Detracción</th>
+                        <th style="text-align: center;">Descuento por Adelanto</th>
+                        <th style="text-align: center;">Neto a Pagar</th>
+                        <th style="text-align: center;">Factura</th>
                         <th style="text-align: center;">Fecha de Pago</th>
-                        <th style="text-align: center;">Fecha de Emisión</th>
-                        <th style="text-align: center;">Moneda</th>
-                        <th style="text-align: center;">Monto Total</th>
-                        <th style="text-align: center;">Pagado</th>
                     </tr>
                 </thead>
                 <tbody></tbody>
@@ -117,6 +121,9 @@
     $("#form").validate({
         rules: {
             persona_proveedor_id: {
+                required: true
+            },
+            proyecto_id: {
                 required: true
             },
             fecha_pago_inicio: {
@@ -144,23 +151,39 @@
         postJSON("PersonaRol_C.php", {
             action: "listByPersonaTipoAndRolNombre",
             persona_tipo_id: "J",
-            rol_nombre: "PROVEEDOR",
+            rol_nombre: "CONTRATISTA",
         }, function (data) {
             if (!validErrorResponse(data)) {
-                $("#persona_proveedor_id").html('<option value="">Seleccione Proveedor</option>');
+                $("#persona_contratista_id").html('<option value="TODOS">TODOS</option>');
                 var arrayAlmacenes = JSON.parse(data);
                 arrayAlmacenes.forEach(function (object, index) {
-                    $("#persona_proveedor_id").append('<option value="' + object.id + '" data-numero_documento_identidad="' + object.numero_documento_identidad + '" data-direccion="' + object.direccion + '">' + object.nombre_1 + '</option>');
+                    $("#persona_contratista_id").append('<option value="' + object.id + '" data-numero_documento_identidad="' + object.numero_documento_identidad + '" data-direccion="' + object.direccion + '">' + object.nombre_1 + '</option>');
                 });
                 if (typeof idPersona !== 'undefined') {
-                    $("#persona_proveedor_id").val(idPersona);
+                    $("#persona_contratista_id").val(idPersona);
                 }
-                startSelect2ById("persona_proveedor_id");
+                startSelect2ById("persona_contratista_id");
+            }
+        });
+    }
+    function fillProyecto(idProyecto, callback) {
+        postJSON("Proyecto_C.php", { "action": "list" }, function (data) {
+            if (!validErrorResponse(data)) {
+                $("#proyecto_id").html('<option value="TODOS">TODOS</option>');
+                var arrayProyectos = JSON.parse(data);
+                arrayProyectos.forEach(function (object, index) {
+                    $("#proyecto_id").append('<option value="' + object.id + '">' + object.nombre + '</option>');
+                });
+                if (typeof idProyecto !== 'undefined') {
+                    $("#proyecto_id").val(idProyecto);
+                }
+                startSelect2ById("proyecto_id");
+                if (typeof callback !== 'undefined') callback();
             }
         });
     }
     function report() {
-        postJSONForm("PagoProveedor_C.php", "form", function (data) {
+        postJSONForm("PagoContratista_C.php", "form", function (data) {
             destroyDataTableIfExists("table");
             $("#table tbody").html("");
             if (!validErrorResponse(data)) {
@@ -170,18 +193,22 @@
                         var html =
                             `
                             <tr>
-                                <td>`+ object.orden_compra + `</td>
-                                <td>`+ object.guia_remision + `</td>
-                                <td>`+ object.persona_proveedor + `</td>
-                                <td>`+ object.comprobante_pago_tipo + `</td>
+                                <td>`+ object.fecha_inicio + `</td>
+                                <td>`+ object.fecha_termino + `</td>
+                                <td>`+ object.valor_venta + `</td>
+                                <td>`+ object.amortizacion_adelanto + `</td>
+                                <td>`+ object.retencion_fondo_garantia + `</td>
+                                <td>`+ object.sub_total + `</td>
+                                <td>`+ object.igv + `</td>
+                                <td>`+ object.total + `</td>
+                                <td>`+ object.detraccion + `</td>
+                                <td>`+ object.descuento_adelanto + `</td>
+                                <td>`+ object.neto_pagar + `</td>
                                 <td>`+ object.comprobante_pago_codigo + `</td>
                                 <td>`+ object.fecha_pago + `</td>
-                                <td>`+ object.fecha_emision + `</td>
-                                <td>`+ object.moneda + `</td>
-                                <td>`+ object.monto_total + `</td>
-                                <td>`+ (object.pagado === "1" ? `SI` : object.pagado === "0" ? `NO` : ``) + `</td>
                             </tr>
                             `;
+
                         $("#table tbody").append(html);
                     });
                     $("#btn-export").show();
@@ -204,5 +231,6 @@
         $("#divAlertImprimir").show();
     }
     fillPersonaByPersonaTipo();
+    fillProyecto();
     startDatePicker();
 </script>

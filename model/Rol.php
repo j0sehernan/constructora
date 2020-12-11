@@ -7,7 +7,7 @@ class Rol
     function list()
     {
         $db = new DB();
-        $result = $db->query("call rol_list();");
+        $result = $db->query("select id, nombre, descripcion from rol;");
         return $result;
     }
 
