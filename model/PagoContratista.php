@@ -14,9 +14,7 @@ class PagoContratista
     {
         $db = new DB();
 
-        $query = "select persona_contratista_id, " .
-            "proyecto_trabajo_id, " .
-            "proyecto_id, " .
+        $query = "select " .
             "if(fecha_inicio='0000-00-00', '', date_format(fecha_inicio, '%d/%m/%Y')) as fecha_inicio, " .
             "if(fecha_termino='0000-00-00', '', date_format(fecha_termino, '%d/%m/%Y')) as fecha_termino, " .
             "valor_venta, " .
@@ -26,10 +24,10 @@ class PagoContratista
             "igv, " .
             "total, " .
             "detraccion, " .
-            "neto_pagar, " .
-            "pagado, " .
             "descuento_adelanto, " .
-            "comprobante_pago_tipo_id, " .
+            "neto_pagar, " .
+            /* "pagado, " . */
+            /* "comprobante_pago_tipo_id, "  .*/
             "comprobante_pago_codigo, " .
             "if(fecha_pago='0000-00-00', '', date_format(fecha_pago, '%d/%m/%Y')) as fecha_pago " .
             "from pago_contratista " .

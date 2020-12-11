@@ -15,6 +15,57 @@ if ($object->{'action'} == "list") {
     echo (json_encode($result));
 } elseif ($object->{'action'} == "listByProyectoAndTrabajoAndPeriod") {
     $result = $pagoContratista->listByProyectoAndTrabajoAndPeriod($object->proyecto_id, $object->proyecto_trabajo_id, $object->fecha_inicio, $object->fecha_termino);
+
+    $total_valor_venta = 0;
+    $total_amortizacion_adelanto = 0;
+    $total_retencion_fondo_garantia = 0;
+    $total_sub_total = 0;
+    $total_igv = 0;
+    $total_total = 0;
+    $total_detraccion = 0;
+    $total_descuento_adelanto = 0;
+    $total_neto_pagar = 0;
+
+    for ($i = 0; $i < count($result); $i++) {
+        $total_valor_venta += $result[$i]["valor_venta"];
+        $total_amortizacion_adelanto += $result[$i]["amortizacion_adelanto"];
+        $total_retencion_fondo_garantia += $result[$i]["retencion_fondo_garantia"];
+        $total_sub_total += $result[$i]["sub_total"];
+        $total_igv += $result[$i]["igv"];
+        $total_total += $result[$i]["total"];
+        $total_detraccion += $result[$i]["detraccion"];
+        $total_descuento_adelanto += $result[$i]["descuento_adelanto"];
+        $total_neto_pagar += $result[$i]["neto_pagar"];
+
+        $result[$i]["valor_venta"] = number_format($result[$i]["valor_venta"], 2, '.', ',');
+        $result[$i]["amortizacion_adelanto"] = number_format($result[$i]["amortizacion_adelanto"], 2, '.', ',');
+        $result[$i]["retencion_fondo_garantia"] = number_format($result[$i]["retencion_fondo_garantia"], 2, '.', ',');
+        $result[$i]["sub_total"] = number_format($result[$i]["sub_total"], 2, '.', ',');
+        $result[$i]["igv"] = number_format($result[$i]["igv"], 2, '.', ',');
+        $result[$i]["total"] = number_format($result[$i]["total"], 2, '.', ',');
+        $result[$i]["detraccion"] = number_format($result[$i]["detraccion"], 2, '.', ',');
+        $result[$i]["descuento_adelanto"] = number_format($result[$i]["descuento_adelanto"], 2, '.', ',');
+        $result[$i]["neto_pagar"] = number_format($result[$i]["neto_pagar"], 2, '.', ',');
+    }
+
+    $objectReport = array(
+        "fecha_inicio" => "TOTAL",
+        "fecha_termino" => "",
+        "valor_venta" => number_format($total_valor_venta, 2, '.', ','),
+        "amortizacion_adelanto" => number_format($total_amortizacion_adelanto, 2, '.', ','),
+        "retencion_fondo_garantia" => number_format($total_retencion_fondo_garantia, 2, '.', ','),
+        "sub_total" => number_format($total_sub_total, 2, '.', ','),
+        "igv" => number_format($total_igv, 2, '.', ','),
+        "total" => number_format($total_total, 2, '.', ','),
+        "detraccion" => number_format($total_detraccion, 2, '.', ','),
+        "descuento_adelanto" => number_format($total_descuento_adelanto, 2, '.', ','),
+        "neto_pagar" => number_format($total_neto_pagar, 2, '.', ','),
+        "comprobante_pago_codigo" => "",
+        "fecha_pago" => ""
+    );
+
+    array_push($result, $objectReport);
+
     echo (json_encode($result));
 } elseif ($object->{'action'} == "get") {
     $result = $pagoContratista->get($object->id);
