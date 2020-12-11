@@ -347,7 +347,7 @@ function recursividadHijos($resultReport, $idProyectoTrabajoPartidaPadre, $idPro
             $cantidad_acumulada = $sumProyectoTrabajoPartidaAvanceAcumulado["cantidad_acumulada"];
             $cantidad_acumulada_anterior = (($cantidad_acumulada === "" ? 0 : $cantidad_acumulada) - ($cantidad_avance === "" ? 0 : $cantidad_avance));
             //$cantidad_presupuesto_actual = $cantidad_plan >= $cantidad_acumulada ? $cantidad_plan : $cantidad_acumulada;
-            $cantidad_presupuesto_actual = $objPartidaHija["cantidad_actual"] == "0" ? "" : $objPartidaHija["cantidad_actual"];
+            $cantidad_presupuesto_actual = $objPartidaHija["cantidad_actual"];
             $cantidad_por_ejecutar = $cantidad_plan == "" || $cantidad_acumulada == "" ? "" : number_format($cantidad_plan - $cantidad_acumulada, 2, '.', ',');
 
             $objectReportHijo = array(
