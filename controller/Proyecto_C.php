@@ -342,7 +342,7 @@ function recursividadHijos($resultReport, $idProyectoTrabajoPartidaPadre, $idPro
             $precio_presupuesto_actual = $sumProyectoTrabajoPartida["precio_actual"];
             $precio_por_ejecutar = $precio_presupuesto_actual - $precio_acumulado;
 
-            $cantidad_plan = $objPartidaHija["cantidad_plan"] == "0" ? "" : $objPartidaHija["cantidad_plan"];
+            $cantidad_plan = $objPartidaHija["cantidad_plan"];
             $cantidad_avance = $sumProyectoTrabajoPartidaAvance["cantidad_avance"];
             $cantidad_acumulada = $sumProyectoTrabajoPartidaAvanceAcumulado["cantidad_acumulada"];
             $cantidad_acumulada_anterior = (($cantidad_acumulada === "" ? 0 : $cantidad_acumulada) - ($cantidad_avance === "" ? 0 : $cantidad_avance));
@@ -355,9 +355,9 @@ function recursividadHijos($resultReport, $idProyectoTrabajoPartidaPadre, $idPro
                 "codigo" => $objPartidaHija["codigo"],
                 "partida" => $objPartidaHija["partida"],
                 "unidad_medida" => $objPartidaHija["unidad_medida"] == null ? "" : $objPartidaHija["unidad_medida"],
-                "precio_unitario_plan" => $objPartidaHija["precio_unitario_plan"] == null ? "" : number_format($objPartidaHija["precio_unitario_plan"], 2, '.', ''),
-                "cantidad_plan" => number_format($cantidad_plan, 2, '.', ''),
-                "precio_plan" => number_format($precio_plan, 2, '.', ''),
+                "precio_unitario_plan" => $objPartidaHija["precio_unitario_plan"] == null ? "" : number_format($objPartidaHija["precio_unitario_plan"], 2, '.', ','),
+                "cantidad_plan" => number_format($cantidad_plan, 2, '.', ','),
+                "precio_plan" => number_format($precio_plan, 2, '.', ','),
                 "precio_presupuesto_actual" => number_format($precio_presupuesto_actual, 2, '.', ''),
                 "cantidad_presupuesto_actual" => number_format($cantidad_presupuesto_actual, 2, '.', ''),
                 "precio_acumulado_anterior" => number_format($precio_acumulado_anterior, 2, '.', ''),
