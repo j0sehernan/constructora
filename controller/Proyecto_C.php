@@ -340,7 +340,7 @@ function recursividadHijos($resultReport, $idProyectoTrabajoPartidaPadre, $idPro
             $precio_acumulado_anterior = ($sumProyectoTrabajoPartidaAvanceByCodigoAcumulado["precio_acumulado"] - $sumProyectoTrabajoPartidaAvanceByCodigo["precio_avance"]);
             //$precio_presupuesto_actual = $precio_plan >= $precio_acumulado ? $precio_plan : $precio_acumulado;
             $precio_presupuesto_actual = $sumProyectoTrabajoPartida["precio_actual"];
-            $precio_por_ejecutar = number_format($precio_presupuesto_actual - $precio_acumulado, 2, '.', '');
+            $precio_por_ejecutar = $precio_presupuesto_actual - $precio_acumulado;
 
             $cantidad_plan = $objPartidaHija["cantidad_plan"] == "0" ? "" : $objPartidaHija["cantidad_plan"];
             $cantidad_avance = $sumProyectoTrabajoPartidaAvance["cantidad_avance"];
