@@ -426,7 +426,7 @@
         total = total * tipo_cambio;
         total_sin_igv = total_sin_igv * tipo_cambio;
         igv = igv * tipo_cambio;
-        $("#total").val(total.round(2).fixed(2));
+        $("#total").val(total.round(2));
         $("#total_sin_igv").val(total_sin_igv.round(2));
         $("#igv").val(igv.round(2));
     }
