@@ -14,11 +14,11 @@
     </div>
     <div class="form-group">
         <label for="cantidad_avance">Cantidad Avance</label>
-        <input type="text" class="form-control form-control-sm" id="cantidad_avance" name="cantidad_avance" placeholder="Cantidad Avance" maxlength="10" onchange="changeGenerateValues();">
+        <input type="text" class="form-control form-control-sm form-control-decimal" id="cantidad_avance" name="cantidad_avance" placeholder="Cantidad Avance" maxlength="10" onchange="changeGenerateValues();">
     </div>
     <div class="form-group">
         <label for="precio_avance">Precio Avance</label>
-        <input type="text" class="form-control form-control-sm form-control-decimal" id="precio_avance" name="precio_avance" placeholder="Precio Avance" maxlength="10" readonly>
+        <input type="text" class="form-control form-control-sm" id="precio_avance" name="precio_avance" placeholder="Precio Avance" maxlength="10" readonly>
     </div>
     <div class="only-options-right">
         <input type="hidden" id="proyecto_trabajo_partida_id" name="proyecto_trabajo_partida_id">
@@ -34,6 +34,7 @@
         var precioUnitarioAvance = $("#precio_unitario_avance").val();
         var cantidadAvance = $("#cantidad_avance").val();
         var precioAvance = Number(precioUnitarioAvance) * Number(cantidadAvance);
+        precioAvance = precioAvance.round(2);
         if (isNaN(precioAvance) || precioAvance == null || (precioUnitarioAvance == "" && cantidadAvance == "")) {
             precioAvance = "";
         }
@@ -124,7 +125,8 @@
         });
     }
     startDatePicker();
-    /* startDecimalNumbers(17, 3); */
+    startDecimalNumbers(17, 3);
+    $("#precio_avance").inputmask("9{1," + 20 + "}[.9{1," + 2 + "}]");
     /* $("#cantidad_avance").inputmask({
         alias: "numeric",
         digits: "2",
@@ -137,6 +139,6 @@
         min: -1000,
         max: 1000,
         numericInput: true
-        "mask": "9{1," + 17 + "}[.9{1," + 3 + "}]" 
+        "mask": "9{1," + 17 + "}[.9{1," + 3 + "}]"
     }); */
 </script>
