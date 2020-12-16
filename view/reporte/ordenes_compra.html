@@ -66,7 +66,24 @@
         <div id="div_export" style="display: none;">
             <table>
                 <tr>
-                    <td colspan="6" style="text-align: center;">REPORTE DE ORDENES DE COMPRA</td>
+                    <td colspan="6" style="text-align: center;"><img style="float: left;" src="http://deza.com.pe/assets/media/logos/logo-deza-nuevo.jpg" alt="" height="40">REPORTE DE ORDENES DE COMPRA</td>
+                </tr>
+                <tr>
+                    <td colspan="6"></td>
+                </tr>
+            </table>
+            <table>
+                <tr>
+                    <td colspan="1">Proveedor:</td>
+                    <td colspan="3" style="text-align: left; padding-right: 10;">__PROVEEDOR__</td>
+                    <td style="text-align: right;">Periodo del:</td>
+                    <td style="text-align: right;">__PERIODO_INICIO__</td>
+                </tr>
+                <tr>
+                    <td colspan="1"></td>
+                    <td colspan="3"></td>
+                    <td style="text-align: right;">Al:</td>
+                    <td style="text-align: right;">__PERIODO_TERMINO__</td>
                 </tr>
             </table>
             <table id="table_export" border="1">
@@ -92,6 +109,9 @@
         $("#table_export tbody").html(tbody);
         $("#table").DataTable();
         var tableExport = $("#div_export").html();
+        tableExport = tableExport.replace("__PROVEEDOR__", $("#persona_proveedor_id :selected").text());
+        tableExport = tableExport.replace("__PERIODO_INICIO__", $("#fecha_inicio").val());
+        tableExport = tableExport.replace("__PERIODO_TERMINO__", $("#fecha_termino").val());
         tableExport = tableExport.replace(/ /g, '%20');
         exportHTMLToExcel(tableExport, 'REPORTE_ORDENES_COMPRA');
     });
