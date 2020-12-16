@@ -11,8 +11,8 @@ class ProyectoTrabajoPartida
             "ptp.cantidad_plan, ptp.precio_plan, " .
             "ptp.cantidad_actual, ptp.precio_actual, " .
             "ptp.cantidad_real_acumulada, ptp.precio_real_acumulado, " .
-            "(ifnull(ptp.cantidad_actual, 0) - ifnull(cantidad_presupuesto_actual, 0)) as cantidad_por_ejecutar".
-            "(ifnull(ptp.precio_actual, 0) - ifnull(precio_real_acumulado, 0)) as precio_por_ejecutar".
+            "(ifnull(ptp.cantidad_actual, 0) - ifnull(cantidad_presupuesto_actual, 0)) as cantidad_por_ejecutar,".
+            "(ifnull(ptp.precio_actual, 0) - ifnull(precio_real_acumulado, 0)) as precio_por_ejecutar,".
             //"ptp.cantidad_por_ejecutar, ptp.precio_por_ejecutar, " .
             "ptp.proyecto_trabajo_partida_id, " .
             "ifnull(if(ptp.fecha_inicio_plan='0000-00-00', '', date_format(ptp.fecha_inicio_plan, '%d/%m/%Y')), '') as fecha_inicio_plan, " .
