@@ -89,14 +89,14 @@
             </table>
             <table>
                 <tr>
-                    <td colspan="1">Proyecto:</td>
-                    <td colspan="10" style="text-align: left; padding-right: 10;">__PROYECTO__</td>
+                    <td colspan="1">Proveedor:</td>
+                    <td colspan="7" style="text-align: left; padding-right: 10;">__PROVEEDOR__</td>
                     <td style="text-align: right;">Periodo del:</td>
                     <td style="text-align: right;">__PERIODO_INICIO__</td>
                 </tr>
                 <tr>
                     <td colspan="1">Contratista:</td>
-                    <td colspan="10" style="text-align: left; padding-right: 10;">__CONTRATISTA__</td>
+                    <td colspan="7" style="text-align: left; padding-right: 10;">__PAGADO__</td>
                     <td style="text-align: right;">Al:</td>
                     <td style="text-align: right;">__PERIODO_TERMINO__</td>
                 </tr>
@@ -128,6 +128,10 @@
         $("#table_export tbody").html(tbody);
         $("#table").DataTable();
         var tableExport = $("#div_export").html();
+        tableExport = tableExport.replace("__PROVEEDOR__", $("#persona_proveedor_id :selected").text());
+        tableExport = tableExport.replace("__PAGADO__", $("#pagado").val() === "1" ? "SI" : "NO");
+        tableExport = tableExport.replace("__PERIODO_INICIO__", $("#fecha_pago_inicio").val());
+        tableExport = tableExport.replace("__PERIODO_TERMINO__", $("#fecha_pago_termino").val());
         tableExport = tableExport.replace(/ /g, '%20');
         exportHTMLToExcel(tableExport, 'REPORTE_PAGO_PROVEEDORES');
     });
