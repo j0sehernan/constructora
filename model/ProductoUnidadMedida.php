@@ -25,6 +25,15 @@ class ProductoUnidadMedida
         return $result;
     }
 
+    function getByProductoAndUMIngresoAndUMSalida($producto_id, $unidad_medida_ingreso_id, $unidad_medida_salida_id)
+    {
+        $db = new DB();
+        $result = $db->query("select id, producto_id, unidad_medida_ingreso_id, unidad_medida_salida_id, factor, cantidad " .
+            "from producto_unidad_medida " .
+            "where producto_id = $producto_id and unidad_medida_ingreso_id = '$unidad_medida_ingreso_id' and unidad_medida_salida_id = '$unidad_medida_salida_id';");
+        return $result;
+    }
+
     function get($id)
     {
         $db = new DB();

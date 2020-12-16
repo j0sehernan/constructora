@@ -4,6 +4,7 @@
 @include_once("../model/KardexMovimiento.php");
 @include_once("../model/OrdenCompra.php");
 @include_once("../model/OrdenCompraDetalle.php");
+@include_once("../model/ProductoUnidadMedida.php");
 
 $json = file_get_contents(_Configuration::$CONFIGURATION_QUERY_PARAMS);
 $object = json_decode($json);
@@ -11,6 +12,7 @@ $kardex = new Kardex();
 $kardexMovimiento = new KardexMovimiento();
 $ordenCompra = new OrdenCompra();
 $ordenCompraDetalle = new OrdenCompraDetalle();
+$productoUnidadMedida = new ProductoUnidadMedida();
 
 if ($object->{'action'} == "listByAlmacen") {
     $result = $kardex->listByAlmacen($object->almacen_id, $object->del);
@@ -119,10 +121,32 @@ if ($object->{'action'} == "listByAlmacen") {
         //4. Insertamos el Nuevo Kardex convertido
         $idKardexNew = $kardex->insert($object->{'almacen_id'}, $object->{'producto_id'}, $object->{'unidad_medida_salida_id'}, $object->{'cantidad_final'}, $object->{'fecha_ingreso'}, $object->{'fecha_vencimiento'});
         if ($idKardexNew) {
+            //Agregando  conversión a precio
+            $producto_unidad_medida = $productoUnidadMedida->getByProductoAndUMIngresoAndUMSalida($object->producto_id, $object->unidad_medida_ingreso_id, $object->unidad_medida_salida_id)[0];
+            $precio_anterior = $kardexMovimiento->getLastMovimientoByKardexId($object->id)[0]["precio"];
+            $nuevo_precio = 0;
+
+            switch ($producto_unidad_medida["factor"]) {
+                case "*":
+                    $nuevo_precio = $precio_anterior * $producto_unidad_medida["cantidad"];
+                    break;
+                case "/":
+                    $nuevo_precio = $precio_anterior / $producto_unidad_medida["cantidad"];
+                    break;
+                case "+":
+                    $nuevo_precio = $precio_anterior + $producto_unidad_medida["cantidad"];
+                    echo (json_encode($result));
+                    break;
+                case "-":
+                    $nuevo_precio = $precio_anterior - $producto_unidad_medida["cantidad"];
+                    echo (json_encode($result));
+                    break;
+            }
+
             //5. Obtenemos el nuevo Id Kardex
             $idKardexNew = $idKardexNew[0]["id"];
             //6. Insertamos el Nuevo Kardex Movimiento convertido
-            $result = $kardexMovimiento->insertConvertNew($idKardexMovimiento, $idKardexNew, $object->{'unidad_medida_salida_id'}, $object->{'cantidad_final'}, $object->{'id'}, getPersonaFullName());
+            $result = $kardexMovimiento->insertConvertNew($idKardexMovimiento, $idKardexNew, $object->{'unidad_medida_salida_id'}, $object->{'cantidad_final'}, $nuevo_precio, $object->{'id'}, getPersonaFullName());
         }
     }
 

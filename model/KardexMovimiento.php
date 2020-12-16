@@ -128,10 +128,10 @@ class KardexMovimiento
         return $result;
     }
 
-    function insertConvertNew($idKardexMovimiento, $idKardex, $idUnidadMedida, $cantidad, $idKardexOrigen, $perRegAud)
+    function insertConvertNew($idKardexMovimiento, $idKardex, $idUnidadMedida, $cantidad, $precio, $idKardexOrigen, $perRegAud)
     {
         $db = new DB();
-        $result = $db->execute("call kardex_movimiento_i_convert_new('$idKardexMovimiento','$idKardex','$idUnidadMedida','$cantidad','$idKardexOrigen',',$perRegAud');");
+        $result = $db->execute("call kardex_movimiento_i_convert_new('$idKardexMovimiento','$idKardex','$idUnidadMedida','$cantidad','$precio','$idKardexOrigen',',$perRegAud');");
         return $result;
     }
 
