@@ -85,15 +85,16 @@ if ($object->{'action'} == "list") {
     foreach ($listAvancesByProyectoTrabajoAndDataRanges as $avance) {
         $valorVenta += $avance["precio_avance"];
     }
+
+    $proyecto_trabajo_text = $object->proyecto_trabajo_text;
+    if (strpos(strtoupper($proyecto_trabajo_text), "ESTRUCTURA") !== false  || strpos(strtoupper($proyecto_trabajo_text), "ARQUITECTURA") !== false || strpos(strtoupper($proyecto_trabajo_text), "ADICIONALES") !== false) {
+        $valorVenta = $valorVenta + ($valorVenta * 0.04);
+    }
+
     //3. Calcular el resto de variables
     $amortizacionAdelanto = $valorVenta * $porcentajeAmortizacionAdelanto / 100;
     $retencionFondoGarantia = $valorVenta * $porcentajeRetencionFondoGarantia / 100;
     $subTotal = $valorVenta - $amortizacionAdelanto - $retencionFondoGarantia;
-
-    $proyecto_trabajo_text = $object->proyecto_trabajo_text;
-    if (strpos(strtoupper($proyecto_trabajo_text), "ESTRUCTURA") !== false  || strpos(strtoupper($proyecto_trabajo_text), "ARQUITECTURA") !== false || strpos(strtoupper($proyecto_trabajo_text), "ADICIONALES") !== false) {
-        $subTotal = $subTotal + ($subTotal * 0.04);
-    }
 
     $igv = $subTotal * 0.18;
     $total = $subTotal + $igv;

@@ -287,6 +287,10 @@
                         $("#tableAvances tbody").append(html);
                     });
                     $('#tableAvances').DataTable();
+                    var proyecto_trabajo_text = $("#proyecto_trabajo_id option:selected").text();
+                    if (proyecto_trabajo_text.toUpperCase().includes("ESTRUCTURA") || proyecto_trabajo_text.toUpperCase().includes("ARQUITECTURA") || proyecto_trabajo_text.toUpperCase().includes("ADICIONALES")) {
+                        valorVenta = valorVenta + (valorVenta * 0.04);
+                    }
                     $("#valor_venta").val(valorVenta.toFixed(2));
                     var cantidadAdelantoRestante = $("#cantidad_adelanto_restante").val();
                     var porcentaje_amortizacion_adelanto = $("#porcentaje_amortizacion_adelanto").val();
@@ -296,10 +300,6 @@
                     var amortizacionAdelanto = valorVenta * porcentaje_amortizacion_adelanto;
                     var retencionFondoGarantia = Number(valorVenta) * porcentaje_retencion_fondo_garantia;
                     var subTotal = Number(valorVenta) - Number(amortizacionAdelanto) - Number(retencionFondoGarantia);
-                    var proyecto_trabajo_text = $("#proyecto_trabajo_id option:selected").text();
-                    if (proyecto_trabajo_text.toUpperCase().includes("ESTRUCTURA") || proyecto_trabajo_text.toUpperCase().includes("ARQUITECTURA") || proyecto_trabajo_text.toUpperCase().includes("ADICIONALES")) {
-                        subTotal = subTotal + (subTotal * 0.04);
-                    }
                     var igv = subTotal * 0.18;
                     var total = Number(subTotal) + Number(igv);
                     var detraccion = total * 0.12;
