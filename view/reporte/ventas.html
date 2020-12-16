@@ -56,7 +56,16 @@
         <div id="div_export" style="display: none;">
             <table>
                 <tr>
-                    <td colspan="9" style="text-align: center;">REPORTE DE VENTAS</td>
+                    <td colspan="9" style="text-align: center;"><img style="float: left;" src="http://deza.com.pe/assets/media/logos/logo-deza-nuevo.jpg" alt="" height="40">REPORTE DE VENTAS</td>
+                </tr>
+                <tr>
+                    <td colspan="9"></td>
+                </tr>
+            </table>
+            <table>
+                <tr>
+                    <td colspan="1">Proyecto:</td>
+                    <td colspan="8" style="text-align: left; padding-right: 10;">__PROYECTO__</td>
                 </tr>
             </table>
             <table id="table_export" border="1">
@@ -101,6 +110,7 @@
         $("#table_export tbody").html(tbody);
         $("#table").DataTable();
         var tableExport = $("#div_export").html();
+        tableExport = tableExport.replace("__PROYECTO__", $("#proyecto_id :selected").text());
         tableExport = tableExport.replace(/ /g, '%20');
         exportHTMLToExcel(tableExport, 'REPORTE_VENTAS');
     });
