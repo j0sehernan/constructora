@@ -64,7 +64,7 @@ class ProyectoVentaCronogramaPago
         $result = $db->execute("update proyecto_venta_cronograma_pago " .
             "set cuota = $cuota, " .
             "monto_a_pagar = $monto_a_pagar, " .
-            "fecha_programada = if('$fecha_programada'='', null, str_to_date('$fecha_programada', '%d/%m/%Y'))" .
+            "fecha_programada = if('$fecha_programada'='', null, str_to_date('$fecha_programada', '%d/%m/%Y')) " .
             "where id = $id;");
         return $result;
     }
