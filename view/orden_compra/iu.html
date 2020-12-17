@@ -479,11 +479,11 @@
                     $("#print_table tbody").append(`
                     <tr>
                         <td>`+ (index + 1) + `</td>
-                        <td>`+ row.cantidad + `</td>
+                        <td>`+ milFormate(row.cantidad) + `</td>
                         <td>`+ row.unidad_medida + `</td>
                         <td>`+ row.producto + `</td>
-                        <td>`+ row.precio_unitario + `</td>
-                        <td>`+ row.sub_total + `</td>
+                        <td>`+ milFormate(row.precio_unitario) + `</td>
+                        <td>`+ milFormate(row.sub_total) + `</td>
                     </tr>`);
                 });
 
@@ -510,17 +510,17 @@
                     <tr>
                         <td colspan="4" style="text-align: right;">Valor Venta</td>
                         <td>`+ ($("#moneda").val() === "PEN" ? `S/` : `$`) + `</td>
-                        <td>`+ $("#total_sin_igv").val() + `</td>
+                        <td>`+ milFormate($("#total_sin_igv").val()) + `</td>
                     </tr>
                     <tr>
                         <td colspan="4" style="text-align: right;">IGV</td>
                         <td>18.00%</td>
-                        <td>`+ $("#igv").val() + `</td>
+                        <td>`+ milFormate($("#igv").val()) + `</td>
                     </tr>
                     <tr>
                         <td colspan="4" style="text-align: right;">Precio Total</td>
                         <td>`+ ($("#moneda").val() === "PEN" ? `S/` : `$`) + `</td>
-                        <td>`+ $("#total").val() + `</td>
+                        <td>`+ milFormate($("#total").val()) + `</td>
                     </tr>
                     `);
             }

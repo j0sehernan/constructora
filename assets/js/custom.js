@@ -492,3 +492,8 @@ $(document).ajaxStart(function () {
 /* $(window).on("hashchange",function(){
     getHTMLContainer(location.hash.slice(1));
 });*/
+
+function milFormate(value) {
+    var nf = new Intl.NumberFormat('en-IN', { minimumFractionDigits: 2 });
+    return nf.format(value);
+}
