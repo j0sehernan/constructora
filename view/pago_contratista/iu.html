@@ -291,7 +291,7 @@
                     porcentaje_retencion_fondo_garantia = Number(porcentaje_retencion_fondo_garantia) / 100;
                     var proyecto_trabajo_text = $("#proyecto_trabajo_id option:selected").text();
                     if (proyecto_trabajo_text.toUpperCase().includes("ESTRUCTURA") || proyecto_trabajo_text.toUpperCase().includes("ARQUITECTURA") || proyecto_trabajo_text.toUpperCase().includes("ADICIONALES")) {
-                        valorVenta = valorVenta + (valorVenta * porcentaje_retencion_fondo_garantia);
+                        valorVenta = valorVenta;
                     }
                     $("#valor_venta").val(valorVenta.toFixed(2));
                     var cantidadAdelantoRestante = $("#cantidad_adelanto_restante").val();
