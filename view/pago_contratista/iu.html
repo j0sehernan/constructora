@@ -287,16 +287,16 @@
                         $("#tableAvances tbody").append(html);
                     });
                     $('#tableAvances').DataTable();
+                    var porcentaje_retencion_fondo_garantia = $("#porcentaje_retencion_fondo_garantia").val();
+                    porcentaje_retencion_fondo_garantia = Number(porcentaje_retencion_fondo_garantia) / 100;
                     var proyecto_trabajo_text = $("#proyecto_trabajo_id option:selected").text();
                     if (proyecto_trabajo_text.toUpperCase().includes("ESTRUCTURA") || proyecto_trabajo_text.toUpperCase().includes("ARQUITECTURA") || proyecto_trabajo_text.toUpperCase().includes("ADICIONALES")) {
-                        valorVenta = valorVenta + (valorVenta * 0.04);
+                        valorVenta = valorVenta + (valorVenta * porcentaje_retencion_fondo_garantia);
                     }
                     $("#valor_venta").val(valorVenta.toFixed(2));
                     var cantidadAdelantoRestante = $("#cantidad_adelanto_restante").val();
                     var porcentaje_amortizacion_adelanto = $("#porcentaje_amortizacion_adelanto").val();
                     porcentaje_amortizacion_adelanto = Number(porcentaje_amortizacion_adelanto) / 100;
-                    var porcentaje_retencion_fondo_garantia = $("#porcentaje_retencion_fondo_garantia").val();
-                    porcentaje_retencion_fondo_garantia = Number(porcentaje_retencion_fondo_garantia) / 100;
                     var amortizacionAdelanto = valorVenta * porcentaje_amortizacion_adelanto;
                     var retencionFondoGarantia = Number(valorVenta) * porcentaje_retencion_fondo_garantia;
                     var subTotal = Number(valorVenta) - Number(amortizacionAdelanto) - Number(retencionFondoGarantia);

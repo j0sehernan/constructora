@@ -88,7 +88,7 @@ if ($object->{'action'} == "list") {
 
     $proyecto_trabajo_text = $object->proyecto_trabajo_text;
     if (strpos(strtoupper($proyecto_trabajo_text), "ESTRUCTURA") !== false  || strpos(strtoupper($proyecto_trabajo_text), "ARQUITECTURA") !== false || strpos(strtoupper($proyecto_trabajo_text), "ADICIONALES") !== false) {
-        $valorVenta = $valorVenta + ($valorVenta * 0.04);
+        $valorVenta = $valorVenta + ($valorVenta * $porcentajeRetencionFondoGarantia);
     }
 
     //3. Calcular el resto de variables
