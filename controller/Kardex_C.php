@@ -128,17 +128,17 @@ if ($object->{'action'} == "listByAlmacen") {
 
             switch ($producto_unidad_medida["factor"]) {
                 case "*":
-                    $nuevo_precio = $precio_anterior * $producto_unidad_medida["cantidad"];
-                    break;
-                case "/":
                     $nuevo_precio = $precio_anterior / $producto_unidad_medida["cantidad"];
                     break;
+                case "/":
+                    $nuevo_precio = $precio_anterior * $producto_unidad_medida["cantidad"];
+                    break;
                 case "+":
-                    $nuevo_precio = $precio_anterior + $producto_unidad_medida["cantidad"];
+                    $nuevo_precio = $precio_anterior - $producto_unidad_medida["cantidad"];
                     echo (json_encode($result));
                     break;
                 case "-":
-                    $nuevo_precio = $precio_anterior - $producto_unidad_medida["cantidad"];
+                    $nuevo_precio = $precio_anterior + $producto_unidad_medida["cantidad"];
                     echo (json_encode($result));
                     break;
             }
