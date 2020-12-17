@@ -24,17 +24,14 @@ switch ($object->action) {
             //1.Insert
             $result = $proyectoVentaDetalle->insert($idProyectoVenta, $object->proyecto_inmueble_id, $precio);
             if ($result) {
-                //2. Sum new accumulate values
+                //2.Actualiza totales
+                $proyectoVenta->updateTotalsById($idProyectoVenta);
+
+                //3. Obtiene los nuevos montos
                 $listProyectoVenta = $proyectoVenta->get($idProyectoVenta);
 
-                $totalAPagar = $listProyectoVenta[0]["total_a_pagar"] + $precio;
-                $acumuladoPagado = $listProyectoVenta[0]["acumulado_pagado"];
-                $tipo_venta = $listProyectoVenta[0]["tipo_venta"];
-                $monto_financiado = $listProyectoVenta[0]["monto_financiado"];
-                $saldoPorPagar = $totalAPagar - $acumuladoPagado;
-                $moneda = $listProyectoVenta[0]["moneda"];
-
-                $proyectoVenta->update($idProyectoVenta, $totalAPagar, $acumuladoPagado, $saldoPorPagar, $tipo_venta, $monto_financiado, $moneda);
+                $totalAPagar = $listProyectoVenta[0]["total_a_pagar"];
+                $saldo_por_pagar = $listProyectoVenta[0]["saldo_por_pagar"];
 
                 $result = array(
                     "total_a_pagar" => $totalAPagar,
