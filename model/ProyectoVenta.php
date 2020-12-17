@@ -81,7 +81,7 @@ class ProyectoVenta
         $result = $db->execute("update proyecto_venta
         set total_a_pagar = (select ifnull(sum(ifnull(precio, 0)), 0) from proyecto_venta_detalle where proyecto_venta_id = $id),
         acumulado_pagado = (select ifnull(sum(ifnull(monto_moneda_pago, 0)), 0) from proyecto_venta_pago where proyecto_venta_id = $id),
-        saldo_por_pagar = (select ifnull(sum(ifnull(precio, 0)), 0) from proyecto_venta_detalle where proyecto_venta_id = $id) - (select ifnull(sum(ifnull(monto_moneda_pago, 0)), 0) from proyecto_venta_pago where proyecto_venta_id = $id)
+        saldo_por_pagar = ((select ifnull(sum(ifnull(precio, 0)), 0) from proyecto_venta_detalle where proyecto_venta_id = $id) - (select ifnull(sum(ifnull(monto_moneda_pago, 0)), 0) from proyecto_venta_pago where proyecto_venta_id = $id))
         where id = $id");
         return $result;
     }
