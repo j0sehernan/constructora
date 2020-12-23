@@ -92,6 +92,8 @@ if ($object->{'action'} == "list") {
         $valorVenta = $valorVenta + ($valorVenta * $porcentajeRetencionFondoGarantia / 100);
     } */
 
+    $sub_total_0 = $valorVenta;
+
     $gastos_generales = $valorVenta * $porcentaje_gastos_generales;
 
     $valorVenta = $valorVenta + $gastos_generales;
@@ -106,7 +108,7 @@ if ($object->{'action'} == "list") {
     $descuento_adelanto = $object->descuento_adelanto == "" ? 0 : $object->descuento_adelanto;
     $netoPagar = $total - $detraccion - $descuento_adelanto;
     //4. Insertar en pago contratista
-    $result = $pagoContratista->insert($object->{'persona_contratista_id'}, $idProyectoTrabajo, $object->{'proyecto_id'}, $fechaInicio, $fechaTermino, round($valorVenta, 2), round($amortizacionAdelanto, 2), round($retencionFondoGarantia, 2), round($subTotal, 2), round($igv, 2), round($total, 2), round($detraccion, 2), round($netoPagar, 2), $object->{'pagado'}, $descuento_adelanto, $object->comprobante_pago_tipo_id, $object->comprobante_pago_codigo, $object->fecha_pago);
+    $result = $pagoContratista->insert($object->{'persona_contratista_id'}, $idProyectoTrabajo, $object->{'proyecto_id'}, $fechaInicio, $fechaTermino, round($valorVenta, 2), round($amortizacionAdelanto, 2), round($retencionFondoGarantia, 2), round($subTotal, 2), round($igv, 2), round($total, 2), round($detraccion, 2), round($netoPagar, 2), $object->{'pagado'}, $descuento_adelanto, $object->comprobante_pago_tipo_id, $object->comprobante_pago_codigo, $object->fecha_pago, $sub_total_0, $gastos_generales);
 
     if ($result) {
         //5. Actualizar el adelanto restante en Proyecto Trabajo
