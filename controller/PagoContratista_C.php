@@ -102,7 +102,7 @@ if ($object->{'action'} == "list") {
 
     $sub_total_0 = $valorVenta;
 
-    $gastos_generales = $valorVenta * $porcentaje_gastos_generales;
+    $gastos_generales = $valorVenta * $porcentaje_gastos_generales / 100;
 
     $valorVenta = $valorVenta + $gastos_generales;
     //3. Calcular el resto de variables
