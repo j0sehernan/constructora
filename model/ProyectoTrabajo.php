@@ -26,10 +26,15 @@ class ProyectoTrabajo
         return $result;
     }
 
-    function listByProyectoAndContratista($idProyecto, $idContratista)
+    function listByProyectoAndContratista($proyecto_id, $persona_contratista_id)
     {
         $db = new DB();
-        $result = $db->query("call proyecto_trabajo_list_by_proyecto_and_contratista('$idProyecto','$idContratista');");
+        $result = $db->query("select id, nombre, cantidad_adelanto_restante, " .
+            "porcentaje_amortizacion_adelanto, porcentaje_retencion_fondo_garantia, " .
+            "porcentaje_gastos_generales " .
+            "from proyecto_trabajo " .
+            "where persona_contratista_id = $persona_contratista_id " .
+            "and proyecto_id = $proyecto_id;");
         return $result;
     }
 

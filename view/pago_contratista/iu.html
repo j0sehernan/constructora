@@ -136,6 +136,7 @@
             <div style="text-align: right;">
                 <input type="hidden" id="porcentaje_amortizacion_adelanto" name="porcentaje_amortizacion_adelanto">
                 <input type="hidden" id="porcentaje_retencion_fondo_garantia" name="porcentaje_retencion_fondo_garantia">
+                <input type="hidden" id="porcentaje_gastos_generales" name="porcentaje_gastos_generales">
                 <input type="hidden" id="action" name="action">
                 <input type="hidden" id="id" name="id">
                 <button type="submit" id="btnVisualizar" class="btn btn-outline-info btn-sm" onclick="$('#action').val('view')"><i class="la la-eye"></i> Visualizar</button>
@@ -216,7 +217,7 @@
                 $("#formPagoContratista #proyecto_trabajo_id").html('<option value="">Seleccione Trabajo</option>');
                 var arrayProyectoTrabajo = JSON.parse(data);
                 arrayProyectoTrabajo.forEach(function (object, index) {
-                    $("#formPagoContratista #proyecto_trabajo_id").append('<option value="' + object.id + '" data-cantidad_adelanto_restante="' + object.cantidad_adelanto_restante + '" data-porcentaje_amortizacion_adelanto="' + object.porcentaje_amortizacion_adelanto + '" data-porcentaje_retencion_fondo_garantia="' + object.porcentaje_retencion_fondo_garantia + '">' + object.nombre + '</option>');
+                    $("#formPagoContratista #proyecto_trabajo_id").append('<option value="' + object.id + '" data-cantidad_adelanto_restante="' + object.cantidad_adelanto_restante + '" data-porcentaje_amortizacion_adelanto="' + object.porcentaje_amortizacion_adelanto + '" data-porcentaje_retencion_fondo_garantia="' + object.porcentaje_retencion_fondo_garantia + '" data-porcentaje_gastos_generales="' + object.porcentaje_gastos_generales + '">' + object.nombre + '</option>');
                 });
                 if (typeof idProyectoTrabajo !== 'undefined') {
                     $("#formPagoContratista #proyecto_trabajo_id").val(idProyectoTrabajo);
@@ -239,9 +240,11 @@
         var cantidad_adelanto_restante = $("#proyecto_trabajo_id option:selected").attr("data-cantidad_adelanto_restante");
         var porcentaje_amortizacion_adelanto = $("#proyecto_trabajo_id option:selected").attr("data-porcentaje_amortizacion_adelanto");
         var porcentaje_retencion_fondo_garantia = $("#proyecto_trabajo_id option:selected").attr("data-porcentaje_retencion_fondo_garantia");
+        var porcentaje_gastos_generales = $("#proyecto_trabajo_id option:selected").attr("data-porcentaje_gastos_generales");
         $("#cantidad_adelanto_restante").val(cantidad_adelanto_restante);
         $("#porcentaje_amortizacion_adelanto").val(porcentaje_amortizacion_adelanto);
         $("#porcentaje_retencion_fondo_garantia").val(porcentaje_retencion_fondo_garantia);
+        $("#porcentaje_gastos_generales").val(porcentaje_gastos_generales);
     });
     function createRowAvancesHTML(object) {
         var html =
@@ -287,30 +290,48 @@
                         $("#tableAvances tbody").append(html);
                     });
                     $('#tableAvances').DataTable();
-                    var porcentaje_retencion_fondo_garantia = $("#porcentaje_retencion_fondo_garantia").val();
-                    porcentaje_retencion_fondo_garantia = Number(porcentaje_retencion_fondo_garantia) / 100;
-                    var proyecto_trabajo_text = $("#proyecto_trabajo_id option:selected").text();
-                    if (proyecto_trabajo_text.toUpperCase().includes("ESTRUCTURA") || proyecto_trabajo_text.toUpperCase().includes("ARQUITECTURA") || proyecto_trabajo_text.toUpperCase().includes("ADICIONALES")) {
-                        valorVenta = valorVenta + (valorVenta * porcentaje_retencion_fondo_garantia);
-                    }
-                    $("#valor_venta").val(valorVenta.toFixed(2));
-                    var cantidadAdelantoRestante = $("#cantidad_adelanto_restante").val();
+
+                    var porcentaje_gastos_generales = $("#porcentaje_gastos_generales").val();
+                    porcentaje_gastos_generales = Number(porcentaje_gastos_generales) / 100;
+
                     var porcentaje_amortizacion_adelanto = $("#porcentaje_amortizacion_adelanto").val();
                     porcentaje_amortizacion_adelanto = Number(porcentaje_amortizacion_adelanto) / 100;
-                    var amortizacionAdelanto = valorVenta * porcentaje_amortizacion_adelanto;
+
+                    var porcentaje_retencion_fondo_garantia = $("#porcentaje_retencion_fondo_garantia").val();
+                    porcentaje_retencion_fondo_garantia = Number(porcentaje_retencion_fondo_garantia) / 100;
+
+                    /* var proyecto_trabajo_text = $("#proyecto_trabajo_id option:selected").text();
+                    if (proyecto_trabajo_text.toUpperCase().includes("ESTRUCTURA") || proyecto_trabajo_text.toUpperCase().includes("ARQUITECTURA") || proyecto_trabajo_text.toUpperCase().includes("ADICIONALES")) {
+                        valorVenta = valorVenta + (valorVenta * porcentaje_retencion_fondo_garantia);
+                    } */
+
+                    var gastos_generales = Number(valorVenta) * porcentaje_gastos_generales;
+                    valorVenta = valorVenta + gastos_generales;
+                    $("#valor_venta").val(valorVenta.toFixed(2));
+
+                    var amortizacionAdelanto = Number(valorVenta) * porcentaje_amortizacion_adelanto;
+                    $("#amortizacion_adelanto").val(amortizacionAdelanto.toFixed(2));
+
                     var retencionFondoGarantia = Number(valorVenta) * porcentaje_retencion_fondo_garantia;
-                    var subTotal = Number(valorVenta) - Number(amortizacionAdelanto) - Number(retencionFondoGarantia);
-                    var igv = subTotal * 0.18;
-                    var total = Number(subTotal) + Number(igv);
-                    var detraccion = total * 0.12;
-                    var descuento_adelanto = $("#descuento_adelanto").val();
-                    var netoPagar = Number(total) - Number(detraccion) - Number(descuento_adelanto);
-                    $("#amortizacion_adelanto").val(Number(amortizacionAdelanto).toFixed(2));
                     $("#retencion_fondo_garantia").val(retencionFondoGarantia.toFixed(2));
+
+                    var subTotal = Number(valorVenta) - Number(amortizacionAdelanto) - Number(retencionFondoGarantia);
                     $("#sub_total").val(subTotal.toFixed(2));
+
+                    var igv = subTotal * 0.18;
                     $("#igv").val(igv.toFixed(2));
+
+                    var total = Number(subTotal) + Number(igv);
                     $("#total").val(total.toFixed(2));
+
+
+                    var detraccion = total * 0.12;
                     $("#detraccion").val(detraccion.toFixed(2));
+
+                    var descuento_adelanto = $("#descuento_adelanto").val() == "" ? 0 : $("#descuento_adelanto").val();
+
+                    var netoPagar = Number(total) - Number(detraccion) - Number(descuento_adelanto);
+
                     $("#neto_pagar").val(netoPagar.toFixed(2));
                 }
             });

@@ -79,6 +79,7 @@ if ($object->{'action'} == "list") {
     $cantidadAdelantoRestante = $listProyectoTrabajo[0]["cantidad_adelanto_restante"];
     $porcentajeAmortizacionAdelanto = $listProyectoTrabajo[0]["porcentaje_amortizacion_adelanto"];
     $porcentajeRetencionFondoGarantia = $listProyectoTrabajo[0]["porcentaje_retencion_fondo_garantia"];
+    $porcentaje_gastos_generales = $listProyectoTrabajo[0]["porcentaje_gastos_generales"];
     //2. Calcular el Valor Venta
     $valorVenta = 0;
     $listAvancesByProyectoTrabajoAndDataRanges = $proyectoTrabajoPartidaAvance->listByProyectoTrabajoAndDateRanges($idProyectoTrabajo, $fechaInicio, $fechaTermino);
@@ -86,11 +87,14 @@ if ($object->{'action'} == "list") {
         $valorVenta += $avance["precio_avance"];
     }
 
-    $proyecto_trabajo_text = $object->proyecto_trabajo_text;
+    /* $proyecto_trabajo_text = $object->proyecto_trabajo_text;
     if (strpos(strtoupper($proyecto_trabajo_text), "ESTRUCTURA") !== false  || strpos(strtoupper($proyecto_trabajo_text), "ARQUITECTURA") !== false || strpos(strtoupper($proyecto_trabajo_text), "ADICIONALES") !== false) {
         $valorVenta = $valorVenta + ($valorVenta * $porcentajeRetencionFondoGarantia / 100);
-    }
+    } */
 
+    $gastos_generales = $valorVenta * $porcentaje_gastos_generales;
+
+    $valorVenta = $valorVenta + $gastos_generales;
     //3. Calcular el resto de variables
     $amortizacionAdelanto = $valorVenta * $porcentajeAmortizacionAdelanto / 100;
     $retencionFondoGarantia = $valorVenta * $porcentajeRetencionFondoGarantia / 100;
