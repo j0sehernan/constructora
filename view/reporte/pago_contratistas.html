@@ -64,6 +64,8 @@
                     <tr>
                         <th style="text-align: center;">Inicio</th>
                         <th style="text-align: center;">Término</th>
+                        <th style="text-align: center;">Sub Total</th>
+                        <th style="text-align: center;">Gasto General</th>
                         <th style="text-align: center;">Valor Venta</th>
                         <th style="text-align: center;">Amortización de Adelanto</th>
                         <th style="text-align: center;">Retencion de Fondo de Garantía</th>
@@ -83,22 +85,22 @@
         <div id="div_export" style="display: none;">
             <table>
                 <tr>
-                    <td colspan="13" style="text-align: center;"><img style="float: left;" src="http://deza.com.pe/assets/media/logos/logo-deza-nuevo.jpg" alt="" height="40">REPORTE DE PAGO A CONTRATISTA</td>
+                    <td colspan="15" style="text-align: center;"><img style="float: left;" src="http://deza.com.pe/assets/media/logos/logo-deza-nuevo.jpg" alt="" height="40">REPORTE DE PAGO A CONTRATISTA</td>
                 </tr>
                 <tr>
-                    <td colspan="13" style="text-align: center;">Trabajo de: __TRABAJO__</td>
+                    <td colspan="15" style="text-align: center;">Trabajo de: __TRABAJO__</td>
                 </tr>
             </table>
             <table>
                 <tr>
                     <td colspan="1">Proyecto:</td>
-                    <td colspan="10" style="text-align: left; padding-right: 10;">__PROYECTO__</td>
+                    <td colspan="12" style="text-align: left; padding-right: 10;">__PROYECTO__</td>
                     <td style="text-align: right;">Periodo del:</td>
                     <td style="text-align: right;">__PERIODO_INICIO__</td>
                 </tr>
                 <tr>
                     <td colspan="1">Contratista:</td>
-                    <td colspan="10" style="text-align: left; padding-right: 10;">__CONTRATISTA__</td>
+                    <td colspan="12" style="text-align: left; padding-right: 10;">__CONTRATISTA__</td>
                     <td style="text-align: right;">Al:</td>
                     <td style="text-align: right;">__PERIODO_TERMINO__</td>
                 </tr>
@@ -108,6 +110,8 @@
                     <tr>
                         <th style="text-align: center;">Inicio</th>
                         <th style="text-align: center;">Término</th>
+                        <th style="text-align: center;">Sub Total</th>
+                        <th style="text-align: center;">Gasto General</th>
                         <th style="text-align: center;">Valor Venta</th>
                         <th style="text-align: center;">Amortización de Adelanto</th>
                         <th style="text-align: center;">Retencion de Fondo de Garantía</th>
@@ -216,6 +220,8 @@
                             <tr>
                                 <td>`+ object.fecha_inicio + `</td>
                                 <td>`+ object.fecha_termino + `</td>
+                                <td>`+ comodin + object.sub_total_0 + `</td>
+                                <td>`+ comodin + object.gasto_general + `</td>
                                 <td>`+ comodin + object.valor_venta + `</td>
                                 <td>`+ comodin + object.amortizacion_adelanto + `</td>
                                 <td>`+ comodin + object.retencion_fondo_garantia + `</td>

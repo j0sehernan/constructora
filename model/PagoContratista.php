@@ -17,6 +17,8 @@ class PagoContratista
         $query = "select " .
             "if(fecha_inicio='0000-00-00', '', date_format(fecha_inicio, '%d/%m/%Y')) as fecha_inicio, " .
             "if(fecha_termino='0000-00-00', '', date_format(fecha_termino, '%d/%m/%Y')) as fecha_termino, " .
+            "sub_total_0, ".
+            "gasto_general, ".
             "valor_venta, " .
             "amortizacion_adelanto, " .
             "retencion_fondo_garantia, " .

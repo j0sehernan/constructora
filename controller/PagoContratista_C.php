@@ -16,6 +16,8 @@ if ($object->{'action'} == "list") {
 } elseif ($object->{'action'} == "listByProyectoAndTrabajoAndPeriod") {
     $result = $pagoContratista->listByProyectoAndTrabajoAndPeriod($object->proyecto_id, $object->proyecto_trabajo_id, $object->fecha_inicio, $object->fecha_termino);
 
+    $total_sub_total_0 = 0;
+    $total_gasto_general = 0;
     $total_valor_venta = 0;
     $total_amortizacion_adelanto = 0;
     $total_retencion_fondo_garantia = 0;
@@ -27,6 +29,8 @@ if ($object->{'action'} == "list") {
     $total_neto_pagar = 0;
 
     for ($i = 0; $i < count($result); $i++) {
+        $total_sub_total_0 += $result[$i]["sub_total_0"];
+        $total_gasto_general += $result[$i]["gasto_general"];
         $total_valor_venta += $result[$i]["valor_venta"];
         $total_amortizacion_adelanto += $result[$i]["amortizacion_adelanto"];
         $total_retencion_fondo_garantia += $result[$i]["retencion_fondo_garantia"];
@@ -37,6 +41,8 @@ if ($object->{'action'} == "list") {
         $total_descuento_adelanto += $result[$i]["descuento_adelanto"];
         $total_neto_pagar += $result[$i]["neto_pagar"];
 
+        $result[$i]["sub_total_0"] = number_format($result[$i]["sub_total_0"], 2, '.', ',');
+        $result[$i]["gasto_general"] = number_format($result[$i]["gasto_general"], 2, '.', ',');
         $result[$i]["valor_venta"] = number_format($result[$i]["valor_venta"], 2, '.', ',');
         $result[$i]["amortizacion_adelanto"] = number_format($result[$i]["amortizacion_adelanto"], 2, '.', ',');
         $result[$i]["retencion_fondo_garantia"] = number_format($result[$i]["retencion_fondo_garantia"], 2, '.', ',');
@@ -51,6 +57,8 @@ if ($object->{'action'} == "list") {
     $objectReport = array(
         "fecha_inicio" => "TOTAL",
         "fecha_termino" => "",
+        "sub_total_0" => number_format($total_sub_total_0, 2, '.', ','),
+        "gasto_general" => number_format($total_gasto_general, 2, '.', ','),
         "valor_venta" => number_format($total_valor_venta, 2, '.', ','),
         "amortizacion_adelanto" => number_format($total_amortizacion_adelanto, 2, '.', ','),
         "retencion_fondo_garantia" => number_format($total_retencion_fondo_garantia, 2, '.', ','),
