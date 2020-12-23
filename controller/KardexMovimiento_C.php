@@ -47,9 +47,11 @@ switch ($object->action) {
                     break;
                 case "I_OC":
                     $documento = $result[$i]["guia_remision"];
+                    $orden_compra_entrada__partida_salida = $result[$i]["orden_compra"];
                     break;
                 case "S_PARTIDA":
                     $documento = $result[$i]["numero_vale"];
+                    $orden_compra_entrada__partida_salida = $result[$i]["proyecto_trabajo_partida_salida"];
                     break;
                 case "I_CONVERT_UPDATE":
                     break;
