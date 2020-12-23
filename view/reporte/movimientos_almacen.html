@@ -50,7 +50,7 @@
         <div class="row" style="margin-bottom: 10px;">
             <div class="col-sm-12">
                 <div style="text-align: right;">
-                    <input type="hidden" id="action" name="action" value="reportByAlmacenAndFechaInicioAndFechaTermino">
+                    <input type="hidden" id="action" name="action" value="reportByAlmacenAndProductoAndFechaInicioAndFechaTermino">
                     <button type="button" id="btn-export" class="btn btn-outline-info btn-sm" style="display: none;"><i class="fa fa-print"></i> Exportar</button>
                     <!-- <button type="button" id="btnImprimir" class="btn btn-outline-info btn-sm" style="display: none;"><i class="fa fa-print"></i> Imprimir</button> -->
                     <button type="submit" id="btnGenerar" class="btn btn-success btn-sm"><i class="la la-save"></i> Generar</button>
@@ -61,13 +61,17 @@
             <table id="table" class="table table-hover table-bordered table-striped table-sm">
                 <thead class="thead-dark">
                     <tr>
+                        <th style="text-align: center;">Fecha de Movimiento</th>
                         <th style="text-align: center;">Tipo Movimiento</th>
                         <th style="text-align: center;">UM</th>
-                        <th style="text-align: center;">Cantidad</th>
-                        <th style="text-align: center;">Fecha de Movimiento</th>
+                        <th style="text-align: center;">Documento</th>
+                        <th style="text-align: center;">OC Entrada / Partida Salida</th>
+                        <th style="text-align: center;">Proveedor /Contratista/Almacen</th>
+                        <th style="text-align: center;">C_Entrada</th>
+                        <th style="text-align: center;">C_Salida</th>
+                        <th style="text-align: center;">S_Actual</th>
                         <th style="text-align: center;">Precio</th>
-                        <th style="text-align: center;">Partida Salida</th>
-                        <th style="text-align: center;">Contratista Salida</th>
+                        <th style="text-align: center;">Subtotales</th>
                     </tr>
                 </thead>
                 <tbody></tbody>
@@ -76,23 +80,40 @@
         <div id="div_export" style="display: none;">
             <table>
                 <tr>
-                    <td colspan="7" style="text-align: center;">REPORTE DE MOVIMIENTOS DE ALMACÉN</td>
+                    <td colspan="10" style="text-align: center;"><img style="float: left;" src="http://deza.com.pe/assets/media/logos/logo-deza-nuevo.jpg" alt="" height="40">REPORTE DE MOVIMIENTOS DE ALMACÉN</td>
                 </tr>
                 <tr>
-                    <td>Producto: </td>
-                    <td colspan="6">__PRODUCTO__</td>
+                    <td colspan="10"></td>
                 </tr>
+                <table>
+                    <tr>
+                        <td colspan="1">Almacen:</td>
+                        <td colspan="8" style="text-align: left; padding-right: 10;">__ALMACEN__</td>
+                        <td style="text-align: right;">Periodo del:</td>
+                        <td style="text-align: right;">__PERIODO_INICIO__</td>
+                    </tr>
+                    <tr>
+                        <td colspan="1">Producto:</td>
+                        <td colspan="8" style="text-align: left; padding-right: 10;">__PRODUCTO__</td>
+                        <td style="text-align: right;">Al:</td>
+                        <td style="text-align: right;">__PERIODO_TERMINO__</td>
+                    </tr>
+                </table>
             </table>
             <table id="table_export" border="1">
                 <thead>
                     <tr>
+                        <th style="text-align: center;">Fecha de Movimiento</th>
                         <th style="text-align: center;">Tipo Movimiento</th>
                         <th style="text-align: center;">UM</th>
-                        <th style="text-align: center;">Cantidad</th>
-                        <th style="text-align: center;">Fecha de Movimiento</th>
+                        <th style="text-align: center;">Documento</th>
+                        <th style="text-align: center;">OC Entrada / Partida Salida</th>
+                        <th style="text-align: center;">Proveedor / Contratista / Almacen</th>
+                        <th style="text-align: center;">C_Entrada</th>
+                        <th style="text-align: center;">C_Salida</th>
+                        <th style="text-align: center;">S_Actual</th>
                         <th style="text-align: center;">Precio</th>
-                        <th style="text-align: center;">Partida Salida</th>
-                        <th style="text-align: center;">Contratista Salida</th>
+                        <th style="text-align: center;">Subtotales</th>
                     </tr>
                 </thead>
                 <tbody></tbody>
@@ -108,6 +129,9 @@
         $("#table").DataTable();
         var tableExport = $("#div_export").html();
         tableExport = tableExport.replace("__PRODUCTO__", $("#producto_id option:selected").text());
+        tableExport = tableExport.replace("__ALMACEN__", $("#almacen_id option:selected").text());
+        tableExport = tableExport.replace("__PERIODO_INICIO__", $("#fecha_inicio").val());
+        tableExport = tableExport.replace("__PERIODO_TERMINO__", $("#fecha_termino").val());
         tableExport = tableExport.replace(/ /g, '%20');
         exportHTMLToExcel(tableExport, 'REPORTE_MOVIMIENTOS_ALMACEN');
     });
@@ -192,20 +216,23 @@
                             case "S_PARTIDA": tipo_movimiento = "SALIDA POR ASIGNACIÓN A PARTIDA"; break;
                             case "I_CONVERT_UPDATE": tipo_movimiento = "ACTUALIZACIÓN DE CANTIDAD POR CONVERSIÓN DE UM"; break;
                             case "I_CONVERT_UPDATE_FINISH": tipo_movimiento = "ACTUALIZACIÓN Y FINALIZACIÓN DE CANTIDAD POR CONVERSIÓN DE UM"; break;
-                            case "I_CONVERT_NEW": tipo_movimiento = "GENERACIÓN POR CONVERSIÓN DE UM"; break;
                             case "I_PARTIDA": tipo_movimiento = "REINGRESO DESDE PARTIDA"; break;
                         };
 
                         var html =
                             `
                             <tr>
+                                <td>`+ object.fecha_movimiento + `</td>
                                 <td>`+ tipo_movimiento + `</td>
                                 <td>`+ object.unidad_medida + `</td>
-                                <td>`+ object.cantidad + `</td>
-                                <td>`+ object.fecha_movimiento + `</td>
+                                <td>`+ object.documento + `</td>
+                                <td>`+ object.oc_p + `</td>
+                                <td>`+ object.p_c_a + `</td>
+                                <td>`+ object.cantidad_entrada + `</td>
+                                <td>`+ object.cantidad_salida + `</td>
+                                <td>`+ object.stock_actual + `</td>
                                 <td>`+ object.precio + `</td>
-                                <td>`+ object.proyecto_trabajo_partida_salida + `</td>
-                                <td>`+ object.contratista_salida + `</td>
+                                <td>`+ object.sub_total + `</td>
                             </tr>
                             `;
                         $("#table tbody").append(html);

@@ -36,7 +36,7 @@ class KardexMovimiento
         return $result;
     }
 
-    function reportByAlmacenAndFechaInicioAndFechaTermino($almacen_id, $producto_id, $fecha_inicio, $fecha_termino)
+    function reportByAlmacenAndProductoAndFechaInicioAndFechaTermino($almacen_id, $producto_id, $fecha_inicio, $fecha_termino)
     {
         $db = new DB();
         $result = $db->query("select km.tipo_movimiento, " .
@@ -44,8 +44,6 @@ class KardexMovimiento
             "um.nombre as unidad_medida, " .
             "cantidad, " .
             "if(fecha_movimiento='0000-00-00', '', date_format(fecha_movimiento, '%d/%m/%Y')) as fecha_movimiento, " .
-            //"if(fecha_vencimiento='0000-00-00', '', date_format(fecha_vencimiento, '%d/%m/%Y')) as fecha_vencimiento, " .
-            //"if(fecha_termino='0000-00-00', '', date_format(fecha_termino, '%d/%m/%Y')) as fecha_termino, " .
             "precio, " .
             "ao.nombre as almacen_origen, " .
             "pro.nombre as proyecto, " .
@@ -53,6 +51,7 @@ class KardexMovimiento
             "oc.codigo as orden_compra, " .
             "cpt.nombre as comprobante_pago_tipo, " .
             "ifnull(comprobante_pago_codigo, '') as comprobante_pago_codigo, " .
+            "ifnull(numero_vale, '') as numero_vale, " .
             "per_reg_aud, " .
             "fec_reg_aud, " .
             "ifnull(guia_remision, '') as guia_remision, " .
