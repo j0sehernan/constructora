@@ -33,40 +33,50 @@ switch ($object->action) {
 
             switch ($tipo_movimiento) {
                 case "D":
+                    $tipo_movimiento_text = "ELIMINADO";
                     break;
                 case "I_PRODUCTO":
+                    $tipo_movimiento_text = "INGRESO POR PRODUCTO";
                     $documento = $result[$i]["comprobante_pago_codigo"];
                     break;
                 case "I_ALMACEN":
+                    $tipo_movimiento_text = "INGRESO POR CAMBIO DE ALMACEN";
                     $proveedor_contratista_almacen = $result[$i]["almacen_origen"];
                     break;
                 case "S_ALMACEN":
+                    $tipo_movimiento_text = "SALIDA POR CAMBIO DE ALMACEN";
                     $proveedor_contratista_almacen = $result[$i]["almacen_salida"];
                     break;
                 case "I_CONVERT_NEW":
+                    $tipo_movimiento_text = "INGRESO POR CONVERSIÓN DE UM";
                     break;
                 case "I_OC":
+                    $tipo_movimiento_text = "INGRESO POR ORDEN DE COMPRA";
                     $documento = $result[$i]["guia_remision"];
                     $orden_compra_entrada__partida_salida = $result[$i]["orden_compra"];
                     $proveedor_contratista_almacen = $result[$i]["proveedor_ingreso"];
                     break;
                 case "S_PARTIDA":
+                    $tipo_movimiento_text = "SALIDA POR ASIGNACIÓN A PARTIDA";
                     $documento = $result[$i]["numero_vale"];
                     $orden_compra_entrada__partida_salida = $result[$i]["proyecto_trabajo_partida_salida"];
                     $proveedor_contratista_almacen = $result[$i]["contratista_salida"];
                     break;
                 case "I_CONVERT_UPDATE":
+                    $tipo_movimiento_text = "ACTUALIZACIÓN DE CANTIDAD POR CONVERSIÓN DE UM";
                     break;
                 case "I_CONVERT_UPDATE_FINISH":
+                    $tipo_movimiento_text = "ACTUALIZACIÓN Y FINALIZACIÓN DE CANTIDAD POR CONVERSIÓN DE UM";
                     break;
                 case "I_PARTIDA":
+                    $tipo_movimiento_text = "REINGRESO DESDE PARTIDA";
                     break;
             }
 
             $objectReport = array(
                 "index" => $i + 1,
                 "fecha_movimiento" => $result[$i]["fecha_movimiento"],
-                "tipo_movimiento" => $tipo_movimiento,
+                "tipo_movimiento" => $tipo_movimiento_text,
                 "unidad_medida" => $result[$i]["unidad_medida"],
                 "documento" => $documento,
                 "oc_p" => $orden_compra_entrada__partida_salida,
