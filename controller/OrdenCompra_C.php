@@ -70,7 +70,7 @@ switch ($object->action) {
             $igv = round($total_sin_igv * 0.18, 2);
             $total = $total_sin_igv + $igv;
         }
-        $result = $ordenCompra->update($object->id, $object->persona_proveedor_id, $object->fecha, $object->proforma_codigo, $object->codigo, $incluye_igv, $total_sin_igv, $igv, $total, $object->moneda, $object->tipo_cambio, $object->total_text, $object->lugar_entrega, $object->forma_pago, $object->fecha_atencion, $object->referencia_requerimiento, $object->referencia_cotizacion);
+        $result = $ordenCompra->update($object->id, $object->persona_proveedor_id, $object->fecha, $object->proforma_codigo, $object->codigo, $incluye_igv, $total_sin_igv, $igv, $total, $object->moneda, $object->tipo_cambio, $object->total_text, $object->lugar_entrega, $object->forma_pago, $object->fecha_atencion, $object->referencia_requerimiento, "");
         echo (json_encode($result));
         break;
     case "d":

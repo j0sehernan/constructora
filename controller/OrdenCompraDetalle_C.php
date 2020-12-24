@@ -1,10 +1,12 @@
 <?php
 @include_once("_Configuration.php");
 @include_once("../model/OrdenCompraDetalle.php");
+@include_once("../model/OrdenCompra.php");
 
 $json = file_get_contents(_Configuration::$CONFIGURATION_QUERY_PARAMS);
 $object = json_decode($json);
 $ordenCompraDetalle = new OrdenCompraDetalle();
+$ordenCompra = new OrdenCompra();
 
 switch ($object->action) {
     case "listByOrdenCompra":
@@ -12,7 +14,15 @@ switch ($object->action) {
         echo (json_encode($result));
         break;
     case "listDontUsedByOrdenCompra":
+        $incluye_igv = $ordenCompra->get($object->orden_compra_id)[0]["incluye_igv"];
         $result = $ordenCompraDetalle->listDontUsedByOrdenCompra($object->orden_compra_id);
+
+        for ($i = 0; $i < count($result); $i++) {
+            if ($incluye_igv === "0") {
+                $result[$i]["precio_unitario"] = $result[$i]["precio_unitario"] * 1.18;
+            }
+        }
+
         echo (json_encode($result));
         break;
     case "get":
