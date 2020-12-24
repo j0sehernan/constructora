@@ -40,10 +40,7 @@ switch ($object->action) {
                 case "I_ALMACEN":
                     $proveedor_contratista_almacen = $result[$i]["almacen_origen"];
                     break;
-                case "I_ALMACEN_UPDATE":
-                    $proveedor_contratista_almacen = $result[$i]["almacen_salida"];
-                    break;
-                case "I_ALMACEN_UPDATE_FINISH":
+                case "S_ALMACEN":
                     $proveedor_contratista_almacen = $result[$i]["almacen_salida"];
                     break;
                 case "I_CONVERT_NEW":

@@ -120,7 +120,7 @@ class KardexMovimiento
     function insertAlmacenUpdate($idKardexMovimiento, $cantidad, $perRegAud, $almacen_salida_id)
     {
         $db = new DB();
-        $result = $db->execute("call kardex_movimiento_i_almacen_update('$idKardexMovimiento','$cantidad',',$perRegAud',', $almacen_salida_id');");
+        $result = $db->execute("call kardex_movimiento_i_almacen_update('$idKardexMovimiento','$cantidad',',$perRegAud','$almacen_salida_id');");
         return $result;
     }
 
