@@ -46,6 +46,7 @@ class KardexMovimiento
             "if(fecha_movimiento='0000-00-00', '', date_format(fecha_movimiento, '%d/%m/%Y')) as fecha_movimiento, " .
             "precio, " .
             "ao.nombre as almacen_origen, " .
+            "as.nombre as almacen_salida, " .
             "pro.nombre as proyecto, " .
             "ptp.nombre as proyecto_trabajo_partida, " .
             "oc.codigo as orden_compra, " .
@@ -58,14 +59,17 @@ class KardexMovimiento
             "if(guia_remision_pagada = 1, 'SI', 'NO') as guia_remision_pagada, " .
             "ifnull(cantidad_salida, 0), " .
             "ifnull(ptps.nombre, '') as proyecto_trabajo_partida_salida, " .
-            "ifnull(pc_s.nombre_1, '') as contratista_salida " .
+            "ifnull(pc_s.nombre_1, '') as contratista_salida, " .
+            "ifnull(pp_i.nombre_1, '') as proveedor_ingreso " .
             "from kardex_movimiento km " .
             "inner join producto p on km.producto_id = p.id " .
             "inner join unidad_medida um on km.unidad_medida_id = um.codigo " .
             "left join almacen ao on km.almacen_origen_id = ao.id " .
+            "left join almacen as on km.almacen_salida_id = as.id " .
             "left join proyecto pro on km.proyecto_origen_id = pro.id " .
             "left join proyecto_trabajo_partida ptp on km.proyecto_trabajo_partida_origen_id = ptp.id " .
             "left join orden_compra oc on km.orden_compra_id = oc.id " .
+            "left join persona pp_i on oc.persona_proveedor_id = pp_i.id " .
             "left join comprobante_pago_tipo cpt on km.comprobante_pago_tipo_id = cpt.codigo " .
             "left join proyecto_trabajo_partida ptps on km.proyecto_trabajo_partida_salida_id = ptps.id " .
             "left join proyecto_trabajo pt_s on ptps.proyecto_trabajo_id = pt_s.id " .
@@ -113,10 +117,10 @@ class KardexMovimiento
         return $result;
     }
 
-    function insertAlmacenUpdate($idKardexMovimiento, $cantidad, $perRegAud)
+    function insertAlmacenUpdate($idKardexMovimiento, $cantidad, $perRegAud, $almacen_salida_id)
     {
         $db = new DB();
-        $result = $db->execute("call kardex_movimiento_i_almacen_update('$idKardexMovimiento','$cantidad',',$perRegAud');");
+        $result = $db->execute("call kardex_movimiento_i_almacen_update('$idKardexMovimiento','$cantidad',',$perRegAud',', $almacen_salida_id');");
         return $result;
     }
 

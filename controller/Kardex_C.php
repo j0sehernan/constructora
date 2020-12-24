@@ -87,7 +87,7 @@ if ($object->{'action'} == "listByAlmacen") {
             $idKardexMovimiento = $kardexMovimiento->getMaxIdByKardex($id);
             $idKardexMovimiento = $idKardexMovimiento[0]["id"];
             //3. Insertamos un Kardex Movimiento de tipo convert con la cantidad restante
-            $resultKardexMovimientoUpdate = $kardexMovimiento->insertAlmacenUpdate($idKardexMovimiento, $diferencia, getPersonaFullName());
+            $resultKardexMovimientoUpdate = $kardexMovimiento->insertAlmacenUpdate($idKardexMovimiento, $diferencia, getPersonaFullName(), $almacen_id);
 
             if ($resultKardexMovimientoUpdate) {
                 //4. Insertamos el Nuevo Kardex

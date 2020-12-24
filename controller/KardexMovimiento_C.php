@@ -38,20 +38,25 @@ switch ($object->action) {
                     $documento = $result[$i]["comprobante_pago_codigo"];
                     break;
                 case "I_ALMACEN":
+                    $proveedor_contratista_almacen = $result[$i]["almacen_origen"];
                     break;
                 case "I_ALMACEN_UPDATE":
+                    $proveedor_contratista_almacen = $result[$i]["almacen_salida"];
                     break;
                 case "I_ALMACEN_UPDATE_FINISH":
+                    $proveedor_contratista_almacen = $result[$i]["almacen_salida"];
                     break;
                 case "I_CONVERT_NEW":
                     break;
                 case "I_OC":
                     $documento = $result[$i]["guia_remision"];
                     $orden_compra_entrada__partida_salida = $result[$i]["orden_compra"];
+                    $proveedor_contratista_almacen = $result[$i]["proveedor_ingreso"];
                     break;
                 case "S_PARTIDA":
                     $documento = $result[$i]["numero_vale"];
                     $orden_compra_entrada__partida_salida = $result[$i]["proyecto_trabajo_partida_salida"];
+                    $proveedor_contratista_almacen = $result[$i]["contratista_salida"];
                     break;
                 case "I_CONVERT_UPDATE":
                     break;
