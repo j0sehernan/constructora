@@ -45,8 +45,8 @@ class KardexMovimiento
             "cantidad, " .
             "if(fecha_movimiento='0000-00-00', '', date_format(fecha_movimiento, '%d/%m/%Y')) as fecha_movimiento, " .
             "precio, " .
-            "ao.nombre as almacen_origen, " .
-            "as.nombre as almacen_salida, " .
+            "ifnull(ao.nombre, '') as almacen_origen, " .
+            "ifnull(a_salida.nombre, '') as almacen_salida, " .
             "pro.nombre as proyecto, " .
             "ptp.nombre as proyecto_trabajo_partida, " .
             "oc.codigo as orden_compra, " .
@@ -65,7 +65,7 @@ class KardexMovimiento
             "inner join producto p on km.producto_id = p.id " .
             "inner join unidad_medida um on km.unidad_medida_id = um.codigo " .
             "left join almacen ao on km.almacen_origen_id = ao.id " .
-            "left join almacen as on km.almacen_salida_id = as.id " .
+            "left join almacen a_salida on km.almacen_salida_id = a_salida.id " .
             "left join proyecto pro on km.proyecto_origen_id = pro.id " .
             "left join proyecto_trabajo_partida ptp on km.proyecto_trabajo_partida_origen_id = ptp.id " .
             "left join orden_compra oc on km.orden_compra_id = oc.id " .
