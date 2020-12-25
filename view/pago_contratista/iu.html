@@ -305,8 +305,8 @@
                         valorVenta = valorVenta + (valorVenta * porcentaje_retencion_fondo_garantia);
                     } */
 
-                    var gastos_generales = Number(valorVenta) * porcentaje_gastos_generales;
-                    valorVenta = valorVenta + gastos_generales;
+                    var gastos_generales = Number(valorVenta).round(2) * porcentaje_gastos_generales;
+                    valorVenta = Number(valorVenta).round(2) + Number(gastos_generales).round(2);
                     $("#valor_venta").val(valorVenta.toFixed(2));
 
                     var amortizacionAdelanto = Number(valorVenta) * porcentaje_amortizacion_adelanto;

@@ -100,9 +100,9 @@ if ($object->{'action'} == "list") {
         $valorVenta = $valorVenta + ($valorVenta * $porcentajeRetencionFondoGarantia / 100);
     } */
 
-    $sub_total_0 = $valorVenta;
+    $sub_total_0 = round($valorVenta, 2);
 
-    $gastos_generales = $valorVenta * $porcentaje_gastos_generales / 100;
+    $gastos_generales = round($valorVenta * $porcentaje_gastos_generales / 100, 2);
 
     $valorVenta = $valorVenta + $gastos_generales;
     //3. Calcular el resto de variables
