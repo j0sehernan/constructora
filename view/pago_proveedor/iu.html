@@ -59,7 +59,7 @@
         <div class="col-sm-3">
             <div class="form-group">
                 <label for="igv">IGV</label>
-                <input type="text" class="form-control form-control-sm" id="igv" name="igv" placeholder="I.G.V." readonly>
+                <input type="text" class="form-control form-control-sm" id="igv" name="igv" placeholder="I.G.V." value="0" readonly>
             </div>
         </div>
         <div class="col-sm-3">
@@ -122,10 +122,10 @@
     $("#orden_compra_id").change(function () {
         clearGenerate();
         var proveedor = $("#orden_compra_id option:selected").attr("data-proveedor");
-        var igv = $("#orden_compra_id option:selected").attr("data-igv");
+        //var igv = $("#orden_compra_id option:selected").attr("data-igv");
         var moneda = $("#orden_compra_id option:selected").attr("data-moneda");
         $("#persona_proveedor").val(proveedor);
-        $("#igv").val(igv);
+        //$("#igv").val(igv);
         $("#moneda").val(moneda);
     });
     $("#guia_remision").change(function () {
@@ -204,8 +204,8 @@
                         $("#tableDetalle tbody").append(html);
                     });
                     if ($("#orden_compra_id option:selected").attr("data-incluye_igv") === "0") {
-                        var igv = Number($("#igv").val());
-                        montoTotal = Number(montoTotal) + Number(igv);
+                        //var igv = Number($("#igv").val());
+                        montoTotal = Number(montoTotal.round(2));// + Number(igv);
                     }
                     $("#monto_total").val(montoTotal);
                 }
@@ -233,7 +233,7 @@
                 listPagoProveedorDetalles();
                 $("#orden_compra_id").attr("disabled", true);
                 $("#guia_remision").attr("disabled", true);
-                $("#igv").val(dataResponse.igv);
+                //$("#igv").val(dataResponse.igv);
                 $("#moneda").val(dataResponse.moneda);
             }
         });
@@ -295,7 +295,7 @@
                 comprobante_pago_codigo: $("#comprobante_pago_codigo").val(),
                 fecha_pago: $("#fecha_pago").val(),
                 pagado: $("#pagado").is(":checked"),
-                igv: $("#igv").val(),
+                igv: 0,//$("#igv").val(),
                 moneda: $("#moneda").val(),
                 fecha_emision: $("#fecha_emision").val()
             }, function (data) {
