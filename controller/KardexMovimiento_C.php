@@ -33,6 +33,7 @@ switch ($object->action) {
             $cantidad_entrada = 0;
             $cantidad_salida = 0;
             $sub_total = 0;
+            $moneda = "";
 
             switch ($tipo_movimiento) {
                 case "D":
@@ -68,6 +69,7 @@ switch ($object->action) {
                     $proveedor_contratista_almacen = $result[$i]["proveedor_ingreso"];
                     $cantidad_entrada = $result[$i]["cantidad"];
                     $stock_actual += $cantidad_entrada;
+                    $moneda = $result[$i]["moneda"];
                     break;
                 case "S_PARTIDA":
                     $tipo_movimiento_text = "SALIDA POR ASIGNACIÓN A PARTIDA";
@@ -112,6 +114,7 @@ switch ($object->action) {
                 "cantidad_salida" => number_format($cantidad_salida, 2, '.', ','),
                 "stock_actual" => number_format($stock_actual, 2, '.', ','),
                 "precio" => number_format($precio, 2, '.', ','),
+                "moneda" => $moneda,
                 "sub_total" => number_format($sub_total, 2, '.', ',')
             );
 
@@ -130,6 +133,7 @@ switch ($object->action) {
             "cantidad_salida" => number_format($total_cantidad_salida, 2, '.', ','),
             "stock_actual" => number_format(($total_cantidad_entrada - $total_cantidad_salida), 2, '.', ','),
             "precio" => "",
+            "moneda" => "",
             "sub_total" => number_format($total_sub_total, 2, '.', ',')
         );
 

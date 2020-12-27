@@ -60,7 +60,8 @@ class KardexMovimiento
             "ifnull(cantidad_salida, 0) as cantidad_salida, " .
             "ifnull(ptps.nombre, '') as proyecto_trabajo_partida_salida, " .
             "ifnull(pc_s.nombre_1, '') as contratista_salida, " .
-            "ifnull(pp_i.nombre_1, '') as proveedor_ingreso " .
+            "ifnull(pp_i.nombre_1, '') as proveedor_ingreso, " .
+            "ifnull(oc.moneda, '') as moneda " .
             "from kardex_movimiento km " .
             "inner join producto p on km.producto_id = p.id " .
             "inner join unidad_medida um on km.unidad_medida_id = um.codigo " .
