@@ -57,7 +57,7 @@ class KardexMovimiento
             "fec_reg_aud, " .
             "ifnull(guia_remision, '') as guia_remision, " .
             "if(guia_remision_pagada = 1, 'SI', 'NO') as guia_remision_pagada, " .
-            "ifnull(cantidad_salida, 0), " .
+            "ifnull(cantidad_salida, 0) as cantidad_salida, " .
             "ifnull(ptps.nombre, '') as proyecto_trabajo_partida_salida, " .
             "ifnull(pc_s.nombre_1, '') as contratista_salida, " .
             "ifnull(pp_i.nombre_1, '') as proveedor_ingreso " .
