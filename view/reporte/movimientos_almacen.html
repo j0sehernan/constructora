@@ -61,6 +61,7 @@
             <table id="table" class="table table-hover table-bordered table-striped table-sm">
                 <thead class="thead-dark">
                     <tr>
+                        <th style="text-align: center;">Item</th>
                         <th style="text-align: center;">Fecha de Movimiento</th>
                         <th style="text-align: center;">Tipo Movimiento</th>
                         <th style="text-align: center;">UM</th>
@@ -80,21 +81,21 @@
         <div id="div_export" style="display: none;">
             <table>
                 <tr>
-                    <td colspan="10" style="text-align: center;"><img style="float: left;" src="http://deza.com.pe/assets/media/logos/logo-deza-nuevo.jpg" alt="" height="40">REPORTE DE MOVIMIENTOS DE ALMACÉN</td>
+                    <td colspan="11" style="text-align: center;"><img style="float: left;" src="http://deza.com.pe/assets/media/logos/logo-deza-nuevo.jpg" alt="" height="40">REPORTE DE MOVIMIENTOS DE ALMACÉN</td>
                 </tr>
                 <tr>
-                    <td colspan="10"></td>
+                    <td colspan="11"></td>
                 </tr>
                 <table>
                     <tr>
                         <td colspan="1">Almacen:</td>
-                        <td colspan="8" style="text-align: left; padding-right: 10;">__ALMACEN__</td>
+                        <td colspan="9" style="text-align: left; padding-right: 10;">__ALMACEN__</td>
                         <td style="text-align: right;">Periodo del:</td>
                         <td style="text-align: right;">__PERIODO_INICIO__</td>
                     </tr>
                     <tr>
                         <td colspan="1">Producto:</td>
-                        <td colspan="8" style="text-align: left; padding-right: 10;">__PRODUCTO__</td>
+                        <td colspan="9" style="text-align: left; padding-right: 10;">__PRODUCTO__</td>
                         <td style="text-align: right;">Al:</td>
                         <td style="text-align: right;">__PERIODO_TERMINO__</td>
                     </tr>
@@ -103,6 +104,7 @@
             <table id="table_export" border="1">
                 <thead>
                     <tr>
+                        <th style="text-align: center;">Item</th>
                         <th style="text-align: center;">Fecha de Movimiento</th>
                         <th style="text-align: center;">Tipo Movimiento</th>
                         <th style="text-align: center;">UM</th>
@@ -206,6 +208,7 @@
                         var html =
                             `
                             <tr>
+                                <td>`+ object.index + `</td>
                                 <td>`+ object.fecha_movimiento + `</td>
                                 <td>`+ object.tipo_movimiento + `</td>
                                 <td>`+ object.unidad_medida + `</td>
