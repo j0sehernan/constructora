@@ -119,6 +119,8 @@
         var precioPlan = Number(precioUnitarioPlan) * Number(cantidadPlan);
         if (isNaN(precioPlan) || precioPlan == null || (precioUnitarioPlan == "" && cantidadPlan == "")) {
             precioPlan = "";
+        } else {
+            precioPlan = precioPlan.round(2);
         }
         $("#precio_plan").val(precioPlan);
     }
@@ -128,6 +130,8 @@
         var precioActual = Number(precioUnitarioPlan) * Number(cantidadActual);
         if (isNaN(precioActual) || precioActual == null || (precioUnitarioPlan == "" && cantidadActual == "")) {
             precioActual = "";
+        } else {
+            precioActual = precioActual.round(2);
         }
         $("#precio_actual").val(precioActual);
     }
