@@ -44,12 +44,14 @@ switch ($object->action) {
                     $documento = $result[$i]["comprobante_pago_codigo"];
                     $cantidad_entrada = $result[$i]["cantidad"];
                     $stock_actual += $cantidad_entrada;
+                    $sub_total = $cantidad_entrada * $precio;
                     break;
                 case "I_ALMACEN":
                     $tipo_movimiento_text = "INGRESO POR CAMBIO DE ALMACEN";
                     $proveedor_contratista_almacen = $result[$i]["almacen_origen"];
                     $cantidad_entrada = $result[$i]["cantidad"];
                     $stock_actual += $cantidad_entrada;
+                    $sub_total = $cantidad_entrada * $precio;
                     break;
                 case "S_ALMACEN":
                     $tipo_movimiento_text = "SALIDA POR CAMBIO DE ALMACEN";
@@ -70,6 +72,7 @@ switch ($object->action) {
                     $cantidad_entrada = $result[$i]["cantidad"];
                     $stock_actual += $cantidad_entrada;
                     $moneda = $result[$i]["moneda"];
+                    $sub_total = $cantidad_entrada * $precio;
                     break;
                 case "S_PARTIDA":
                     $tipo_movimiento_text = "SALIDA POR ASIGNACIÓN A PARTIDA";
@@ -97,10 +100,9 @@ switch ($object->action) {
                     $tipo_movimiento_text = "REINGRESO DESDE PARTIDA";
                     $cantidad_entrada = $result[$i]["cantidad"];
                     $stock_actual += $cantidad_entrada;
+                    $sub_total = $cantidad_entrada * $precio;
                     break;
             }
-
-            $sub_total = $cantidad_entrada * $precio;
 
             $total_cantidad_entrada += $cantidad_entrada;
             $total_cantidad_salida += $cantidad_salida;
