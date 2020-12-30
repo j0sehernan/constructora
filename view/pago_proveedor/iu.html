@@ -122,10 +122,10 @@
     $("#orden_compra_id").change(function () {
         clearGenerate();
         var proveedor = $("#orden_compra_id option:selected").attr("data-proveedor");
-        //var igv = $("#orden_compra_id option:selected").attr("data-igv");
+        var igv = $("#orden_compra_id option:selected").attr("data-igv");
         var moneda = $("#orden_compra_id option:selected").attr("data-moneda");
         $("#persona_proveedor").val(proveedor);
-        //$("#igv").val(igv);
+        $("#igv").val(igv);
         $("#moneda").val(moneda);
     });
     $("#guia_remision").change(function () {
@@ -233,7 +233,7 @@
                 listPagoProveedorDetalles();
                 $("#orden_compra_id").attr("disabled", true);
                 $("#guia_remision").attr("disabled", true);
-                //$("#igv").val(dataResponse.igv);
+                $("#igv").val(dataResponse.igv);
                 $("#moneda").val(dataResponse.moneda);
             }
         });
@@ -295,7 +295,7 @@
                 comprobante_pago_codigo: $("#comprobante_pago_codigo").val(),
                 fecha_pago: $("#fecha_pago").val(),
                 pagado: $("#pagado").is(":checked"),
-                igv: 0,//$("#igv").val(),
+                igv: $("#igv").val(),
                 moneda: $("#moneda").val(),
                 fecha_emision: $("#fecha_emision").val()
             }, function (data) {
