@@ -76,7 +76,8 @@ class KardexMovimiento
             "left join proyecto_trabajo pt_s on ptps.proyecto_trabajo_id = pt_s.id " .
             "left join persona pc_s on pt_s.persona_contratista_id = pc_s.id " .
             "where km.almacen_id = $almacen_id and km.producto_id = $producto_id " .
-            "and (km.fecha_movimiento between if('$fecha_inicio'='', null, str_to_date('$fecha_inicio', '%d/%m/%Y')) and if('$fecha_termino'='', null, str_to_date('$fecha_termino', '%d/%m/%Y')));");
+            "and (km.fecha_movimiento between if('$fecha_inicio'='', null, str_to_date('$fecha_inicio', '%d/%m/%Y')) and if('$fecha_termino'='', null, str_to_date('$fecha_termino', '%d/%m/%Y'))) ".
+            "order by km.fecha_movimiento;");
         return $result;
     }
 
