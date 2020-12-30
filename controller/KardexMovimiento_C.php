@@ -81,15 +81,17 @@ switch ($object->action) {
                     break;
                 case "I_CONVERT_UPDATE":
                     $tipo_movimiento_text = "ACTUALIZACIÓN DE CANTIDAD POR CONVERSIÓN DE UM";
-                    $cantidad_entrada = $result[$i]["cantidad"];
-                    $stock_actual += $cantidad_entrada;
+                    /* $cantidad_entrada = $result[$i]["cantidad"];
+                    $stock_actual += $cantidad_entrada; */
                     $cantidad_salida = $result[$i]["cantidad_salida"];
+                    $stock_actual -= $cantidad_salida;
                     break;
                 case "I_CONVERT_UPDATE_FINISH":
                     $tipo_movimiento_text = "ACTUALIZACIÓN Y FINALIZACIÓN DE CANTIDAD POR CONVERSIÓN DE UM";
-                    $cantidad_entrada = $result[$i]["cantidad"];
-                    $stock_actual += $cantidad_entrada;
+                    /* $cantidad_entrada = $result[$i]["cantidad"];
+                    $stock_actual += $cantidad_entrada; */
                     $cantidad_salida = $result[$i]["cantidad_salida"];
+                    $stock_actual -= $cantidad_salida;
                     break;
                 case "I_PARTIDA":
                     $tipo_movimiento_text = "REINGRESO DESDE PARTIDA";
