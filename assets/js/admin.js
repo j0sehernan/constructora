@@ -26,7 +26,7 @@ function changePage(object) {
 }
 
 //Alerts
-function showAlerts() {
+/* function showAlerts() {
     postJSON("ProductoStockMinimo_C.php", { action: "alertByStockMinimo" }, function (dataAlertByStockMinimo) {
         var count = 0;
         var flagNotification = '<span class="kt-badge kt-badge--dot kt-badge--notify kt-badge--sm kt-badge--brand"></span>';
@@ -167,7 +167,7 @@ function showAlerts() {
         });
 
     });
-}
+} */
 
 function exportHTMLToExcel(tableHTML, filename = '') {
     var downloadLink;
