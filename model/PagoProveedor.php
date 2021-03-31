@@ -45,7 +45,8 @@ class PagoProveedor
             "inner join orden_compra oc on pp.orden_compra_id = oc.id " .
             "inner join comprobante_pago_tipo cpt on pp.comprobante_pago_tipo_id = cpt.codigo " .
             "where pp.fecha_pago between if('$fecha_pago_inicio'='', null, str_to_date('$fecha_pago_inicio', '%d/%m/%Y')) and if('$fecha_pago_termino'='', null, str_to_date('$fecha_pago_termino', '%d/%m/%Y')) " .
-            "and pagado = $pagado ";
+            "and pagado = $pagado " .
+            "order by pp.id desc";
 
         if ($persona_proveedor_id !== "TODOS") {
             $query .= "and oc.persona_proveedor_id = $persona_proveedor_id;";
