@@ -135,7 +135,7 @@
         destroyDataTableIfExists("table");
         var tbody = $("#table tbody").html();
         $("#table_export tbody").html(tbody);
-        $("#table").DataTable();
+        $("#table").DataTable({ "ordering": false });
         var tableExport = $("#div_export").html();
         tableExport = tableExport.replace("__TRABAJO__", $("#proyecto_trabajo_id :selected").text());
         tableExport = tableExport.replace("__PROYECTO__", $("#proyecto_id :selected").text());

@@ -126,7 +126,7 @@
         destroyDataTableIfExists("table");
         var tbody = $("#table tbody").html();
         $("#table_export tbody").html(tbody);
-        $("#table").DataTable();
+        $("#table").DataTable({ "ordering": false });
         var tableExport = $("#div_export").html();
         tableExport = tableExport.replace("__PROVEEDOR__", $("#persona_proveedor_id :selected").text());
         tableExport = tableExport.replace("__PAGADO__", $("#pagado").val() === "1" ? "SI" : "NO");
