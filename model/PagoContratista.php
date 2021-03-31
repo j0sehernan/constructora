@@ -17,8 +17,8 @@ class PagoContratista
         $query = "select " .
             "if(fecha_inicio='0000-00-00', '', date_format(fecha_inicio, '%d/%m/%Y')) as fecha_inicio, " .
             "if(fecha_termino='0000-00-00', '', date_format(fecha_termino, '%d/%m/%Y')) as fecha_termino, " .
-            "sub_total_0, ".
-            "gasto_general, ".
+            "sub_total_0, " .
+            "gasto_general, " .
             "valor_venta, " .
             "amortizacion_adelanto, " .
             "retencion_fondo_garantia, " .
@@ -36,7 +36,8 @@ class PagoContratista
             "where (fecha_inicio between str_to_date('$fecha_inicio', '%d/%m/%Y') and str_to_date('$fecha_termino', '%d/%m/%Y')) " .
             "and (fecha_termino between str_to_date('$fecha_inicio', '%d/%m/%Y') and str_to_date('$fecha_termino', '%d/%m/%Y')) " .
             "and proyecto_id = $proyecto_id " .
-            "and proyecto_trabajo_id = $proyecto_trabajo_id;";
+            "and proyecto_trabajo_id = $proyecto_trabajo_id " .
+            "order by fecha_inicio desc;";
 
         $result = $db->query($query);
 
