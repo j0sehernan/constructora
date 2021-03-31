@@ -32,12 +32,12 @@ class PagoContratista
             /* "comprobante_pago_tipo_id, "  .*/
             "comprobante_pago_codigo, " .
             "if(fecha_pago='0000-00-00', '', date_format(fecha_pago, '%d/%m/%Y')) as fecha_pago " .
-            "from pago_contratista " .
+            "from pago_contratista pg" .
             "where (fecha_inicio between str_to_date('$fecha_inicio', '%d/%m/%Y') and str_to_date('$fecha_termino', '%d/%m/%Y')) " .
             "and (fecha_termino between str_to_date('$fecha_inicio', '%d/%m/%Y') and str_to_date('$fecha_termino', '%d/%m/%Y')) " .
             "and proyecto_id = $proyecto_id " .
             "and proyecto_trabajo_id = $proyecto_trabajo_id " .
-            "order by fecha_inicio desc;";
+            "order by pg.fecha_inicio desc;";
 
         $result = $db->query($query);
 
