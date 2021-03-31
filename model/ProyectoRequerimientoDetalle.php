@@ -18,17 +18,17 @@ class ProyectoRequerimientoDetalle
         return $result;
     }
 
-    function insert($idProyectoTrabajoPartida, $idProducto, $idUnidadMedida, $cantidad, $fechaEnObra, $idProyectoRequerimiento)
+    function insert($idProyectoTrabajoPartida, $idProducto, $idUnidadMedida, $cantidad, $fechaEnObra, $idProyectoRequerimiento, $observacion)
     {
         $db = new DB();
-        $result = $db->execute("call proyecto_requerimiento_detalle_i('$idProyectoTrabajoPartida','$idProducto','$idUnidadMedida','$cantidad','$fechaEnObra','$idProyectoRequerimiento');");
+        $result = $db->execute("call proyecto_requerimiento_detalle_i('$idProyectoTrabajoPartida','$idProducto','$idUnidadMedida','$cantidad','$fechaEnObra','$idProyectoRequerimiento','$observacion');");
         return $result;
     }
 
-    function update($id, $cantidad, $fechaEnObra)
+    function update($id, $cantidad, $fechaEnObra, $observacion)
     {
         $db = new DB();
-        $result = $db->execute("call proyecto_requerimiento_detalle_u('$id','$cantidad','$fechaEnObra');");
+        $result = $db->execute("call proyecto_requerimiento_detalle_u('$id','$cantidad','$fechaEnObra','$observacion');");
         return $result;
     }
 

@@ -28,6 +28,10 @@
         <label for="fecha_en_obra">Fecha en obra</label>
         <input type="text" class="form-control form-control-sm form-control-date" id="fecha_en_obra" name="fecha_en_obra" placeholder="Fecha en Obra" maxlength="10">
     </div>
+    <div class="form-group">
+        <label for="observacion">Observación</label>
+        <input type="text" class="form-control form-control-sm" id="observacion" name="observacion" placeholder="Observación" maxlength="200">
+    </div>
     <div class="only-options-right">
         <input type="hidden" id="proyecto_requerimiento_id" name="proyecto_requerimiento_id" value="">
         <input type="hidden" id="action" name="action" value="i">
@@ -114,6 +118,7 @@
                 $("#unidad_medida_id").attr("disabled", true);
                 $("#formProyectoRequerimientoDetalle #cantidad").val(dataResponse.cantidad);
                 $("#formProyectoRequerimientoDetalle #fecha_en_obra").val(dataResponse.fecha_en_obra);
+                $("#formProyectoRequerimientoDetalle #observacion").val(dataResponse.observacion);
             }
         });
     }
